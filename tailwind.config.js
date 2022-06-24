@@ -11,6 +11,7 @@ module.exports = {
         'brand-violet': '#7C063F',
         'dark-green': '#016648',
         'brand-black': '#333333',
+        'opacity-06': 'rgba(33, 107, 7, 0.6)',
       },
     }
   },

@@ -5,8 +5,9 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { Menu as MenuIcon } from '@mui/icons-material';
 import Logo from '../Logo';
+import NavItems from '../NavItems';
 
-const LeftDrawer = ({ navs }: { navs: any[] }) => {
+const LeftDrawer = () => {
   const { pathname } = useRouter();
   const [toggle, setToggle] = React.useState(false);
   const toggleDrawer = (open: boolean) => (event: any) => {
@@ -23,8 +24,12 @@ const LeftDrawer = ({ navs }: { navs: any[] }) => {
 
   return (
     <>
-      <button type="button" onClick={() => setToggle(!toggle)}>
-        <MenuIcon />
+      <button
+        type="button"
+        onClick={() => setToggle(!toggle)}
+        className="md:hidden"
+      >
+        <MenuIcon fontSize="large" />
       </button>
       <Drawer
         anchor="left"
@@ -40,33 +45,13 @@ const LeftDrawer = ({ navs }: { navs: any[] }) => {
           onClick={toggleDrawer(false)}
           onKeyDown={toggleDrawer(false)}
         >
-          <div className="flex py-3 flex-col flex-grow min-h-screen overflow-y-auto w-full">
+          <div className="flex py-3 px-4 flex-col flex-grow min-h-screen overflow-y-auto w-full">
             <Logo />
             <div className="flex w-full mt-6" />
-            {navs.map((element: any) => {
-              const active = pathname.includes(element.path);
-              return (
-                <Link key={element.label} href={element.path}>
-                  <div className="cursor-pointer px-3 w-full py-1">
-                    <h2
-                      className={`flex items-center py-2 space-x-3 font-medium px-4 w-full truncate ${
-                        active
-                          ? 'bg-white text-brand-blue rounded-lg'
-                          : 'text-[#A0AAC8]'
-                      }`}
-                    >
-                      <element.icon
-                        color={active ? '#42427D' : '#A0AAC8'}
-                      />
-                      <span>{element.label}</span>
-                    </h2>
-                  </div>
-                </Link>
-              );
-            })}
+            <NavItems className="flex flex-col" />
             <div className="flex flex-col mt-auto">
               <p className="mt-12 text-xs py-2 px-4">
-                &copy; {new Date().getFullYear()} BuyPress
+                &copy; {new Date().getFullYear()} yean
               </p>
             </div>
           </div>

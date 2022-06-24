@@ -1,93 +1,59 @@
-import DashboardIcon from 'modules/_partials/_drawable/icons/dashboardIcon';
-import DesignIcon from 'modules/_partials/_drawable/icons/designIcon';
-import OrderIcon from 'modules/_partials/_drawable/icons/orderIcon';
-import ProductIcon from 'modules/_partials/_drawable/icons/productIcon';
-import ReportIcon from 'modules/_partials/_drawable/icons/reportIcon';
-import UserIcon from 'modules/_partials/_drawable/icons/userIcon';
+import {
+  Home,
+  Grass,
+  ShoppingBasket,
+  LocalLibrary,
+  Handshake,
+} from '@mui/icons-material';
 
 export const navs = [
   {
-    path: '/dashboard',
-    label: 'Dashboard',
-    icon: DashboardIcon,
+    path: '/about',
+    label: 'About us',
   },
   {
-    path: '/orders',
-    label: 'Orders',
-    icon: OrderIcon,
+    path: '/blog',
+    label: 'Blog',
   },
   {
-    path: '/products',
-    label: 'Products',
-    icon: ProductIcon,
+    path: '/contact',
+    label: 'Contact us',
   },
   {
-    path: '/users',
-    label: 'Users',
-    icon: UserIcon,
-  },
-  {
-    path: '/design',
-    label: 'Design',
-    icon: DesignIcon,
-  },
-  {
-    path: '/reports',
-    label: 'Reports',
-    icon: ReportIcon,
+    path: '/login',
+    label: 'Login',
   },
 ];
 
-export const totals = [
+export const headerNavs = [
   {
-    amount: '23 789',
-    desc: 'Total orders',
-    total: 20,
-    bg: 'bg-[#C7F2FF]',
-    icon: OrderIcon,
+    icon: Home,
+    path: '/home',
+    label: 'Home',
+    hasSub: false,
   },
   {
-    amount: 'RWF 12 890,89',
-    desc: 'This month',
-    total: 20,
-    bg: 'bg-[#FFE5EE]',
-    icon: OrderIcon,
+    icon: Grass,
+    path: '/doings',
+    label: 'What we do?',
+    hasSub: true,
   },
   {
-    amount: '23 789',
-    desc: "Today's Orders",
-    total: 25,
-    bg: 'bg-[#C7F2FF]',
-    icon: OrderIcon,
+    icon: ShoppingBasket,
+    path: '/market',
+    label: 'Farmers Market',
+    hasSub: false,
   },
   {
-    amount: 'RWF 12 890,89',
-    desc: 'Profit',
-    total: 25,
-    bg: 'bg-[#FFE5EE]',
-    icon: OrderIcon,
-  },
-];
-
-export const orderStatus = [
-  {
-    title: 'Total Order',
-    count: 188,
-    icon: '/assets/icons/cart.png',
+    icon: LocalLibrary,
+    path: '/library',
+    label: 'Library',
+    hasSub: false,
   },
   {
-    title: 'Order Pending',
-    count: 38,
-    icon: '/assets/icons/moreIcon.png',
-  },
-  {
-    title: 'Order Processing',
-    count: 66,
-    icon: '/assets/icons/bikeIcon.png',
-  },
-  {
-    title: 'Order Delivered',
-    count: 68,
-    icon: '/assets/icons/shipIcon.png',
+    icon: Handshake,
+    path: '/partner',
+    label: 'Partner with Us',
+    hasSub: false,
   },
 ];
