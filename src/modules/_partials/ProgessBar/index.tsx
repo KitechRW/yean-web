@@ -5,7 +5,7 @@ NProgress.configure({
   minimum: 0.3,
   easing: 'ease',
   speed: 500,
-  showSpinner: true,
+  // showSpinner: true,
 });
 
 Router.events.on('routeChangeStart', () => NProgress.start());
