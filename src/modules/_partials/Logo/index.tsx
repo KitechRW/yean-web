@@ -1,15 +1,17 @@
-import Link from 'next/link';
 import React from 'react';
-import SmillingIcon from '../_drawable/icons/smillingIcon';
+import Image from 'next/image';
+import Link from 'next/link';
 
 const Logo = () => {
   return (
     <Link href="/">
-      <div className="py-1 px-4 cursor-pointer flex items-center space-x-1">
-        <SmillingIcon />
-        <h1 className="text-2xl font-black text-brand-blue">
-          BuyPress
-        </h1>
+      <div className="relative flex flex-col w-[105.93px] h-[69px]">
+        <Image
+          src="/assets/images/Yean_Logo.png"
+          alt=""
+          // objectFit="cover"
+          layout="fill"
+        />
       </div>
     </Link>
   );

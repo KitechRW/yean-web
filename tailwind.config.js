@@ -9,6 +9,8 @@ module.exports = {
         'brand-green': '#3B951C',
         'brand-yellow': '#DEBB04',
         'brand-violet': '#7C063F',
+        'dark-green': '#016648',
+        'brand-black': '#333333',
       },
     }
   },
