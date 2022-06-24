@@ -42,7 +42,7 @@ const Login: NextPage = () => {
         } = response.data;
         console.log(token);
         Secure.setToken(token);
-        push('/bookings');
+        push('/home');
       })
       .catch(result => {
         const { error } =
@@ -129,7 +129,7 @@ export const getServerSideProps = withSessionSsr(
       return {
         redirect: {
           permanent: false,
-          destination: '/bookings',
+          destination: '/home',
         },
       };
     }
