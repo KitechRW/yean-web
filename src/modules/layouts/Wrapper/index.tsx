@@ -3,9 +3,9 @@ import React from 'react';
 const Wrapper = ({ className = '', children = <div /> }) => {
   return (
     <div
-      className={`flex flex-col items-center w-full px-4 ${className}`}
+      className={`flex flex-col items-center w-full ${className}`}
     >
-      <div className="w-full xl:max-w-7xl flex flex-col h-full relative">
+      <div className="w-full xl:max-w-screen-2xl flex flex-col h-full relative">
         {children}
       </div>
     </div>

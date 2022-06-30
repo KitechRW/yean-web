@@ -5,7 +5,7 @@ import React from 'react';
 import { headerNavs } from 'system/static';
 
 const HeaderNavItems = ({
-  className = 'hidden md:inline-grid grid-cols-7',
+  className = 'flex items-center',
 }) => {
   const { pathname } = useRouter();
   return (
@@ -14,7 +14,7 @@ const HeaderNavItems = ({
         return (
           <Link key={element.label} href={element.path}>
             <h2
-              className={`border-r border-opacity-06 px-2 flex items-center font-medium space-x-2 py-3 hover:opacity-75 bg-brand-green text-white cursor-pointer ${
+              className={`whitespace-nowrap border-r border-opacity-06 px-2 md:px-4 flex items-center font-medium space-x-2 py-4 hover:opacity-75 bg-brand-green text-white cursor-pointer ${
                 pathname === element.path ? 'bg-opacity-30' : ''
               }`}
             >
