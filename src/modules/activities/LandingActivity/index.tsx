@@ -1,7 +1,12 @@
 import React from 'react';
 import Scaffold from 'modules/layouts/Scaffold';
 import Image from 'next/image';
-import { Add, LocalLibrary } from '@mui/icons-material';
+import {
+  Add,
+  ChevronLeft,
+  ChevronRight,
+  LocalLibrary,
+} from '@mui/icons-material';
 import Link from 'next/link';
 import MinPost from '../_Partials/MinPost';
 import LatestBlog from '../_Partials/LatestBlog';
@@ -9,6 +14,14 @@ import CowIcon from 'modules/_partials/_drawable/icons/cowIcon';
 import SorgohIcon from 'modules/_partials/_drawable/icons/sorgohIcon';
 import HandIcon from 'modules/_partials/_drawable/icons/handIcon';
 import TruckIcon from 'modules/_partials/_drawable/icons/truckIcon';
+import Testimonial from 'modules/_partials/Testimonial';
+
+const partners = [
+  '/assets/images/agriprofocus 2.png',
+  '/assets/images/gfar 1.png',
+  '/assets/images/rdi_logo 1.png',
+  '/assets/images/ypard 1.png',
+];
 
 const LandingAcitivity = () => {
   return (
@@ -224,6 +237,41 @@ const LandingAcitivity = () => {
           </div>
         </div>
       </div>
+
+      <div className="flex flex-col px-4 md:px-8 py-2 bg-white">
+        <h1 className="text-2xl md:text-4xl text-white font-bold bg-brand-green p-2 text-center">
+          Our Partners
+        </h1>
+        <div className="pt-2 flex items-center space-x-3 justify-between">
+          <button className="bg-brand-violet px-2 py-1 text-white bg-opacity-50">
+            <ChevronLeft />
+          </button>
+          {partners.map(element => (
+            <Image
+              key={element}
+              src={element}
+              alt=""
+              width="150px"
+              height="92px"
+            />
+          ))}
+          <button className="bg-brand-violet px-2 py-1 text-white">
+            <ChevronRight />
+          </button>
+        </div>
+      </div>
+
+      <div className="flex flex-col px-4 md:px-8 py-2 bg-white">
+        <h1 className="text-2xl md:text-4xl text-white font-bold bg-brand-green p-2 text-center">
+          Our Testmonials
+        </h1>
+        <div className="pt-2 flex items-center space-x-3 md:space-x-12 justify-between">
+          {new Array(3).fill(0).map(element => (
+            <Testimonial key={element} />
+          ))}
+        </div>
+      </div>
+      <div className="w-full bg-center bg-cover bg-no-repeat min-h-[34px] bg-[url(/assets/images/bottom-pattern.png)]" />
     </Scaffold>
   );
 };
