@@ -271,7 +271,6 @@ const LandingAcitivity = () => {
           ))}
         </div>
       </div>
-      <div className="w-full bg-center bg-cover bg-no-repeat min-h-[34px] bg-[url(/assets/images/bottom-pattern.png)]" />
     </Scaffold>
   );
 };

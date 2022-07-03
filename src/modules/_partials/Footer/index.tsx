@@ -10,6 +10,7 @@ import YouTubeIcon from '../_drawable/icons/youTubeIcon';
 const Footer = () => {
   return (
     <>
+      <div className="w-full bg-center bg-cover bg-no-repeat min-h-[34px] bg-[url(/assets/images/bottom-pattern.png)]" />
       <Wrapper className="bg-dark-green px-4 md:px-8 text-white py-3 bg-no-repeat bg-center bg-cover bg-[url(/assets/images/bg-footer.svg)]">
         <div className="flex flex-wrap md:flex-nowrap gap-x-10 gap-y-3">
           <div className="flex flex-col space-y-3">

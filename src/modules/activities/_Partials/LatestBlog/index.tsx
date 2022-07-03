@@ -12,6 +12,7 @@ const LatestBlog = () => {
           layout="fill"
           className="rounded-[15px]"
           objectFit="cover"
+          loading="lazy"
         />
       </div>
       <div className="p-2 flex items-center space-x-3 text-brand-violet">

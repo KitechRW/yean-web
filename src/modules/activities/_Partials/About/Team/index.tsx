@@ -14,6 +14,7 @@ const Team = ({ tabIndex = 0, onClick = () => {} }) => {
           src="/assets/images/etienne.png"
           alt=""
           layout="fill"
+          loading="lazy"
         />
       </div>
       <div className="-translate-y-12 flex flex-col bg-[#FCB316]">

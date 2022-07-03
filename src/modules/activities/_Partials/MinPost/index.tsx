@@ -11,6 +11,7 @@ const MinPost = () => {
           layout="fill"
           className="rounded-[15px]"
           objectFit="cover"
+          loading="lazy"
         />
       </div>
 

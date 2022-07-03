@@ -39,6 +39,7 @@ const AboutActivity = () => {
             alt=""
             width="150px"
             height="282.42px"
+            loading="lazy"
           />
           <h2 className="text-xl md:text-2xl font-bold py-3">
             Our Mission
@@ -56,6 +57,7 @@ const AboutActivity = () => {
             alt=""
             width="150px"
             height="282.42px"
+            loading="lazy"
           />
           <h2 className="text-xl md:text-2xl font-bold py-3">
             Our Mission
