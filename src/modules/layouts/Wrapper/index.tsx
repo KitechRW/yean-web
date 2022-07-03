@@ -9,7 +9,7 @@ const Wrapper = ({
 }) => {
   return (
     <div className={`flex flex-col items-center w-full ${className}`}>
-      <div className="w-full xl:max-w-screen-2xl flex flex-col h-full relative">
+      <div className="w-full xl:max-w-screen-2xl flex flex-grow flex-col h-full relative">
         {children}
       </div>
     </div>

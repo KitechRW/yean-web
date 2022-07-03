@@ -1,16 +1,16 @@
 import React from 'react';
 import Head from 'next/head';
-import LandingActivity from 'modules/activities/LandingActivity';
+import ContactActivity from 'modules/activities/ContactActivity';
 
-const LandingPage = () => {
+const ContactPage = () => {
   return (
     <>
       <Head>
         <title>Yean</title>
       </Head>
-      <LandingActivity />
+      <ContactActivity />
     </>
   );
 };
 
-export default LandingPage;
+export default ContactPage;
