@@ -23,8 +23,6 @@ const ServicesActivity = () => {
 
   const itemIndex = services[id] ? id : 0;
 
-  console.log(itemIndex);
-
   return (
     <Scaffold>
       <div className="flex flex-col w-full relative bg-brand-green min-h-[312px]">

@@ -28,7 +28,7 @@ export const navs = [
 export const headerNavs = [
   {
     icon: Home,
-    path: '/home',
+    path: '/',
     label: 'Home',
     hasSub: false,
   },

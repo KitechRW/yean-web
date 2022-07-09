@@ -70,7 +70,7 @@ const WedoPopup = ({
               Models
             </p>
           </Link>
-          <Link href="/impacts">
+          <Link href="/models?q=impact">
             <p className="cursor-pointer hover:opacity-80 border-b pt-3">Impacts</p>
           </Link>
         </div>
