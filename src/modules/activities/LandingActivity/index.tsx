@@ -16,7 +16,7 @@ import HandIcon from 'modules/_partials/_drawable/icons/handIcon';
 import TruckIcon from 'modules/_partials/_drawable/icons/truckIcon';
 import Testimonial from 'modules/_partials/Testimonial';
 
-const partners = [
+export const partners = [
   '/assets/images/agriprofocus 2.png',
   '/assets/images/gfar 1.png',
   '/assets/images/rdi_logo 1.png',
