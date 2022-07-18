@@ -1,8 +1,17 @@
 import { withSessionRoute } from 'system/lib/withSession';
 import DefaultApi from 'apis/restful';
 import endpoints from 'apis/utils/constants/endpoints';
+import sequelize from 'system/lib/db';
+import type { NextApiRequest, NextApiResponse } from 'next'
 
-async function loginRoute(req: any, res: any) {
+
+async function loginRoute(req: NextApiRequest, res: NextApiResponse) {
+  try {
+    await sequelize.authenticate();
+    console.log('Connection has been established successfully.');
+  } catch (error) {
+    console.error('Unable to connect to the database:', error);
+  }
   const { data, error } = await DefaultApi.OpenRoute.postRoute(
     endpoints.LOGIN_ENDPOINT,
     req.body,
