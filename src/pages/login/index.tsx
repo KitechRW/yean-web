@@ -43,12 +43,12 @@ const Login: NextPage = () => {
         } = response.data;
         console.log(token);
         Secure.setToken(token);
-        push('/bookings');
+        push('/');
       })
       .catch(result => {
-        const { error } =
+        const error =
           result.response?.data || result.response || result;
-        console.log(error?.message);
+        console.log(error);
         setErrorMessage(
           error?.message || 'Something went wrong, try again',
         );
@@ -119,7 +119,7 @@ const Login: NextPage = () => {
             </form>
 
             <p className="text-brand-green mt-6">
-              <span className="text-gray-800">First time?{' '}</span>
+              <span className="text-gray-800">First time? </span>
               <Link href="/signup">Signup</Link>
             </p>
           </div>
