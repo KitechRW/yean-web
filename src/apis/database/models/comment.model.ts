@@ -8,7 +8,10 @@ const Comment = sequelize.define(
     article_id: DataTypes.BIGINT,
     username: DataTypes.STRING,
     comment: DataTypes.TEXT,
-    status: DataTypes.STRING,
+    status: {
+      type:DataTypes.STRING,
+      defaultValue:'off'
+    },
   },
   {
     tableName: 'comment',
