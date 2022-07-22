@@ -57,3 +57,26 @@ export const headerNavs = [
     hasSub: false,
   },
 ];
+
+export const adminNavs = [
+  {
+    icon: Home,
+    label: 'Dashboard',
+    path: '/admin',
+  },
+  {
+    icon: Home,
+    label: 'Blogs',
+    path: '/admin/blogs',
+  },
+  {
+    icon: Home,
+    label: 'Extension Materials',
+    path: '/admin/extension-materials',
+  },
+  {
+    icon: Home,
+    label: 'Partners',
+    path: '/admin/partners',
+  },
+];

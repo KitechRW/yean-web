@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import {
   withIronSessionApiRoute,
   withIronSessionSsr,
@@ -15,6 +14,7 @@ declare module 'iron-session' {
     user?: {
       id: number;
       roleId: number;
+      type: string;
     };
     token: string;
     data: any;
