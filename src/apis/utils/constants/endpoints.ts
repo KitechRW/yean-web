@@ -6,6 +6,7 @@ const endpoints = {
   SEND_EMAIL: '/api/v1/portfolio/email',
   BOOKS_ENDPOINT: '/api/v1/files/books',
   AUTH_WITH_GOOGLE: '/auth/google',
+  BLOG_ENDPOINT: '/api/blogs',
 };
 
 export default endpoints;

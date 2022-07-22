@@ -21,7 +21,6 @@ const handler = async (
   // Just after the "Method Not Allowed" code
   try {
     const { fields, files } = await parseForm(req);
-
     const getPath = (path: string) => {
       const arr = path.split('public');
       if (arr.length > 1) {

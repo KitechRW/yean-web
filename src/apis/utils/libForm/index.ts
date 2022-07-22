@@ -18,7 +18,6 @@ export const parseForm = async (
       process.env.ROOT_DIR || process.cwd(),
       `/public/uploads/${dateFn.format(Date.now(), 'dd-MM-Y')}`,
     );
-    console.log(uploadDir)
     try {
       await stat(uploadDir);
     } catch (e: any) {
@@ -45,7 +44,7 @@ export const parseForm = async (
           Math.random() * 1e9,
         )}`;
         filename = `${part.name || 'unknown'}-${uniqueSuffix}.${
-          mime.extension(part.mimetype || '') || 'unknown'
+          mime.getExtension(part.mimetype || '') || 'unknown'
         }`;
         console.log(filename)
         return filename;

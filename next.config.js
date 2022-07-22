@@ -7,6 +7,9 @@ module.exports = {
     // your project has type errors.
     // !! WARN !!
     ignoreBuildErrors: true,
+  },
+  env: {
+    HOST: process.env.HOST,
     DEFAULT_API: process.env.DEFAULT_API,
     DEFAULT_JWT_SECRET: process.env.DEFAULT_JWT_SECRET,
     REDIRECT_TO: process.env.REDIRECT_TO,
@@ -15,5 +18,6 @@ module.exports = {
     REACT_APP_ACCESS_TOKEN: process.env.REACT_APP_ACCESS_TOKEN,
     ISSERVER: typeof window === 'undefined',
     SESSION_PASSWORD: process.env.SESSION_PASSWORD,
+    ALLOWED_EMAILS: process.env.ALLOWED_EMAILS,
   },
 };

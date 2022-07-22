@@ -25,7 +25,7 @@ const Post = sequelize.define(
   await sequelize.sync({ alter: false });
   Post.hasMany(Like, {
     foreignKey: {
-      name: 'post_id',
+      name: 'post',
     },
   });
   // Post.hasMany(Notification, {
