@@ -4,6 +4,9 @@ import {
   ShoppingBasket,
   LocalLibrary,
   Handshake,
+  Dashboard,
+  Feed,
+  Extension,
 } from '@mui/icons-material';
 
 export const navs = [
@@ -55,5 +58,28 @@ export const headerNavs = [
     path: '/partner',
     label: 'Partner with Us',
     hasSub: false,
+  },
+];
+
+export const adminNavs = [
+  {
+    icon: Dashboard,
+    label: 'Dashboard',
+    path: '/admin',
+  },
+  {
+    icon: Feed,
+    label: 'Blogs',
+    path: '/admin/blogs',
+  },
+  {
+    icon: Extension,
+    label: 'Extension Materials',
+    path: '/admin/extension-materials',
+  },
+  {
+    icon: Handshake,
+    label: 'Partners',
+    path: '/admin/partners',
   },
 ];

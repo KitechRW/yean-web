@@ -5,12 +5,16 @@ import React from 'react';
 import { navs } from 'system/static';
 
 const NavItems = ({
+  items = navs,
   className = 'hidden md:flex items-center space-x-8',
+}: {
+  items?: any[];
+  className?: string;
 }) => {
   const { pathname } = useRouter();
   return (
     <div className={className}>
-      {navs.map((element, index) => {
+      {items.map((element, index) => {
         const isLastIndex = index === navs.length - 1;
         return (
           <Link key={element.label} href={element.path}>

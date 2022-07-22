@@ -1,23 +1,12 @@
 import { withSessionRoute } from 'system/lib/withSession';
-import DefaultApi from 'apis/restful';
-import endpoints from 'apis/utils/constants/endpoints';
+import type { NextApiRequest, NextApiResponse } from 'next';
+import AuthController from 'apis/restful/controllers/AuthController';
 
-async function loginRoute(req: any, res: any) {
-  const { data, error } = await DefaultApi.OpenRoute.postRoute(
-    endpoints.LOGIN_ENDPOINT,
-    req.body,
-  );
-  req.session.user = data?.user;
-  req.session.token = data?.token;
-  await req.session.save();
-  if (error) {
-    return res.status(404).json({
-      error,
-    });
+async function loginRoute(req: NextApiRequest, res: NextApiResponse) {
+  if (req.method !== 'POST') {
+    return res.status(404).send('404 page not found');
   }
-  return res.status(200).json({
-    data,
-  });
+  return AuthController.signIn(req, res);
 }
 
 export default withSessionRoute(loginRoute);
