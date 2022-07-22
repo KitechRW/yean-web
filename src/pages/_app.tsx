@@ -1,5 +1,6 @@
 import React from 'react';
 import 'system/styles/globals.css';
+import "system/styles/Dropzone.css"
 import type { AppProps } from 'next/app';
 import dynamic from 'next/dynamic';
 import AppProviders from 'modules/contexts/AppProviders';
