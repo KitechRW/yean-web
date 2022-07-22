@@ -7,6 +7,7 @@ const Keys = {
   REACT_APP_ACCESS_TOKEN: process.env.REACT_APP_ACCESS_TOKEN,
   ISSERVER: typeof window === 'undefined',
   SESSION_PASSWORD: process.env.SESSION_PASSWORD,
+  HOST: process.env.HOST,
 };
 
 export default Keys;

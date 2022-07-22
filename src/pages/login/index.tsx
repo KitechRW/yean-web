@@ -39,11 +39,15 @@ const Login: NextPage = () => {
       .post('/api/login', data)
       .then(response => {
         const {
-          data: { token },
+          data: { token, user },
         } = response.data;
         console.log(token);
         Secure.setToken(token);
-        push('/');
+        if (['admin', 'member'].includes(`${user?.type}`)) {
+          push('/admin');
+        } else {
+          push('/');
+        }
       })
       .catch(result => {
         const error =
@@ -133,11 +137,23 @@ export const getServerSideProps = withSessionSsr(
   async ({ req, res }) => {
     const { user, token } = req.session;
 
-    if (isAuth(token) && user?.roleId === 1) {
+    if (
+      isAuth(token) &&
+      ['admin', 'member'].includes(`${user?.type}`)
+    ) {
       return {
         redirect: {
           permanent: false,
-          destination: '/bookings',
+          destination: '/admin',
+        },
+      };
+    }
+
+    if (isAuth(token)) {
+      return {
+        redirect: {
+          permanent: false,
+          destination: '/',
         },
       };
     }
