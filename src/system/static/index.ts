@@ -4,6 +4,9 @@ import {
   ShoppingBasket,
   LocalLibrary,
   Handshake,
+  Dashboard,
+  Feed,
+  Extension,
 } from '@mui/icons-material';
 
 export const navs = [
@@ -60,22 +63,22 @@ export const headerNavs = [
 
 export const adminNavs = [
   {
-    icon: Home,
+    icon: Dashboard,
     label: 'Dashboard',
     path: '/admin',
   },
   {
-    icon: Home,
+    icon: Feed,
     label: 'Blogs',
     path: '/admin/blogs',
   },
   {
-    icon: Home,
+    icon: Extension,
     label: 'Extension Materials',
     path: '/admin/extension-materials',
   },
   {
-    icon: Home,
+    icon: Handshake,
     label: 'Partners',
     path: '/admin/partners',
   },

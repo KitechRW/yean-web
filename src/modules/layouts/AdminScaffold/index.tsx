@@ -13,7 +13,7 @@ const AdminScaffold = ({ children }: any) => {
         <div className="hidden md:flex flex-col w-1/6 top-0 sticky px-2 bg-[#FBFBFB] border-r border-gray-200">
           <div className="flex w-full mt-2" />
           {adminNavs.map(element => {
-            const active = pathname.includes(element.path);
+            const active = pathname === element.path;
             return (
               <Link key={element.label} href={element.path}>
                 <div
@@ -31,7 +31,7 @@ const AdminScaffold = ({ children }: any) => {
                     }`}
                   >
                     <element.icon />
-                    <span className='truncate'>{element.label}</span>
+                    <span className="truncate">{element.label}</span>
                   </h2>
                 </div>
               </Link>
