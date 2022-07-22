@@ -1,11 +1,11 @@
 import UserService from '../../services/userServices';
 import bcrypt from 'bcryptjs';
-import { signinToken } from 'apis/utils/jwt';
-import { decode } from 'punycode';
+import { signinToken, decode } from 'apis/utils/jwt';
 import Response from 'apis/utils/helpers/response';
 import { emailSender } from 'apis/utils/sendEmail';
 import emailMocks from 'apis/utils/mocks';
 import { NextApiRequest, NextApiResponse } from 'next';
+import { isloggedIn } from '../middlewares/auth';
 
 export default class AuthController {
   /**
@@ -117,6 +117,7 @@ export default class AuthController {
     const { token } = req.body;
     try {
       const decodedToken: any = decode(token);
+      console.log(decodedToken)
       if (!decodedToken) {
         return Response.error(res, 400, {
           message: 'Your verification link may have expired.',
@@ -148,7 +149,7 @@ export default class AuthController {
           active: true,
         },
       });
-    } catch (err) {
+    } catch (err:any) {
       const message = err.message || 'something went wrong';
       return Response.error(res, 500, { message });
     }
@@ -159,16 +160,17 @@ export default class AuthController {
    * @param {Request} req Request
    * @param {Response} res Response
    */
-  static async logOut(req: NextApiRequest, res: NextApiResponse) {
-    if (!req.isAuth) {
+  static async logout(req: NextApiRequest, res: NextApiResponse) {
+    const isLogged: any = await isloggedIn(req,res);
+    if (!isLogged) {
       return Response.error(res, 404, {
         message: "you aren't logged in",
       });
     }
     try {
-      let user: any = await UserService.findByPk(req.userId);
-      user.status = 0; // update login status
-      user = await user.save();
+      let user: any = isLogged;
+      user = await UserService.update({status:0},{email:user.email})
+      // req.session.destroy();
       return Response.success(res, 201, {
         message: 'logout successfully',
       });
@@ -272,16 +274,18 @@ export default class AuthController {
    * @param {Response} res Response
    */
   static async getProfile(req: NextApiRequest, res: NextApiResponse) {
-    if (!req.isAuth) {
+    const isLogged: any = await isloggedIn(req,res);
+    if (!isLogged) {
       return Response.error(res, 404, {
         message: "you aren't logged in",
       });
     }
+    
     try {
-      const user: any = await UserService.findByPk(req.userId);
+      isLogged.password = undefined;
       return Response.success(res, 201, {
         message: 'your profile',
-        profile: user,
+        profile: isLogged,
       });
     } catch (error: any) {
       return Response.error(res, 500, {

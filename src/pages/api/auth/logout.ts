@@ -1,8 +1,11 @@
-import { withSessionRoute } from 'system/lib/withSession';
+import type { NextApiRequest, NextApiResponse } from 'next';
+import AuthController from 'apis/restful/controllers/AuthController';
 
-async function logoutRoute(req: any, res: any) {
-  await req.session.destroy();
-  res.send('Logged out');
+export default function handler(req: NextApiRequest, res: NextApiResponse) {
+    if (req.method === 'GET') {
+      return AuthController.logout(req,res);
+    } else {
+      // Handle any other HTTP method
+      return res.status(404).send('404 page not found');
+    }
 }
-
-export default withSessionRoute(logoutRoute);
