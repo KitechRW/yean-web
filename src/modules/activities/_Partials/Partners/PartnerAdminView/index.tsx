@@ -1,10 +1,10 @@
 import Image from "next/image";
 import React from "react";
 import CloseIcon from "@mui/icons-material/Close";
-import Team from "modules/activities/_Partials/About/Team";
 import Drawer from "@mui/material/Drawer";
+import AddPartnerForm from "modules/activities/_Partials/Partners/AddPartner";
 
-const PartnerAdminView = ({imageUrl, disc}:any) => {
+const PartnerAdminView = ({imageUrl, companyName, email, phone}:any) => {
   const [toggle, setToggle] = React.useState(false);
   const toggleDrawer = (open: boolean) => (event: any) => {
     if (
@@ -38,7 +38,7 @@ const PartnerAdminView = ({imageUrl, disc}:any) => {
 
       <div className="p-5">
         <div >
-          <h6 className="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">{disc}</h6>
+          <h6 className="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">{companyName}</h6>
         </div>
         <button onClick={() => setToggle(!toggle)}
                 className="inline-flex items-center py-2 px-3 text-sm font-medium text-center text-white bg-brand-green/70 rounded-lg hover:bg-brand-green focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
@@ -86,29 +86,7 @@ const PartnerAdminView = ({imageUrl, disc}:any) => {
           </button>
 
           <div className="w-full md:grid grid-cols-3 gap-x-10 flex-flex-col mt-4">
-            <Team />
-            <div className="flex flex-col md:col-span-2">
-              <div className="flex flex-col pb-2 border-b border-brand-green">
-                <p className="text-xl md:text-2xl text-brand-green">
-                  <span className="font-bold">{"firstName"}Etienne</span>{' '}
-                  {"lastName"}NIYIGABA
-                </p>
-                <p className="mt-1 text-brand-green text-sm">
-                  {"title"}Founder & CEO
-                </p>
-              </div>
-              <p className="mt-3 text-sm">
-                {"desc"}Kelvin is a social entrepreneur based in the
-                Western region of Kenya. He is dedicated to
-                empowering youth and children through his SAIDE
-                Community Library by providing free learning
-                opportunities through digital literacy programs and
-                community outreach programs. Kelvin has worked with
-                partners such as American Friends of Kenya,
-                Worldreader, Population Service International Kenya,
-                Foundation for Sustainable Development among others.
-              </p>
-            </div>
+            <AddPartnerForm email={email} companyName={companyName} phone={phone} />
           </div>
         </div>
       </div>

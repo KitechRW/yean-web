@@ -1,23 +1,11 @@
-import React, {useEffect, useRef, useState} from 'react'
-import Image from "next/image";
+import React, {useEffect, useState} from 'react'
 import {partners} from "./data"
 import CloseIcon from "@mui/icons-material/Close";
 import Drawer from "@mui/material/Drawer";
 import PartnerAdminView from "modules/activities/_Partials/Partners/PartnerAdminView";
-import Dropzone from "modules/_partials/ImageUpload";
-import {each} from "immer/dist/utils/common";
+import AddPartnerForm from "modules/activities/_Partials/Partners/AddPartner";
 
 const AdminPartnersActivity = () => {
-  const fileInputRef = useRef();
-  const modalImageRef = useRef();
-  const modalRef = useRef();
-  const progressRef = useRef();
-  const uploadRef = useRef();
-  const uploadModalRef = useRef();
-  const [selectedFiles, setSelectedFiles] = useState([]);
-  const [unsupportedFiles, setUnsupportedFiles] = useState([]);
-  const [errorMessage, setErrorMessage] = useState('');
-  const [validFiles, setValidFiles] = useState([]);
 
   const [filterValue, setFilterValue] = useState("");
   const [partnersList, setPartnersList] = useState([...partners]);
@@ -43,7 +31,7 @@ const AdminPartnersActivity = () => {
 
   useEffect(() => {
 
-    const filteredPartner = partners.filter(each => each.disc.toLowerCase().includes(filterValue.toLowerCase()))
+    const filteredPartner = partners.filter(each => each.companyName.toLowerCase().includes(filterValue.toLowerCase()))
     setPartnersList([...filteredPartner]);
 
   }, [filterValue])
@@ -74,8 +62,8 @@ const AdminPartnersActivity = () => {
           <ul className="bg-slate-50 p-4 sm:px-8 sm:pt-6 sm:pb-8 lg:p-4 xl:px-8 xl:pt-6 xl:pb-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 text-sm leading-6">
             {
               partnersList.map((eachPartner, index) => {
-                return <li key={eachPartner.disc + index +"disc"} className={""}>
-                  <PartnerAdminView disc={eachPartner.disc} imageUrl={eachPartner.imageUrl} />
+                return <li key={eachPartner.companyName + index +"disc"} className={""}>
+                  <PartnerAdminView companyName={eachPartner.companyName} imageUrl={eachPartner.imageUrl} email={eachPartner.email} phone={eachPartner.phone} />
                 </li>
               })
             }
@@ -120,34 +108,7 @@ const AdminPartnersActivity = () => {
             </button>
 
             <div className="w-full md:grid grid-cols-3 gap-x-10 flex-flex-col mt-4">
-              <form>
-                <div className="mb-6">
-                  <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">
-                    email</label>
-                  <input type="email" id="email"
-                         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                         placeholder="name@yarn.com" />
-                </div>
-                <div className="mb-6">
-                  <label htmlFor="companyName" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Company name</label>
-                  <input type="text" id="companyName" placeholder={"Company name"}
-                         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                         />
-                </div>
-                <div className="mb-6">
-                  <label htmlFor="telPhoneNumber" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Phone number</label>
-                  <input type="tel" id="telPhoneNumber" placeholder={"Phone"}
-                         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                         />
-                </div>
-                <div className={"md-6 mb-6"}>
-                  <Dropzone errorMessage={errorMessage} setErrorMessage={setErrorMessage} unsupportedFiles={unsupportedFiles} setUnsupportedFiles={setUnsupportedFiles} selectedFiles={selectedFiles} setSelectedFiles={setSelectedFiles} uploadModalRef={uploadModalRef} uploadRef={uploadRef} progressRef={progressRef} modalRef={modalRef} modalImageRef={modalImageRef} fileInputRef={fileInputRef} validFiles={validFiles} setValidFiles={setValidFiles} isOneImage={true}/>
-                </div>
-
-                <button type="submit"
-                        className="text-white bg-brand-green/80 hover:bg-brand-green focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Submit
-                </button>
-              </form>
+              <AddPartnerForm/>
             </div>
           </div>
         </div>
