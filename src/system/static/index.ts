@@ -7,6 +7,7 @@ import {
   Dashboard,
   Feed,
   Extension,
+  Pageview
 } from '@mui/icons-material';
 
 export const navs = [
@@ -82,4 +83,9 @@ export const adminNavs = [
     label: 'Partners',
     path: '/admin/partners',
   },
+  {
+    icon: Pageview,
+    label: 'Home page',
+    path: '/admin/edit-home-page'
+  }
 ];
