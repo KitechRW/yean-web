@@ -7,6 +7,24 @@ import { mkdir, stat } from 'fs/promises';
 
 export const FormidableError = formidable.errors.FormidableError;
 
+export const getUploadedFileUrl = async (req: NextApiRequest) => {
+  const { fields, files } = await parseForm(req);
+  const getPath = (path: string) => {
+    const arr = path.split('public');
+    if (arr.length > 1) {
+      return arr[1];
+    }
+    return path;
+  };
+
+  const file = files.media;
+  let url = Array.isArray(file)
+    ? file.map(f => getPath(f.filepath))
+    : getPath(file.filepath);
+  return url;
+};
+
+// @ts-ignore
 export const parseForm = async (
   req: NextApiRequest,
 ): Promise<{
@@ -43,10 +61,11 @@ export const parseForm = async (
         const uniqueSuffix = `${Date.now()}-${Math.round(
           Math.random() * 1e9,
         )}`;
+        
         filename = `${part.name || 'unknown'}-${uniqueSuffix}.${
           mime.getExtension(part.mimetype || '') || 'unknown'
         }`;
-        console.log(filename)
+        console.log(filename);
         return filename;
       },
       filter: part => {
