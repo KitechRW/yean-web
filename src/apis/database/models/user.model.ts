@@ -1,5 +1,5 @@
 import { DataTypes } from 'sequelize';
-import sequelize from '../config/db.config';
+import sequelize from '../config/sequelize';
 import Article from './article.model';
 import Like from './like.model';
 import Picture from './picture.model';

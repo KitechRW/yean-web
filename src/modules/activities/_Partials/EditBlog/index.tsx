@@ -2,10 +2,6 @@ import React from 'react';
 import Drawer from '@mui/material/Drawer';
 import FormBottomActions from 'modules/_partials/FormBottomActions';
 import FormTopHeader from 'modules/_partials/FormTopHeader';
-import * as yup from 'yup';
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import InputField from 'modules/_partials/InputField';
 import 'react-quill/dist/quill.snow.css';
 import FileUploader from 'modules/activities/FileUploader';
 import Image from 'next/image';
@@ -18,26 +14,19 @@ const ReactQuill = dynamic(() => import('react-quill'), {
   ssr: false,
 });
 
-const schema = yup.object({
-  title: yup.string().required('Title is required'),
-});
-
-const EditBlog = (
-  { onAdd, item }: { onAdd: (item: any) => void },
-  item: any,
-) => {
+const EditBlog = ({
+  onAdd,
+  item,
+}: {
+  onAdd: (item: any) => void;
+  item: any;
+}) => {
+  const [title, setTitle] = React.useState<string>(item?.title);
   const [toggle, setToggle] = React.useState(false);
-  const [image, setImage] = React.useState<any>('');
-  const [convertedText, setConvertedText] = React.useState('');
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    reset,
-  } = useForm({
-    resolver: yupResolver(schema),
-  });
+  const [image, setImage] = React.useState<any>(`${item?.image}`);
+  const [convertedText, setConvertedText] = React.useState<string>(
+    `${item?.text}`,
+  );
   const toggleDrawer = (open: boolean) => (event: any) => {
     if (
       event.type === 'keydown' &&
@@ -85,12 +74,12 @@ const EditBlog = (
     'image',
   ];
 
-  const onSubmit = async (data: any) => {
+  const onSubmit = async () => {
     const { data: response, error: responseError } =
       await DefaultApi.PostRoute.postRoute(
-        Constants.Endpoints.BLOG_ENDPOINT,
+        `${Constants.Endpoints.BLOG_ENDPOINT}/${item?.id}`,
         {
-          title: data.title,
+          title: title,
           text: convertedText,
           image,
         },
@@ -105,7 +94,6 @@ const EditBlog = (
     }
 
     if (response) {
-      reset();
       setImage('');
       setConvertedText('');
       if (response.article) {
@@ -131,7 +119,8 @@ const EditBlog = (
       >
         <form
           onSubmit={event => {
-            handleSubmit(onSubmit)(event);
+            event.preventDefault();
+            onSubmit();
           }}
           className="w-screen sm:w-[70vw] xl:w-[50vw] flex py-3 px-4 md:px-8 flex-col items-center min-h-screen overflow-y-auto"
         >
@@ -141,13 +130,19 @@ const EditBlog = (
             label="blog"
           />
 
-          <InputField
-            placeholder="Blog Title"
-            register={register('title')}
-            error={errors.title?.message}
-            value={item?.title}
-            className="flex flex-col w-full mt-4"
-          />
+          <label className="flex relative w-full">
+            <input
+              className="peer pt-6 pb-2 focus:border-brand-green focus:pt-6 focus:pb-2 placeholder-shown:py-4 w-full placeholder-transparent focus:outline-none bg-gray-202 outline-none rounded-lg border border-gray-201 px-3"
+              placeholder={'Title'}
+              value={item?.title}
+              onChange={event => {
+                setTitle(event.target.value);
+              }}
+            />
+            <span className="text-gray-800 peer-focus:text-brand-green pt-2 px-3 text-xs peer-focus:pt-2 peer-focus:text-xs  transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-600 peer-placeholder-shown:pt-4 absolute">
+              Title
+            </span>
+          </label>
 
           <div className="flex flex-col mt-3 w-full">
             <p className="mb-2">Image</p>

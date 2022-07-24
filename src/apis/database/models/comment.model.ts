@@ -1,5 +1,5 @@
 import { Sequelize, Model, DataTypes } from 'sequelize';
-import sequelize from '../config/db.config';
+import sequelize from '../config/sequelize';
 import Article from './article.model';
 
 const Comment = sequelize.define(
