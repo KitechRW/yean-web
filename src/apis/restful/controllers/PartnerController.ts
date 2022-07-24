@@ -1,7 +1,6 @@
 import Response from 'apis/utils/helpers/response';
 import { NextApiRequest, NextApiResponse } from 'next';
 import Partner from 'apis/database/models/partner.model';
-import { getUploadedFileUrl } from 'apis/utils/libForm';
 
 export default class PartnerController {
   static async getPartners(
@@ -31,6 +30,34 @@ export default class PartnerController {
           companyName,
           image,
         }),
+      });
+    } catch (error) {
+      return Response.error(res, 500, {
+        message: 'something went wrong',
+      });
+    }
+  }
+
+  static async edit(req: NextApiRequest, res: NextApiResponse) {
+    const { id } = req.query;
+    const { email, phone, companyName, image } = req.body;
+    try {
+      const partner = await Partner.findByPk(`${id}`);
+      if (!partner) {
+        return Response.error(res, 404, {
+          message: 'patner is not found',
+        });
+      }
+      const prev = partner.toJSON();
+      partner.set({
+        email: email || prev.email,
+        phone: phone || prev.phone,
+        companyName: companyName || prev.companyName,
+        image: image || prev.companyName,
+      });
+      return Response.success(res, 200, {
+        message: 'Partner edited successfuly',
+        partner: await partner.save(),
       });
     } catch (error) {
       return Response.error(res, 500, {
