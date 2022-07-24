@@ -98,7 +98,7 @@ const AdminPartnersActivity = () => {
                 <PartnerAdminView
                   key={eachPartner.id}
                   data={eachPartner}
-                  handlePartner={handleAddPartner}
+                  handleAddPartner={handleAddPartner}
                 />
               );
             })}
