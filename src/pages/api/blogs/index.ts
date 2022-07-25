@@ -1,4 +1,5 @@
 import BlogController from 'apis/restful/controllers/BlogController';
+import Response from 'apis/utils/helpers/response';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 export default function handler(
@@ -11,5 +12,25 @@ export default function handler(
   if (req.method === 'POST') {
     return BlogController.create(req, res);
   }
-  return res.status(405).json({ message: 'method not allowed' });
+  switch (req.method) {
+    case 'GET':
+      if (req.query.id) {
+        return BlogController.getOne(req, res);
+      }
+      return BlogController.getArticles(req, res);
+
+    case 'DELETE':
+      return BlogController.delete(req, res);
+
+    case 'PATCH':
+      return BlogController.delete(req, res);
+
+    case 'POST':
+      return BlogController.create(req, res);
+
+    default:
+      return Response.error(res, 405, {
+        message: 'method not allowed',
+      });
+  }
 }

@@ -6,10 +6,12 @@ const DrawerLayout = ({
   children,
   toggle = false,
   setToggle,
+  title = 'New item',
 }: {
   toggle: boolean;
   setToggle: React.Dispatch<React.SetStateAction<boolean>>;
   children: JSX.Element[];
+  title: string;
 }) => {
   const toggleDrawer = (open: boolean) => (event: any) => {
     if (
@@ -46,27 +48,33 @@ const DrawerLayout = ({
             maxWidth: '100%',
             minHeight: '100vh',
             marginX: 'auto',
-            margin: '8px',
+            padding: '8px',
             backgroundColor: 'transparent',
             boxShadow: 'none',
             overflowY: 'auto',
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            pointerEvents: 'none',
+            // pointerEvents: 'none',
+            height: 'fit-content',
           },
         }}
       >
         <div className="max-w-4xl pointer-events-auto bg-white flex py-3 px-4 md:p-8 flex-col items-center w-full">
-          <button
-            type="button"
-            onKeyDown={handleKeyDown}
-            onClick={toggleDrawer(false)}
-            className="text-brand-green flex flex-col items-center ml-auto"
-          >
-            <Close fontSize="large" />
-            <span className="text-sm text-brand-green">ESC</span>
-          </button>
+          <div className="flex gap-x-2 justify-between w-full">
+            <h1 className="font-black text-xl tracking-wide text-brand-green">
+              {title}
+            </h1>
+            <button
+              type="button"
+              onKeyDown={handleKeyDown}
+              onClick={toggleDrawer(false)}
+              className="text-brand-green flex flex-col items-center ml-auto"
+            >
+              <Close fontSize="large" />
+              <span className="text-sm text-brand-green">ESC</span>
+            </button>
+          </div>
           <div className="flex flex-col w-full">{children[1]}</div>
         </div>
       </Drawer>
