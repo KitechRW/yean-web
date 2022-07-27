@@ -4,12 +4,13 @@ export const sequelize = new Sequelize(
   `${process.env.DATABASE_URL}`,
   {
     logging: false,
-    dialectOptions: {
-      ssl: {
-        require: true,
-        rejectUnauthorized: false,
-      },
-    },
+    dialect: 'mysql',
+    // dialectOptions: {
+    //   ssl: {
+    //     require: true,
+    //     rejectUnauthorized: false,
+    //   },
+    // },
   },
 );
 

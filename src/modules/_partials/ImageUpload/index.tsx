@@ -15,9 +15,10 @@ type parameter = {
   uploadRef:React.Ref<any>;
   uploadModalRef:React.Ref<any>;
   selectedFiles:any[];
-  setSelectedFiles:Function
+  setSelectedFiles:Function;
+  imageUrl?: string;
 }
-const Dropzone = ({isOneImage,validFiles, setValidFiles,fileInputRef,modalImageRef, modalRef,progressRef,uploadRef,uploadModalRef,selectedFiles, setSelectedFiles,unsupportedFiles, setUnsupportedFiles,errorMessage, setErrorMessage}: parameter) => {
+const Dropzone = ({imageUrl, isOneImage,validFiles, setValidFiles,fileInputRef,modalImageRef, modalRef,progressRef,uploadRef,uploadModalRef,selectedFiles, setSelectedFiles,unsupportedFiles, setUnsupportedFiles,errorMessage, setErrorMessage}: parameter) => {
 
     useEffect(() => {
         let filteredArr = selectedFiles.reduce((acc, current) => {

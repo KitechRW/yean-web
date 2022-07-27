@@ -1,3 +1,4 @@
+import Response from 'apis/utils/helpers/response';
 import { FormidableError, parseForm } from 'apis/utils/libForm';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
@@ -34,22 +35,15 @@ const handler = async (
       ? file.map(f => getPath(f.filepath))
       : getPath(file.filepath);
 
-    res.status(200).json({
-      data: {
-        url,
-      },
-      error: null,
-    });
+    return Response.success(res, 200, { url });
   } catch (e) {
     if (e instanceof FormidableError) {
-      res
-        .status(e.httpCode || 400)
-        .json({ data: null, error: e.message });
+      return Response.error(res, 400, { message: `${e.message}` });
     } else {
       console.error(e);
-      res
-        .status(500)
-        .json({ data: null, error: 'Internal Server Error' });
+      return Response.error(res, 500, {
+        message: 'Internal Server Error',
+      });
     }
   }
 };

@@ -5,7 +5,6 @@ import { useRouter } from 'next/router';
 import React from 'react';
 import Partners from '../_Partials/Library/Partners';
 import ReadBooks from '../_Partials/Library/ReadBooks';
-import { stats } from './data';
 
 const PartnerActivity = () => {
   return (

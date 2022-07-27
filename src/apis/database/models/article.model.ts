@@ -1,7 +1,7 @@
 import { Sequelize, Model, DataTypes } from 'sequelize';
 import User from './user.model';
 import Comment from './comment.model';
-import sequelize from '../config/db.config';
+import sequelize from '../config/sequelize';
 
 const Article = sequelize.define(
   'Article',

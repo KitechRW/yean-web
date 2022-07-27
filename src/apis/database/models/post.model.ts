@@ -1,5 +1,5 @@
 import { DataTypes } from 'sequelize';
-import sequelize from '../config/db.config';
+import sequelize from '../config/sequelize';
 import Like from './like.model';
 import Notification from './notification.model';
 import Post_comment from './post_comment.model';
