@@ -8,6 +8,7 @@ const Like = sequelize.define(
   {
     user: DataTypes.BIGINT,
     post: DataTypes.BIGINT,
+    likes: DataTypes.BOOLEAN,
   },
   {
     tableName: 'like',
@@ -16,7 +17,7 @@ const Like = sequelize.define(
 );
 
 (async () => {
-  await sequelize.sync({ alter: false });
+  await sequelize.sync({ alter: true });
   Like.belongsTo(User, {
     as: 'likedBy',
     foreignKey: {
