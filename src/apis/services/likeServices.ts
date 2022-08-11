@@ -29,7 +29,7 @@ export default class LikeServices{
       }
 
       static findAllByCondition(conditon: any) {
-        return Like.findAndCountAll({
+        return Like.count({
           where: conditon,
         }
         );
