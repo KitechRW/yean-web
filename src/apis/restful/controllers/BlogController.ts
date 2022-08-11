@@ -3,14 +3,12 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import Article from 'apis/database/models/article.model';
 
 export default class BlogController {
-  static async getArticles(
-    req: NextApiRequest,
-    res: NextApiResponse,
-  ) {
+  static async getOne(req: NextApiRequest, res: NextApiResponse) {
+    const { id } = req.query;
     try {
       return Response.success(res, 200, {
         message: 'articles fetched successfuly',
-        articles: await Article.findAndCountAll(),
+        articles: await Article.findByPk(`${id}`),
       });
     } catch (error) {
       return Response.error(res, 500, {
@@ -19,10 +17,25 @@ export default class BlogController {
     }
   }
 
-  static async create(
+  static async getArticles(
     req: NextApiRequest,
     res: NextApiResponse,
   ) {
+    try {
+      return Response.success(res, 200, {
+        message: 'articles fetched successfuly',
+        articles: await Article.findAndCountAll({
+          attributes: ['title', 'image'],
+        }),
+      });
+    } catch (error) {
+      return Response.error(res, 500, {
+        message: 'something went wrong',
+      });
+    }
+  }
+
+  static async create(req: NextApiRequest, res: NextApiResponse) {
     try {
       return Response.success(res, 200, {
         message: 'article created successfuly',

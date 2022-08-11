@@ -100,25 +100,26 @@ const AddPartnerForm = ({
   };
 
   return (
-    <DrawerLayout toggle={toggle} setToggle={setToggle}>
+    <DrawerLayout
+      title={`${isEdit ? 'Edit' : 'New'} Partner`}
+      toggle={toggle}
+      setToggle={setToggle}
+    >
       {children}
       <div className="flex flex-col">
-        <h1 className="font-black text-xl tracking-wide text-brand-green">
-          {isEdit ? 'Edit' : 'New'} Partner
-        </h1>
         <form
           onSubmit={event => {
             event.preventDefault();
             handleSubmit();
           }}
-          className="mt-6"
+          className="pt-4"
         >
           <div className="mb-6">
             <label
               htmlFor="email"
               className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
             >
-              email
+              Email
             </label>
             <input
               type="email"
@@ -163,7 +164,7 @@ const AddPartnerForm = ({
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             />
           </div>
-          <div className={'md-6 mb-6'}>
+          <div className=''>
             <Dropzone
               errorMessage={errorMessage}
               setErrorMessage={setErrorMessage}
@@ -186,7 +187,7 @@ const AddPartnerForm = ({
 
           <button
             type="submit"
-            className="text-white bg-brand-green/80 hover:bg-brand-green focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+            className="text-white mt-12 bg-brand-green/80 hover:bg-brand-green focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
           >
             Submit
           </button>

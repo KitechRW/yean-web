@@ -17,7 +17,7 @@ const PartnerAdminView = ({
           width={'320px '}
           height={'200px'}
           objectFit="cover"
-          priority
+          loading="lazy"
         />
 
         <div className="p-5">
