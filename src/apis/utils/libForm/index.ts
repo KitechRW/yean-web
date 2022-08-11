@@ -1,30 +1,14 @@
 import type { NextApiRequest } from 'next';
-import mime from 'mime';
+import amime from 'mime';
 import { join } from 'path';
-import * as dateFn from 'date-fns';
 import formidable from 'formidable';
 import { mkdir, stat } from 'fs/promises';
+import fs from 'fs'
 
 export const FormidableError = formidable.errors.FormidableError;
 
-export const getUploadedFileUrl = async (req: NextApiRequest) => {
-  const { fields, files } = await parseForm(req);
-  const getPath = (path: string) => {
-    const arr = path.split('public');
-    if (arr.length > 1) {
-      return arr[1];
-    }
-    return path;
-  };
+export const mime: any = amime;
 
-  const file = files.media;
-  let url = Array.isArray(file)
-    ? file.map(f => getPath(f.filepath))
-    : getPath(file.filepath);
-  return url;
-};
-
-// @ts-ignore
 export const parseForm = async (
   req: NextApiRequest,
 ): Promise<{
@@ -34,7 +18,7 @@ export const parseForm = async (
   return await new Promise(async (resolve, reject) => {
     const uploadDir = join(
       process.env.ROOT_DIR || process.cwd(),
-      `/public/uploads/${dateFn.format(Date.now(), 'dd-MM-Y')}`,
+      `/public/uploads`,
     );
     try {
       await stat(uploadDir);
@@ -48,24 +32,18 @@ export const parseForm = async (
       }
     }
 
-    let filename = ''; //  To avoid duplicate upload
     const form = formidable({
-      maxFiles: 2,
-      maxFileSize: 10 * 1024 * 1024, // 10mb
+      multiples: true,
+      maxFiles: 10,
+      maxFileSize: 10 * 1024 * 1024,
       uploadDir,
       filename: (_name, _ext, part) => {
-        if (filename !== '') {
-          return filename;
-        }
-
         const uniqueSuffix = `${Date.now()}-${Math.round(
           Math.random() * 1e9,
         )}`;
-        
-        filename = `${part.name || 'unknown'}-${uniqueSuffix}.${
+        const filename = `${part.name || 'unknown'}-${uniqueSuffix}.${
           mime.getExtension(part.mimetype || '') || 'unknown'
         }`;
-        console.log(filename);
         return filename;
       },
       filter: part => {
@@ -82,3 +60,18 @@ export const parseForm = async (
     });
   });
 };
+
+export default function removeFile(filePath: string | string[]) {
+  try {
+    if (Array.isArray(filePath)) {
+      for (let i = 0; i < filePath.length; i += 1) {
+        fs.unlinkSync(`public/${filePath[0]}`);
+      }
+    } else {
+      fs.unlinkSync(`public/${filePath}`);
+    }
+  } catch (error: any) {
+    console.error(error?.message);
+  }
+}
+
