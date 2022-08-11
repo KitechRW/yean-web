@@ -76,8 +76,8 @@ export const adminNavs = [
   },
   {
     icon: Feed,
-    label: 'Blogs',
-    path: '/admin/blogs',
+    label: 'Articles',
+    path: '/admin/articles',
   },
   {
     icon: Extension,

@@ -2,19 +2,19 @@ import React from 'react';
 import { NextPage } from 'next';
 import Head from 'next/head';
 import AdminScaffold from 'modules/layouts/AdminScaffold';
-import AdminBlogsActivity from 'modules/activities/AdminBlogsActivity';
+import ArticleActivity from 'modules/admin/ArticleActivity';
 import { withSessionSsr } from 'system/lib/withSession';
 import isAuth from 'system/helpers/isAuth';
 import Keys from 'apis/utils/constants/keys';
 
-const AdminBlogs: NextPage = () => {
+const Article: NextPage = () => {
   return (
     <>
       <Head>
         <title>Forshop</title>
       </Head>
       <AdminScaffold>
-        <AdminBlogsActivity />
+        <ArticleActivity />
       </AdminScaffold>
     </>
   );
@@ -51,4 +51,4 @@ const AdminBlogs: NextPage = () => {
 //   },
 // );
 
-export default AdminBlogs;
+export default Article;
