@@ -7,7 +7,7 @@ export default class CommentServices{
       }
     
       static findAll() {
-        return Comment.findAll();
+        return Comment.findAndCountAll();
       }
     
       static findByPk(id: number) {
@@ -18,6 +18,13 @@ export default class CommentServices{
         return Comment.update(set, {
           where: conditon,
           returning: true,
+        }
+        );
+      }
+
+      static findAllByCondition(conditon: any) {
+        return Comment.findAndCountAll({
+          where: conditon,
         }
         );
       }

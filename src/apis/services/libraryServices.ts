@@ -10,7 +10,7 @@ export default class LibraryServices{
         return Library.findAll();
       }
     
-      static findByPk(id: number) {
+      static findByPk(id: any) {
         return Library.findByPk(id);
       }
     

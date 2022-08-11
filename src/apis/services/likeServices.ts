@@ -28,4 +28,18 @@ export default class LikeServices{
         });
       }
 
+      static findAllByCondition(conditon: any) {
+        return Like.findAndCountAll({
+          where: conditon,
+        }
+        );
+      }
+
+      static findOneByCondition(conditon: any) {
+        return Like.findOne({
+          where: conditon,
+        }
+        );
+      }
+
 }
