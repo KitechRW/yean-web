@@ -15,9 +15,11 @@ const convertBytesToKB = (bytes: number) =>
 const UploadImage = ({
   updateFilesCb,
   maxFileSizeInBytes = DEFAULT_MAX_FILE_SIZE_IN_BYTES,
+  multiple = false,
 }: {
   updateFilesCb: Function;
   maxFileSizeInBytes?: number;
+  multiple: boolean
 }) => {
   const [dragActive, setDragActive] = React.useState(false);
   const [files, setFiles] = React.useState<any>({});
@@ -96,7 +98,7 @@ const UploadImage = ({
         <input
           ref={fileInputField}
           type="file"
-          multiple
+          multiple={multiple}
           accept=".jpg,.png,.jpeg"
           onChange={handleNewUploadImage}
           className="hidden"
