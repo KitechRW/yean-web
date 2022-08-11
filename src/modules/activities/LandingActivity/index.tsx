@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Scaffold from 'modules/layouts/Scaffold';
 import Image from 'next/image';
 import {
@@ -15,6 +15,8 @@ import SorgohIcon from 'modules/_partials/_drawable/icons/sorgohIcon';
 import HandIcon from 'modules/_partials/_drawable/icons/handIcon';
 import TruckIcon from 'modules/_partials/_drawable/icons/truckIcon';
 import Testimonial from 'modules/_partials/Testimonial';
+import EditIcon from '@mui/icons-material/Edit';
+import EditLandingPage from "modules/activities/admin/EditLandingPage";
 
 export const partners = [
   '/assets/images/agriprofocus 2.png',
@@ -24,8 +26,13 @@ export const partners = [
 ];
 
 const LandingAcitivity = () => {
+  const [isAdmin, setIsAdmin] =useState(true);
+
   return (
     <Scaffold>
+      {isAdmin ? <EditLandingPage><button className={"bg-brand-green shadow mb-3 z-10 bg-blend-overlay px-2 py-2 w-16 h-16 fixed rounded-full bottom-5 right-2 text-white"}>
+        <EditIcon/> edit
+      </button></EditLandingPage>:null}
       <div className="inline-grid items-center gap-x-10 gap-y-5 md:grid-cols-2 bg-brand-green px-4 md:px-0 py-4 md:py-8">
         <div className="flex flex-col items-start md:pl-8">
           <h1 className="font-black text-3xl md:text-6xl text-white tracking-wide">

@@ -10,7 +10,7 @@ const AdminPartnersActivity = () => {
 
   useEffect(() => {
     if (data.partners?.rows?.length) {
-      const filteredPartner = data.partners?.rows?.filter(each =>
+      const filteredPartner = data.partners?.rows?.filter((each :any) =>
         each.companyName
           .toLowerCase()
           .includes(filterValue.toLowerCase()),
