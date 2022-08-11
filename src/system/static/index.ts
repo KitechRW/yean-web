@@ -7,7 +7,8 @@ import {
   Dashboard,
   Feed,
   Extension,
-  Pageview
+  Pageview,
+  Category,
 } from '@mui/icons-material';
 
 export const navs = [
@@ -69,6 +70,11 @@ export const adminNavs = [
     path: '/admin',
   },
   {
+    icon: Category,
+    label: 'Categories',
+    path: '/admin/categories',
+  },
+  {
     icon: Feed,
     label: 'Blogs',
     path: '/admin/blogs',
@@ -86,6 +92,6 @@ export const adminNavs = [
   {
     icon: Pageview,
     label: 'Home page',
-    path: '/admin/edit-home-page'
-  }
+    path: '/admin/edit-home-page',
+  },
 ];
