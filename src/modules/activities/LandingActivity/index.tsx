@@ -35,7 +35,6 @@ const slide = {
 const slides = new Array(6).fill(slide);
 
 const LandingAcitivity = () => {
-  const [isAdmin, setIsAdmin] =useState(true);
 
   return (
     <Scaffold>

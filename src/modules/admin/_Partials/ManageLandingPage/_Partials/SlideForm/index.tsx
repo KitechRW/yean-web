@@ -1,7 +1,7 @@
 import {FormControlLabel, Radio, RadioGroup} from "@mui/material";
 import React from "react";
-import CreateBanner from "modules/activities/admin/Banner/Create";
 import DeleteIcon from '@mui/icons-material/Delete';
+import CreateBanner from "modules/admin/_Partials/BannerForm";
 
 const SlideForm = ({id, handleRemove}:any) =>{
   const [slideType, setSlideType ] = React.useState("bannerId")

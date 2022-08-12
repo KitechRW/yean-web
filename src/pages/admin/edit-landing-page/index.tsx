@@ -2,7 +2,7 @@ import React from 'react';
 import { NextPage } from 'next';
 import Head from 'next/head';
 import AdminScaffold from 'modules/layouts/AdminScaffold';
-import EditHomePageActivity from "modules/activities/EditHomePageActivity";
+import EditLandingPageActivity from "modules/admin/LandingPageActitivity";
 
 const AdminHomePage: NextPage = () => {
   return (
@@ -11,7 +11,7 @@ const AdminHomePage: NextPage = () => {
         <title>Edit home</title>
       </Head>
       <AdminScaffold>
-        <EditHomePageActivity />
+        <EditLandingPageActivity />
       </AdminScaffold>
     </>
   );
