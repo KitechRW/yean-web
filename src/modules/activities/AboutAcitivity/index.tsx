@@ -2,16 +2,10 @@ import Scaffold from 'modules/layouts/Scaffold';
 import BioPopup from 'modules/_partials/BioPopup';
 import Image from 'next/image';
 import React from 'react';
-import EditIcon from "@mui/icons-material/Edit";
-import EditAboutUs from "modules/activities/admin/EditAboutUs";
 
 const AboutActivity = () => {
-  const [isAdmin, setIsAdmin] = React.useState(true);
   return (
     <Scaffold>
-      {isAdmin ? <EditAboutUs><button className={"bg-brand-green shadow mb-3 z-10 bg-blend-overlay px-2 py-2 w-16 h-16 fixed rounded-full bottom-5 right-2 text-white"}>
-        <EditIcon/> edit
-      </button></EditAboutUs>:null}
       <div className="flex flex-col w-full relative bg-brand-green min-h-[250px]">
         <Image
           src="/assets/images/about-page.png"
