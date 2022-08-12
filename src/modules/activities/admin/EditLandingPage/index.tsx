@@ -4,9 +4,6 @@ import SlideForm from "modules/activities/admin/EditLandingPage/_Partials/SlideF
 
 const EditLandingPage = ({children}:any) => {
   const [toggle, setToggle] = React.useState(false);
-  const [emailValue, setEmailValue] = useState('');
-  const [companyNameValue, setCompanyNameValue] = useState('');
-  const [phoneValue, setPhoneValue] = useState('');
   const [slidesForm, setSlidesForm] = useState<any[]>([])
   const [newSlidesCounter, setNewSlidesCounter] = useState(0)
 

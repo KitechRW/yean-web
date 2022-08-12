@@ -4,7 +4,7 @@ import UploadImage from "modules/_partials/UploadImage";
 
 const CreateBanner = ({withSaveBtn = false}) => {
   return <div>
-    <form>
+    {/*<form>*/}
       <div className={"flex flex-col"}>
         {withSaveBtn?<div className={"mt-2 mx-10 mb-10 "}>
           <h2 className={"text-brand-green text-xl font-bold"}>Create banner</h2>
@@ -41,7 +41,7 @@ const CreateBanner = ({withSaveBtn = false}) => {
           <button type={"button"} className="bg-brand-green px-3 text-white rounded py-2">Save</button>
         </div>:null}
       </div>
-    </form>
+    {/*</form>*/}
   </div>
 }
 

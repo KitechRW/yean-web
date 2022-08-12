@@ -1,14 +1,17 @@
 import Scaffold from 'modules/layouts/Scaffold';
 import Image from 'next/image';
-import Link from 'next/link';
-import { useRouter } from 'next/router';
 import React from 'react';
 import Partners from '../_Partials/Library/Partners';
-import ReadBooks from '../_Partials/Library/ReadBooks';
+import EditIcon from "@mui/icons-material/Edit";
+import EditPartnerWithUs from "modules/activities/admin/EditPartnerWithUs";
 
 const PartnerActivity = () => {
+  const [isAdmin, setIsAdmin] = React.useState(true);
   return (
     <Scaffold>
+      {isAdmin ? <EditPartnerWithUs><button className={"bg-brand-green shadow mb-3 z-10 bg-blend-overlay px-2 py-2 w-16 h-16 fixed rounded-full bottom-5 right-2 text-white"}>
+        <EditIcon/> edit
+      </button></EditPartnerWithUs>:null}
       <div className="flex flex-col w-full relative bg-brand-green min-h-[312px]">
         <Image
           src="/assets/images/partner.png"

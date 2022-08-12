@@ -33,26 +33,28 @@ const ProjectsActivity = () => {
 
       <div className="flex flex-wrap justify-center w-full p-4 gap-10 md:p-8">
         {projects.map(element => (
-          <div
-            key={`projects_${projects.indexOf(element)}`}
-            className="relative flex flex-col rounded-lg drop-shadow shadow-xl"
-          >
-            <Image
-              src={element.imageUrl}
-              alt=""
-              loading="lazy"
-              width="479.65"
-              height="289.99"
-            />
-            <Image
-              src={element.chart}
-              alt=""
-              loading="lazy"
-              width="479.65"
-              height="435.95"
-            />
-            <div className="flex flex-grow w-full h-full top-0 absolute" />
-          </div>
+          <button key={`projects_${projects.indexOf(element)}`}
+          ><Link href={`/project/${element.id}`}>
+            <div
+              className="relative flex flex-col rounded-lg drop-shadow shadow-xl"
+            >
+              <Image
+                src={element.imageUrl}
+                alt=""
+                loading="lazy"
+                width="479.65"
+                height="289.99"
+              />
+              <Image
+                src={element.chart}
+                alt=""
+                loading="lazy"
+                width="479.65"
+                height="435.95"
+              />
+              <div className="flex flex-grow w-full h-full top-0 absolute" />
+            </div>
+          </Link></button>
         ))}
       </div>
     </Scaffold>
