@@ -9,7 +9,6 @@ const Library = sequelize.define(
     size: DataTypes.BIGINT,
     name: DataTypes.STRING,
     cat: DataTypes.BIGINT,
-    descriptions: DataTypes.STRING,
   },
   {
     tableName: 'library',

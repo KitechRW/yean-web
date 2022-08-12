@@ -35,7 +35,7 @@ export const parseForm = async (
     const form = formidable({
       multiples: true,
       maxFiles: 10,
-      maxFileSize: 10 * 1024 * 1024,
+      maxFileSize: 50 * 1024 * 1024,
       uploadDir,
       filename: (_name, _ext, part) => {
         const uniqueSuffix = `${Date.now()}-${Math.round(
@@ -48,8 +48,8 @@ export const parseForm = async (
       },
       filter: part => {
         return (
-          part.name === 'media' &&
-          (part.mimetype?.includes('image') || false)
+          part.name === 'media'
+          //  && (part.mimetype?.includes('image') || false)
         );
       },
     });
