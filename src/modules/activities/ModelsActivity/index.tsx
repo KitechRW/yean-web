@@ -7,13 +7,22 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
+import EditIcon from "@mui/icons-material/Edit";
+import EditImpact from "modules/activities/admin/EditImpact";
+import EditModels from "modules/activities/admin/EditModels";
 
 const ModelsActivity = () => {
+  const [isAdmin, setIsAdmin] = React.useState(true);
   const {
     query: { q },
   } = useRouter();
   return (
     <Scaffold>
+      {/*{isAdmin ? q?<EditImpact><button className={"bg-brand-green shadow mb-3 z-10 bg-blend-overlay px-2 py-2 w-16 h-16 fixed rounded-full bottom-5 right-2 text-white"}>*/}
+      {/*  <EditIcon/> edit*/}
+      {/*</button></EditImpact>:<EditModels><button className={"bg-brand-green shadow mb-3 z-10 bg-blend-overlay px-2 py-2 w-16 h-16 fixed rounded-full bottom-5 right-2 text-white"}>*/}
+      {/*  <EditIcon/> edit*/}
+      {/*</button></EditModels>:null}*/}
       <div className="flex flex-col w-full relative bg-brand-green min-h-[312px]">
         <Image
           src="/assets/images/services.png"
