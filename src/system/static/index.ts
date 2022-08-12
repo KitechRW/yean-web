@@ -80,6 +80,11 @@ export const adminNavs = [
     path: '/admin/articles',
   },
   {
+    icon: LocalLibrary,
+    label: 'Library',
+    path: '/admin/libraries',
+  },
+  {
     icon: Extension,
     label: 'Extension Materials',
     path: '/admin/extension-materials',

@@ -8,11 +8,13 @@ export default function handler(
 ) {
   switch (req.method) {
     case 'GET':
-      return LibraryController.getAll(req, res);
-    case 'POST':
-      return LibraryController.create(req, res);
+      return LibraryController.getOne(req, res);
+    case 'PATCH':
+      return LibraryController.update(req, res);
+    case 'DELETE':
+      return LibraryController.delete(req, res);
     default:
-      return Response.error(res, 405, {
+      return Response.success(res, 405, {
         message: 'method is not allowed',
       });
   }
