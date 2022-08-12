@@ -1,16 +1,28 @@
 import Response from 'apis/utils/helpers/response';
 import { NextApiRequest, NextApiResponse } from 'next';
 import Partner from 'apis/database/models/partner.model';
+import removeFile, { parseForm } from 'apis/utils/libForm';
 
 export default class PartnerController {
-  static async getPartners(
-    req: NextApiRequest,
-    res: NextApiResponse,
-  ) {
+  static async getOne(req: NextApiRequest, res: NextApiResponse) {
+    const { id } = req.query;
     try {
       return Response.success(res, 200, {
         message: 'Partners fetched successfuly',
-        partners: await Partner.findAndCountAll(),
+        data: await Partner.findByPk(`${id}`),
+      });
+    } catch (error) {
+      return Response.error(res, 500, {
+        message: 'something went wrong',
+      });
+    }
+  }
+
+  static async getAll(req: NextApiRequest, res: NextApiResponse) {
+    try {
+      return Response.success(res, 200, {
+        message: 'Partners fetched successfuly',
+        data: await Partner.findAndCountAll(),
       });
     } catch (error) {
       return Response.error(res, 500, {
@@ -20,16 +32,26 @@ export default class PartnerController {
   }
 
   static async create(req: NextApiRequest, res: NextApiResponse) {
-    const { email, phone, companyName, image } = req.body;
     try {
+      const { fields, files } = await parseForm(req);
+      if (!files.media) {
+        return Response.error(res, 500, {
+          message: 'Please upload image',
+        });
+      }
+
+      const file = files.media;
+      let images = Array.isArray(file)
+        ? file.map(f => `/uploads/${f.newFilename}`)
+        : `/uploads/${file.newFilename}`;
+
+      const payload = {
+        ...fields,
+        image: images,
+      };
       return Response.success(res, 200, {
         message: 'Partner created successfuly',
-        partner: await Partner.create({
-          email,
-          phone,
-          companyName,
-          image,
-        }),
+        data: await Partner.create(payload),
       });
     } catch (error) {
       return Response.error(res, 500, {
@@ -38,26 +60,43 @@ export default class PartnerController {
     }
   }
 
-  static async edit(req: NextApiRequest, res: NextApiResponse) {
+  static async update(req: NextApiRequest, res: NextApiResponse) {
     const { id } = req.query;
-    const { email, phone, companyName, image } = req.body;
     try {
-      const partner = await Partner.findByPk(`${id}`);
-      if (!partner) {
+      const item = await Partner.findByPk(`${id}`);
+
+      if (!item?.toJSON()) {
         return Response.error(res, 404, {
-          message: 'patner is not found',
+          message: 'Partner is not found',
         });
       }
-      const prev = partner.toJSON();
-      partner.set({
-        email: email || prev.email,
-        phone: phone || prev.phone,
-        companyName: companyName || prev.companyName,
-        image: image || prev.companyName,
-      });
+
+      const { fields, files } = await parseForm(req);
+      if (!files.media) {
+        return Response.error(res, 500, {
+          message: 'Please upload image',
+        });
+      }
+
+      const file = files.media;
+      let images = Array.isArray(file)
+        ? file.map(f => `/uploads/${f.newFilename}`)
+        : `/uploads/${file.newFilename}`;
+
+      if (images) {
+        removeFile(item.toJSON()?.image);
+      }
+
+      const payload = {
+        ...fields,
+        image: images,
+      };
+
+      item.set(payload);
+
       return Response.success(res, 200, {
-        message: 'Partner edited successfuly',
-        partner: await partner.save(),
+        message: 'Partner updated successfuly',
+        data: await item.save(),
       });
     } catch (error) {
       return Response.error(res, 500, {
@@ -69,15 +108,15 @@ export default class PartnerController {
   static async delete(req: NextApiRequest, res: NextApiResponse) {
     const { id } = req.query;
     try {
-      const partner = await Partner.findByPk(`${id}`);
-      if (!partner) {
+      const item = await Partner.findByPk(`${id}`);
+      if (!item) {
         return Response.error(res, 409, {
           message: 'Partner is not found',
         });
       }
       return Response.success(res, 200, {
         message: 'Partners deleted successfuly',
-        partner: await Partner.destroy({ where: { id } }),
+        data: await item.destroy(),
       });
     } catch (error) {
       return Response.error(res, 500, {

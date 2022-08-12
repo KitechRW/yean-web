@@ -96,8 +96,8 @@ export const adminNavs = [
   },
   {
     icon: Pageview,
-    label: 'Landing page',
-    path: '/admin/edit-landing-page',
+    label: 'Home Page',
+    path: '/admin/home',
   },
   {
     icon: Pageview,

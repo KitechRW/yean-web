@@ -2,16 +2,16 @@ import React from 'react';
 import { NextPage } from 'next';
 import Head from 'next/head';
 import AdminScaffold from 'modules/layouts/AdminScaffold';
-import EditLandingPageActivity from "modules/admin/LandingPageActitivity";
+import HomeActivity from 'modules/admin/HomeActivity';
 
-const AdminHomePage: NextPage = () => {
+const Home: NextPage = () => {
   return (
     <>
       <Head>
-        <title>Edit home</title>
+        <title>Yean</title>
       </Head>
       <AdminScaffold>
-        <EditLandingPageActivity />
+        <HomeActivity />
       </AdminScaffold>
     </>
   );
@@ -48,4 +48,4 @@ const AdminHomePage: NextPage = () => {
 //   },
 // );
 
-export default AdminHomePage;
+export default Home;

@@ -1,4 +1,4 @@
-import PartnerController from 'apis/restful/controllers/PartnerController';
+import LandingController from 'apis/restful/controllers/LandingController';
 import Response from 'apis/utils/helpers/response';
 import { NextApiRequest, NextApiResponse } from 'next';
 
@@ -8,18 +8,12 @@ export default function handler(
 ) {
   switch (req.method) {
     case 'GET':
-      return PartnerController.getAll(req, res);
+      return LandingController.getAll(req, res);
     case 'POST':
-      return PartnerController.create(req, res);
+      return LandingController.create(req, res);
     default:
       return Response.error(res, 405, {
         message: 'method is not allowed',
       });
   }
 }
-
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};

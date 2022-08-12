@@ -2,19 +2,19 @@ import React from 'react';
 import { NextPage } from 'next';
 import Head from 'next/head';
 import AdminScaffold from 'modules/layouts/AdminScaffold';
-import AdminPartnersActivity from 'modules/activities/AdminPartnersActivity';
+import PartnerActivity from 'modules/admin/PartnerActivity';
 import { withSessionSsr } from 'system/lib/withSession';
 import isAuth from 'system/helpers/isAuth';
 import Keys from 'apis/utils/constants/keys';
 
-const AdminPartners: NextPage = () => {
+const Partner: NextPage = () => {
   return (
     <>
       <Head>
         <title>Forshop</title>
       </Head>
       <AdminScaffold>
-        <AdminPartnersActivity />
+        <PartnerActivity />
       </AdminScaffold>
     </>
   );
@@ -51,4 +51,4 @@ const AdminPartners: NextPage = () => {
 //   },
 // );
 
-export default AdminPartners;
+export default Partner;
