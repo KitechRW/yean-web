@@ -15,6 +15,7 @@ import SorgohIcon from 'modules/_partials/_drawable/icons/sorgohIcon';
 import HandIcon from 'modules/_partials/_drawable/icons/handIcon';
 import TruckIcon from 'modules/_partials/_drawable/icons/truckIcon';
 import Testimonial from 'modules/_partials/Testimonial';
+import Slides from 'modules/_partials/Slides';
 
 export const partners = [
   '/assets/images/agriprofocus 2.png',
@@ -23,37 +24,20 @@ export const partners = [
   '/assets/images/ypard 1.png',
 ];
 
+const slide = {
+  title: 'From Youth Engagement in Agriculture Network',
+  desc: `Youth Engagement in Agriculture Network (YEAN ) is a Youth
+            Led Private Agriculture Extension Social enterprise
+            created in 2014.`,
+  image: '/assets/images/Home Slider Image.png',
+};
+
+const slides = new Array(6).fill(slide);
+
 const LandingAcitivity = () => {
   return (
     <Scaffold>
-      <div className="inline-grid items-center gap-x-10 gap-y-5 md:grid-cols-2 bg-brand-green px-4 md:px-0 py-4 md:py-8">
-        <div className="flex flex-col items-start md:pl-8">
-          <h1 className="font-black text-3xl md:text-6xl text-white tracking-wide">
-            From Youth Engagement in Agriculture Network
-          </h1>
-          <p className="text-white text-sm md:text-base leading-relaxed mt-3 md:mt-6">
-            Youth Engagement in Agriculture Network (YEAN ) is a Youth
-            Led Private Agriculture Extension Social enterprise
-            created in 2014.
-          </p>
-          <button
-            type="button"
-            className="uppercase rounded-sm mt-3 md:mt-6 px-4 py-2 bg-brand-yellow flex items-center space-x-2 text-white"
-          >
-            <LocalLibrary />
-            <span>Learn more</span>
-          </button>
-        </div>
-        <div className="flex flex-col relative min-h-[418px]">
-          <Image
-            src="/assets/images/Home Slider Image.png"
-            alt=""
-            layout="fill"
-            priority
-            objectFit="cover"
-          />
-        </div>
-      </div>
+      <Slides data={slides} />
       <div className="px-4 md:px-8 py-2 bg-white inline-grid md:grid-cols-3 gap-x-10 gap-y-3">
         <div className="flex space-y-6 justify-between flex-col items-center py-4 px-6 rounded-[15px] drop-shadow border border-gray-400">
           <Image
