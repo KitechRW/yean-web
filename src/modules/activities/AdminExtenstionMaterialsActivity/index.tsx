@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from 'react'
-import AddPartnerForm from "modules/activities/_Partials/Partners/AddPartner";
 import PartnerAdminView from "modules/activities/_Partials/Partners/PartnerAdminView";
 import {useOpenFetcher} from "apis/utils/fetcher";
 import AddExtensionMaterialForm from "modules/activities/_Partials/ExtensionMaterials/AddExtensionMaterials";
@@ -11,7 +10,7 @@ const AdminExtenstionMaterialsActivity = () => {
 
   useEffect(() => {
     if (data.partners?.rows?.length) {
-      const filteredPartner = data.partners?.rows?.filter(each =>
+      const filteredPartner = data.partners?.rows?.filter((each:any) =>
         each.companyName
           .toLowerCase()
           .includes(filterValue.toLowerCase()),
