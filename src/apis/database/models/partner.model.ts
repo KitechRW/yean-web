@@ -4,10 +4,17 @@ import sequelize from '../config/sequelize';
 const Partner = sequelize.define(
   'Partner',
   {
-    email: DataTypes.STRING,
-    image: DataTypes.STRING,
-    phone: DataTypes.STRING,
     companyName: DataTypes.STRING,
+    email: DataTypes.STRING,
+    phone: DataTypes.STRING,
+    address: DataTypes.STRING,
+    message:DataTypes.TEXT,
+    image: DataTypes.STRING,
+    confirmed:{
+      type:DataTypes.BOOLEAN,
+      defaultValue:false
+    }
+    
   },
   {
     tableName: 'tbl_partner',
@@ -16,7 +23,7 @@ const Partner = sequelize.define(
 );
 
 (async () => {
-  await sequelize.sync({ alter: false });
+  await sequelize.sync({ alter:true });
 })();
 
 export default Partner;
