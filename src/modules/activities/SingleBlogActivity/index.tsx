@@ -6,7 +6,7 @@ import { useRouter } from 'next/router';
 import React from 'react';
 import Blogs from '../_Partials/Blogs';
 
-const SingleBlogActivity = ({article}:any) => {
+const SingleBlogActivity = ({data}:any) => {
   const contentRef = React.useRef(null);
   const { push } = useRouter();
   const handleClick = () => {
@@ -14,11 +14,11 @@ const SingleBlogActivity = ({article}:any) => {
   };
 
   React.useEffect(() => {
-    if (article.text && contentRef.current) {
+    if (data.article.text && contentRef.current) {
       // @ts-ignore
-      contentRef.current.innerHTML = article.text
+      contentRef.current.innerHTML = data.article.text
     }
-  }, [article])
+  }, [data])
   return (
     <Scaffold>
       <div className="w-full px-4 bg-white md:px-8 pt-12 border-b border-[#E6E6E6]">
@@ -48,15 +48,15 @@ const SingleBlogActivity = ({article}:any) => {
           </div>
         </div>
         <div className="px-3 py-3 space-x-3 flex items-center">
-          <Avatar src="/assets/images/avatar.png" alt="Fridolin" />
+          <Avatar src="/assets/images/avatar.png" alt={data?.article?.author?.firstName || "Name"} />
           <div className="flex flex-col text-[#767676]">
-            <h1 className="text-base font-bold">Fridolin</h1>
+            <h1 className="text-base font-bold">{data?.author?.firstName}</h1>
             <p className="text-xs">12 April 2022</p>
           </div>
         </div>
 
         <h1 className="mt-6 text-[#6F7D1D] text-lg md:text-xl font-semibold">
-          {article?.title}
+          {data?.article?.title}
         </h1>
 
         <div ref={contentRef} className="mt-4 text-justify leading-relaxed flex flex-col space-y-3 hideContentNotInTagUL">

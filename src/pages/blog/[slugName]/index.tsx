@@ -24,7 +24,7 @@ const SingleBlogPage = ({data}:any) => {
       <Head>
         <title>Yean</title>
       </Head>
-      <SingleBlogActivity article={data} />
+      <SingleBlogActivity data={data} />
     </>
   );
 };
