@@ -4,10 +4,10 @@ import { useRouter } from 'next/router';
 import React from 'react';
 import Blogs from '../_Partials/Blogs';
 
-const BlogActivity = () => {
+const BlogActivity = ({articles}:any) => {
   const { push } = useRouter();
-  const handleClick = () => {
-    push('/blog/cow-farmers');
+  const handleClick = (id:any) => {
+    push('/blog/'+id);
   };
   return (
     <Scaffold>
@@ -18,14 +18,12 @@ const BlogActivity = () => {
               All
             </span>
           </Link>
-          <Link href="/blog/items">
-            <span className="cursor-pointer text-sm font-medium pb-3">Blogs</span>
-          </Link>
+          <span className="cursor-pointer text-sm font-medium pb-3">Blogs</span>
         </div>
       </div>
 
       <div className="w-full px-4 bg-white md:px-8 py-6">
-        <Blogs onClick={handleClick} />
+        <Blogs articles={articles} onClick={handleClick} />
       </div>
     </Scaffold>
   );
