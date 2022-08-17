@@ -1,11 +1,65 @@
 import { Call, Email, Facebook } from '@mui/icons-material';
 import Scaffold from 'modules/layouts/Scaffold';
 import React from 'react';
+import * as yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { useForm } from 'react-hook-form';
+import axios from 'axios';
+
+const schema = yup
+  .object({
+    name: yup.string().required('Name is required'),
+    message: yup.string().required('Message is required'),
+    email: yup
+      .string()
+      .required('Email is required')
+      .email('Email is invalid'),
+  })
+  .required();
 
 const ContactActivity = () => {
+  const [errorMessage, setErrorMessage] = React.useState(null);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
+  });
+
+  const onSubmit = (data: any) => {
+    console.log("data")
+    console.log(data)
+    setErrorMessage(null);
+    axios
+      .post('/api/contacts', data)
+      .then(response => {
+        console.log(response);
+      })
+      .catch(result => {
+        const { error } =
+          result.response?.data || result.response || result;
+        console.log(error?.message);
+        setErrorMessage(
+          error?.message || 'Something went wrong, try again',
+        );
+      });
+  };
+
   return (
     <Scaffold>
-      <div className="items-center bg-gradient-to-r from-[#00F0FF]/20 to-white flex-grow h-full flex flex-col p-4 md:p-8">
+      {errorMessage ? (
+              <div className="mt-3 flex flex-col items-center rounded-lg bg-red-500 px-4 py-3">
+                <p className="text-white text-sm first-letter:uppercase">
+                  {errorMessage}
+                </p>
+              </div>
+            ) : null}
+      <form onSubmit={event => {
+                handleSubmit(onSubmit)(event);
+              }}
+      className="items-center bg-gradient-to-r from-[#00F0FF]/20 to-white flex-grow h-full flex flex-col p-4 md:p-8">
         <h1 className="text-dark-green text-4xl md:text-6xl font-bold tracking-wide">
           Contact us
         </h1>
@@ -14,23 +68,41 @@ const ContactActivity = () => {
         </p>
 
         <div className="mt-6 flex gap-3 justify-between flex-wrap items-center max-w-4xl">
+          <div className="w-full max-w-[340px]">
           <input
             type="text"
+            {...register('name')}
             placeholder="Your Name"
-            className="rounded-full border border-dark-green py-3 px-4 w-full max-w-[340px]"
+            className="rounded-full border border-dark-green py-3 px-4 w-full"
           />
+          <p className="text-red-500 text-xs mt-1">
+                  {errors.name?.message}
+                </p>
+          </div>
+          <div className="w-full max-w-[340px]">
           <input
             type="email"
+            {...register('email')}
             placeholder="Your Email Address"
-            className="flex-grow rounded-full border border-dark-green py-3 px-4 w-full max-w-[340px]"
+            className="flex-grow rounded-full border border-dark-green py-3 px-4 w-full"
+            
           />
+          <p className="text-red-500 text-xs mt-1">
+                  {errors.email?.message}
+                </p>
+          </div>
+          <div className="w-full max-w-[763px]">
           <textarea
-            name=""
+            {...register('message')}
             id=""
             rows={4}
             placeholder="Your Messages..."
-            className="resize-none rounded-3xl border border-dark-green py-3 px-4 w-full max-w-[763px]"
+            className="resize-none rounded-3xl border border-dark-green py-3 px-4 w-full"
           />
+          <p className="text-red-500 text-xs mt-1">
+                  {errors.message?.message}
+                </p>
+          </div>
         </div>
         <button className="text-base font-bold border-2 px-12 py-3 tracking-wide rounded-full mt-6 border-dark-green">
           Submit
@@ -72,7 +144,7 @@ const ContactActivity = () => {
             </a>
           ))}
         </div>
-      </div>
+      </form>
     </Scaffold>
   );
 };
