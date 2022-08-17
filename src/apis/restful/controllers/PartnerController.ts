@@ -124,4 +124,27 @@ export default class PartnerController {
       });
     }
   }
+
+  static async request(req: NextApiRequest, res: NextApiResponse){
+    try {
+      const {companyName,email,phone,address,message} = req.body;
+      await Partner.create({companyName,email,phone,address,message}).then((resp)=>{
+        return Response.success(res,201,{
+          message:"request sent successfully",
+          data:resp
+        })
+      }).catch((error)=>{
+        return Response.error(res,403,{
+          message:"Something failed",
+          error:error.message
+        })
+      })
+    } catch (error:any) {
+      return Response.error(res,500,{
+        message:'server error',
+        error:error.message
+      })      
+    }
+  }
+
 }
