@@ -23,11 +23,12 @@ export default class ArticleController {
     try {
       return Response.success(res, 200, {
         message: 'Articles fetched successfuly',
-        data: await ArticleServices.findAndCountAll(undefined,["id","title","image","author_id"]),
+        data: await ArticleServices.findAndCountAll(undefined,["id","title","image","author_id"],["firstName","lastName","phone","gender"]),
       });
-    } catch (error) {
+    } catch (error:any) {
       return Response.error(res, 500, {
         message: 'something went wrong',
+        error:error.message
       });
     }
   }
