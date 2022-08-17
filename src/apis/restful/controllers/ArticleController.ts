@@ -1,6 +1,7 @@
 import Response from 'apis/utils/helpers/response';
 import { NextApiRequest, NextApiResponse } from 'next';
 import Article from 'apis/database/models/article.model';
+import ArticleServices from 'apis/services/articleServices';
 import removeFile, { parseForm } from 'apis/utils/libForm';
 
 export default class ArticleController {
@@ -22,11 +23,12 @@ export default class ArticleController {
     try {
       return Response.success(res, 200, {
         message: 'Articles fetched successfuly',
-        data: await Article.findAndCountAll(),
+        data: await ArticleServices.findAndCountAll(undefined,["id","title","image","author_id"],["firstName","lastName","phone","gender"]),
       });
-    } catch (error) {
+    } catch (error:any) {
       return Response.error(res, 500, {
         message: 'something went wrong',
+        error:error.message
       });
     }
   }
