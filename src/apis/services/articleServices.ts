@@ -14,6 +14,7 @@ export default class ArticleServices {
   static async findAndCountAll(
     where?: WhereOptions<any> | undefined,
     attributes?: FindAttributeOptions | undefined,
+    autherAttributes?: FindAttributeOptions | undefined,
   ) {
     const { count, rows } = await Article.findAndCountAll({
       attributes,
@@ -21,9 +22,9 @@ export default class ArticleServices {
     });
     const articleRows = await Promise.all(
       rows.map(row => {
-        return User.findByPk(row.toJSON()?.author_id).then(
-          author => ({ author, ...row.toJSON() }),
-        );
+        return User.findByPk(row.toJSON()?.author_id, {
+          attributes: autherAttributes,
+        }).then(author => ({ author, ...row.toJSON() }));
       }),
     );
     return { count, rows: articleRows };

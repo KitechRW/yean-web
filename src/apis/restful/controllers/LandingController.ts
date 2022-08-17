@@ -63,7 +63,12 @@ export default class LandingController {
       );
       return Response.success(res, 200, {
         message: 'Landings fetched successfuly',
-        data: articles,
+        data: {
+          ...articles,
+          rows: articles.rows.sort(
+            (a: any, b: any) => Number(b.id) - Number(a.id),
+          ),
+        },
       });
     } catch (error: any) {
       return Response.error(res, 500, {
