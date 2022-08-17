@@ -19,23 +19,31 @@ const schema = yup
 
 const ContactActivity = () => {
   const [errorMessage, setErrorMessage] = React.useState(null);
+  const [successMessage, setSuccessMessage] = React.useState(null);
 
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
   });
 
   const onSubmit = (data: any) => {
-    console.log("data")
-    console.log(data)
     setErrorMessage(null);
+    setSuccessMessage(null);
     axios
       .post('/api/contacts', data)
       .then(response => {
         console.log(response);
+        if(response.status === 201 || response.status === 200){
+          reset();
+          setSuccessMessage(response?.data?.message || "Thank you for contact us !");
+        
+        }else {
+          setErrorMessage(response?.data?.message || "Something bad happed! try again later ");
+        }
       })
       .catch(result => {
         const { error } =
@@ -50,12 +58,20 @@ const ContactActivity = () => {
   return (
     <Scaffold>
       {errorMessage ? (
-              <div className="mt-3 flex flex-col items-center rounded-lg bg-red-500 px-4 py-3">
+              <div className="mt-3 flex flex-col items-center rounded-lg bg-red-500 px-4 py-3 max-w-4xl">
                 <p className="text-white text-sm first-letter:uppercase">
                   {errorMessage}
                 </p>
               </div>
             ) : null}
+       {successMessage ? (
+              <div className="mt-3 flex flex-col items-center rounded-lg bg-green-500 px-4 py-3 w-full max-w-4xl self-center">
+                <p className="text-white text-sm first-letter:uppercase">
+                  {successMessage}
+                </p>
+              </div>
+            ) : null}
+           
       <form onSubmit={event => {
                 handleSubmit(onSubmit)(event);
               }}
