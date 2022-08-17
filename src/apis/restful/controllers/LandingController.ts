@@ -18,8 +18,9 @@ export default class LandingController {
       const articles = await Article.findAll({
         where: { id: JSON.parse(articleIds) },
       });
+      const ids = JSON.parse(slideIds);
       const slides = await Article.findAll({
-        where: { id: JSON.parse(slideIds) },
+        where: { id: ids },
       });
       const extensions = await Article.findAll({
         where: { id: JSON.parse(extensionIds) },
@@ -27,7 +28,7 @@ export default class LandingController {
 
       return Response.success(res, 200, {
         message: 'Landings fetched successfuly',
-        data: { slides, articles, extensions },
+        data: { slideIds: ids, slides },
       });
     } catch (error) {
       return Response.error(res, 500, {

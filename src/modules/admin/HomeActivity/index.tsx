@@ -1,7 +1,6 @@
 import { Add, Edit, Search } from '@mui/icons-material';
 import { useOpenFetcher } from 'apis/utils/fetcher';
 import React from 'react';
-import AddItem from '../_Partials/ManageHomePage/AddItem';
 import EditItem from '../_Partials/ManageHomePage/EditItem';
 import ViewItem from '../_Partials/ManageHomePage/ViewItem';
 
@@ -25,7 +24,7 @@ const PartnerActivity = () => {
   };
 
   React.useEffect(() => {
-    setItem(data?.data);
+    setItem(data);
   }, [data]);
 
   if (isLoading) {

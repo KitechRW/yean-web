@@ -19,18 +19,18 @@ const ReactQuill = dynamic(() => import('react-quill'), {
 
 const schema = joi.object({
   slideIds: joi.array().items(joi.number()).min(6).max(6).required(),
-  articleIds: joi
-    .array()
-    .items(joi.number())
-    .required()
-    .min(9)
-    .max(12),
-  extensionIds: joi
-    .array()
-    .items(joi.number())
-    .min(9)
-    .max(12)
-    .required(),
+  // articleIds: joi
+  //   .array()
+  //   .items(joi.number())
+  //   .required()
+  //   .min(9)
+  //   .max(12),
+  // extensionIds: joi
+  //   .array()
+  //   .items(joi.number())
+  //   .min(9)
+  //   .max(12)
+  //   .required(),
 });
 
 const EditItem = ({
@@ -59,8 +59,8 @@ const EditItem = ({
   const onSubmit = async (query: any) => {
     setLoading(true);
     const { data, error } = await DefaultApi.PatchRoute.patchRoute(
-      `/api/home/1`,
-      query,
+      `/api/landing/1`,
+      { slideIds: query.slideIds },
     );
     setLoading(false);
 
@@ -94,7 +94,7 @@ const EditItem = ({
     }
     setLoading(true);
     const { data, error } = await DefaultApi.DeleteRoute.deleteRoute(
-      `/api/home/1`,
+      `/api/landing/1`,
     );
     setLoading(false);
 
@@ -115,15 +115,13 @@ const EditItem = ({
     }
   };
 
-  // React.useEffect(() => {
-  //   if (dataValues) {
-  //     reset({
-  //       title: dataValues.title,
-  //       text: dataValues.text,
-  //       category: dataValues.category,
-  //     });
-  //   }
-  // }, [dataValues]);
+  React.useEffect(() => {
+    if (dataValues) {
+      reset({
+        slideIds: dataValues.slideIds,
+      });
+    }
+  }, [dataValues]);
 
   const {
     data: { data: articles },
@@ -138,16 +136,14 @@ const EditItem = ({
     (element: any) => dataValues.slideIds?.includes(element.value),
   );
 
-  const selectedArticleOption = articlesOptions?.filter(
-    (element: any) => dataValues.articleIds?.includes(element.value),
-  );
+  // const selectedArticleOption = articlesOptions?.filter(
+  //   (element: any) => dataValues.articleIds?.includes(element.value),
+  // );
 
-  const selectedExtensionOption = articlesOptions?.filter(
-    (element: any) =>
-      dataValues.extensionIds?.includes(element.value),
-  );
-
-  console.log(errors);
+  // const selectedExtensionOption = articlesOptions?.filter(
+  //   (element: any) =>
+  //     dataValues.extensionIds?.includes(element.value),
+  // );
 
   return (
     <DrawerLayout
@@ -193,7 +189,7 @@ const EditItem = ({
             )}
           </label>
 
-          <label className="flex flex-col">
+          {/* <label className="flex flex-col">
             <span className="text-sm font-medium text-gray-900 dark:text-gray-300">
               Latest Blog
             </span>
@@ -251,7 +247,7 @@ const EditItem = ({
                 {formatJoiErorr(`${errors.extensionIds.message}`)}
               </p>
             )}
-          </label>
+          </label> */}
 
           <div className="flex items-center space-x-3 justify-between md:col-span-2">
             <button
