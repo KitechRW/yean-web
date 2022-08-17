@@ -30,6 +30,22 @@ export default class ArticleServices {
     return { count, rows: articleRows };
   }
 
+  static async findOne(
+    where?: WhereOptions<any> | undefined,
+    attributes?: FindAttributeOptions | undefined,
+    autherAttributes?: FindAttributeOptions | undefined,
+  ) {
+    const article:any = await Article.findOne({
+      attributes,
+      where,
+    });
+    const articleRows = await User.findByPk(article.toJSON()?.author_id, {
+          attributes: autherAttributes,
+        }).then(author => ({ article, author }));
+    
+    return articleRows;
+  }
+
   static findByPk(id: number) {
     return Article.findByPk(id);
   }
