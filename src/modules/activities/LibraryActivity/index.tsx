@@ -11,7 +11,25 @@ import React from 'react';
 import ReadBooks from '../_Partials/Library/ReadBooks';
 import { stats } from './data';
 
-const LibraryActivity = () => {
+const LibraryActivity = ({books}:any) => {
+const [booksPart1, setBooksPart1] = React.useState<any[]>([])
+const [booksPart2, setBooksPart2] = React.useState<any[]>([])
+
+React.useEffect(() => {
+  if(books && books.rows){
+    setBooksPart1([])
+    setBooksPart2([])
+    books.rows.forEach((eachBook:any, index:number) => {
+      if(index < 6){
+        setBooksPart1((i:any[]) => [...i, eachBook])
+      }
+      else{
+        setBooksPart2((i:any[]) => [...i, eachBook])
+      }
+    })
+  }
+}, [books])
+
   return (
     <Scaffold>
       <div className="flex flex-col w-full relative bg-brand-green min-h-[312px]">
@@ -72,7 +90,7 @@ const LibraryActivity = () => {
       </div>
 
       <div className="p-4 md:p-8 justify-center gap-6 flex md:gap-x-10 flex-wrap w-full">
-        <ReadBooks />
+        <ReadBooks books={booksPart1} />
         <div className="w-full justify-center flex p-4 md:p-8 gap-3 items-center">
           <Image
             src="/assets/images/green-book.png"
@@ -84,7 +102,7 @@ const LibraryActivity = () => {
             FEATURED Things To Know About Green Flat Design
           </h1>
         </div>
-        <ReadBooks />
+        <ReadBooks books={booksPart2} />
       </div>
     </Scaffold>
   );
