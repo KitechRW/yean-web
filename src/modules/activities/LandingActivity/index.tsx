@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import Scaffold from 'modules/layouts/Scaffold';
 import Image from 'next/image';
 import {
@@ -34,8 +34,8 @@ const slide = {
 
 const slides = new Array(6).fill(slide);
 
-const LandingAcitivity = () => {
-
+const LandingAcitivity = ({ data }: { data: any }) => {
+  const slides = data?.slides || [];
   return (
     <Scaffold>
       <Slides data={slides} />
