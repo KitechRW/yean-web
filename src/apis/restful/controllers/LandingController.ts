@@ -2,6 +2,7 @@ import Response from 'apis/utils/helpers/response';
 import { NextApiRequest, NextApiResponse } from 'next';
 import Landing from 'apis/database/models/landing.model';
 import Article from 'apis/database/models/article.model';
+import ArticleServices from 'apis/services/articleServices';
 
 export default class LandingController {
   static async getOne(req: NextApiRequest, res: NextApiResponse) {
@@ -46,6 +47,28 @@ export default class LandingController {
     } catch (error) {
       return Response.error(res, 500, {
         message: 'something went wrong',
+      });
+    }
+  }
+
+  static async getSomeArticles(
+    req: NextApiRequest,
+    res: NextApiResponse,
+  ) {
+    try {
+      let attributes = req.query.attributes as string;
+      const articles = await ArticleServices.findAndCountAll(
+        undefined,
+        attributes.split(','),
+      );
+      return Response.success(res, 200, {
+        message: 'Landings fetched successfuly',
+        data: articles,
+      });
+    } catch (error: any) {
+      return Response.error(res, 500, {
+        message: 'something went wrong',
+        reason: error?.message,
       });
     }
   }

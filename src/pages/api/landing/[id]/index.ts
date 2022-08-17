@@ -8,6 +8,9 @@ export default function handler(
 ) {
   switch (req.method) {
     case 'GET':
+      if (req.query.attributes) {
+        return LandingController.getSomeArticles(req, res);
+      }
       return LandingController.getOne(req, res);
     case 'PATCH':
       return LandingController.update(req, res);

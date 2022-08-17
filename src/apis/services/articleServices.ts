@@ -21,8 +21,8 @@ export default class ArticleServices {
     });
     const articleRows = await Promise.all(
       rows.map(row => {
-        return User.findByPk(row.toJSON()?.auther_id).then(
-          auther => ({ auther, ...row.toJSON() }),
+        return User.findByPk(row.toJSON()?.author_id).then(
+          author => ({ author, ...row.toJSON() }),
         );
       }),
     );
