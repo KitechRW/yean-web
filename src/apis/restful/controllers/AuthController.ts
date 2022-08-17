@@ -5,7 +5,7 @@ import Response from 'apis/utils/helpers/response';
 import { emailSender } from 'apis/utils/sendEmail';
 import emailMocks from 'apis/utils/mocks';
 import { NextApiRequest, NextApiResponse } from 'next';
-import { isloggedIn } from '../checker/auth';
+import { isloggedIn } from '../../middlewares/auth';
 
 export default class AuthController {
   /**
