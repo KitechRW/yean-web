@@ -5,10 +5,10 @@ import axios from 'axios';
 
 
 export async function getStaticProps() {
-  return axios.get('http://localhost:3001/api/blogs').then(resp => {
+  return axios.get('http://localhost:3001/api/articles').then(resp => {
 
     return {
-      props: { data: resp.data}, 
+      props: { data: resp.data.data}, 
     }
 }).catch(ex => {
 
@@ -28,7 +28,7 @@ const BlogPage = (props:any) => {
       <Head>
         <title>Yean</title>
       </Head>
-      <BlogActivity articles={props?.data?.articles}  />
+      <BlogActivity articles={props?.data}  />
     </>
   );
 };

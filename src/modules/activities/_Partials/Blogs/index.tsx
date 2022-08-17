@@ -34,9 +34,9 @@ const Blogs = ({ size = 18, onClick = (id:any) => {},articles={rows:[]} }) => {
             {element?.title}
           </p>
           <div className="px-3 pb-3 space-x-3 flex items-center">
-            <Avatar src="/assets/images/avatar.png" alt="Fridolin" />
+            <Avatar src="/assets/images/avatar.png" alt={element?.author?.firstName||"Name"} />
             <div className="flex flex-col text-[#767676]">
-              <h1 className="text-base font-bold">Fridolin</h1>
+              <h1 className="text-base font-bold">{element?.author?.firstName}</h1>
               <p className="text-xs">12 April 2022</p>
             </div>
           </div>

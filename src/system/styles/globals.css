@@ -30,16 +30,16 @@
   height: 2px;
 }
 
-.hideContentNotInTagUL > ul > li{
+.hideContentNotInTagUL ul li{
   visibility: visible;
 }
-.hideContentNotInTagUL > ul{
+.hideContentNotInTagUL ul{
   visibility: hidden;
 }
-.hideContentNotInTagUL > ol > li{
+.hideContentNotInTagUL ol li{
   visibility: visible;
 }
-.hideContentNotInTagUL > ol{
+.hideContentNotInTagUL ol{
   visibility: hidden;
 }
 
