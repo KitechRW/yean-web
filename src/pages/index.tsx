@@ -1,8 +1,7 @@
 import React from 'react';
 import Head from 'next/head';
 import LandingActivity from 'modules/activities/LandingActivity';
-import axios from 'axios';
-import Keys from 'apis/utils/constants/keys';
+import Http from 'core/factory/fact.http';
 
 const LandingPage = ({
   data,
@@ -25,13 +24,11 @@ export async function getStaticProps() {
   let results = null;
   let resultArticles = null;
   try {
-    const { data } = await axios.get(
-      `${Keys.DEFAULT_API}/api/landing/1`,
-    );
+    const { data } = await Http.axios.get('/api/landing/1');
     results = data?.data;
 
-    const { data: articles } = await axios.get(
-      `${Keys.DEFAULT_API}/api/landing/1?attributes=id,title,author_id,comment,views`,
+    const { data: articles } = await Http.axios.get(
+      '/api/landing/1?attributes=id,title,author_id,comment,views',
     );
     resultArticles = articles?.data;
   } catch (error) {}
