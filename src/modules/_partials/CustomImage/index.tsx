@@ -4,17 +4,20 @@ import React from 'react';
 const CustomImage = (props: ImageProps) => {
   const { alt } = props;
   const errorImage = '/assets/images/placeholder.png';
-  const [src, setSrc] = React.useState(props.src);
+  const [src, setSrc] = React.useState<string>(props.src as string);
 
   React.useEffect(() => {
-    setSrc(props.src);
+    setSrc(props.src as string);
   }, [props.src]);
 
   if (!src) {
     return null;
   }
 
-  let imageUrl = `${src}`;
+  let image: string = src || '';
+  image = image.startsWith('/uploads') ? image : `/uploads/${image}`;
+
+  let imageUrl = image;
 
   if (
     imageUrl.slice(0, 1) !== '/' &&

@@ -34,8 +34,16 @@ const slide = {
 
 const slides = new Array(6).fill(slide);
 
-const LandingAcitivity = ({ data }: { data: any }) => {
+const LandingAcitivity = ({
+  data,
+  articles,
+}: {
+  data: any;
+  articles: any;
+}) => {
   const slides = data?.slides || [];
+  const { rows } = articles || {};
+
   return (
     <Scaffold>
       <Slides data={slides} />
@@ -124,8 +132,8 @@ const LandingAcitivity = ({ data }: { data: any }) => {
           Extension Materials
         </h1>
         <div className="pt-2 inline-grid grid-cols-2 md:grid-cols-4 gap-3">
-          {new Array(8).fill(0).map(element => (
-            <MinPost key={element} />
+          {rows?.slice(0, 8)?.map((element: any) => (
+            <MinPost key={element.id} data={element} />
           ))}
         </div>
       </div>

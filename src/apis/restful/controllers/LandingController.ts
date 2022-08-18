@@ -65,9 +65,9 @@ export default class LandingController {
         message: 'Landings fetched successfuly',
         data: {
           ...articles,
-          rows: articles.rows.sort(
-            (a: any, b: any) => Number(b.id) - Number(a.id),
-          ),
+          rows: articles.rows
+            .sort((a: any, b: any) => Number(b.id) - Number(a.id))
+            .slice(0, 16),
         },
       });
     } catch (error: any) {
