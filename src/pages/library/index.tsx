@@ -1,14 +1,30 @@
 import Head from 'next/head';
 import React from 'react';
 import LibraryActivity from 'modules/activities/LibraryActivity';
+import axios from 'axios';
 
-const LibraryPage = () => {
+
+export async function getStaticProps() {
+  return axios.get('http://localhost:3001/api/libraries').then(resp => {
+
+    return {
+      props: { data: resp.data.data}, 
+    }
+}).catch(ex => {
+
+  console.error(ex)
+  return {
+    props:{data:{}}
+  }
+});
+}
+const LibraryPage = ({data}:any) => {
   return (
     <>
       <Head>
         <title>Yean</title>
       </Head>
-      <LibraryActivity />
+      <LibraryActivity books={data} />
     </>
   );
 };

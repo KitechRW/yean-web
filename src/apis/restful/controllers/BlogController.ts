@@ -24,9 +24,7 @@ export default class BlogController {
     try {
       return Response.success(res, 200, {
         message: 'articles fetched successfuly',
-        articles: await Article.findAndCountAll({
-          attributes: ['title', 'image'],
-        }),
+        articles: await Article.findAndCountAll(),
       });
     } catch (error) {
       return Response.error(res, 500, {

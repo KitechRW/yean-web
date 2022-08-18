@@ -11,7 +11,27 @@ import React from 'react';
 import ReadBooks from '../_Partials/Library/ReadBooks';
 import { stats } from './data';
 
-const LibraryActivity = () => {
+const LibraryActivity = ({books}:any) => {
+const [booksPart1, setBooksPart1] = React.useState<any[]>([])
+const [booksPart2, setBooksPart2] = React.useState<any[]>([])
+const [booksCount, setBooksCount] = React.useState<any>([])
+
+React.useEffect(() => {
+  if(books && books.rows){
+    setBooksPart1([])
+    setBooksPart2([])
+    setBooksCount(books.count)
+    books.rows.forEach((eachBook:any, index:number) => {
+      if(index < 6){
+        setBooksPart1((i:any[]) => [...i, eachBook])
+      }
+      else{
+        setBooksPart2((i:any[]) => [...i, eachBook])
+      }
+    })
+  }
+}, [books])
+
   return (
     <Scaffold>
       <div className="flex flex-col w-full relative bg-brand-green min-h-[312px]">
@@ -39,6 +59,7 @@ const LibraryActivity = () => {
       </div>
 
       <div className="p-4 md:p-8 justify-center flex gap-3 md:gap-x-10 flex-wrap flex-shrink-0 whitespace-nowrap">
+      
         {stats.map((stat, index) => (
           <div
             key={stat.title}
@@ -69,10 +90,32 @@ const LibraryActivity = () => {
             </div>
           </div>
         ))}
+        <div
+            className={`flex flex-col p-3 px-8 justify-center min-w-[255px] min-h-[145px] drop-shadow rounded-lg bg-white
+            }`}
+          >
+            <h2
+              className={`text-base font-semibold `}
+            >
+              Books
+            </h2>
+            <div className="flex items-center space-x-2 mt-3">
+              <p
+                className={`bg-[#E6F3FF] p-2 px-3 rounded text-dark-green font-bold`}
+              >
+                {booksCount}
+              </p>
+              <p
+                className={`text-[#AAB1B7]`}
+              >
+                {"PUblished"}
+              </p>
+            </div>
+          </div>
       </div>
 
       <div className="p-4 md:p-8 justify-center gap-6 flex md:gap-x-10 flex-wrap w-full">
-        <ReadBooks />
+        <ReadBooks books={booksPart1} />
         <div className="w-full justify-center flex p-4 md:p-8 gap-3 items-center">
           <Image
             src="/assets/images/green-book.png"
@@ -84,7 +127,7 @@ const LibraryActivity = () => {
             FEATURED Things To Know About Green Flat Design
           </h1>
         </div>
-        <ReadBooks />
+        <ReadBooks books={booksPart2} />
       </div>
     </Scaffold>
   );

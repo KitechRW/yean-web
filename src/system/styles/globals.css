@@ -30,6 +30,19 @@
   height: 2px;
 }
 
+.hideContentNotInTagUL ul li{
+  visibility: visible;
+}
+.hideContentNotInTagUL ul{
+  visibility: hidden;
+}
+.hideContentNotInTagUL ol li{
+  visibility: visible;
+}
+.hideContentNotInTagUL ol{
+  visibility: hidden;
+}
+
 /* Fancy blur effect */
 #nprogress .peg {
   display: block;

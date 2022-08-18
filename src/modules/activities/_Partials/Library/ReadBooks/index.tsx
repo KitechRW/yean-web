@@ -2,12 +2,12 @@ import { PictureAsPdf } from '@mui/icons-material';
 import Image from 'next/image';
 import React from 'react';
 
-const ReadBooks = () => {
+const ReadBooks = ({books}:any) => {
   return (
     <>
-      {new Array(6).fill(0).map(element => (
+      {books.map((element:any) => (
         <div
-          key={element}
+          key={element.id +"book_id_unic@22"}
           className="flex flex-shrink-0 space-x-2 max-w-[360px]"
         >
           <Image
@@ -20,7 +20,7 @@ const ReadBooks = () => {
           />
           <div className="flex flex-col">
             <h1 className="uppercase font-semibold text-base">
-              Agriculture a competitive
+              {element?.name}
             </h1>
             <p className="text-gray-600 mt-2">
               Cras lobortis, magna lobortis lacinia maximus, diam
