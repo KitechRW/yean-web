@@ -1,11 +1,11 @@
-import Image from 'next/image';
+import CustomImage from 'modules/_partials/CustomImage';
 import React from 'react';
 
 const MinPost = ({ data }: { data: any }) => {
   return (
     <div className="flex flex-col rounded-[15px] drop-shadow border border-gray-400">
       <div className="min-h-[192.97px] flex relative">
-        <Image
+        <CustomImage
           src={data.image}
           alt=""
           layout="fill"
