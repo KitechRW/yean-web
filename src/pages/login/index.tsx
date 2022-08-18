@@ -36,7 +36,7 @@ const Login: NextPage = () => {
   const onSubmit = (data: any) => {
     setErrorMessage(null);
     axios
-      .post('/api/login', data)
+      .post('/api/auth/login', data)
       .then(response => {
         const {
           data: { token, user },

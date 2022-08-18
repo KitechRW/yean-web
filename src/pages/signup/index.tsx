@@ -36,7 +36,7 @@ const Signup: NextPage = () => {
   const onSubmit = (data: any) => {
     setErrorMessage(null);
     axios
-      .post('/api/signup', data)
+      .post('/api/auth/signup', data)
       .then(response => {
         const {
           data: { token },
