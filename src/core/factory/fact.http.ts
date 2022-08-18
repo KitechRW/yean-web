@@ -9,7 +9,7 @@ class Http {
   }
 
   static axios = axios.create({
-    baseURL: '',
+    baseURL: Keys.DEFAULT_API as string,
   });
 }
 export default Http;

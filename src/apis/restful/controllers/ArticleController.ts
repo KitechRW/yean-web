@@ -10,7 +10,7 @@ export default class ArticleController {
     try {
       return Response.success(res, 200, {
         message: 'Articles fetched successfuly',
-        data: await ArticleServices.findOne({id},["id","title","image","author_id","text"],["firstName","lastName","phone","gender"]),
+        data: await ArticleServices.findOne({id},["id","title","image","author_id","text"],["firstname","lastname","phone","gender"]),
       });
     } catch (error:any) {
       return Response.error(res, 500, {
@@ -24,7 +24,7 @@ export default class ArticleController {
     try {
       return Response.success(res, 200, {
         message: 'Articles fetched successfuly',
-        data: await ArticleServices.findAndCountAll(undefined,["id","title","image","author_id"],["firstName","lastName","phone","gender"]),
+        data: await ArticleServices.findAndCountAll(undefined,["id","title","image","author_id"],["firstname","lastname","phone","gender"]),
       });
     } catch (error:any) {
       return Response.error(res, 500, {

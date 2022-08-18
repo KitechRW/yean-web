@@ -31,7 +31,9 @@ export async function getStaticProps() {
       '/api/landing/1?attributes=id,title,author_id,comment,views',
     );
     resultArticles = articles?.data;
-  } catch (error) {}
+  } catch (error) {
+    console.log(error)
+  }
   return {
     props: {
       data: results,

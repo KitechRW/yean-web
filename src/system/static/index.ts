@@ -45,8 +45,8 @@ export const headerNavs = [
   },
   {
     icon: ShoppingBasket,
-    path: '/market',
-    label: 'Farmers Market',
+    path: '/farmer-platform',
+    label: 'Farmer Platform',
     hasSub: false,
   },
   {
@@ -119,6 +119,4 @@ export const adminNavs = [
     label: 'Partner with us',
     path: '/admin/partner-with-us',
   },
-
-
 ];

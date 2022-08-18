@@ -1,12 +1,13 @@
 import { Avatar } from '@mui/material';
 import Scaffold from 'modules/layouts/Scaffold';
+import CustomImage from 'modules/_partials/CustomImage';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
 import Blogs from '../_Partials/Blogs';
 
-const SingleBlogActivity = ({data}:any) => {
+const SingleBlogActivity = ({ data }: any) => {
   const contentRef = React.useRef(null);
   const { push } = useRouter();
   const handleClick = () => {
@@ -16,26 +17,28 @@ const SingleBlogActivity = ({data}:any) => {
   React.useEffect(() => {
     if (data.article.text && contentRef.current) {
       // @ts-ignore
-      contentRef.current.innerHTML = data.article.text
+      contentRef.current.innerHTML = data.article.text;
     }
-  }, [data])
+  }, [data]);
   return (
     <Scaffold>
       <div className="w-full px-4 bg-white md:px-8 pt-12 border-b border-[#E6E6E6]">
         <div className="px-4 md:px-8 w-full max-w-6xl mx-auto flex items-center space-x-4">
           <Link href="/blog">
-            <span className="cursor-pointer text-sm font-medium pb-3">All</span>
+            <span className="cursor-pointer text-sm font-medium pb-3">
+              All
+            </span>
           </Link>
           <span className="cursor-pointer text-sm font-medium pb-3 border-b-2 border-b-[#FCB316]">
-              Blogs
-            </span>
+            Blogs
+          </span>
         </div>
       </div>
 
       <div className="w-full px-4 bg-white md:px-8 py-6 max-w-6xl mx-auto flex flex-col">
         <div className="group-hover:opacity-80 flex flex-col relative w-full max-w-[912px] min-h-[490px]">
-          <Image
-            src="/assets/images/cow.png"
+          <CustomImage
+            src={data?.article?.image}
             alt=""
             layout="fill"
             loading="lazy"
@@ -48,10 +51,16 @@ const SingleBlogActivity = ({data}:any) => {
           </div>
         </div>
         <div className="px-3 py-3 space-x-3 flex items-center">
-          <Avatar src="/assets/images/avatar.png" alt={data?.article?.author?.firstName || "Name"} />
+          <Avatar
+            src="/assets/images/avatar.png"
+            alt={data?.article?.author?.firstname}
+          />
           <div className="flex flex-col text-[#767676]">
-            <h1 className="text-base font-bold">{data?.author?.firstName}</h1>
-            <p className="text-xs">12 April 2022</p>
+            <h1 className="text-sm font-bold">
+              {data?.author?.firstname}{' '}
+              {data?.author?.lastname}
+            </h1>
+            {/* <p className="text-xs">12 April 2022</p> */}
           </div>
         </div>
 
@@ -59,7 +68,10 @@ const SingleBlogActivity = ({data}:any) => {
           {data?.article?.title}
         </h1>
 
-        <div ref={contentRef} className="mt-4 text-justify leading-relaxed flex flex-col space-y-3 hideContentNotInTagUL">
+        <div
+          ref={contentRef}
+          className="mt-4 text-justify leading-relaxed flex flex-col space-y-3 hideContentNotInTagUL"
+        >
           {/* {
           article?.text
           } */}

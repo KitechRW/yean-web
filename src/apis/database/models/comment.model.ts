@@ -21,12 +21,6 @@ const Comment = sequelize.define(
 
 (async () => {
   await sequelize.sync({ alter: false });
-  Comment.belongsTo(Article, {
-    as: 'article',
-    foreignKey: {
-      name: 'article_id',
-    },
-  });
 })();
 
 export default Comment;

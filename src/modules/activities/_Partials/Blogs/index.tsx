@@ -1,24 +1,31 @@
 import { Avatar } from '@mui/material';
+import CustomImage from 'modules/_partials/CustomImage';
 import Image from 'next/image';
 import React from 'react';
 
-const Blogs = ({ size = 18, onClick = (id:any) => {},articles={rows:[]} }) => {
-  const fetchUser = (userId: number) =>{
-    return {firstName:"nkubito"};
-  }
+const Blogs = ({
+  size = 18,
+  onClick = (id: any) => {},
+  articles = { rows: [] },
+}) => {
+  const fetchUser = (userId: number) => {
+    return { firstName: 'nkubito' };
+  };
   return (
-    <div className="w-full justify-center max-w-6xl mx-auto flex items-center flex-wrap gap-4">
-      {articles?.rows?.map((element:any, index) => (
+    <div className="w-full justify-center max-w-6xl mx-auto flex flex-wrap gap-4">
+      {articles?.rows?.map((element: any, index) => (
         <div
           key={JSON.stringify(element)}
           role="button"
           tabIndex={index}
-          onClick={() => { onClick(element?.id)}}
+          onClick={() => {
+            onClick(element?.id);
+          }}
           className="flex flex-col w-full max-w-[298px] border border-[#E6E6E6] rounded-sm"
         >
           <div className="group-hover:opacity-80 flex flex-col relative min-w-[298px] min-h-[153px]">
-            <Image
-              src="/assets/images/cow.png"
+            <CustomImage
+              src={element.image}
               alt=""
               layout="fill"
               loading="lazy"
@@ -30,14 +37,21 @@ const Blogs = ({ size = 18, onClick = (id:any) => {},articles={rows:[]} }) => {
               <p className="w-full bg-[#FCB316] h-1" />
             </div>
           </div>
-          <p className="hover:underline-offset-1 px-3 py-4 text-[#6F7D1D]">
+          <p className="px-3 py-4 text-[#6F7D1D] w-full line-clamp-1">
             {element?.title}
           </p>
-          <div className="px-3 pb-3 space-x-3 flex items-center">
-            <Avatar src="/assets/images/avatar.png" alt={element?.author?.firstName||"Name"} />
+          <div className="px-3 pb-3 space-x-2 flex items-center mt-auto pt-3">
+            <Avatar
+              src="/assets/images/avatar.png"
+              sx={{ width: '24px', height: '24px' }}
+              alt={element?.author?.firstname}
+            />
             <div className="flex flex-col text-[#767676]">
-              <h1 className="text-base font-bold">{element?.author?.firstName}</h1>
-              <p className="text-xs">12 April 2022</p>
+              <h1 className="text-xs">
+                {element?.author?.firstname}{' '}
+                {element?.author?.lastname}
+              </h1>
+              {/* <p className="text-xs">12 April 2022</p> */}
             </div>
           </div>
         </div>

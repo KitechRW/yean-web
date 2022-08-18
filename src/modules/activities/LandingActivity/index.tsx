@@ -158,8 +158,8 @@ const LandingAcitivity = ({
           Latest Blog
         </h1>
         <div className="pt-2 inline-grid grid-cols-2 md:grid-cols-4 gap-3">
-          {new Array(8).fill(0).map(element => (
-            <LatestBlog key={element} />
+          {rows?.slice(8)?.map((element: any) => (
+            <LatestBlog key={element.id} data={element} />
           ))}
         </div>
         <button className="mt-4 flex items-center space-x-2 mx-auto px-12 py-2 text-white bg-brand-green rounded-sm">
