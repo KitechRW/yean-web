@@ -5,7 +5,7 @@ import axios from 'axios';
 
 
 export async function getServerSideProps({ query }:any) {
-  return axios.get(`http://localhost:3001/api/articles/${query.slugName}`).then(resp => {
+  return axios.get(`${process.env.HOST}/api/articles/${query.slugName}`).then(resp => {
 
     return {
       props: { data: resp.data.data}, 

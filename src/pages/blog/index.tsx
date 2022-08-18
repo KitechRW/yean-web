@@ -5,7 +5,7 @@ import axios from 'axios';
 
 
 export async function getStaticProps() {
-  return axios.get('http://localhost:3001/api/articles').then(resp => {
+  return axios.get(`${process.env.HOST}/api/articles`).then(resp => {
 
     return {
       props: { data: resp.data.data}, 
