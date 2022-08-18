@@ -16,16 +16,16 @@ export default class LandingController {
       }
       const { slideIds, articleIds, extensionIds } =
         found?.toJSON() || {};
-      const articles = await Article.findAll({
-        where: { id: JSON.parse(articleIds) },
-      });
+      // const articles = await Article.findAll({
+      //   where: { id: JSON.parse(articleIds) },
+      // });
       const ids = JSON.parse(slideIds);
       const slides = await Article.findAll({
         where: { id: ids },
       });
-      const extensions = await Article.findAll({
-        where: { id: JSON.parse(extensionIds) },
-      });
+      // const extensions = await Article.findAll({
+      //   where: { id: JSON.parse(extensionIds) },
+      // });
 
       return Response.success(res, 200, {
         message: 'Landings fetched successfuly',

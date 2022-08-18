@@ -26,7 +26,11 @@ export async function getStaticProps() {
   try {
     const { data } = await Http.axios.get('/api/landing/1');
     results = data?.data;
+  } catch (error) {
+    console.log(error);
+  }
 
+  try {
     const { data: articles } = await Http.axios.get(
       '/api/landing/1?attributes=id,title,author_id,comment,views',
     );
