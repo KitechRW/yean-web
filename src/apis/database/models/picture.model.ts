@@ -17,12 +17,12 @@ const Picture = sequelize.define(
 
 (async () => {
   await sequelize.sync({ alter: false });
-  Picture.belongsTo(User, {
-    as: 'owner',
-    foreignKey: {
-      name: 'user',
-    },
-  });
+  // Picture.belongsTo(User, {
+  //   as: 'owner',
+  //   foreignKey: {
+  //     name: 'user',
+  //   },
+  // });
 })();
 
 export default Picture;

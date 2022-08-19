@@ -26,17 +26,6 @@ const Article = sequelize.define(
 
 (async () => {
   await sequelize.sync({ alter: false });
-  Article.belongsTo(User, {
-    as: 'user',
-    foreignKey: {
-      name: 'author_id',
-    },
-  });
-  Article.hasMany(Comment, {
-    foreignKey: {
-      name: 'article_id',
-    },
-  });
 })();
 
 export default Article;

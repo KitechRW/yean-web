@@ -1,24 +1,24 @@
 import React from 'react';
 import Head from 'next/head';
 import SingleBlogActivity from 'modules/activities/SingleBlogActivity';
-import axios from 'axios';
+import Http from 'core/factory/fact.http';
 
-
-export async function getServerSideProps({ query }:any) {
-  return axios.get(`${process.env.HOST}/api/articles/${query.slugName}`).then(resp => {
-
-    return {
-      props: { data: resp.data.data}, 
-    }
-}).catch(ex => {
-
-  console.error(ex)
-  return {
-    props:{data:{}}
-  }
-});
+export async function getServerSideProps({ query }: any) {
+  return Http.axios
+    .get(`/api/articles/${query.slugName}`)
+    .then(resp => {
+      return {
+        props: { data: resp.data.data },
+      };
+    })
+    .catch(ex => {
+      console.error(ex);
+      return {
+        props: { data: {} },
+      };
+    });
 }
-const SingleBlogPage = ({data}:any) => {
+const SingleBlogPage = ({ data }: any) => {
   return (
     <>
       <Head>

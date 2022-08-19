@@ -3,7 +3,7 @@
   "scripts": {
     "dev": "next dev -p 3001",
     "build": "next build",
-    "start": "next start",
+    "start": "next start -p 3001",
     "db:migrate": "sequelize db:migrate --env database --migrations-path ./src/apis/database/migrations",
     "db:migrate:undo": "sequelize db:migrate:undo:all --env database --migrations-path ./src/apis/database/migrations",
     "db:seed": "sequelize db:seed:all --env database --seeders-path ./src/apis/database/seeders",
@@ -36,8 +36,8 @@
     "axios": "^0.27.2",
     "bcryptjs": "^2.4.3",
     "date-fns": "^2.29.1",
-    "express": "^4.18.1",
     "dotenv": "^16.0.1",
+    "express": "^4.18.1",
     "formidable": "^2.0.1",
     "i18next": "^21.8.8",
     "i18next-browser-languagedetector": "^6.1.4",
@@ -71,6 +71,7 @@
     "yup": "^0.32.11"
   },
   "devDependencies": {
+    "@tailwindcss/line-clamp": "^0.4.0",
     "@types/formidable": "^2.0.5",
     "@types/node": "17.0.35",
     "@types/react": "18.0.9",

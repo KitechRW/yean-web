@@ -18,18 +18,6 @@ const Like = sequelize.define(
 
 (async () => {
   await sequelize.sync({ alter: true });
-  Like.belongsTo(User, {
-    as: 'likedBy',
-    foreignKey: {
-      name: 'user',
-    },
-  });
-  Like.belongsTo(Post, {
-    as: 'post_id',
-    foreignKey: {
-      name: 'post',
-    },
-  });
 })();
 
 export default Like;

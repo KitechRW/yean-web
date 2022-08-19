@@ -18,12 +18,12 @@ const Post_comment = sequelize.define(
 
 (async () => {
   await sequelize.sync({ alter: false });
-  Post_comment.belongsTo(Post, {
-    as: 'post',
-    foreignKey: {
-      name: 'post_id',
-    },
-  });
+  // Post_comment.belongsTo(Post, {
+  //   as: 'post',
+  //   foreignKey: {
+  //     name: 'post_id',
+  //   },
+  // });
 })();
 
 export default Post_comment;

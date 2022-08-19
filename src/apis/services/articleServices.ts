@@ -20,6 +20,7 @@ export default class ArticleServices {
       attributes,
       where,
     });
+    rows.sort((a: any, b: any) => Number(b.id) - Number(a.id));
     const articleRows = await Promise.all(
       rows.map(row => {
         return User.findByPk(row.toJSON()?.author_id, {
@@ -35,14 +36,17 @@ export default class ArticleServices {
     attributes?: FindAttributeOptions | undefined,
     autherAttributes?: FindAttributeOptions | undefined,
   ) {
-    const article:any = await Article.findOne({
+    const article: any = await Article.findOne({
       attributes,
       where,
     });
-    const articleRows = await User.findByPk(article.toJSON()?.author_id, {
-          attributes: autherAttributes,
-        }).then(author => ({ article, author }));
-    
+    const articleRows = await User.findByPk(
+      article.toJSON()?.author_id,
+      {
+        attributes: autherAttributes,
+      },
+    ).then(author => ({ article, author }));
+
     return articleRows;
   }
 
