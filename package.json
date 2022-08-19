@@ -4,6 +4,7 @@
     "dev": "next dev -p 3001",
     "build": "next build",
     "start": "next start -p 3001",
+    "heroku-postbuild": "npm run build",
     "db:migrate": "sequelize db:migrate --env database --migrations-path ./src/apis/database/migrations",
     "db:migrate:undo": "sequelize db:migrate:undo:all --env database --migrations-path ./src/apis/database/migrations",
     "db:seed": "sequelize db:seed:all --env database --seeders-path ./src/apis/database/seeders",
@@ -85,5 +86,6 @@
     "prettier": "^2.7.1",
     "tailwindcss": "^3.0.24",
     "typescript": "4.7.2"
-  }
+  },
+  "cacheDirectories": [".next/cache"]
 }
