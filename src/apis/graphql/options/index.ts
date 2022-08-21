@@ -3,7 +3,7 @@ import Secure from 'system/helpers/secureLs';
 
 export const graphqlOption = (token = Secure.getToken()) => ({
   method: 'POST',
-  url: 'http://localhost:3000/api/v1/graphql',
+  url: `${process.env.HOST}/api/v1/graphql`,
   headers: {
     'content-type': 'application/json',
     Authorization: `Bearer ${token}`,
