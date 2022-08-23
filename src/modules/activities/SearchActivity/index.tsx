@@ -23,7 +23,7 @@ const SearchActivity = () => {
               onClick={() => {
                 push(`/blog/${element.id}`);
               }}
-              className="flex space-x-2"
+              className="flex space-x-2 mb-3"
             >
               <CustomImage
                 src={element.image}
@@ -41,7 +41,7 @@ const SearchActivity = () => {
             {books.length} results for Books
           </p>
           {books.map(element => (
-            <div key={element.id} className="flex flex-col">
+            <div key={element.id} className="flex flex-col mb-3">
               <h1 className="uppercase font-semibold text-base">
                 {element?.name}
               </h1>
