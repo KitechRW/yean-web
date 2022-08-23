@@ -21,13 +21,14 @@ const Header = () => {
           <HeaderNavItems />
           <label
             htmlFor="search"
-            className="flex text-white items-center relative"
+            className="hidden md:flex text-white items-center relative"
           >
             <Search className="left-3 absolute" />
             <input
               type="search"
               name=""
               id="search"
+              readOnly
               placeholder="Search"
               className="placeholder:text-center rounded-full px-12 placeholder:font-bold placeholder:text-white outline-none bg-white bg-opacity-20 py-2"
             />

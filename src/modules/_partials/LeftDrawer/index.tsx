@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { Menu as MenuIcon } from '@mui/icons-material';
+import { Menu as MenuIcon, Search } from '@mui/icons-material';
 import Logo from '../Logo';
 import NavItems from '../NavItems';
 import { navs } from 'system/static';
@@ -25,13 +25,30 @@ const LeftDrawer = ({ items = navs }: { items?: any[] }) => {
 
   return (
     <>
-      <button
-        type="button"
-        onClick={() => setToggle(!toggle)}
-        className="md:hidden"
-      >
-        <MenuIcon fontSize="large" />
-      </button>
+      <div className="flex items-center space-x-3">
+        <label
+          htmlFor="search"
+          className="flex text-white items-center relative md:hidden"
+        >
+          <Search className="left-3 absolute" />
+          <input
+            type="search"
+            name=""
+            id="search"
+            readOnly
+            placeholder="Search"
+            className="w-full placeholder:text-center rounded-full px-12 placeholder:font-bold placeholder:text-white outline-none bg-brand-green/70 bg-opacity-20 py-2"
+          />
+        </label>
+        <button
+          type="button"
+          onClick={() => setToggle(!toggle)}
+          className="md:hidden"
+        >
+          <MenuIcon fontSize="large" />
+        </button>
+      </div>
+
       <Drawer
         anchor="left"
         open={toggle}
