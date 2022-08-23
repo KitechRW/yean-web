@@ -15,10 +15,14 @@ export default class ArticleServices {
     where?: WhereOptions<any> | undefined,
     attributes?: FindAttributeOptions | undefined,
     autherAttributes?: FindAttributeOptions | undefined,
+    limit?: number | undefined,
+    offset?: number | undefined,
   ) {
     const { count, rows } = await Article.findAndCountAll({
       attributes,
       where,
+      limit,
+      offset,
     });
     rows.sort((a: any, b: any) => Number(b.id) - Number(a.id));
     const articleRows = await Promise.all(

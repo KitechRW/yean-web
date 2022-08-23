@@ -1,5 +1,6 @@
 import Response from 'apis/utils/helpers/response';
 import { NextApiRequest, NextApiResponse } from 'next';
+import { paginate } from 'apis/utils/pagnation';
 import Article from 'apis/database/models/article.model';
 
 export default class BlogController {
@@ -22,9 +23,28 @@ export default class BlogController {
     res: NextApiResponse,
   ) {
     try {
+      let {page = 1, limit = 3} = req.query ;
+      page=Number(page);
+      limit=Number(limit);
+      const offset = (page - 1) * limit
+      const { rows, count } = await Article.findAndCountAll({
+          limit, offset,
+          order: [
+              ['id', 'asc']
+          ]
+      });
+      const pagination = paginate(page, count, rows, limit);
+
+      if (offset >= count) {
+          return res.status(404).json({
+              message: "page not found"
+          })
+      }
       return Response.success(res, 200, {
         message: 'articles fetched successfuly',
-        articles: await Article.findAndCountAll(),
+        pagination,
+        count,
+        articles: rows,
       });
     } catch (error) {
       return Response.error(res, 500, {
