@@ -7,12 +7,15 @@ import { useForm } from 'react-hook-form';
 import { joiResolver } from '@hookform/resolvers/joi';
 import UploadImage from 'modules/_partials/UploadImage';
 import { formatJoiErorr } from 'system/format';
+import { Checkbox, FormControlLabel } from '@mui/material';
 
 const schema = joi.object({
   companyName: joi.string().required(),
   phone: joi.string().required(),
   email: joi.string().required(),
   image: joi.object().required(),
+  portfolio: joi.string().uri().required(),
+  confirmed: joi.boolean().default(true),
 });
 
 const AddItem = ({
@@ -96,6 +99,22 @@ const AddItem = ({
           </label>
           <label className="flex flex-col">
             <span className="text-sm font-medium text-gray-900 dark:text-gray-300">
+              Portfolio
+            </span>
+            <input
+              type="url"
+              placeholder={'Portfolio'}
+              {...register('portfolio')}
+              className="mt-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            />
+            {errors.portfolio?.message && (
+              <p className="mt-1 text-red-500">
+                {formatJoiErorr(`${errors.portfolio.message}`)}
+              </p>
+            )}
+          </label>
+          <label className="flex flex-col">
+            <span className="text-sm font-medium text-gray-900 dark:text-gray-300">
               Email
             </span>
             <input
@@ -126,6 +145,21 @@ const AddItem = ({
               </p>
             )}
           </label>
+          <FormControlLabel
+            control={
+              <Checkbox
+                defaultChecked
+                onChange={event => {
+                  setValue('confirmed', event.target.checked, {
+                    shouldValidate: true,
+                    shouldDirty: true,
+                  });
+                }}
+              />
+            }
+            label="Confirmed"
+          />
+
           <div className="flex flex-col">
             <span className="text-sm mb-2 font-medium text-gray-900 dark:text-gray-300">
               Image

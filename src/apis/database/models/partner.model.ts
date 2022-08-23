@@ -5,6 +5,7 @@ const Partner = sequelize.define(
   'Partner',
   {
     companyName: DataTypes.STRING,
+    portfolio: DataTypes.STRING,
     email: DataTypes.STRING,
     phone: DataTypes.STRING,
     address: DataTypes.STRING,
