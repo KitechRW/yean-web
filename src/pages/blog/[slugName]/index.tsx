@@ -5,7 +5,7 @@ import Http from 'core/factory/fact.http';
 
 export async function getServerSideProps({ query }: any) {
   return Http.axios
-    .get(`/api/articles/${query.slugName}`)
+    .get(`${process.env.DEFAULT_API}/api/articles/${query.slugName}`)
     .then(resp => {
       return {
         props: { data: resp.data.data },

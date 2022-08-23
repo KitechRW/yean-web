@@ -15,7 +15,7 @@ const SingleBlogActivity = ({ data }: any) => {
   };
 
   React.useEffect(() => {
-    if (data.article.text && contentRef.current) {
+    if (data?.article?.text && contentRef.current) {
       // @ts-ignore
       contentRef.current.innerHTML = data.article.text;
     }
@@ -53,7 +53,7 @@ const SingleBlogActivity = ({ data }: any) => {
         <div className="px-3 py-3 space-x-3 flex items-center">
           <Avatar
             src="/assets/images/avatar.png"
-            alt={data?.article?.author?.firstname}
+            alt={data?.article?.author?.firstname || ""}
           />
           <div className="flex flex-col text-[#767676]">
             <h1 className="text-sm font-bold">
