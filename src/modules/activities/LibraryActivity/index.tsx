@@ -33,15 +33,23 @@ React.useEffect(() => {
   }
 }, [booksToDisplay])
   React.useEffect(() => {
-    if(books){
+    if(books && books.count){
       setBooksCount(books.count)
       setTotalPages(Math.ceil(books.count/booksPerPage))
     }
 
   }, [books,booksPerPage])
   React.useEffect(()=> {
+    if(activePage > totalPages){
+      router.push("/library?pageNumber="+totalPages).then(r => console.log("navigate " + JSON.stringify(r)))
+    }
+    else if( activePage < 1){
+      router.push("/library?pageNumber="+1).then(r => console.log("navigate " + JSON.stringify(r)))
+    }
+  }, [activePage, totalPages])
+  React.useEffect(()=> {
     console.log(activePage+" activePage")
-    if(books && books.rows){
+    if(books && books.rows && books.rows.length > 0){
       let lastIndex = booksPerPage * activePage
       const fistIndex = lastIndex - booksPerPage
       lastIndex = lastIndex > books.rows.length ? books.rows.length : lastIndex
@@ -168,7 +176,7 @@ React.useEffect(() => {
         <nav aria-label="Page navigation example">
           <ul className="inline-flex -space-x-px">
             {
-              activePage===1?null:<li>
+              activePage<=1?null:<li>
                 <button onClick={handlePrevPage}>
                 <span
                   className="py-2 px-3 ml-0 leading-tight text-gray-500 bg-white rounded-l-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
@@ -191,7 +199,7 @@ React.useEffect(() => {
               </li>
               ))}
             {
-              activePage===totalPages?null:<li>
+              activePage>=totalPages?null:<li>
                 <button onClick={handleNextPage}>
                 <span className="py-2 px-3 leading-tight text-gray-500 bg-white rounded-r-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
                   Next <NavigateNextIcon/>

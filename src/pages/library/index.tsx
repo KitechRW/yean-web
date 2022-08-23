@@ -5,7 +5,7 @@ import axios from 'axios';
 
 
 export async function getServerSideProps({query:{pageNumber}}:any) {
-  return axios.get(`${process.env.HOST}/api/libraries`).then(resp => {
+  return axios.get(`${process.env.DEFAULT_API}/api/libraries`).then(resp => {
 
     return {
       props: { data: resp.data.data, pageNumber:pageNumber||1},
