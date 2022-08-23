@@ -16,6 +16,8 @@ import HandIcon from 'modules/_partials/_drawable/icons/handIcon';
 import TruckIcon from 'modules/_partials/_drawable/icons/truckIcon';
 import Testimonial from 'modules/_partials/Testimonial';
 import Slides from 'modules/_partials/Slides';
+import CustomImage from 'modules/_partials/CustomImage';
+import CarouselPartners from 'modules/_partials/CarouselPartners';
 
 export const partners = [
   '/assets/images/agriprofocus 2.png',
@@ -37,12 +39,16 @@ const slides = new Array(6).fill(slide);
 const LandingAcitivity = ({
   data,
   articles,
+  partners,
 }: {
   data: any;
   articles: any;
+  partners: any;
 }) => {
   const slides = data?.slides || [];
   const { rows } = articles || {};
+  const confirmedPartners: any[] =
+    partners?.rows?.filter((item: any) => !!item.confirmed) || [];
 
   return (
     <Scaffold>
@@ -235,23 +241,7 @@ const LandingAcitivity = ({
         <h1 className="text-2xl md:text-4xl text-white font-bold bg-brand-green p-2 text-center">
           Our Partners
         </h1>
-        <div className="pt-2 flex items-center space-x-3 justify-between">
-          <button className="bg-brand-violet px-2 py-1 text-white bg-opacity-50">
-            <ChevronLeft />
-          </button>
-          {partners.map(element => (
-            <Image
-              key={element}
-              src={element}
-              alt=""
-              width="150px"
-              height="92px"
-            />
-          ))}
-          <button className="bg-brand-violet px-2 py-1 text-white">
-            <ChevronRight />
-          </button>
-        </div>
+        <CarouselPartners data={confirmedPartners} />
       </div>
 
       <div className="flex flex-col px-4 md:px-8 py-2 bg-white">

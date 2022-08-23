@@ -6,23 +6,33 @@ import Http from 'core/factory/fact.http';
 const LandingPage = ({
   data,
   articles,
+  partners,
 }: {
   data: any;
   articles: any;
+  partners: any;
 }) => {
   return (
     <>
       <Head>
         <title>Yean</title>
       </Head>
-      <LandingActivity data={data} articles={articles} />
+      <LandingActivity
+        data={data}
+        articles={articles}
+        partners={partners}
+      />
     </>
   );
 };
 
-export async function getStaticProps() {
+export async function getServerSideProps() {
   let results = null;
   let resultArticles = null;
+  let partners = null;
+  await Http.axios.get('/api/partners').then(response => {
+    partners = response.data.data;
+  });
   try {
     const { data } = await Http.axios.get('/api/landing/1');
     results = data?.data;
@@ -35,15 +45,15 @@ export async function getStaticProps() {
       '/api/landing/1?attributes=id,title,author_id,comment,views',
     );
     resultArticles = articles?.data;
-  } catch (error:any) {
-     console.log(error.message)
+  } catch (error: any) {
+    console.log(error.message);
   }
   return {
     props: {
       data: results,
       articles: resultArticles,
+      partners,
     },
-    revalidate: 10,
   };
 }
 
