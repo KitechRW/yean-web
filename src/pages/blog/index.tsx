@@ -5,7 +5,7 @@ import Http from 'core/factory/fact.http';
 
 export async function getStaticProps() {
   return Http.axios
-    .get('/api/articles')
+    .get(`${process.env.HOST}/api/articles`)
     .then(resp => {
       return {
         props: { data: resp.data.data },
