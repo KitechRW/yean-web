@@ -53,16 +53,16 @@ React.useEffect(() => {
   const handleNextPage = () => {
     if(activePage!==totalPages){
       const nextPage = activePage + 1;
-      router.push("/library/"+nextPage).then(r => console.log("navigate " + JSON.stringify(r)))
+      router.push("/library?pageNumber="+nextPage).then(r => console.log("navigate " + JSON.stringify(r)))
     }
   }
   const navTo = (pageNumber:number) =>{
-    router.push("/library/"+pageNumber).then(r => console.log("navigate " + JSON.stringify(r)))
+    router.push("/library?pageNumber="+pageNumber).then(r => console.log("navigate " + JSON.stringify(r)))
   }
   const handlePrevPage = () => {
     if(activePage!==1){
       const prev = activePage - 1;
-      router.push("/library/"+prev).then(r => console.log("navigate " + JSON.stringify(r)))
+      router.push("/library?pageNumber="+prev).then(r => console.log("navigate " + JSON.stringify(r)))
     }
   }
 

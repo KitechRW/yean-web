@@ -4,11 +4,11 @@ import LibraryActivity from 'modules/activities/LibraryActivity';
 import axios from 'axios';
 
 
-export async function getStaticProps() {
+export async function getServerSideProps({query:{pageNumber}}:any) {
   return axios.get(`${process.env.HOST}/api/libraries`).then(resp => {
 
     return {
-      props: { data: resp.data.data}, 
+      props: { data: resp.data.data, pageNumber:pageNumber||1},
     }
 }).catch(ex => {
 
@@ -18,13 +18,13 @@ export async function getStaticProps() {
   }
 });
 }
-const LibraryPage = ({data}:any) => {
+const LibraryPage = ({data,pageNumber}:any) => {
   return (
     <>
       <Head>
         <title>Yean</title>
       </Head>
-      <LibraryActivity books={data} />
+      <LibraryActivity books={data} activePage={parseInt(pageNumber)} />
     </>
   );
 };
