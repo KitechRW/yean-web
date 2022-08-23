@@ -3,6 +3,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import Article from 'apis/database/models/article.model';
 import ArticleServices from 'apis/services/articleServices';
 import removeFile, { parseForm } from 'apis/utils/libForm';
+import { paginate } from 'apis/utils/pagnation';
 
 export default class ArticleController {
   static async getOne(req: NextApiRequest, res: NextApiResponse) {
@@ -22,9 +23,24 @@ export default class ArticleController {
 
   static async getAll(req: NextApiRequest, res: NextApiResponse) {
     try {
+
+      let {page = 1, limit = 10} = req.query ;
+      page=Number(page);
+      limit=Number(limit);
+      const offset = (page - 1) * limit
+      const { rows, count } = await ArticleServices.findAndCountAll(undefined,["id","title","image","author_id"],["firstname","lastname","phone","gender"],limit, offset)
+      const pagination = paginate(page, count, rows, limit);
+
+      if (offset >= count) {
+          return Response.success(res, 404, {
+            message: 'page not found',
+          });
+      }
+
       return Response.success(res, 200, {
         message: 'Articles fetched successfuly',
-        data: await ArticleServices.findAndCountAll(undefined,["id","title","image","author_id"],["firstname","lastname","phone","gender"]),
+        pagination,
+        data: rows
       });
     } catch (error:any) {
       return Response.error(res, 500, {
