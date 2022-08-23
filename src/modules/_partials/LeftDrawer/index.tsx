@@ -8,7 +8,12 @@ import Logo from '../Logo';
 import NavItems from '../NavItems';
 import { navs } from 'system/static';
 
-const LeftDrawer = ({ items = navs }: { items?: any[] }) => {
+const LeftDrawer = ({
+  items = navs,
+  onSearch,
+}: {
+  items?: any[];
+}) => {
   const { pathname } = useRouter();
   const [toggle, setToggle] = React.useState(false);
   const toggleDrawer = (open: boolean) => (event: any) => {
@@ -35,6 +40,7 @@ const LeftDrawer = ({ items = navs }: { items?: any[] }) => {
             type="search"
             name=""
             id="search"
+            onClick={onSearch}
             readOnly
             placeholder="Search"
             className="w-full placeholder:text-center rounded-full px-12 placeholder:font-bold placeholder:text-white outline-none bg-brand-green/70 bg-opacity-20 py-2"
