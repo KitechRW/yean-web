@@ -87,6 +87,7 @@ export default class AuthController {
       const userData = {
         id: inUser.id,
         email: inUser.email,
+        type:inUser.type,
       };
       const token = signinToken(userData);
 

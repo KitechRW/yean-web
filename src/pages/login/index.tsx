@@ -40,8 +40,9 @@ const Login: NextPage = () => {
       .then(response => {
         const {
           data: { token, user },
-        } = response.data;
-        console.log(token);
+        } = response;
+        console.log("type:",user?.type)
+        console.log("token",token);
         Secure.setToken(token);
         if (['admin', 'member'].includes(`${user?.type}`)) {
           push('/admin');
