@@ -3,13 +3,12 @@ import Head from 'next/head';
 import BlogActivity from 'modules/activities/BlogActivity';
 import Http from 'core/factory/fact.http';
 
-export async function getStaticProps() {
+export async function getServerSideProps({query:{pageNumber}}:any) {
   return Http.axios
-    .get(`${process.env.DEFAULT_API}/api/articles`)
+    .get(`${process.env.DEFAULT_API}/api/articles?page=${pageNumber || 1}&limit=20`)
     .then(resp => {
       return {
-        props: { data: resp.data.data },
-        revalidate: 10,
+        props: { data: resp.data }
       };
     })
     .catch(ex => {
@@ -26,7 +25,7 @@ const BlogPage = (props: any) => {
       <Head>
         <title>Yean</title>
       </Head>
-      <BlogActivity articles={props?.data} />
+      <BlogActivity data={props?.data} />
     </>
   );
 };
