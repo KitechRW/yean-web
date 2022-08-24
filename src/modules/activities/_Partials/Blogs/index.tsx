@@ -103,7 +103,7 @@ const Blogs = ({
                 </li>
               }
               {new Array(data?.pagination?.pageCount || 0).fill(0).map((element,index) => (
-                <li key={index+"paginationKey"}>
+                <li key={index+"paginationKey"} className={"hidden sm:block"}>
                   <button onClick={()=> {navTo(index+1)}}>
                     {(index+1) === data?.pagination?.currentPage ?<span aria-current="page"
                                                      className="py-2 px-3 text-blue-600 bg-blue-50 border border-gray-300 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white">
