@@ -12,7 +12,6 @@ const LibraryActivity = ({data}:any) => {
 
 const [booksPart1, setBooksPart1] = React.useState<any[]>([])
 const [booksPart2, setBooksPart2] = React.useState<any[]>([])
-const [booksCount, setBooksCount] = React.useState<any>([])
   const [booksPerPage, setBooksPerPage] = React.useState<number>(20)
 
 
@@ -30,12 +29,6 @@ React.useEffect(() => {
     })
   }
 }, [data])
-  React.useEffect(() => {
-    if(data && data?.pagination?.count){
-      setBooksCount(data.count)
-    }
-
-  }, [data,booksPerPage])
   React.useEffect(()=> {
     if(data?.pagination?.currentPage > data?.pagination?.pageCount || !data?.pagination){
       router.push("/library?pageNumber="+1).then(r => console.log("navigate " + JSON.stringify(r)))
@@ -129,7 +122,7 @@ React.useEffect(() => {
               <p
                 className={`bg-[#E6F3FF] p-2 px-3 rounded text-dark-green font-bold`}
               >
-                {booksCount}
+                {data?.pagination?.count}
               </p>
               <p
                 className={`text-[#AAB1B7]`}
