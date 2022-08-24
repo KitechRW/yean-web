@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import React from 'react';
 import Blogs from '../_Partials/Blogs';
 
-const BlogActivity = ({articles}:any) => {
+const BlogActivity = ({data}:any) => {
   const { push } = useRouter();
   const handleClick = (id:any) => {
     push('/blog/'+id);
@@ -23,7 +23,7 @@ const BlogActivity = ({articles}:any) => {
       </div>
 
       <div className="w-full px-4 bg-white md:px-8 py-6">
-        <Blogs articles={articles} onClick={handleClick} />
+        <Blogs data={data} onClick={handleClick} />
       </div>
     </Scaffold>
   );
