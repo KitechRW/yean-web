@@ -17,11 +17,11 @@ const Blogs = ({
   const router = useRouter()
 
 
-  React.useEffect(()=> {
-    if(!(data?.pagination?.currentPage)){
-      router.push("/blog?pageNumber="+1).then(r => console.log("navigate " + JSON.stringify(r)))
-    }
-  }, [data, router])
+  // React.useEffect(()=> {
+  //   if(!(data?.pagination?.currentPage)){
+  //     router.push("/blog?pageNumber="+1).then(r => console.log("navigate " + JSON.stringify(r)))
+  //   }
+  // }, [data, router])
 
   const handleNextPage = () => {
     if(data?.pagination?.currentPage!==data?.pagination?.pageCount){
