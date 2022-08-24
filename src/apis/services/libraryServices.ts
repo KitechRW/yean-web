@@ -1,4 +1,5 @@
 import Library from "../database/models/library.model";
+import { FindAttributeOptions, WhereOptions } from 'sequelize/types';
 
 export default class LibraryServices{
 
@@ -8,6 +9,20 @@ export default class LibraryServices{
     
       static findAll() {
         return Library.findAll();
+      }
+      static async findAndCountAll(
+        where?: WhereOptions<any> | undefined,
+        attributes?: FindAttributeOptions | undefined,
+        limit?: number | undefined,
+        offset?: number | undefined,
+      ) {
+        const { count, rows } = await Library.findAndCountAll({
+          attributes,
+          where,
+          limit,
+          offset,
+        });
+        return { count, rows };
       }
     
       static findByPk(id: any) {
