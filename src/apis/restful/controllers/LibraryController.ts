@@ -1,7 +1,9 @@
 import Response from 'apis/utils/helpers/response';
 import { NextApiRequest, NextApiResponse } from 'next';
 import Library from 'apis/database/models/library.model';
+import LibraryServices from 'apis/services/libraryServices';
 import removeFile, { parseForm } from 'apis/utils/libForm';
+import { paginate } from 'apis/utils/pagnation';
 
 export default class LibraryController {
   static async getOne(req: NextApiRequest, res: NextApiResponse) {
@@ -20,9 +22,22 @@ export default class LibraryController {
 
   static async getAll(req: NextApiRequest, res: NextApiResponse) {
     try {
+      let {page = 1, limit = 20} = req.query ;
+      page=Number(page);
+      limit=Number(limit);
+      const offset = (page - 1) * limit
+      const { rows, count } = await LibraryServices.findAndCountAll(undefined,undefined,limit, offset)
+      const pagination = paginate(page, count, rows, limit);
+
+      if (offset >= count) {
+          return Response.success(res, 404, {
+            message: 'page not found',
+          });
+      }
       return Response.success(res, 200, {
         message: 'Librarys fetched successfuly',
-        data: await Library.findAndCountAll(),
+        pagination,
+        data: rows,
       });
     } catch (error) {
         console.log(error)
