@@ -7,22 +7,19 @@ import { stats } from './data';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
 
-const LibraryActivity = ({books, activePage = 1}:any) => {
+const LibraryActivity = ({data}:any) => {
   const router = useRouter()
 
 const [booksPart1, setBooksPart1] = React.useState<any[]>([])
 const [booksPart2, setBooksPart2] = React.useState<any[]>([])
-const [booksCount, setBooksCount] = React.useState<any>([])
-  const [booksToDisplay, setBooksToDisplay] = React.useState<any[]>([])
-  const [totalPages, setTotalPages] = React.useState<number>(0)
   const [booksPerPage, setBooksPerPage] = React.useState<number>(20)
 
 
 React.useEffect(() => {
-  if(booksToDisplay){
+  if(data?.data?.rows){
     setBooksPart1([])
     setBooksPart2([])
-    booksToDisplay.forEach((eachBook:any, index:number) => {
+    data?.data?.rows?.forEach((eachBook:any, index:number) => {
       if(index < 6){
         setBooksPart1((i:any[]) => [...i, eachBook])
       }
@@ -31,36 +28,16 @@ React.useEffect(() => {
       }
     })
   }
-}, [booksToDisplay])
-  React.useEffect(() => {
-    if(books && books.count){
-      setBooksCount(books.count)
-      setTotalPages(Math.ceil(books.count/booksPerPage))
-    }
-
-  }, [books,booksPerPage])
+}, [data])
   React.useEffect(()=> {
-    if(activePage > totalPages){
-      router.push("/library?pageNumber="+totalPages).then(r => console.log("navigate " + JSON.stringify(r)))
-    }
-    else if( activePage < 1){
+    if(data?.pagination?.currentPage > data?.pagination?.pageCount || !data?.pagination){
       router.push("/library?pageNumber="+1).then(r => console.log("navigate " + JSON.stringify(r)))
     }
-  }, [activePage, totalPages])
-  React.useEffect(()=> {
-    console.log(activePage+" activePage")
-    if(books && books.rows && books.rows.length > 0){
-      let lastIndex = booksPerPage * activePage
-      const fistIndex = lastIndex - booksPerPage
-      lastIndex = lastIndex > books.rows.length ? books.rows.length : lastIndex
-
-      setBooksToDisplay(books.rows.slice(fistIndex,lastIndex))
-    }
-  }, [activePage,booksPerPage,books])
+  }, [data, router])
 
   const handleNextPage = () => {
-    if(activePage!==totalPages){
-      const nextPage = activePage + 1;
+    if(data?.pagination?.currentPage!==data?.pagination?.pageCount){
+      const nextPage = data?.pagination?.currentPage + 1;
       router.push("/library?pageNumber="+nextPage).then(r => console.log("navigate " + JSON.stringify(r)))
     }
   }
@@ -68,8 +45,8 @@ React.useEffect(() => {
     router.push("/library?pageNumber="+pageNumber).then(r => console.log("navigate " + JSON.stringify(r)))
   }
   const handlePrevPage = () => {
-    if(activePage!==1){
-      const prev = activePage - 1;
+    if(data?.pagination?.currentPage!==1){
+      const prev = data?.pagination?.currentPage - 1;
       router.push("/library?pageNumber="+prev).then(r => console.log("navigate " + JSON.stringify(r)))
     }
   }
@@ -145,7 +122,7 @@ React.useEffect(() => {
               <p
                 className={`bg-[#E6F3FF] p-2 px-3 rounded text-dark-green font-bold`}
               >
-                {booksCount}
+                {data?.pagination?.count}
               </p>
               <p
                 className={`text-[#AAB1B7]`}
@@ -176,7 +153,7 @@ React.useEffect(() => {
         <nav aria-label="Page navigation example">
           <ul className="inline-flex -space-x-px">
             {
-              activePage<=1?null:<li>
+              (data?.pagination?.currentPage<=1 || !data?.pagination)?null:<li>
                 <button onClick={handlePrevPage}>
                 <span
                   className="py-2 px-3 ml-0 leading-tight text-gray-500 bg-white rounded-l-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
@@ -185,10 +162,10 @@ React.useEffect(() => {
                 </button>
               </li>
             }
-            {new Array(totalPages).fill(0).map((element,index) => (
-              <li key={index+"paginationKey"}>
+            {new Array(data?.pagination?.pageCount || 0).fill(0).map((element,index) => (
+              <li key={index+"paginationKey"} className={"hidden sm:block"}>
                 <button onClick={()=> {navTo(index+1)}}>
-                  {(index+1) === activePage ?<span aria-current="page"
+                  {(index+1) === data?.pagination?.currentPage ?<span aria-current="page"
                                                    className="py-2 px-3 text-blue-600 bg-blue-50 border border-gray-300 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white">
                 {index+1}
               </span>:<span
@@ -199,7 +176,7 @@ React.useEffect(() => {
               </li>
               ))}
             {
-              activePage>=totalPages?null:<li>
+              (data?.pagination?.currentPage>=data?.pagination?.pageCount || !data?.pagination)?null:<li>
                 <button onClick={handleNextPage}>
                 <span className="py-2 px-3 leading-tight text-gray-500 bg-white rounded-r-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
                   Next <NavigateNextIcon/>

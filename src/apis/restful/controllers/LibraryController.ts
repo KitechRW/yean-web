@@ -37,7 +37,7 @@ export default class LibraryController {
       return Response.success(res, 200, {
         message: 'Librarys fetched successfuly',
         pagination,
-        data: rows,
+        data: { rows },
       });
     } catch (error) {
         console.log(error)

@@ -1,32 +1,41 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import Head from 'next/head';
 import BlogActivity from 'modules/activities/BlogActivity';
 import Http from 'core/factory/fact.http';
+import {useRouter} from "next/router";
 
-export async function getStaticProps() {
+export async function getServerSideProps({query:{pageNumber}}:any) {
   return Http.axios
-    .get(`${process.env.DEFAULT_API}/api/articles`)
+    .get(`${process.env.DEFAULT_API}/api/articles?page=${pageNumber || 1}&limit=20`)
     .then(resp => {
       return {
-        props: { data: resp.data.data },
-        revalidate: 10,
+        props: { data: resp.data, status:resp.status }
       };
     })
     .catch(ex => {
       console.error(ex);
       return {
-        props: { data: {} },
+        props: { data: {}, status:404 },
       };
     });
 }
 
 const BlogPage = (props: any) => {
+  const router = useRouter()
+
+  useEffect(() => {
+    if(props.status === 404){
+      router.push("/404").then(r => console.log("navigate " + JSON.stringify(r)))
+    }else if(props.status === 500){
+      router.push("/500").then(r => console.log("navigate " + JSON.stringify(r)))
+    }
+  }, [])
   return (
     <>
       <Head>
         <title>Yean</title>
       </Head>
-      <BlogActivity articles={props?.data} />
+      <BlogActivity data={props?.data} />
     </>
   );
 };

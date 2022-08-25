@@ -5,10 +5,10 @@ import axios from 'axios';
 
 
 export async function getServerSideProps({query:{pageNumber}}:any) {
-  return axios.get(`${process.env.DEFAULT_API}/api/libraries`).then(resp => {
+  return axios.get(`${process.env.DEFAULT_API}/api/libraries?page=${pageNumber || 1}&limit=20`).then(resp => {
 
     return {
-      props: { data: resp.data.data, pageNumber:pageNumber||1},
+      props: { data: resp.data},
     }
 }).catch(ex => {
 
@@ -18,13 +18,13 @@ export async function getServerSideProps({query:{pageNumber}}:any) {
   }
 });
 }
-const LibraryPage = ({data,pageNumber}:any) => {
+const LibraryPage = ({data}:any) => {
   return (
     <>
       <Head>
         <title>Yean</title>
       </Head>
-      <LibraryActivity books={data} activePage={parseInt(pageNumber)} />
+      <LibraryActivity data={data} />
     </>
   );
 };
