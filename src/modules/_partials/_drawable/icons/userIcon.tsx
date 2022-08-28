@@ -18,7 +18,7 @@ const UserIcon = ({ color }: { color?: string }) => {
 };
 
 UserIcon.defaultProps = {
-  color: '#42427D',
+  bg_color: '#42427D',
 };
 
 export default UserIcon;

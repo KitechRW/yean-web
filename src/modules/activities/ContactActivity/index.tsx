@@ -153,7 +153,7 @@ const ContactActivity = () => {
             href={element.link || "https://www.goole.com"}
             target="_blank"
             rel="noopener noreferrer"
-            className={`hover:opacity-80 flex space-x-2 text-white bg-[${element.color}] items-center border rounded-lg px-3 py-2 font-bold`}
+            className={"hover:opacity-80 flex space-x-2 text-white items-center border rounded-lg px-3 py-2 font-bold " + element.bg_color}
           >
             <element.logo/>
             <span>{element.name}</span>
