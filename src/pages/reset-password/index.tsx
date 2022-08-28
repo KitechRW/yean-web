@@ -15,8 +15,6 @@ const schema = yup
     password: yup
       .string()
       .required('No password provided.')
-      .min(5, 'Password is too short - should be 5 chars minimum.')
-      .matches(/[a-zA-Z]/, 'Password can only contain Latin letters.')
   })
   .required();
 
