@@ -34,7 +34,7 @@ const OrderIcon = ({ color }: { color?: string }) => {
 };
 
 OrderIcon.defaultProps = {
-  color: '#42427D',
+  bg_color: '#42427D',
 };
 
 export default OrderIcon;

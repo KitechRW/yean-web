@@ -22,7 +22,7 @@ const SmillingIcon = ({ color }: { color?: string }) => {
 };
 
 SmillingIcon.defaultProps = {
-  color: '#42427D',
+  bg_color: '#42427D',
 };
 
 export default SmillingIcon;

@@ -42,7 +42,7 @@ const ReportIcon = ({ color }: { color?: string }) => {
 };
 
 ReportIcon.defaultProps = {
-  color: '#42427D',
+  bg_color: '#42427D',
 };
 
 export default ReportIcon;

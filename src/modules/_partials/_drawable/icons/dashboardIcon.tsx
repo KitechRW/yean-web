@@ -18,7 +18,7 @@ const DashboardIcon = ({ color }: { color?: string }) => {
 };
 
 DashboardIcon.defaultProps = {
-  color: '#42427D',
+  bg_color: '#42427D',
 };
 
 export default DashboardIcon;

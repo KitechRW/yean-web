@@ -18,7 +18,7 @@ const DesignIcon = ({ color }: { color?: string }) => {
 };
 
 DesignIcon.defaultProps = {
-  color: '#42427D',
+  bg_color: '#42427D',
 };
 
 export default DesignIcon;

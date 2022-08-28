@@ -1,9 +1,10 @@
-import { Call, Email, Facebook } from '@mui/icons-material';
+import { Call, Email } from '@mui/icons-material';
 import Scaffold from 'modules/layouts/Scaffold';
 import React from 'react';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
+import social_medias from './social_medias'
 import axios from 'axios';
 
 const schema = yup
@@ -40,7 +41,7 @@ const ContactActivity = () => {
         if(response.status === 201 || response.status === 200){
           reset();
           setSuccessMessage(response?.data?.message || "Thank you for contact us !");
-        
+
         }else {
           setErrorMessage(response?.data?.message || "Something bad happed! try again later ");
         }
@@ -57,25 +58,25 @@ const ContactActivity = () => {
 
   return (
     <Scaffold>
-      {errorMessage ? (
-              <div className="mt-3 flex flex-col items-center rounded-lg bg-red-500 px-4 py-3 max-w-4xl">
-                <p className="text-white text-sm first-letter:uppercase">
-                  {errorMessage}
-                </p>
-              </div>
-            ) : null}
-       {successMessage ? (
-              <div className="mt-3 flex flex-col items-center rounded-lg bg-green-500 px-4 py-3 w-full max-w-4xl self-center">
-                <p className="text-white text-sm first-letter:uppercase">
-                  {successMessage}
-                </p>
-              </div>
-            ) : null}
-           
+
       <form onSubmit={event => {
                 handleSubmit(onSubmit)(event);
               }}
       className="items-center bg-gradient-to-r from-[#00F0FF]/20 to-white flex-grow h-full flex flex-col p-4 md:p-8">
+        {errorMessage ? (
+          <div className="mt-3 flex flex-col items-center rounded-lg bg-red-500 px-4 py-3 ">
+            <p className="text-white text-sm first-letter:uppercase">
+              {errorMessage}
+            </p>
+          </div>
+        ) : null}
+        {successMessage ? (
+          <div className="mt-3 flex flex-col items-center rounded-lg bg-green-500 px-4 py-3  self-center">
+            <p className="text-white text-sm first-letter:uppercase">
+              {successMessage}
+            </p>
+          </div>
+        ) : null}
         <h1 className="text-dark-green text-4xl md:text-6xl font-bold tracking-wide">
           Contact us
         </h1>
@@ -101,7 +102,7 @@ const ContactActivity = () => {
             {...register('email')}
             placeholder="Your Email Address"
             className="flex-grow rounded-full border border-dark-green py-3 px-4 w-full"
-            
+
           />
           <p className="text-red-500 text-xs mt-1">
                   {errors.email?.message}
@@ -146,19 +147,18 @@ const ContactActivity = () => {
           </a>
         </div>
 
-        <div className="mt-12 justify-center flex-wrap gap-3 pb-2 max-w-4xl w-full flex items-center">
-          {new Array(8).fill(0).map(element => (
-            <a
-              key={element}
-              href="http://"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:opacity-80 flex space-x-2 text-white bg-[#4267B2] items-center border rounded-lg px-3 py-2 font-bold"
-            >
-              <Facebook />
-              <span>Facebook</span>
-            </a>
-          ))}
+        <div className="mt-12 place-content-between flex-wrap gap-3 pb-2 max-w-4xl w-full flex items-center">
+          {social_medias.map((element, index) => (
+          <a key={element.name + index}
+            href={element.link || "https://www.goole.com"}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={"hover:opacity-80 flex space-x-2 text-white items-center border rounded-lg px-3 py-2 font-bold " + element.bg_color}
+          >
+            <element.logo/>
+            <span>{element.name}</span>
+          </a>))}
+
         </div>
       </form>
     </Scaffold>

@@ -1,32 +1,43 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import axios from 'axios';
 import type { NextPage } from 'next';
 import * as yup from 'yup';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useRouter } from 'next/router';
-import { withSessionSsr } from 'system/lib/withSession';
-import Secure from 'system/helpers/secureLs';
-import isAuth from 'system/helpers/isAuth';
 import { useTranslation } from 'react-i18next';
 import Logo from 'modules/_partials/Logo';
 import Link from 'next/link';
+import Secure from "system/helpers/secureLs";
 
 const schema = yup
   .object({
-    email: yup
+    password: yup
       .string()
-      .required('Email is required')
-      .email('Email is invalid'),
+      .required('No password provided.')
   })
   .required();
 
-const ForgotPassword: NextPage = () => {
+
+export async function getServerSideProps({query:{token}}:any) {
+  return {
+    props: { token: token||null }
+  };
+}
+const RestPassword: NextPage = (props:any) => {
   const { t } = useTranslation();
   const { push } = useRouter();
+  useEffect(()=> {
+    if(!props.token){
+      push("/404").catch(error => console.error(error))
+    }
+  }, [props.token, push])
+
+
+
   const [errorMessage, setErrorMessage] = React.useState<string | null>(null);
   const [message, setMessage] = React.useState<string | null>(null);
-  const [submitting, SetSubmitting] = React.useState<boolean>(false);
+  const [submitting, isSubmitting] = React.useState<boolean>(false)
   const {
     register,
     handleSubmit,
@@ -34,33 +45,27 @@ const ForgotPassword: NextPage = () => {
   } = useForm({
     resolver: yupResolver(schema),
   });
-  const onSubmit = (data: any) => {
-    console.log(data)
+  const onSubmit = (data: object) => {
     setErrorMessage(null);
     setMessage(null)
-    SetSubmitting(true)
+    isSubmitting(true)
     axios
-      .post('/api/auth/forget-password', data)
+      .put('/api/auth/reset-password', {...data, token:props.token})
       .then(response => {
-        SetSubmitting(false)
+        isSubmitting(false)
+        console.log(response)
         if(response.status === 201 || response.status === 200){
-          setMessage(response?.data?.message || "check your email please ")
+          setMessage(response?.data?.message || "reset successfully, go to login ")
         }else {
           setErrorMessage("Something went wrong, try again.")
         }
         // setMessage(response.data.)
       })
       .catch(result => {
-        SetSubmitting(false)
-        try{
-          if(result.response.status === 401){
-            setErrorMessage("No such account found!, go to sign up to create account ");
-            return
-          }
-        }catch (e) {}
+        isSubmitting(false)
         console.log(result)
         const { error } =
-          result.response?.data || result.response || result;
+        result.response?.data || result.response || result;
         console.log(error?.message);
         setErrorMessage(
           error?.message || 'Something went wrong, try again',
@@ -74,7 +79,7 @@ const ForgotPassword: NextPage = () => {
           <div className="flex flex-col items-center w-full p-6 py-12 md:px-12">
             <Logo />
             <h1 className="mt-6 text-2xl md:text-3xl font-bold tracking-wide">
-              Reset your Password
+              Set new password
             </h1>
 
             {errorMessage ? (
@@ -98,29 +103,30 @@ const ForgotPassword: NextPage = () => {
               }}
               className="w-full flex flex-col mt-6"
             >
-              <label htmlFor="user-email" className="flex flex-col">
-                <span className="text-black-200 text-sm">Email</span>
+              <label htmlFor="user-password" className="flex flex-col">
+                <span className="text-black-200 text-sm">New password</span>
                 <input
-                  id="user-email"
-                  type="email"
-                  {...register('email')}
+                  id="user-password"
+                  type="password"
+                  {...register('password')}
                   className="mt-1 focus:border-primary bg-gray-202 outline-none rounded-lg border border-gray-201 px-3 py-2"
                 />
                 <p className="text-red-500 text-xs mt-1">
-                  {errors.email?.message}
+                  {errors.password?.message}
                 </p>
               </label>
-              {submitting?<button disabled={true}
-                type="submit"
-                className="mt-6 w-full font-semibold tracking-wide bg-brand-green/60 px-4 py-3 rounded-lg text-white"
-              >
-                Submit
-              </button>:<button
-                type="submit"
-                className="mt-6 w-full font-semibold tracking-wide bg-brand-green px-4 py-3 rounded-lg text-white"
-              >
-                Submit
-              </button>
+              {
+                submitting?<button disabled={true}
+                  type="submit"
+                  className="mt-6 w-full font-semibold tracking-wide bg-brand-green/60 px-4 py-3 rounded-lg text-white"
+                >
+                  Submit
+                </button>:<button
+                  type="submit"
+                  className="mt-6 w-full font-semibold tracking-wide bg-brand-green px-4 py-3 rounded-lg text-white"
+                >
+                  Submit
+                </button>
               }
             </form>
 
@@ -134,26 +140,5 @@ const ForgotPassword: NextPage = () => {
   );
 };
 
-export const getServerSideProps = withSessionSsr(
-  async ({ req, res }) => {
-    const { user, token } = req.session;
 
-    if (isAuth(token) && user?.roleId === 1) {
-      return {
-        redirect: {
-          permanent: false,
-          destination: '/bookings',
-        },
-      };
-    }
-
-    return {
-      props: {
-        user: user || null,
-        token: token || null,
-      },
-    };
-  },
-);
-
-export default ForgotPassword;
+export default RestPassword;

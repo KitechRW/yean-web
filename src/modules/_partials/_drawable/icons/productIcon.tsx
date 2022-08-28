@@ -18,7 +18,7 @@ const ProductIcon = ({ color }: { color?: string }) => {
 };
 
 ProductIcon.defaultProps = {
-  color: '#42427D',
+  bg_color: '#42427D',
 };
 
 export default ProductIcon;
