@@ -1,4 +1,5 @@
 import { Person } from '@mui/icons-material';
+import { useNavbar } from 'modules/contexts/NavbarContext';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
@@ -12,12 +13,18 @@ const NavItems = ({
   className?: string;
 }) => {
   const { pathname } = useRouter();
+  const { profile } = useNavbar();
   return (
     <div className={className}>
       {items.map((element, index) => {
         const isLastIndex = index === navs.length - 1;
         return (
-          <Link key={element.label} href={element.path}>
+          <Link
+            key={element.label}
+            href={
+              profile?.user && isLastIndex ? '/logout' : element.path
+            }
+          >
             <h2
               className={`hover:opacity-75 cursor-pointer ${
                 pathname === element.path
@@ -30,7 +37,11 @@ const NavItems = ({
               }`}
             >
               {isLastIndex ? <Person /> : null}
-              <span>{element.label}</span>
+              <span>
+                {profile?.user && isLastIndex
+                  ? 'Logout'
+                  : element.label}
+              </span>
             </h2>
           </Link>
         );

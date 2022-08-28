@@ -11,6 +11,8 @@ import isAuth from 'system/helpers/isAuth';
 import { useTranslation } from 'react-i18next';
 import Logo from 'modules/_partials/Logo';
 import Link from 'next/link';
+import { useNavbar } from 'modules/contexts/NavbarContext';
+import Keys from 'apis/utils/constants/keys';
 
 const schema = yup
   .object({
@@ -23,7 +25,7 @@ const schema = yup
   .required();
 
 const Login: NextPage = () => {
-  const { t } = useTranslation();
+  const { setProfile } = useNavbar();
   const { push } = useRouter();
   const [errorMessage, setErrorMessage] = React.useState(null);
   const {
@@ -41,10 +43,10 @@ const Login: NextPage = () => {
         const {
           data: { token, user },
         } = response;
-        console.log("type:",user?.type)
-        console.log("token",token);
+        setProfile({ token, user });
         Secure.setToken(token);
-        if (['admin', 'member'].includes(`${user?.type}`)) {
+        Secure.set(Keys.USER_INFO as string, { token, user });
+        if (['admin', 'manager'].includes(`${user?.type}`)) {
           push('/admin');
         } else {
           push('/');

@@ -13,6 +13,7 @@ const LeftDrawer = ({
   onSearch,
 }: {
   items?: any[];
+  onSearch: any;
 }) => {
   const { pathname } = useRouter();
   const [toggle, setToggle] = React.useState(false);
