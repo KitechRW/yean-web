@@ -4,13 +4,13 @@ import Library from 'apis/database/models/library.model';
 import LibraryServices from 'apis/services/libraryServices';
 import removeFile, { parseForm } from 'apis/utils/libForm';
 import { paginate } from 'apis/utils/pagnation';
-import { promises as fs } from 'fs'
+//import { promises as fs } from 'fs'
 import  Keys  from 'apis/utils/constants/keys'
 import path from 'path';
+import axios from 'axios';
 import stream from 'stream';
 import { promisify } from 'util';
-import axios from 'axios';
-
+import fetch from 'node-fetch';
 
 export default class LibraryController {
   static async getOne(req: NextApiRequest, res: NextApiResponse) {
@@ -149,22 +149,31 @@ export default class LibraryController {
   }
 
   static async readFile(req: NextApiRequest, res: NextApiResponse){
-    const pipeline = promisify(stream.pipeline);
-    const postsDirectory =  `${Keys.HOST}/uploads/media-1661364328169-412504610.pdf`
-    await axios.get(postsDirectory).then(async(response)=>{
-      res.setHeader('Content-Type', 'application/pdf');
-//      res.setHeader('Content-Disposition', `inline`);
-  //    res.setHeader('Content-Disposition', `attachment`);
-      res.setHeader('Content-Disposition', `attachment; filename="book.pdf"`);
+   try {
+    // const url = `${Keys.HOST}/uploads/media-1661364328169-412504610.pdf`;
+    let {link,name} = req.body
+    if (!link.startsWith('/uploads/')) {
+      link = `/uploads/${link}`
+      console.log('string starts with /uploads/');
+    } 
 
-      // console.log("data: ",response.data)
-       return await pipeline(response.data, res);
-    }).catch((error)=>{
+    const url = `${Keys.HOST}${link}`
+    const pipeline = promisify(stream.pipeline);
+    const response:any = await fetch(url);
+    if (!response.ok) throw new Error(`unexpected response ${response.statusText}`);
+
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', `attachment; filename=${name}.pdf`);
+    await pipeline(response.body, res)
+    return Response.error(res, 201, {
+      message: 'File downloaded successfully',
+    })
+   } catch (error:any) {
       return Response.error(res, 500, {
         message: 'something went wrong',
         error:error.message
       });
-    })
+    }
   }
 
 }
