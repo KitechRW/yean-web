@@ -1,8 +1,39 @@
 import { PictureAsPdf } from '@mui/icons-material';
 import Image from 'next/image';
 import React from 'react';
+import swal from "sweetalert";
+import axios from "axios";
+import {useRouter} from "next/router";
 
 const ReadBooks = ({books}:any) => {
+  const route = useRouter();
+  const downloadPDF = (book:any) => {
+    axios({
+      url: '/api/libraries/file', //your url
+      method: 'POST',
+      responseType: 'blob', // important
+      data:{
+        link: book?.link,
+        name: book?.name
+      }
+    }).then((response) => {
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', book?.name+'.pdf'); //or any other extension
+      document.body.appendChild(link);
+      link.click();
+    }).catch(error => {
+      swal("sorry", "fail to download", "error").then(r => console.log("he"))
+    });
+    // DefaultApi.PostRoute.postRoute(
+    //   '/api/libraries/file',
+    //   {
+    //     link: book?.link,
+    //     name: book?.name
+    //   },
+    // )
+  }
   return (
     <>
       {books.map((element:any) => (
@@ -27,10 +58,10 @@ const ReadBooks = ({books}:any) => {
               velit condimentum ex, at volutpat massa metus vel eli
             </p>
             <div className="flex items-center space-x-3 mt-3">
-              <button className="bg-dark-green text-white p-2 text-xs">
+              <button onClick={()=> {route.push("/library/view/"+element?.id)}} className="bg-dark-green text-white p-2 text-xs">
                 Read
               </button>
-              <button className="text-red-500 p-2">
+              <button onClick={()=> {downloadPDF(element)}} className="text-red-500 p-2">
                 <PictureAsPdf />
               </button>
             </div>

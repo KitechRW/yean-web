@@ -54,6 +54,7 @@
     "nprogress": "^0.2.0",
     "pg": "^8.7.3",
     "react": "18.1.0",
+    "react-doc-viewer": "^0.1.5",
     "react-dom": "18.1.0",
     "react-hook-form": "^7.31.3",
     "react-i18next": "^11.17.0",
