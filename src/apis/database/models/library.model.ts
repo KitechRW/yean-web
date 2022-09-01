@@ -9,6 +9,8 @@ const Library = sequelize.define(
     size: DataTypes.BIGINT,
     name: DataTypes.STRING,
     cat: DataTypes.BIGINT,
+    desc: DataTypes.TEXT,
+    cover: DataTypes.STRING,
   },
   {
     tableName: 'library',
@@ -17,7 +19,7 @@ const Library = sequelize.define(
 );
 
 (async () => {
-  await sequelize.sync({ alter: false });
+  await sequelize.sync({ alter: true });
   //   POST.belongsTo(User, {
   //     as: 'user',
   //     foreignKey: {
