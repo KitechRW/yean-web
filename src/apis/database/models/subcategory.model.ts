@@ -1,8 +1,8 @@
 import { Sequelize, Model, DataTypes } from 'sequelize';
 import sequelize from '../config/sequelize';
 
-const Landing = sequelize.define(
-  'Landing',
+const SubCategory = sequelize.define(
+  'SubCategory',
   {
     id: {
       type: DataTypes.BIGINT,
@@ -11,18 +11,16 @@ const Landing = sequelize.define(
       autoIncrement: true,
       unique: true,
     },
-    slideIds: {
-      type: DataTypes.JSON,
+    name: {
+      type: DataTypes.STRING,
+      unique: true,
+      allowNull: false,
     },
-    articleIds: {
-      type: DataTypes.JSON,
-    },
-    extensionIds: {
-      type: DataTypes.JSON,
-    },
+    categoryId: DataTypes.BIGINT,
+    image: DataTypes.STRING,
   },
   {
-    tableName: 'tbl_landing',
+    tableName: 'tbl_sub_category',
     timestamps: false,
   },
 );
@@ -31,4 +29,4 @@ const Landing = sequelize.define(
   await sequelize.sync({ alter: false });
 })();
 
-export default Landing;
+export default SubCategory;

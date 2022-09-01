@@ -17,13 +17,11 @@ const NavItems = ({
   return (
     <div className={className}>
       {items.map((element, index) => {
-        const isLastIndex = index === navs.length - 1;
+        const isLogin = '/login' === element.path;
         return (
           <Link
             key={element.label}
-            href={
-              profile?.user && isLastIndex ? '/logout' : element.path
-            }
+            href={profile?.user && isLogin ? '/logout' : element.path}
           >
             <h2
               className={`hover:opacity-75 cursor-pointer ${
@@ -31,16 +29,14 @@ const NavItems = ({
                   ? 'border-b-4 border-brand-yellow'
                   : 'border-none'
               } ${
-                isLastIndex
+                isLogin
                   ? 'bg-brand-yellow rounded-full drop-shadow px-12 py-3 font-semibold text-white flex items-center space-x-2'
                   : 'text-dark-green font-medium py-4'
               }`}
             >
-              {isLastIndex ? <Person /> : null}
+              {isLogin ? <Person /> : null}
               <span>
-                {profile?.user && isLastIndex
-                  ? 'Logout'
-                  : element.label}
+                {profile?.user && isLogin ? 'Logout' : element.label}
               </span>
             </h2>
           </Link>

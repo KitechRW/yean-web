@@ -1,18 +1,23 @@
 import { Add, Search } from '@mui/icons-material';
 import { useOpenFetcher } from 'apis/utils/fetcher';
+import Pagination from 'modules/_partials/Pagination';
 import React from 'react';
 import AddItem from '../_Partials/ManageLibrary/AddItem';
 import ViewItem from '../_Partials/ManageLibrary/ViewItem';
 
 const LibraryActivity = () => {
+  const topRef = React.useRef(null);
+  const [pageNumber, setPageNumber] = React.useState(1);
   const [libraries, setLibraries] = React.useState<{
     count: number;
     rows: any[];
   }>({ count: 0, rows: [] });
   const {
-    data: { data },
+    data: { data, pagination },
     isLoading,
-  } = useOpenFetcher(`/api/libraries`);
+  } = useOpenFetcher(
+    `/api/libraries?page=${pageNumber || 1}&limit=20`,
+  );
 
   const [filterValue, setFilterValue] = React.useState('');
 
@@ -67,7 +72,10 @@ const LibraryActivity = () => {
   }
 
   return (
-    <div className="px-4 md:pl-6 bg-white py-4 flex flex-col flex-grow items-center md:px-8 w-full">
+    <div
+      ref={topRef}
+      className="px-4 md:pl-6 bg-white py-4 flex flex-col flex-grow items-center md:px-8 w-full"
+    >
       <div className="space-x-6 md:space-x-12 bg-white flex justify-between w-full">
         <div className="group flex-grow flex items-center relative">
           <Search className="left-2 absolute text-slate-400" />
@@ -115,6 +123,15 @@ const LibraryActivity = () => {
           </li>
         </AddItem>
       </ul>
+      <Pagination
+        pageCount={pagination?.pageCount}
+        currentPage={pagination?.currentPage}
+        setPageNumber={(page: number) => {
+          setPageNumber(page);
+          // @ts-ignore
+          topRef.current.scrollIntoView();
+        }}
+      />
     </div>
   );
 };

@@ -40,9 +40,11 @@ const TopNav = ({
         } bg-[#FBFBFB] border-b border-gray-200 z-50`}
       >
         <div className="flex items-center lg:hidden">
-          <LeftDrawer navs={adminNavs} />
+          <LeftDrawer items={adminNavs} />
         </div>
-        <Logo />
+        <div className="hidden md:block">
+          <Logo />
+        </div>
         <div className="ml-auto pl-6 md:pl-12 flex items-center space-x-6">
           <button
             type="button"
