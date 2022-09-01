@@ -43,4 +43,10 @@ export default class LibraryServices{
         });
       }
 
+      static findByCondition(condition: any) {
+        return Library.findOne({
+          where: condition,
+        });
+      }
+
 }
