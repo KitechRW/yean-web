@@ -2,27 +2,24 @@ import { PictureAsPdf } from '@mui/icons-material';
 import Image from 'next/image';
 import React from 'react';
 import swal from 'sweetalert';
-import axios from 'axios';
 import { useRouter } from 'next/router';
 import PDFPreview from 'modules/_partials/PDFPreview';
-import CustomImage from 'modules/_partials/CustomImage';
 
 const ReadBooks = ({ books }: any) => {
   const route = useRouter();
   const downloadPDF = (book: any) => {
-    axios({
-      url: '/api/libraries/file', //your url
-      method: 'POST',
-      responseType: 'blob', // important
-      data: {
-        link: book?.link,
-        name: book?.name,
-      },
-    })
-      .then(response => {
-        const url = window.URL.createObjectURL(
-          new Blob([response.data]),
-        );
+    let link: string = book.link;
+    if (
+      link &&
+      !link.startsWith('/uploads/') &&
+      !link.startsWith('http')
+    ) {
+      link = `/uploads/${link}`;
+    }
+    fetch(link)
+      .then(response => response.blob())
+      .then(blob => {
+        const url = window.URL.createObjectURL(blob);
         const link = document.createElement('a');
         link.href = url;
         link.setAttribute('download', book?.name + '.pdf'); //or any other extension
@@ -34,13 +31,6 @@ const ReadBooks = ({ books }: any) => {
           console.log('he'),
         );
       });
-    // DefaultApi.PostRoute.postRoute(
-    //   '/api/libraries/file',
-    //   {
-    //     link: book?.link,
-    //     name: book?.name
-    //   },
-    // )
   };
   return (
     <>
@@ -65,10 +55,7 @@ const ReadBooks = ({ books }: any) => {
             </h1>
             <p className="text-gray-600 mt-2">{element.desc}</p>
             <div className="flex items-center space-x-3 mt-3">
-              <PDFPreview
-                title={element?.name}
-                src={'/uploads/Celestin_Resume.pdf'}
-              >
+              <PDFPreview title={element?.name} src={element.link}>
                 <span className="bg-dark-green text-white p-2 text-xs">
                   Read
                 </span>
