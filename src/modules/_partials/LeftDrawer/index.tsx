@@ -13,7 +13,7 @@ const LeftDrawer = ({
   onSearch,
 }: {
   items?: any[];
-  onSearch: any;
+  onSearch?: any;
 }) => {
   const { pathname } = useRouter();
   const [toggle, setToggle] = React.useState(false);
@@ -32,21 +32,23 @@ const LeftDrawer = ({
   return (
     <>
       <div className="flex items-center space-x-3">
-        <label
-          htmlFor="search"
-          className="flex text-white items-center relative md:hidden"
-        >
-          <Search className="left-3 absolute" />
-          <input
-            type="search"
-            name=""
-            id="search"
-            onClick={onSearch}
-            readOnly
-            placeholder="Search"
-            className="w-full placeholder:text-center rounded-full px-12 placeholder:font-bold placeholder:text-white outline-none bg-brand-green/70 bg-opacity-20 py-2"
-          />
-        </label>
+        {onSearch && (
+          <label
+            htmlFor="search"
+            className="flex text-white items-center relative md:hidden"
+          >
+            <Search className="left-3 absolute" />
+            <input
+              type="search"
+              name=""
+              id="search"
+              onClick={onSearch}
+              readOnly
+              placeholder="Search"
+              className="w-full placeholder:text-center rounded-full px-12 placeholder:font-bold placeholder:text-white outline-none bg-brand-green/70 bg-opacity-20 py-2"
+            />
+          </label>
+        )}
         <button
           type="button"
           onClick={() => setToggle(!toggle)}

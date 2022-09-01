@@ -4,6 +4,7 @@ import Head from 'next/head';
 import AdminScaffold from 'modules/layouts/AdminScaffold';
 import TopNav from 'modules/_partials/TopNav';
 import CategoryActivity from 'modules/admin/CategoryActivity';
+import SubCategoryActivity from 'modules/admin/SubCategoryActivity';
 
 const Category: NextPage = () => {
   return (
@@ -12,7 +13,11 @@ const Category: NextPage = () => {
         <title>Yean</title>
       </Head>
       <AdminScaffold>
-        <CategoryActivity />
+        <div className="md:flex gap-3 md:gap-2 flex-grow">
+          <CategoryActivity />
+          <div className="w-0.5 bg-gray-200 h-full" />
+          <SubCategoryActivity />
+        </div>
       </AdminScaffold>
     </>
   );
