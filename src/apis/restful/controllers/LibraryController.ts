@@ -145,7 +145,7 @@ export default class LibraryController {
     }
   }
 
-  static async readFile(req: NextApiRequest, res: NextApiResponse){
+  static async downloadFile(req: NextApiRequest, res: NextApiResponse){
    try {
     // const url = `${Keys.HOST}/uploads/media-1661364328169-412504610.pdf`;
     let {link,name} = req.body
@@ -172,5 +172,38 @@ export default class LibraryController {
       });
     }
   }
+
+  static async readFile(req: NextApiRequest, res: NextApiResponse){
+    try {
+     // const url = `${Keys.HOST}/uploads/media-1661364328169-412504610.pdf`;
+     
+     let {link} = req.body
+
+     const linkFound = await LibraryServices.findByCondition({link})
+     if(!linkFound){
+      return Response.error(res,404,{
+        message:"this book is not found"
+      })
+     }
+
+     if (!link.startsWith('/uploads/')) {
+       link = `/uploads/${link}`
+       console.log('string starts with /uploads/');
+     } 
+ 
+     const url = `${Keys.HOST}${link}`
+     return Response.error(res, 201, {
+       message: 'Book retreived successfully',
+       data:{
+        url
+       }
+     })
+    } catch (error:any) {
+       return Response.error(res, 500, {
+         message: 'something went wrong',
+         error:error.message
+       });
+     }
+   }
 
 }
