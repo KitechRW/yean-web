@@ -33,9 +33,20 @@ const PDFPreview = ({
     setNumPages(nextNumPages);
   }
 
+  React.useEffect(() => {
+    if (
+      src &&
+      !src.startsWith('/uploads/') &&
+      !src.startsWith('http')
+    ) {
+      setFile(`/uploads/${src}`);
+    }
+  }, [src]);
+
   if (!file) {
     return null;
   }
+
   return (
     <DrawerLayout toggle={toggle} setToggle={setToggle} title={title}>
       {children}
