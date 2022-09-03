@@ -1,6 +1,6 @@
 import Scaffold from 'modules/layouts/Scaffold';
 import Image from 'next/image';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import Link from "next/link";
 import Select from "react-select";
 import joi from "joi";
@@ -8,12 +8,21 @@ import {useForm} from "react-hook-form";
 import { joiResolver } from '@hookform/resolvers/joi';
 
 const schema = joi.object({
-  keyword: joi.string().required(),
-  category: joi.string().required(),
-  location: joi.string().required(),
+  keyword: joi.string(),
+  category: joi.string(),
+  location: joi.string(),
 
 });
 const Carrers = ({data} : any) => {
+  const [categories, setCategories] = useState<any>([])
+  const [keywords, setKeywords] = useState<any>([])
+  const [locations, setLocations] = useState<any>([])
+
+  const [categoryFilter, setCategoryFilter] = useState(null)
+  const [keywordFilter, setKeywordFilter] = useState(null)
+  const [locationFilter, setLocationFilter] = useState(null)
+
+  const [jobsToShow, setJobsToShow] = useState([])
   const {
     register,
     handleSubmit,
@@ -25,7 +34,50 @@ const Carrers = ({data} : any) => {
     resolver: joiResolver(schema),
   });
 
-  const onSubmit = async (query: any) => {}
+  useEffect(()=> {
+    if(data.rows){
+      const results = data.rows.filter((eachJob:any) => {
+        let found = true
+        if(categoryFilter && !(eachJob.category === categoryFilter)){
+          found = false
+        }
+        if(locationFilter && !(eachJob.location === locationFilter)){
+          found = false;
+        }
+        if(keywordFilter && !(eachJob.keyword === keywordFilter)){
+          found = false;
+        }
+        return found
+      })
+      setJobsToShow(results)
+    }
+  }, [categoryFilter, data.rows, keywordFilter, locationFilter])
+
+  useEffect(()=>{
+    if(data){
+      const keywords = data?.keywords?.map((eachKeyword:any) => {
+        return {label:eachKeyword, value:eachKeyword}
+      })
+
+      const locations =data?.locations?.map((eachLocation:any) => {
+        return {label:eachLocation, value:eachLocation}
+      })
+      const categories = data?.categories?.map((eachCategory:any) => {
+        return {label:eachCategory, value:eachCategory}
+      })
+
+
+      setKeywords(keywords)
+      setLocations(locations)
+      setCategories(categories)
+    }
+  }, [data])
+
+  const onSubmit = async (query: any) => {
+    setCategoryFilter(query['category'])
+    setLocationFilter(query["location"])
+    setKeywordFilter(query["keyword"])
+  }
   return (
     <Scaffold>
       <div className="flex-wrap bg-white justify-center items-center w-full p-4 md:p-8 flex gap-4">
@@ -52,36 +104,27 @@ const Carrers = ({data} : any) => {
             placeholder={"Keyword"}
             isMulti={false}
             {...register('keyword')}
-            options={[]}
+            options={keywords}
             onChange={(newValue: any) => {
-              setValue('keyword', Number(newValue.value), {
-                shouldDirty: true,
-                shouldValidate: true,
-              });
+              setValue('keyword', newValue.value);
             }}
           />
           <Select
             placeholder={"Location"}
             isMulti={false}
             {...register('location')}
-            options={[]}
+            options={locations}
             onChange={(newValue: any) => {
-              setValue('location', Number(newValue.value), {
-                shouldDirty: true,
-                shouldValidate: true,
-              });
+              setValue('location', newValue.value);
             }}
           />
           <Select
             placeholder={"Category"}
             isMulti={false}
             {...register('category')}
-            options={[]}
+            options={categories}
             onChange={(newValue: any) => {
-              setValue('category', Number(newValue.value), {
-                shouldDirty: true,
-                shouldValidate: true,
-              });
+              setValue('category', newValue.value);
             }}
           />
 
@@ -108,7 +151,7 @@ const Carrers = ({data} : any) => {
           </button>
         </div>
 
-        {data?.rows?.map((element : any) => (
+        {jobsToShow.map((element : any) => (
           <Link key={element} href={"/carrers/"+element.id}>
             <div
               className="flex items-start gap-3 mt-4 py-4 px-2 flex-wrap justify-between max-w-6xl w-full hover:bg-white"
