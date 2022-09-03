@@ -146,9 +146,9 @@ const Carrers = ({data} : any) => {
           <h1 className="text-xl md:text-2xl font-black tracking-wide">
             Available Jobs
           </h1>
-          <button className="px-12 py-3 border border-brand-green rounded">
-            Browse More Job
-          </button>
+          {/*<button className="px-12 py-3 border border-brand-green rounded">*/}
+          {/*  Browse More Job*/}
+          {/*</button>*/}
         </div>
 
         {jobsToShow.map((element : any) => (
