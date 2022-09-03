@@ -2,27 +2,28 @@ import React from 'react';
 import DefaultApi from 'apis/restful';
 import swal from 'sweetalert';
 import joi from 'joi';
-import Select from 'react-select';
 import DrawerLayout from 'modules/layouts/DrawerLayout';
 import { useForm } from 'react-hook-form';
 import { joiResolver } from '@hookform/resolvers/joi';
-import UploadImage from 'modules/_partials/UploadImage';
 import { formatJoiErorr } from 'system/format';
 import { useProtectedFetcher } from 'apis/utils/fetcher';
 
 const schema = joi.object({
-  name: joi.string().required(),
-  image: joi.object().required(),
-  categoryId: joi.number().required().label('Category'),
+  title: joi.string().required(),
+  keyword: joi.string().required(),
+  location: joi.string().required(),
+  category: joi.string().required(),
+  description: joi.string().required(),
+
 });
 
-const AddItem = ({
-  handleAdd,
-  children,
-  handleEdit,
-  dataValues,
-  handleDelete,
-}: {
+const AddJob = ({
+                   handleAdd,
+                   children,
+                   handleEdit,
+                   dataValues,
+                   handleDelete,
+                 }: {
   handleAdd?: (item: any) => void;
   children: any;
   handleEdit?: (item: any) => void;
@@ -42,25 +43,18 @@ const AddItem = ({
     resolver: joiResolver(schema),
   });
 
-  const {
-    data: { data: categories },
-  } = useProtectedFetcher('/api/categories');
 
   const onSubmit = async (query: any) => {
     setLoading(true);
-    const formData = new FormData();
-    Object.keys(query).forEach(key => {
-      formData.append(key === 'image' ? 'media' : key, query[key]);
-    });
     const { data, error } = await (!dataValues
       ? DefaultApi.PostRoute.postRoute(
-          '/api/sub-categories',
-          formData,
-        )
+        '/api/jobs',
+        {...query},
+      )
       : DefaultApi.PatchRoute.patchRoute(
-          `/api/sub-categories/${dataValues.id}`,
-          formData,
-        ));
+        `/api/jobs/${dataValues.id}`,
+        {...query},
+      ));
     setLoading(false);
 
     if (data) {
@@ -90,19 +84,15 @@ const AddItem = ({
   React.useEffect(() => {
     if (dataValues) {
       reset({
-        name: dataValues.name,
-        categoryId: dataValues.categoryId,
+        title: dataValues.title,
+        keyword: dataValues.keyword,
+        location: dataValues.location,
+        category: dataValues.category,
+        description: dataValues.description,
       });
     }
-  }, [dataValues]);
+  }, [dataValues, reset]);
 
-  const categoryOptions = categories?.rows?.map((element: any) => ({
-    value: element.id,
-    label: element.name,
-  }));
-  const defaultCategory = categoryOptions?.filter(
-    (item: any) => item.value == dataValues?.categoryId,
-  );
 
   const onDelete = async () => {
     const willDelete = await swal({
@@ -117,7 +107,7 @@ const AddItem = ({
     }
     setLoading(true);
     const { data, error } = await DefaultApi.DeleteRoute.deleteRoute(
-      `/api/sub-categories/${dataValues.id}`,
+      `/api/jobs/${dataValues.id}`,
     );
     setLoading(false);
 
@@ -141,7 +131,7 @@ const AddItem = ({
 
   return (
     <DrawerLayout
-      title={`${dataValues ? 'Edit' : 'New'} Sub Category`}
+      title={`${dataValues ? 'Edit' : 'New'} Job`}
       toggle={toggle}
       setToggle={setToggle}
     >
@@ -155,17 +145,68 @@ const AddItem = ({
         >
           <label className="flex flex-col">
             <span className="text-sm font-medium text-gray-900 dark:text-gray-300">
-              Name
+              Title
             </span>
             <input
               type="text"
-              placeholder={'Name'}
-              {...register('name')}
+              placeholder={'Title'}
+              {...register('title')}
+              onChange={(event: any) => {
+                setValue('title', event.target.value, {
+                  shouldDirty: true,
+                  shouldValidate: true,
+                });
+              }}
               className="mt-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             />
-            {errors.name?.message && (
+            {errors.title?.message && (
               <p className="mt-1 text-red-500">
-                {formatJoiErorr(`${errors.name.message}`)}
+                {formatJoiErorr(`${errors.title.message}`)}
+              </p>
+            )}
+          </label>
+          <label className="flex flex-col">
+            <span className="text-sm font-medium text-gray-900 dark:text-gray-300">
+              Keywords
+            </span>
+            <input
+              type="text"
+              placeholder={'Keyword'}
+              {...register('keyword')}
+              onChange={(event: any) => {
+                setValue('keyword', event.target.value, {
+                  shouldDirty: true,
+                  shouldValidate: true,
+                });
+              }}
+              className="mt-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            />
+            {errors.keyword?.message && (
+              <p className="mt-1 text-red-500">
+                {formatJoiErorr(`${errors.keyword.message}`)}
+              </p>
+            )}
+          </label>
+
+          <label className="flex flex-col">
+            <span className="text-sm font-medium text-gray-900 dark:text-gray-300">
+              Location
+            </span>
+            <input
+              type="text"
+              placeholder={'Location'}
+              {...register('location')}
+              onChange={(event: any) => {
+                setValue('location', event.target.value, {
+                  shouldDirty: true,
+                  shouldValidate: true,
+                });
+              }}
+              className="mt-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            />
+            {errors.location?.location && (
+              <p className="mt-1 text-red-500">
+                {formatJoiErorr(`${errors.location.message}`)}
               </p>
             )}
           </label>
@@ -173,44 +214,46 @@ const AddItem = ({
             <span className="text-sm font-medium text-gray-900 dark:text-gray-300">
               Category
             </span>
-            <Select
-              isMulti={false}
-              {...register('categoryId')}
-              defaultValue={defaultCategory}
-              options={categoryOptions}
-              onChange={(newValue: any) => {
-                setValue('categoryId', Number(newValue.value), {
+            <input
+              type="text"
+              placeholder={'Category'}
+              {...register('category')}
+              onChange={(event: any) => {
+                setValue('category', event.target.value, {
                   shouldDirty: true,
                   shouldValidate: true,
                 });
               }}
-              className="mt-2"
+              className="mt-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             />
-            {errors.categoryId?.message && (
+            {errors.category?.message && (
               <p className="mt-1 text-red-500">
-                {formatJoiErorr(`${errors.categoryId.message}`)}
+                {formatJoiErorr(`${errors.category.message}`)}
               </p>
             )}
           </label>
-          <div className="flex flex-col">
-            <span className="text-sm mb-2 font-medium text-gray-900 dark:text-gray-300">
-              Image
+          <label className="flex flex-col">
+            <span className="text-sm font-medium text-gray-900 dark:text-gray-300">
+              Description
             </span>
-            <UploadImage
-              updateFilesCb={(files: any[]) => {
-                setValue('image', files[0], {
+            <textarea
+              rows={10}
+              placeholder={'Description'}
+              {...register('description')}
+              onChange={(event: any) => {
+                setValue('description', event.target.value, {
                   shouldDirty: true,
                   shouldValidate: true,
                 });
               }}
-              multiple={false}
+              className="mt-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             />
-            {errors.image?.message && (
+            {errors.description?.message && (
               <p className="mt-1 text-red-500">
-                {formatJoiErorr(`${errors.image?.message}`)}
+                {formatJoiErorr(`${errors.description.message}`)}
               </p>
             )}
-          </div>
+          </label>
 
           <div className="flex items-center space-x-3 justify-between md:col-span-2">
             {dataValues ? (
@@ -237,4 +280,4 @@ const AddItem = ({
   );
 };
 
-export default AddItem;
+export default AddJob;

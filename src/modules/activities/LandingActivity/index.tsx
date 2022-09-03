@@ -120,7 +120,7 @@ const LandingAcitivity = ({
       </div>
       <div className="px-4 md:px-8 py-2 bg-white">
         <div className="flex flex-col relative min-h-[64px] md:min-h-[195px]">
-          <Link href="#">
+          <Link href="/innovation-center">
             <Image
               src="/assets/images/yean.png"
               alt=""

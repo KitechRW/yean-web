@@ -100,6 +100,8 @@ const Footer = () => {
             </div>
             <div className="mt-3 flex flex-col space-y-2">
               <Link href="/farmer-platform">Farmer Platform</Link>
+              <Link href="/carrers">Job Openings</Link>
+
               {/* <Link href="#">Opportunities</Link> */}
             </div>
           </div>
