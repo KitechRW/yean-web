@@ -9,6 +9,7 @@ import {
   Extension,
   Pageview,
   Category,
+  Work,
 } from '@mui/icons-material';
 
 export const navs = [
@@ -119,4 +120,10 @@ export const adminNavs = [
     label: 'Partner with us',
     path: '/admin/partner-with-us',
   },
+  {
+    icon: Work,
+    label: 'Job',
+    path: '/admin/job',
+  },
+
 ];

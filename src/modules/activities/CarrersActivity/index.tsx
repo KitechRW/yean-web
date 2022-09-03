@@ -2,8 +2,30 @@ import Scaffold from 'modules/layouts/Scaffold';
 import Image from 'next/image';
 import React from 'react';
 import Link from "next/link";
+import Select from "react-select";
+import joi from "joi";
+import {useForm} from "react-hook-form";
+import {joiResolver} from "@hookform/resolvers/joi/dist/joi";
 
+const schema = joi.object({
+  keyword: joi.string().required(),
+  category: joi.string().required(),
+  location: joi.string().required(),
+
+});
 const Carrers = () => {
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    getValues,
+    reset,
+    formState: { errors },
+  } = useForm({
+    resolver: joiResolver(schema),
+  });
+
+  const onSubmit = async (query: any) => {}
   return (
     <Scaffold>
       <div className="flex-wrap bg-white justify-center items-center w-full p-4 md:p-8 flex gap-4">
@@ -23,20 +45,54 @@ const Carrers = () => {
           alt=""
         />
 
-        <div className="mt-6 w-full justify-center flex items-center gap-6 flex-wrap">
-          <button className="text-gray-400 rounded-lg py-3 px-12 border border-gray-200 bg-white">
-            Keyword
-          </button>
-          <button className="text-gray-400 rounded-lg py-3 px-12 border border-gray-200 bg-white">
-            Location
-          </button>
-          <button className="text-gray-400 rounded-lg py-3 px-12 border border-gray-200 bg-white">
-            Category
-          </button>
-          <button className="text-white rounded-lg py-3 px-12 border border-dark-green bg-dark-green">
+        <form onSubmit={event => {handleSubmit(onSubmit)(event);}}
+              className="mt-6 w-full justify-center flex items-center gap-6 flex-wrap">
+
+          <Select
+            placeholder={"Keyword"}
+            isMulti={false}
+            {...register('keyword')}
+            options={[]}
+            onChange={(newValue: any) => {
+              setValue('keyword', Number(newValue.value), {
+                shouldDirty: true,
+                shouldValidate: true,
+              });
+            }}
+          />
+          <Select
+            placeholder={"Location"}
+            isMulti={false}
+            {...register('location')}
+            options={[]}
+            onChange={(newValue: any) => {
+              setValue('location', Number(newValue.value), {
+                shouldDirty: true,
+                shouldValidate: true,
+              });
+            }}
+          />
+          <Select
+            placeholder={"Category"}
+            isMulti={false}
+            {...register('category')}
+            options={[]}
+            onChange={(newValue: any) => {
+              setValue('category', Number(newValue.value), {
+                shouldDirty: true,
+                shouldValidate: true,
+              });
+            }}
+          />
+
+          {/*<button className="text-gray-400 rounded-lg py-3 px-12 border border-gray-200 bg-white">*/}
+          {/*  Keyword*/}
+          {/*</button>*/}
+
+          <button type={"submit"} className="text-white rounded-lg py-3 px-12 border border-dark-green bg-dark-green">
             Find Job
           </button>
-        </div>
+        </form>
       </div>
 
       <div className="p-4 md:p-8 items-center flex flex-col bg-[#F5F7FA]">
