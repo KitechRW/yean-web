@@ -18,23 +18,8 @@ import Testimonial from 'modules/_partials/Testimonial';
 import Slides from 'modules/_partials/Slides';
 import CustomImage from 'modules/_partials/CustomImage';
 import CarouselPartners from 'modules/_partials/CarouselPartners';
-
-export const partners = [
-  '/assets/images/agriprofocus 2.png',
-  '/assets/images/gfar 1.png',
-  '/assets/images/rdi_logo 1.png',
-  '/assets/images/ypard 1.png',
-];
-
-const slide = {
-  title: 'From Youth Engagement in Agriculture Network',
-  desc: `Youth Engagement in Agriculture Network (YEAN ) is a Youth
-            Led Private Agriculture Extension Social enterprise
-            created in 2014.`,
-  image: '/assets/images/Home Slider Image.png',
-};
-
-const slides = new Array(6).fill(slide);
+import { useProtectedFetcher } from 'apis/utils/fetcher';
+import { useRouter } from 'next/router';
 
 const LandingAcitivity = ({
   data,
@@ -42,19 +27,39 @@ const LandingAcitivity = ({
   partners,
 }: {
   data: any;
-  articles: any;
+  articles: any[];
   partners: any;
 }) => {
+  const { push } = useRouter();
+  const {
+    data: { data: subCategories },
+  } = useProtectedFetcher('/api/sub-categories');
   const slides = data?.slides || [];
-  const { rows } = articles || {};
   const confirmedPartners: any[] =
     partners?.rows?.filter((item: any) => !!item.confirmed) || [];
+
+  const articleList: any[] =
+    articles.map((item: any) => {
+      const sub = subCategories?.rows?.filter(
+        (element: any) => element.id == item.category,
+      );
+      if (sub?.length) {
+        return { ...item, category: sub[0] };
+      }
+      return item;
+    }) || [];
 
   return (
     <Scaffold>
       <Slides data={slides} />
       <div className="px-4 md:px-8 py-2 bg-white inline-grid md:grid-cols-3 gap-x-10 gap-y-3">
-        <div className="flex space-y-6 justify-between flex-col items-center py-4 px-6 rounded-[15px] drop-shadow border border-gray-400">
+        <div
+          role="button"
+          onClick={() => {
+            push('/services');
+          }}
+          className="flex space-y-6 justify-between flex-col items-center py-4 px-6 rounded-[15px] drop-shadow border border-gray-400"
+        >
           <Image
             src="/assets/images/Business Network.png"
             alt=""
@@ -73,7 +78,13 @@ const LandingAcitivity = ({
             +
           </button>
         </div>
-        <div className="flex flex-col relative rounded-[15px]">
+        <div
+          role="button"
+          onClick={() => {
+            push('/extension-material');
+          }}
+          className="flex flex-col relative rounded-[15px]"
+        >
           <div className="z-10 flex-grow flex bg-[#660A0A] bg-opacity-80 space-y-6 justify-between flex-col items-center py-4 px-6 rounded-[15px] drop-shadow border border-gray-400">
             <Image
               src="/assets/images/extension 1.png"
@@ -98,7 +109,13 @@ const LandingAcitivity = ({
             className="rounded-[15px]"
           />
         </div>
-        <div className="flex space-y-6 justify-between flex-col items-center py-4 px-6 rounded-[15px] drop-shadow border border-gray-400">
+        <div
+          role="button"
+          onClick={() => {
+            push('/farmer-platform');
+          }}
+          className="flex space-y-6 justify-between flex-col items-center py-4 px-6 rounded-[15px] drop-shadow border border-gray-400"
+        >
           <Image
             src="/assets/images/farmer 1.png"
             alt=""
@@ -138,7 +155,7 @@ const LandingAcitivity = ({
           Extension Materials
         </h1>
         <div className="pt-2 inline-grid grid-cols-2 md:grid-cols-4 gap-3">
-          {rows?.slice(0, 8)?.map((element: any) => (
+          {articleList.slice(0, 8)?.map((element: any) => (
             <MinPost key={element.id} data={element} />
           ))}
         </div>
@@ -164,7 +181,7 @@ const LandingAcitivity = ({
           Latest Blog
         </h1>
         <div className="pt-2 inline-grid grid-cols-2 md:grid-cols-4 gap-3">
-          {rows?.slice(8)?.map((element: any) => (
+          {articles?.slice(8)?.map((element: any) => (
             <LatestBlog key={element.id} data={element} />
           ))}
         </div>

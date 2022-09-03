@@ -12,31 +12,45 @@ import dynamic from 'next/dynamic';
 import RichText from 'system/config/richtext';
 import Select from 'react-select';
 import { useProtectedFetcher } from 'apis/utils/fetcher';
+import Http from 'core/factory/fact.http';
 
 const ReactQuill = dynamic(() => import('react-quill'), {
   ssr: false,
 });
 
-const schema = joi.object({
+const fields = {
   title: joi.string().required(),
   image: joi.object().required(),
   text: joi.string().required(),
-  category: joi.number().required(),
-  author_id: joi.number().required(),
-});
+  parentCat: joi.number().required().label('Category'),
+  category: joi.number().required().label('Sub category'),
+  author_id: joi.number().required().label('Author'),
+};
+
+const schema = joi.object(fields);
 
 const AddItem = ({
   handleAdd,
   children,
+  handleEdit,
+  dataValues,
+  handleDelete,
 }: {
-  handleAdd: (item: any) => void;
+  handleAdd?: (item: any) => void;
   children: any;
+  handleEdit?: (item: any) => void;
+  handleDelete?: (id: any) => void;
+  dataValues?: any;
 }) => {
+  const [data, setData] = React.useState<any>(null);
   const [loading, setLoading] = React.useState(false);
   const [toggle, setToggle] = React.useState(false);
   const {
     data: { data: categories },
   } = useProtectedFetcher('/api/categories');
+  const {
+    data: { data: subCategories },
+  } = useProtectedFetcher('/api/sub-categories');
   const {
     data: { data: authors },
   } = useProtectedFetcher('/api/users');
@@ -55,23 +69,34 @@ const AddItem = ({
     setLoading(true);
     const formData = new FormData();
     Object.keys(query).forEach(key => {
-      formData.append(key === 'image' ? 'media' : key, query[key]);
+      if (key !== 'parentCat') {
+        formData.append(key === 'image' ? 'media' : key, query[key]);
+      }
     });
-    const { data, error } = await DefaultApi.PostRoute.postRoute(
-      '/api/articles',
-      formData,
-    );
+    const { data: res, error } = await (!dataValues
+      ? DefaultApi.PostRoute.postRoute('/api/articles', formData)
+      : DefaultApi.PatchRoute.patchRoute(
+          `/api/articles/${dataValues.id}`,
+          formData,
+        ));
     setLoading(false);
 
-    if (data) {
+    if (res) {
+      const message = dataValues ? 'Edited' : 'Added';
       swal(
-        'Added!',
-        data.message || 'Added successfully',
+        message,
+        res.message || `${message} successfully`,
         'success',
       ).then(() => {
         reset();
         setToggle(false);
-        handleAdd(data.data);
+        if (dataValues) {
+          // @ts-ignore
+          handleEdit(res.data);
+        } else {
+          // @ts-ignore
+          handleAdd(res.data);
+        }
       });
     }
 
@@ -80,15 +105,99 @@ const AddItem = ({
     }
   };
 
+  const onDelete = async () => {
+    const willDelete = await swal({
+      title: 'Are you sure?',
+      text: 'Are you sure that you want to delete this article?',
+      icon: 'warning',
+      dangerMode: true,
+    });
+
+    if (!willDelete) {
+      return;
+    }
+    setLoading(true);
+    const { data, error } = await DefaultApi.DeleteRoute.deleteRoute(
+      `/api/articles/${dataValues.id}`,
+    );
+    setLoading(false);
+
+    if (data) {
+      swal(
+        'Deleted!',
+        data.message || 'Deleted successfully',
+        'success',
+      ).then(() => {
+        reset();
+        setToggle(false);
+        // @ts-ignore
+        handleDelete(dataValues.id);
+      });
+    }
+
+    if (error) {
+      swal('Ooops!', error.message || 'Something went wrong');
+    }
+  };
+
+  React.useEffect(() => {
+    if (dataValues?.id) {
+      Http.axios
+        .get(`/api/articles/${dataValues.id}`)
+        .then(response => {
+          setData(response.data.data.article);
+        });
+    }
+  }, [dataValues]);
+
+  React.useEffect(() => {
+    if (data) {
+      const defaultValues: any = {};
+      Object.keys(fields).map(key => {
+        if (!['image', 'parentCat'].includes(key)) {
+          defaultValues[key] = data[key];
+        }
+      });
+      reset(defaultValues);
+    }
+  }, [data]);
+
   const categoryOptions = categories?.rows?.map((element: any) => ({
     value: element.id,
     label: element.name,
   }));
 
+  const subCategoryOptions = subCategories?.rows
+    ?.filter((item: any) => item.categoryId == getValues('parentCat'))
+    ?.map((element: any) => ({
+      value: element.id,
+      label: element.name,
+    }));
+
+  const defaultSubCategoryOptions = subCategories?.rows
+    ?.filter((item: any) => item.id == data?.category)
+    ?.map((item: any) => ({
+      value: item.id,
+      label: item.name,
+      categoryId: item.categoryId,
+    }));
+  const defaultCategoryOptions = categoryOptions?.filter(
+    (item: any) => {
+      if (defaultSubCategoryOptions?.length) {
+        return defaultSubCategoryOptions[0].categoryId == item.value;
+      }
+      return false;
+    },
+  );
+
   const authorOptions = authors?.rows?.map((element: any) => ({
     value: element.id,
     label: `${element.firstname} ${element.lastname}`,
   }));
+
+  const defaultAuthorOptions = authorOptions?.filter(
+    (item: any) => item.value == data?.author_id,
+  );
 
   return (
     <DrawerLayout
@@ -126,8 +235,32 @@ const AddItem = ({
             </span>
             <Select
               isMulti={false}
-              {...register('category')}
+              {...register('parentCat')}
               options={categoryOptions}
+              defaultValue={defaultCategoryOptions}
+              onChange={(newValue: any) => {
+                setValue('parentCat', newValue.value, {
+                  shouldDirty: true,
+                  shouldValidate: true,
+                });
+              }}
+              className="mt-2"
+            />
+            {errors.parentCat?.message && (
+              <p className="mt-1 text-red-500">
+                {formatJoiErorr(`${errors.parentCat.message}`)}
+              </p>
+            )}
+          </label>
+          <label className="flex flex-col">
+            <span className="text-sm font-medium text-gray-900 dark:text-gray-300">
+              Sub Category
+            </span>
+            <Select
+              isMulti={false}
+              {...register('category')}
+              options={subCategoryOptions}
+              defaultValue={defaultSubCategoryOptions}
               onChange={(newValue: any) => {
                 setValue('category', newValue.value, {
                   shouldDirty: true,
@@ -150,6 +283,7 @@ const AddItem = ({
               isMulti={false}
               {...register('author_id')}
               options={authorOptions}
+              defaultValue={defaultAuthorOptions}
               onChange={(newValue: any) => {
                 setValue('author_id', newValue.value, {
                   shouldDirty: true,
@@ -188,6 +322,7 @@ const AddItem = ({
             <p className="mt-3 w-full font-medium">Text</p>
             <ReactQuill
               theme="snow"
+              defaultValue={data?.text}
               modules={RichText.modules}
               formats={RichText.formats}
               onChange={newValue => {
@@ -204,13 +339,26 @@ const AddItem = ({
             )}
           </div>
 
-          <button
-            type="submit"
-            disabled={loading}
-            className="md:col-span-2 disabled:cursor-not-allowed disabled:bg-slate-400 mt-12 text-white bg-brand-green/80 hover:bg-brand-green focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-8 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-          >
-            Submit
-          </button>
+          <div className="flex items-center space-x-3 justify-between md:col-span-2">
+            {dataValues ? (
+              <button
+                type="button"
+                disabled={loading}
+                onClick={onDelete}
+                className="font-semibold disabled:cursor-not-allowed disabled:bg-slate-400 mt-12 text-white bg-red-500/80 hover:bg-red-500 focus:ring-4 focus:outline-none focus:ring-red-300 rounded-lg text-sm w-full sm:w-auto px-8 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:red:ring-blue-800"
+              >
+                Delete
+              </button>
+            ) : null}
+
+            <button
+              type="submit"
+              disabled={loading}
+              className="font-semibold disabled:cursor-not-allowed disabled:bg-slate-400 mt-12 text-white bg-brand-green/80 hover:bg-brand-green focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg text-sm w-full sm:w-auto px-12 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+            >
+              Save
+            </button>
+          </div>
         </form>
       </div>
     </DrawerLayout>

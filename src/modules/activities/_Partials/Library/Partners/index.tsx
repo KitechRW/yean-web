@@ -1,8 +1,7 @@
-import { partners } from 'modules/activities/LandingActivity';
 import Image from 'next/image';
 import React from 'react';
 
-const Partners = () => {
+const Partners = ({ partners = [] }) => {
   return (
     <>
       {partners.map(element => (

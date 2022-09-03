@@ -11,41 +11,54 @@ export default class ArticleController {
     try {
       return Response.success(res, 200, {
         message: 'Articles fetched successfuly',
-        data: await ArticleServices.findOne({id},["id","title","image","author_id","text"],["firstname","lastname","phone","gender"]),
+        data: await ArticleServices.findOne(
+          { id },
+          ['id', 'title', 'image', 'author_id', 'text', 'category'],
+          ['firstname', 'lastname', 'phone', 'gender'],
+        ),
       });
-    } catch (error:any) {
+    } catch (error: any) {
       return Response.error(res, 500, {
         message: 'something went wrong',
-        error:error.message
+        error: error.message,
       });
     }
   }
 
   static async getAll(req: NextApiRequest, res: NextApiResponse) {
     try {
-
-      let {page = 1, limit = 10} = req.query ;
-      page=Number(page);
-      limit=Number(limit);
-      const offset = (page - 1) * limit
-      const { rows, count } = await ArticleServices.findAndCountAll(undefined,["id","title","image","author_id"],["firstname","lastname","phone","gender"],limit, offset)
+      let { page = 1, limit = 10, cat } = req.query;
+      page = Number(page);
+      limit = Number(limit);
+      const where: any = {};
+      if (Number(cat)) {
+        where.category = cat;
+      }
+      const offset = (page - 1) * limit;
+      const { rows, count } = await ArticleServices.findAndCountAll(
+        where,
+        ['id', 'title', 'image', 'author_id', 'category'],
+        ['firstname', 'lastname', 'phone', 'gender'],
+        limit,
+        offset,
+      );
       const pagination = paginate(page, count, rows, limit);
 
       if (offset >= count) {
-          return Response.success(res, 404, {
-            message: 'page not found',
-          });
+        return Response.success(res, 404, {
+          message: 'page not found',
+        });
       }
 
       return Response.success(res, 200, {
         message: 'Articles fetched successfuly',
         pagination,
-        data: rows
+        data: rows,
       });
-    } catch (error:any) {
+    } catch (error: any) {
       return Response.error(res, 500, {
         message: 'something went wrong',
-        error:error.message
+        error: error.message,
       });
     }
   }

@@ -41,7 +41,7 @@ const ArticleActivity = () => {
   const handleAdd = (item: any) => {
     setArticles(prev => ({
       ...articles,
-      rows: [...prev.rows, item],
+      rows: [item, ...prev.rows],
     }));
   };
 
