@@ -43,24 +43,17 @@ const AddJob = ({
     resolver: joiResolver(schema),
   });
 
-  const {
-    data: { data: categories },
-  } = useProtectedFetcher('/api/categories');
 
   const onSubmit = async (query: any) => {
     setLoading(true);
-    const formData = new FormData();
-    Object.keys(query).forEach(key => {
-      formData.append(key === 'image' ? 'media' : key, query[key]);
-    });
     const { data, error } = await (!dataValues
       ? DefaultApi.PostRoute.postRoute(
-        '/api/sub-categories',
-        formData,
+        '/api/jobs',
+        {...query},
       )
       : DefaultApi.PatchRoute.patchRoute(
-        `/api/sub-categories/${dataValues.id}`,
-        formData,
+        `/api/jobs/${dataValues.id}`,
+        {...query},
       ));
     setLoading(false);
 
@@ -97,13 +90,6 @@ const AddJob = ({
     }
   }, [dataValues]);
 
-  const categoryOptions = categories?.rows?.map((element: any) => ({
-    value: element.id,
-    label: element.name,
-  }));
-  const defaultCategory = categoryOptions?.filter(
-    (item: any) => item.value == dataValues?.categoryId,
-  );
 
   const onDelete = async () => {
     const willDelete = await swal({
@@ -162,6 +148,12 @@ const AddJob = ({
               type="text"
               placeholder={'Title'}
               {...register('title')}
+              onChange={(event: any) => {
+                setValue('title', event.target.value, {
+                  shouldDirty: true,
+                  shouldValidate: true,
+                });
+              }}
               className="mt-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             />
             {errors.title?.message && (
@@ -178,6 +170,12 @@ const AddJob = ({
               type="text"
               placeholder={'Keyword'}
               {...register('keyword')}
+              onChange={(event: any) => {
+                setValue('keyword', event.target.value, {
+                  shouldDirty: true,
+                  shouldValidate: true,
+                });
+              }}
               className="mt-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             />
             {errors.keyword?.message && (
@@ -195,6 +193,12 @@ const AddJob = ({
               type="text"
               placeholder={'Location'}
               {...register('location')}
+              onChange={(event: any) => {
+                setValue('location', event.target.value, {
+                  shouldDirty: true,
+                  shouldValidate: true,
+                });
+              }}
               className="mt-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             />
             {errors.location?.location && (
@@ -211,6 +215,12 @@ const AddJob = ({
               type="text"
               placeholder={'Category'}
               {...register('category')}
+              onChange={(event: any) => {
+                setValue('category', event.target.value, {
+                  shouldDirty: true,
+                  shouldValidate: true,
+                });
+              }}
               className="mt-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             />
             {errors.category?.message && (
@@ -227,6 +237,12 @@ const AddJob = ({
               rows={10}
               placeholder={'Description'}
               {...register('description')}
+              onChange={(event: any) => {
+                setValue('description', event.target.value, {
+                  shouldDirty: true,
+                  shouldValidate: true,
+                });
+              }}
               className="mt-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             />
             {errors.description?.message && (

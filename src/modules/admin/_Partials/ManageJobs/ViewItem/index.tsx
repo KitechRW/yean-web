@@ -14,14 +14,13 @@ const ViewJob = ({
   handleEdit: (item: any) => void;
   handleDelete: (id: any) => void;
 }) => {
-  const { name, image, } = data || {};
-  console.log(data);
+  const { title, keyword, category } = data || {};
   return (
     <>
       <div className="flex flex-col bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700">
-        <CustomImage src={image} width="150" height="150" />
+        <h2 className={"self-center"}> {title}</h2>
         <div className="p-3 flex-grow flex flex-col items-center justify-between gap-y-2">
-          <p className="font-semibold pl-2">{name}</p>
+          <p className="font-semibold pl-2">{keyword} , {category}</p>
           <AddItem
             dataValues={data}
             handleEdit={handleEdit}

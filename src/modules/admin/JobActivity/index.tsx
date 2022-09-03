@@ -5,58 +5,57 @@ import ViewJob from "modules/admin/_Partials/ManageJobs/ViewItem";
 import AddJob from "modules/admin/_Partials/ManageJobs/AddItem";
 
 const JobActivity = () => {
-  const [categories, setCategories] = React.useState<{
+  const [jobs, setJobs] = React.useState<{
     count: number;
     rows: any[];
   }>({ count: 0, rows: [] });
   const {
     data: { data },
     isLoading,
-  } = useOpenFetcher(`/api/sub-categories`);
+  } = useOpenFetcher(`/api/jobs`);
 
   const [filterValue, setFilterValue] = React.useState('');
 
   React.useEffect(() => {
     const rows = data?.rows || [];
     if (rows.length) {
-      const matchcategories = rows.filter((element: any) =>
-        element.name
-          .toLowerCase()
-          .includes(filterValue.toLowerCase()),
+      const matchJobs = rows.filter((element: any) =>
+        element?.title?element?.title?.toLowerCase()
+          .includes(filterValue.toLowerCase()) : false,
       );
-      setCategories(prev => ({ ...prev, rows: matchcategories }));
+      setJobs(prev => ({ ...prev, rows: matchJobs }));
     }
   }, [data, filterValue]);
 
   React.useEffect(() => {
     const rows = data?.rows || [];
     if (rows.length) {
-      setCategories(prev => ({ ...prev, rows }));
+      setJobs(prev => ({ ...prev, rows }));
     }
   }, [data]);
 
   const handleAdd = (item: any) => {
-    setCategories(prev => ({
-      ...categories,
+    setJobs(prev => ({
+      ...jobs,
       rows: [...prev.rows, item],
     }));
   };
 
   const handleEdit = (item: any) => {
-    const rows = categories.rows.map(row => {
+    const rows = jobs.rows.map(row => {
       if (Number(row.id) === Number(item.id)) {
         return item;
       }
       return row;
     });
-    setCategories(prev => ({
+    setJobs(prev => ({
       ...prev,
       rows: rows,
     }));
   };
 
   const handleDelete = (id: any) => {
-    setCategories(prev => ({
+    setJobs(prev => ({
       ...prev,
       rows: prev.rows.filter(element => element.id !== id),
     }));
@@ -95,7 +94,7 @@ const JobActivity = () => {
         </AddJob>
       </div>
       <ul className="w-full py-4 md:py-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 text-sm leading-6">
-        {categories.rows.map((item, index) => {
+        {jobs.rows.map((item, index) => {
           return (
             <ViewJob
               key={item?.id}
