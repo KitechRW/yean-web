@@ -3,13 +3,13 @@ import Image from 'next/image';
 import React from 'react';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 
-const CarrerActivity = () => {
+const CarrerActivity = ({data}:any) => {
   return (
     <Scaffold>
       <div className="flex-wrap bg-white justify-center items-center w-full p-4 md:p-8 flex gap-4">
         <div className="flex flex-col">
           <h1 className="text-2xl md:text-4xl text-dark-green tracking-wide font-black">
-            Job title
+            {data?.title}
           </h1>
           <p className="mt-2 text-[#767676] max-w-sm">
             The following are the description about this job
@@ -33,26 +33,24 @@ const CarrerActivity = () => {
             <dl>
               <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                 <dt className="text-sm font-medium text-gray-500">Title</dt>
-                <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">Margot Foster</dd>
+                <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">{data?.title}</dd>
               </div>
               <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                 <dt className="text-sm font-medium text-gray-500">Keyword</dt>
-                <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">ddc</dd>
+                <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">{data?.keyword}</dd>
               </div>
               <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                 <dt className="text-sm font-medium text-gray-500">Location</dt>
-                <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">kigali</dd>
+                <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">{data?.location}</dd>
               </div>
               <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                 <dt className="text-sm font-medium text-gray-500">Category </dt>
-                <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">FullTime</dd>
+                <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">{data?.category}</dd>
               </div>
               <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                 <dt className="text-sm font-medium text-gray-500">Description</dt>
                 <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-                  Fugiat ipsum ipsum deserunt culpa aute sint do nostrud anim incididunt cillum culpa consequat. Excepteur
-                  qui ipsum aliquip consequat sint. Sit id mollit nulla mollit nostrud in ea officia proident. Irure nostrud
-                  pariatur mollit ad adipisicing reprehenderit deserunt qui eu.
+                  {data?.description}
                 </dd>
               </div>
             </dl>

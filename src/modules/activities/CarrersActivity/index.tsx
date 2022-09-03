@@ -5,7 +5,7 @@ import Link from "next/link";
 import Select from "react-select";
 import joi from "joi";
 import {useForm} from "react-hook-form";
-import {joiResolver} from "@hookform/resolvers/joi/dist/joi";
+import { joiResolver } from '@hookform/resolvers/joi';
 
 const schema = joi.object({
   keyword: joi.string().required(),
@@ -13,7 +13,7 @@ const schema = joi.object({
   location: joi.string().required(),
 
 });
-const Carrers = () => {
+const Carrers = ({data} : any) => {
   const {
     register,
     handleSubmit,
@@ -108,23 +108,23 @@ const Carrers = () => {
           </button>
         </div>
 
-        {new Array(10).fill(0).map(element => (
-          <Link key={element} href={"/carrers/2323"}>
+        {data?.rows?.map((element : any) => (
+          <Link key={element} href={"/carrers/"+element.id}>
             <div
               className="flex items-start gap-3 mt-4 py-4 px-2 flex-wrap justify-between max-w-6xl w-full hover:bg-white"
             >
               <div className="flex flex-col gap-3">
                 <div className="flex items-center gap-3">
                   <h1 className="text-lg md:text-xl font-light">
-                    AgroDealer mFrams
+                    {element.title}
                   </h1>
                   <button className="rounded-full bg-dark-green text-white px-3 ml-24 py-2">
-                    Partime
+                    {element.category}
                   </button>
                 </div>
                 <div className="flex items-center ml-3 gap-3 gap-x-12">
-                  <p className="text-dark-green">RAB</p>
-                  <p className="text-gray-400">NYAGATARE</p>
+                  <p className="text-dark-green">{element.keyword}</p>
+                  <p className="text-gray-400">{element.location}</p>
                 </div>
               </div>
 
