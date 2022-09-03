@@ -1,6 +1,7 @@
 import Scaffold from 'modules/layouts/Scaffold';
 import Image from 'next/image';
 import React from 'react';
+import Link from "next/link";
 
 const Carrers = () => {
   return (
@@ -52,29 +53,31 @@ const Carrers = () => {
         </div>
 
         {new Array(10).fill(0).map(element => (
-          <div
-            key={element}
-            className="flex items-start gap-3 mt-4 flex-wrap justify-between max-w-6xl w-full"
-          >
-            <div className="flex flex-col">
-              <div className="flex items-center gap-3">
-                <h1 className="text-lg md:text-xl font-light">
-                  AgroDealer mFrams
-                </h1>
-                <button className="rounded-full bg-dark-green text-white px-3 py-2">
-                  Partime
-                </button>
+          <Link key={element} href={"/carrers/2323"}>
+            <div
+              className="flex items-start gap-3 mt-4 py-4 px-2 flex-wrap justify-between max-w-6xl w-full hover:bg-white"
+            >
+              <div className="flex flex-col gap-3">
+                <div className="flex items-center gap-3">
+                  <h1 className="text-lg md:text-xl font-light">
+                    AgroDealer mFrams
+                  </h1>
+                  <button className="rounded-full bg-dark-green text-white px-3 ml-24 py-2">
+                    Partime
+                  </button>
+                </div>
+                <div className="flex items-center ml-3 gap-3 gap-x-12">
+                  <p className="text-dark-green">RAB</p>
+                  <p className="text-gray-400">NYAGATARE</p>
+                </div>
               </div>
-              <div className="flex items-center gap-3 gap-x-12">
-                <p className="text-dark-green">RAB</p>
-                <p className="text-gray-400">NYAGATARE</p>
-              </div>
-            </div>
 
-            <button className="rounded-lg bg-dark-green text-white px-8 py-3">
-              Apply Job
-            </button>
-          </div>
+              <button className="rounded-lg bg-dark-green text-white px-8 py-3">
+                View more
+              </button>
+            </div>
+          </Link>
+
         ))}
       </div>
     </Scaffold>
