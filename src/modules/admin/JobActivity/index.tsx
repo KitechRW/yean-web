@@ -97,7 +97,7 @@ const JobActivity = () => {
         {jobs.rows.map((item, index) => {
           return (
             <ViewJob
-              key={item?.id}
+              key={item?.id + "keyForJob"}
               data={item}
               handleEdit={handleEdit}
               handleDelete={handleDelete}

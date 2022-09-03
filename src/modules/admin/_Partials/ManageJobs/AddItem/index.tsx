@@ -84,11 +84,14 @@ const AddJob = ({
   React.useEffect(() => {
     if (dataValues) {
       reset({
-        name: dataValues.name,
-        categoryId: dataValues.categoryId,
+        title: dataValues.title,
+        keyword: dataValues.keyword,
+        location: dataValues.location,
+        category: dataValues.category,
+        description: dataValues.description,
       });
     }
-  }, [dataValues]);
+  }, [dataValues, reset]);
 
 
   const onDelete = async () => {
@@ -104,7 +107,7 @@ const AddJob = ({
     }
     setLoading(true);
     const { data, error } = await DefaultApi.DeleteRoute.deleteRoute(
-      `/api/sub-categories/${dataValues.id}`,
+      `/api/jobs/${dataValues.id}`,
     );
     setLoading(false);
 
