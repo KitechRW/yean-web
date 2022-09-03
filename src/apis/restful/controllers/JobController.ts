@@ -24,9 +24,16 @@ export default class JobController {
       const keywords: string[] = [];
       const locations: string[] = [];
       jobs.rows.forEach(item => {
-        categories.push(item.toJSON().category);
-        keywords.push(item.toJSON().keyword);
-        locations.push(item.toJSON().location);
+        if (!categories.includes(item.toJSON().category)) {
+          categories.push(item.toJSON().category);
+        }
+
+        if (!keywords.includes(item.toJSON().keyword)) {
+          keywords.push(item.toJSON().keyword);
+        }
+        if (!locations.includes(item.toJSON().location)) {
+          locations.push(item.toJSON().location);
+        }
       });
       return Response.success(res, 200, {
         message: 'Jobs fetched successfuly',
