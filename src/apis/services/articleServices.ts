@@ -23,6 +23,7 @@ export default class ArticleServices {
       where,
       limit,
       offset,
+      order: [['id', 'DESC']],
     });
     rows.sort((a: any, b: any) => Number(b.id) - Number(a.id));
     const articleRows = await Promise.all(

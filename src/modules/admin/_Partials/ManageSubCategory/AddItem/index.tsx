@@ -129,6 +129,7 @@ const AddItem = ({
       ).then(() => {
         reset();
         setToggle(false);
+        // @ts-ignore
         handleDelete(dataValues.id);
       });
     }

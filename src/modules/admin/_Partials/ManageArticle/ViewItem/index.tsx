@@ -2,7 +2,7 @@ import React from 'react';
 import { useRouter } from 'next/router';
 import { IconButton } from '@mui/material';
 import CustomImage from 'modules/_partials/CustomImage';
-import EditItem from '../EditItem';
+import AddItem from '../AddItem';
 import { Edit } from '@mui/icons-material';
 
 const ViewItem = ({
@@ -21,7 +21,7 @@ const ViewItem = ({
         <CustomImage src={image} width="150" height="150" />
         <div className="p-3 flex-grow flex flex-col items-center justify-between gap-y-2">
           <p className="font-semibold pl-2">{title}</p>
-          <EditItem
+          <AddItem
             dataValues={data}
             handleEdit={handleEdit}
             handleDelete={handleDelete}
@@ -29,7 +29,7 @@ const ViewItem = ({
             <IconButton>
               <Edit />
             </IconButton>
-          </EditItem>
+          </AddItem>
         </div>
       </div>
     </>

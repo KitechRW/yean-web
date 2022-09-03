@@ -63,10 +63,7 @@ export default class LandingController {
       );
       return Response.success(res, 200, {
         message: 'Landings fetched successfuly',
-        data: {
-          ...articles,
-          rows: articles.rows.slice(0, 16),
-        },
+        data: articles.rows.slice(0, 16),
       });
     } catch (error: any) {
       return Response.error(res, 500, {

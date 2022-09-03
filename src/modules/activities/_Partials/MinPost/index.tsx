@@ -5,7 +5,13 @@ import React from 'react';
 const MinPost = ({ data }: { data: any }) => {
   const { push } = useRouter();
   const handleClick = () => {
-    push(`/blog/${data?.id}`);
+    if (data?.category?.id) {
+      push(
+        `/extension-material/${data?.category?.id}?sub=${data?.category?.name}`,
+      );
+    } else {
+      push(`/extension-material`);
+    }
   };
   return (
     <div
@@ -24,10 +30,12 @@ const MinPost = ({ data }: { data: any }) => {
         />
       </div>
 
-      {/* <button className="mr-auto rounded-sm bg-dark-green -translate-y-4 text-white py-2 px-3">
-        Ubuhinzi
-      </button> */}
-      <p className="p-2 text-dark-green line-clamp-2 pb-2">
+      {data?.category && (
+        <button className="mr-auto rounded-sm bg-dark-green -translate-y-4 text-white py-2 px-3">
+          {data.category.name}
+        </button>
+      )}
+      <p className="px-2 text-dark-green line-clamp-2">
         {data?.title}
       </p>
       <div className="pt-2 p-2 mt-auto">
