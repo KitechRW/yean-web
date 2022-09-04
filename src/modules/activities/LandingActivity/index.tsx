@@ -154,7 +154,7 @@ const LandingAcitivity = ({
         <h1 className="text-2xl md:text-4xl text-white font-bold bg-brand-green p-2 text-center">
           Extension Materials
         </h1>
-        <div className="pt-2 inline-grid grid-cols-2 md:grid-cols-4 gap-3">
+        <div className="pt-2 inline-grid sm:grid-cols-2 md:grid-cols-4 gap-3">
           {articleList.slice(0, 8)?.map((element: any) => (
             <MinPost key={element.id} data={element} />
           ))}
@@ -163,7 +163,7 @@ const LandingAcitivity = ({
 
       <div className="px-4 md:px-8 py-2 bg-white">
         <div className="flex flex-col relative min-h-[64px] md:min-h-[195px]">
-          <Link href="#">
+          <Link href="/farmer-platform">
             <Image
               src="/assets/images/greenhouse.png"
               alt=""
@@ -180,12 +180,18 @@ const LandingAcitivity = ({
         <h1 className="text-2xl md:text-4xl text-white font-bold bg-brand-green p-2 text-center">
           Latest Blog
         </h1>
-        <div className="pt-2 inline-grid grid-cols-2 md:grid-cols-4 gap-3">
+        <div className="pt-2 inline-grid sm:grid-cols-2 md:grid-cols-4 gap-3">
           {articles?.slice(8)?.map((element: any) => (
             <LatestBlog key={element.id} data={element} />
           ))}
         </div>
-        <button className="mt-4 flex items-center space-x-2 mx-auto px-12 py-2 text-white bg-brand-green rounded-sm">
+        <button
+          type="button"
+          onClick={() => {
+            push('/blogs');
+          }}
+          className="mt-4 flex items-center space-x-2 mx-auto px-12 py-2 text-white bg-brand-green rounded-sm"
+        >
           <span className="p-1 rounded-full bg-white text-brand-green">
             <Add />
           </span>
@@ -195,7 +201,7 @@ const LandingAcitivity = ({
 
       <div className="px-4 md:px-8 py-2 bg-white">
         <div className="flex flex-col relative min-h-[64px] md:min-h-[195px]">
-          <Link href="#">
+          <Link href="/farmer-platform">
             <Image
               src="/assets/images/Inputs.png"
               alt=""
