@@ -1,17 +1,15 @@
 import { DataTypes } from 'sequelize';
 import sequelize from '../config/sequelize';
 
-const Job = sequelize.define(
-  'Job',
+const Project = sequelize.define(
+  'Project',
   {
-    title: DataTypes.STRING,
-    category: DataTypes.STRING,
-    keyword: DataTypes.STRING,
-    location: DataTypes.STRING,
+    name: DataTypes.STRING,
+    image: DataTypes.STRING,
     description: DataTypes.TEXT,
   },
   {
-    tableName: 'tbl_jobs',
+    tableName: 'tbl_projects',
     timestamps: false,
   },
 );
@@ -20,4 +18,4 @@ const Job = sequelize.define(
   await sequelize.sync({ alter: false });
 })();
 
-export default Job;
+export default Project;

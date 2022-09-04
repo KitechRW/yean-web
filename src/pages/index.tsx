@@ -2,6 +2,7 @@ import React from 'react';
 import Head from 'next/head';
 import LandingActivity from 'modules/activities/LandingActivity';
 import Http from 'core/factory/fact.http';
+import Script from 'next/script';
 
 const LandingPage = ({
   data,
@@ -22,6 +23,7 @@ const LandingPage = ({
         articles={articles}
         partners={partners}
       />
+      <Script src="/assets/js/main.js" />
     </>
   );
 };

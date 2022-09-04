@@ -1,28 +1,28 @@
 import Scaffold from 'modules/layouts/Scaffold';
 import Image from 'next/image';
-import React, {useEffect, useState} from 'react';
-import Link from "next/link";
-import Select from "react-select";
-import joi from "joi";
-import {useForm} from "react-hook-form";
+import React, { useEffect, useState } from 'react';
+import Link from 'next/link';
+import Select from 'react-select';
+import joi from 'joi';
+import { useForm } from 'react-hook-form';
 import { joiResolver } from '@hookform/resolvers/joi';
+import { Divider } from '@mui/material';
 
 const schema = joi.object({
   keyword: joi.string(),
   category: joi.string(),
   location: joi.string(),
-
 });
-const Carrers = ({data} : any) => {
-  const [categories, setCategories] = useState<any>([])
-  const [keywords, setKeywords] = useState<any>([])
-  const [locations, setLocations] = useState<any>([])
+const Carrers = ({ data }: any) => {
+  const [categories, setCategories] = useState<any>([]);
+  const [keywords, setKeywords] = useState<any>([]);
+  const [locations, setLocations] = useState<any>([]);
 
-  const [categoryFilter, setCategoryFilter] = useState(null)
-  const [keywordFilter, setKeywordFilter] = useState(null)
-  const [locationFilter, setLocationFilter] = useState(null)
+  const [categoryFilter, setCategoryFilter] = useState(null);
+  const [keywordFilter, setKeywordFilter] = useState(null);
+  const [locationFilter, setLocationFilter] = useState(null);
 
-  const [jobsToShow, setJobsToShow] = useState([])
+  const [jobsToShow, setJobsToShow] = useState([]);
   const {
     register,
     handleSubmit,
@@ -34,50 +34,57 @@ const Carrers = ({data} : any) => {
     resolver: joiResolver(schema),
   });
 
-  useEffect(()=> {
-    if(data.rows){
-      const results = data.rows.filter((eachJob:any) => {
-        let found = true
-        if(categoryFilter && !(eachJob.category === categoryFilter)){
-          found = false
-        }
-        if(locationFilter && !(eachJob.location === locationFilter)){
+  useEffect(() => {
+    if (data.rows) {
+      const results = data.rows.filter((eachJob: any) => {
+        let found = true;
+        if (
+          categoryFilter &&
+          !(eachJob.category === categoryFilter)
+        ) {
           found = false;
         }
-        if(keywordFilter && !(eachJob.keyword === keywordFilter)){
+        if (
+          locationFilter &&
+          !(eachJob.location === locationFilter)
+        ) {
           found = false;
         }
-        return found
-      })
-      setJobsToShow(results)
+        if (keywordFilter && !(eachJob.keyword === keywordFilter)) {
+          found = false;
+        }
+        return found;
+      });
+      setJobsToShow(results);
     }
-  }, [categoryFilter, data.rows, keywordFilter, locationFilter])
+  }, [categoryFilter, data.rows, keywordFilter, locationFilter]);
 
-  useEffect(()=>{
-    if(data){
-      const keywords = data?.keywords?.map((eachKeyword:any) => {
-        return {label:eachKeyword, value:eachKeyword}
-      })
+  useEffect(() => {
+    if (data) {
+      const keywords = data?.keywords?.map((eachKeyword: any) => {
+        return { label: eachKeyword, value: eachKeyword };
+      });
 
-      const locations =data?.locations?.map((eachLocation:any) => {
-        return {label:eachLocation, value:eachLocation}
-      })
-      const categories = data?.categories?.map((eachCategory:any) => {
-        return {label:eachCategory, value:eachCategory}
-      })
+      const locations = data?.locations?.map((eachLocation: any) => {
+        return { label: eachLocation, value: eachLocation };
+      });
+      const categories = data?.categories?.map(
+        (eachCategory: any) => {
+          return { label: eachCategory, value: eachCategory };
+        },
+      );
 
-
-      setKeywords(keywords)
-      setLocations(locations)
-      setCategories(categories)
+      setKeywords(keywords);
+      setLocations(locations);
+      setCategories(categories);
     }
-  }, [data])
+  }, [data]);
 
   const onSubmit = async (query: any) => {
-    setCategoryFilter(query['category'])
-    setLocationFilter(query["location"])
-    setKeywordFilter(query["keyword"])
-  }
+    setCategoryFilter(query['category']);
+    setLocationFilter(query['location']);
+    setKeywordFilter(query['keyword']);
+  };
   return (
     <Scaffold>
       <div className="flex-wrap bg-white justify-center items-center w-full p-4 md:p-8 flex gap-4">
@@ -97,11 +104,14 @@ const Carrers = ({data} : any) => {
           alt=""
         />
 
-        <form onSubmit={event => {handleSubmit(onSubmit)(event);}}
-              className="mt-6 w-full justify-center flex items-center gap-6 flex-wrap">
-
+        <form
+          onSubmit={event => {
+            handleSubmit(onSubmit)(event);
+          }}
+          className="mt-6 w-full justify-center flex items-center gap-6 flex-wrap"
+        >
           <Select
-            placeholder={"Keyword"}
+            placeholder={'Keyword'}
             isMulti={false}
             {...register('keyword')}
             options={keywords}
@@ -110,7 +120,7 @@ const Carrers = ({data} : any) => {
             }}
           />
           <Select
-            placeholder={"Location"}
+            placeholder={'Location'}
             isMulti={false}
             {...register('location')}
             options={locations}
@@ -119,7 +129,7 @@ const Carrers = ({data} : any) => {
             }}
           />
           <Select
-            placeholder={"Category"}
+            placeholder={'Category'}
             isMulti={false}
             {...register('category')}
             options={categories}
@@ -132,7 +142,10 @@ const Carrers = ({data} : any) => {
           {/*  Keyword*/}
           {/*</button>*/}
 
-          <button type={"submit"} className="text-white rounded-lg py-3 px-12 border border-dark-green bg-dark-green">
+          <button
+            type={'submit'}
+            className="text-white rounded-lg py-3 px-12 border border-dark-green bg-dark-green"
+          >
             Find Job
           </button>
         </form>
@@ -151,9 +164,10 @@ const Carrers = ({data} : any) => {
           {/*</button>*/}
         </div>
 
-        {jobsToShow.map((element : any) => (
-          <Link key={element} href={"/carrers/"+element.id}>
+        {jobsToShow.map((element: any, index) => (
+          <>
             <div
+              key={element.id}
               className="flex items-start gap-3 mt-4 py-4 px-2 flex-wrap justify-between max-w-6xl w-full hover:bg-white"
             >
               <div className="flex flex-col gap-3">
@@ -171,12 +185,16 @@ const Carrers = ({data} : any) => {
                 </div>
               </div>
 
-              <button className="rounded-lg bg-dark-green text-white px-8 py-3">
-                View more
-              </button>
+              <Link href={'/carrers/' + element.id}>
+                <p className="cursor-pointer rounded-lg bg-dark-green text-white px-8 py-3">
+                  View more
+                </p>
+              </Link>
             </div>
-          </Link>
-
+            {index < jobsToShow.length-1 && (
+              <div className="bg-white w-full h-0.5" />
+            )}
+          </>
         ))}
       </div>
     </Scaffold>

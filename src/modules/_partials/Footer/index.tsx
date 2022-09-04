@@ -199,6 +199,24 @@ const Footer = () => {
           YEAN &copy; {new Date().getFullYear()} - All rights Reserved
         </p>
       </Wrapper>
+      <a
+        href="javascript:void(0)"
+        className="hidden items-center p-3 bg-gray-200/70 rounded-full flex-col justify-center bg-primary text-white w-10 h-10 fixed bottom-8 right-8 left-auto z-[999] hover:bg-dark back-to-top shadow-md transition duration-300 ease-in-out"
+      >
+        <svg
+          width="23"
+          height="23"
+          viewBox="0 0 23 23"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M12.838 0.439341C12.2522 -0.146446 11.3025 -0.146446 10.7167 0.439341L1.17074 9.98528C0.584955 10.5711 0.584955 11.5208 1.17074 12.1066C1.75653 12.6924 2.70628 12.6924 3.29206 12.1066L11.7773 3.62132L20.2626 12.1066C20.8484 12.6924 21.7982 12.6924 22.3839 12.1066C22.9697 11.5208 22.9697 10.5711 22.3839 9.98528L12.838 0.439341ZM13.2773 23L13.2773 1.5H10.2773L10.2773 23H13.2773Z"
+            fill="#7C063F"
+          />
+        </svg>
+      </a>
+      
     </>
   );
 };

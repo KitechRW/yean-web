@@ -5,33 +5,33 @@ import swal from 'sweetalert';
 import { useRouter } from 'next/router';
 import PDFPreview from 'modules/_partials/PDFPreview';
 
+export const downloadPDF = (book: any) => {
+  let link: string = book.link;
+  if (
+    link &&
+    !link.startsWith('/uploads/') &&
+    !link.startsWith('http')
+  ) {
+    link = `/uploads/${link}`;
+  }
+  fetch(link)
+    .then(response => response.blob())
+    .then(blob => {
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', book?.name + '.pdf'); //or any other extension
+      document.body.appendChild(link);
+      link.click();
+    })
+    .catch(error => {
+      swal('sorry', 'fail to download', 'error').then(r =>
+        console.log('he'),
+      );
+    });
+};
+
 const ReadBooks = ({ books }: any) => {
-  const route = useRouter();
-  const downloadPDF = (book: any) => {
-    let link: string = book.link;
-    if (
-      link &&
-      !link.startsWith('/uploads/') &&
-      !link.startsWith('http')
-    ) {
-      link = `/uploads/${link}`;
-    }
-    fetch(link)
-      .then(response => response.blob())
-      .then(blob => {
-        const url = window.URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.setAttribute('download', book?.name + '.pdf'); //or any other extension
-        document.body.appendChild(link);
-        link.click();
-      })
-      .catch(error => {
-        swal('sorry', 'fail to download', 'error').then(r =>
-          console.log('he'),
-        );
-      });
-  };
   return (
     <>
       {books.map((element: any) => (

@@ -85,11 +85,11 @@ export const adminNavs = [
     label: 'Library',
     path: '/admin/libraries',
   },
-  {
-    icon: Extension,
-    label: 'Extension Materials',
-    path: '/admin/extension-materials',
-  },
+  // {
+  //   icon: Extension,
+  //   label: 'Extension Materials',
+  //   path: '/admin/extension-materials',
+  // },
   {
     icon: Handshake,
     label: 'Partners',
@@ -105,25 +105,29 @@ export const adminNavs = [
     label: 'About us',
     path: '/admin/about-us',
   },
+  // {
+  //   icon: Pageview,
+  //   label: 'Impact',
+  //   path: '/admin/impact',
+  // },
+  // {
+  //   icon: Pageview,
+  //   label: 'Models',
+  //   path: '/admin/models',
+  // },
+  // {
+  //   icon: Pageview,
+  //   label: 'Partner with us',
+  //   path: '/admin/partner-with-us',
+  // },
   {
-    icon: Pageview,
-    label: 'Impact',
-    path: '/admin/impact',
-  },
-  {
-    icon: Pageview,
-    label: 'Models',
-    path: '/admin/models',
-  },
-  {
-    icon: Pageview,
-    label: 'Partner with us',
-    path: '/admin/partner-with-us',
+    icon: Work,
+    label: 'Jobs',
+    path: '/admin/job',
   },
   {
     icon: Work,
-    label: 'Job',
-    path: '/admin/job',
+    label: 'Projects',
+    path: '/admin/projects',
   },
-
 ];

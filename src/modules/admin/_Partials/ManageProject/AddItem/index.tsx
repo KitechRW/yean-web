@@ -2,28 +2,27 @@ import React from 'react';
 import DefaultApi from 'apis/restful';
 import swal from 'sweetalert';
 import joi from 'joi';
+import Select from 'react-select';
 import DrawerLayout from 'modules/layouts/DrawerLayout';
 import { useForm } from 'react-hook-form';
 import { joiResolver } from '@hookform/resolvers/joi';
+import UploadImage from 'modules/_partials/UploadImage';
 import { formatJoiErorr } from 'system/format';
 import { useProtectedFetcher } from 'apis/utils/fetcher';
 
 const schema = joi.object({
-  title: joi.string().required(),
-  keyword: joi.string().required(),
-  location: joi.string().required(),
-  category: joi.string().required(),
+  name: joi.string().required(),
+  image: joi.object().required(),
   description: joi.string().required(),
-
 });
 
-const AddJob = ({
-                   handleAdd,
-                   children,
-                   handleEdit,
-                   dataValues,
-                   handleDelete,
-                 }: {
+const AddItem = ({
+  handleAdd,
+  children,
+  handleEdit,
+  dataValues,
+  handleDelete,
+}: {
   handleAdd?: (item: any) => void;
   children: any;
   handleEdit?: (item: any) => void;
@@ -43,18 +42,18 @@ const AddJob = ({
     resolver: joiResolver(schema),
   });
 
-
   const onSubmit = async (query: any) => {
     setLoading(true);
+    const formData = new FormData();
+    Object.keys(query).forEach(key => {
+      formData.append(key === 'image' ? 'media' : key, query[key]);
+    });
     const { data, error } = await (!dataValues
-      ? DefaultApi.PostRoute.postRoute(
-        '/api/jobs',
-        {...query},
-      )
+      ? DefaultApi.PostRoute.postRoute('/api/projects', formData)
       : DefaultApi.PatchRoute.patchRoute(
-        `/api/jobs/${dataValues.id}`,
-        {...query},
-      ));
+          `/api/projects/${dataValues.id}`,
+          formData,
+        ));
     setLoading(false);
 
     if (data) {
@@ -84,20 +83,16 @@ const AddJob = ({
   React.useEffect(() => {
     if (dataValues) {
       reset({
-        title: dataValues.title,
-        keyword: dataValues.keyword,
-        location: dataValues.location,
-        category: dataValues.category,
+        name: dataValues.name,
         description: dataValues.description,
       });
     }
-  }, [dataValues, reset]);
-
+  }, [dataValues]);
 
   const onDelete = async () => {
     const willDelete = await swal({
       title: 'Are you sure?',
-      text: 'Are you sure that you want to delete this job?',
+      text: 'Are you sure that you want to delete this project?',
       icon: 'warning',
       dangerMode: true,
     });
@@ -107,7 +102,7 @@ const AddJob = ({
     }
     setLoading(true);
     const { data, error } = await DefaultApi.DeleteRoute.deleteRoute(
-      `/api/jobs/${dataValues.id}`,
+      `/api/projects/${dataValues.id}`,
     );
     setLoading(false);
 
@@ -131,7 +126,7 @@ const AddJob = ({
 
   return (
     <DrawerLayout
-      title={`${dataValues ? 'Edit' : 'New'} Job`}
+      title={`${dataValues ? 'Edit' : 'New'} Project`}
       toggle={toggle}
       setToggle={setToggle}
     >
@@ -145,108 +140,49 @@ const AddJob = ({
         >
           <label className="flex flex-col">
             <span className="text-sm font-medium text-gray-900 dark:text-gray-300">
-              Title
+              Name
             </span>
             <input
               type="text"
-              placeholder={'Title'}
-              {...register('title')}
-              onChange={(event: any) => {
-                setValue('title', event.target.value, {
+              placeholder={'Name'}
+              {...register('name')}
+              className="mt-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            />
+            {errors.name?.message && (
+              <p className="mt-1 text-red-500">
+                {formatJoiErorr(`${errors.name.message}`)}
+              </p>
+            )}
+          </label>
+          <div className="flex flex-col">
+            <span className="text-sm mb-2 font-medium text-gray-900 dark:text-gray-300">
+              Image
+            </span>
+            <UploadImage
+              updateFilesCb={(files: any[]) => {
+                setValue('image', files[0], {
                   shouldDirty: true,
                   shouldValidate: true,
                 });
               }}
-              className="mt-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              multiple={false}
             />
-            {errors.title?.message && (
+            {errors.image?.message && (
               <p className="mt-1 text-red-500">
-                {formatJoiErorr(`${errors.title.message}`)}
+                {formatJoiErorr(`${errors.image?.message}`)}
               </p>
             )}
-          </label>
-          <label className="flex flex-col">
-            <span className="text-sm font-medium text-gray-900 dark:text-gray-300">
-              Keywords
-            </span>
-            <input
-              type="text"
-              placeholder={'Keyword'}
-              {...register('keyword')}
-              onChange={(event: any) => {
-                setValue('keyword', event.target.value, {
-                  shouldDirty: true,
-                  shouldValidate: true,
-                });
-              }}
-              className="mt-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            />
-            {errors.keyword?.message && (
-              <p className="mt-1 text-red-500">
-                {formatJoiErorr(`${errors.keyword.message}`)}
-              </p>
-            )}
-          </label>
+          </div>
 
-          <label className="flex flex-col">
-            <span className="text-sm font-medium text-gray-900 dark:text-gray-300">
-              Location
-            </span>
-            <input
-              type="text"
-              placeholder={'Location'}
-              {...register('location')}
-              onChange={(event: any) => {
-                setValue('location', event.target.value, {
-                  shouldDirty: true,
-                  shouldValidate: true,
-                });
-              }}
-              className="mt-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            />
-            {errors.location?.location && (
-              <p className="mt-1 text-red-500">
-                {formatJoiErorr(`${errors.location.message}`)}
-              </p>
-            )}
-          </label>
-          <label className="flex flex-col">
-            <span className="text-sm font-medium text-gray-900 dark:text-gray-300">
-              Category
-            </span>
-            <input
-              type="text"
-              placeholder={'Category'}
-              {...register('category')}
-              onChange={(event: any) => {
-                setValue('category', event.target.value, {
-                  shouldDirty: true,
-                  shouldValidate: true,
-                });
-              }}
-              className="mt-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            />
-            {errors.category?.message && (
-              <p className="mt-1 text-red-500">
-                {formatJoiErorr(`${errors.category.message}`)}
-              </p>
-            )}
-          </label>
           <label className="flex flex-col">
             <span className="text-sm font-medium text-gray-900 dark:text-gray-300">
               Description
             </span>
             <textarea
-              rows={10}
+              rows={5}
               placeholder={'Description'}
               {...register('description')}
-              onChange={(event: any) => {
-                setValue('description', event.target.value, {
-                  shouldDirty: true,
-                  shouldValidate: true,
-                });
-              }}
-              className="mt-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              className="resize-none mt-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             />
             {errors.description?.message && (
               <p className="mt-1 text-red-500">
@@ -280,4 +216,4 @@ const AddJob = ({
   );
 };
 
-export default AddJob;
+export default AddItem;

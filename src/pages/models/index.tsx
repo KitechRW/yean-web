@@ -1,6 +1,7 @@
 import Head from 'next/head';
 import React from 'react';
 import ModelsActivity from 'modules/activities/ModelsActivity';
+import Script from 'next/script';
 
 const ModelsPage = () => {
   return (
@@ -9,6 +10,7 @@ const ModelsPage = () => {
         <title>Yean</title>
       </Head>
       <ModelsActivity />
+      <Script src="/assets/js/main.js" />
     </>
   );
 };

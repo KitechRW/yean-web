@@ -10,7 +10,7 @@ const AdminScaffold = ({ children }: any) => {
     <div className="flex flex-col w-full h-screen overflow-y-auto">
       <TopNav />
       <div className="relative flex-grow h-full flex w-full bg-cyan-201 overflow-y-auto overflow-x-hidden">
-        <div className="top-0 sticky hidden md:flex flex-col w-1/6 px-2 bg-[#FBFBFB] border-r border-gray-200">
+        <div className="top-0 sticky hidden md:flex flex-col w-1/6 px-2 bg-[#FBFBFB] border-r border-gray-200 overflow-y-auto">
           <div className="flex w-full mt-2" />
           {adminNavs.map(element => {
             const active = pathname === element.path;

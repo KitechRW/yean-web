@@ -5,32 +5,12 @@ import joi from 'joi';
 import DrawerLayout from 'modules/layouts/DrawerLayout';
 import { useForm } from 'react-hook-form';
 import { joiResolver } from '@hookform/resolvers/joi';
-import UploadImage from 'modules/_partials/UploadImage';
 import { formatJoiErorr } from 'system/format';
-import 'react-quill/dist/quill.snow.css';
-import dynamic from 'next/dynamic';
-import RichText from 'system/config/richtext';
 import Select from 'react-select';
 import { useProtectedFetcher } from 'apis/utils/fetcher';
 
-const ReactQuill = dynamic(() => import('react-quill'), {
-  ssr: false,
-});
-
 const schema = joi.object({
   slideIds: joi.array().items(joi.number()).min(6).max(6).required(),
-  // articleIds: joi
-  //   .array()
-  //   .items(joi.number())
-  //   .required()
-  //   .min(9)
-  //   .max(12),
-  // extensionIds: joi
-  //   .array()
-  //   .items(joi.number())
-  //   .min(9)
-  //   .max(12)
-  //   .required(),
 });
 
 const EditItem = ({
@@ -58,8 +38,9 @@ const EditItem = ({
 
   const onSubmit = async (query: any) => {
     setLoading(true);
+    const id = dataValues?.id || 1;
     const { data, error } = await DefaultApi.PatchRoute.patchRoute(
-      `/api/landing/1`,
+      `/api/landing/${id}`,
       { slideIds: query.slideIds },
     );
     setLoading(false);
@@ -84,7 +65,7 @@ const EditItem = ({
   const onDelete = async () => {
     const willDelete = await swal({
       title: 'Are you sure?',
-      text: 'Are you sure that you want to delete this article?',
+      text: 'Are you sure that you want to delete this page?',
       icon: 'warning',
       dangerMode: true,
     });
@@ -125,9 +106,9 @@ const EditItem = ({
 
   const {
     data: { data: articles },
-  } = useProtectedFetcher('/api/articles');
+  } = useProtectedFetcher('/api/articles?limit=200');
 
-  const articlesOptions = articles?.rows?.map((element: any) => ({
+  const articlesOptions = articles?.map((element: any) => ({
     value: element.id,
     label: element.title,
   }));
@@ -135,15 +116,6 @@ const EditItem = ({
   const selectedSlideOption = articlesOptions?.filter(
     (element: any) => dataValues.slideIds?.includes(element.value),
   );
-
-  // const selectedArticleOption = articlesOptions?.filter(
-  //   (element: any) => dataValues.articleIds?.includes(element.value),
-  // );
-
-  // const selectedExtensionOption = articlesOptions?.filter(
-  //   (element: any) =>
-  //     dataValues.extensionIds?.includes(element.value),
-  // );
 
   return (
     <DrawerLayout
@@ -188,66 +160,6 @@ const EditItem = ({
               </p>
             )}
           </label>
-
-          {/* <label className="flex flex-col">
-            <span className="text-sm font-medium text-gray-900 dark:text-gray-300">
-              Latest Blog
-            </span>
-            <Select
-              isMulti={true}
-              {...register('articleIds')}
-              defaultValue={selectedSlideOption}
-              options={articlesOptions?.reverse()}
-              onChange={(newValue: any) => {
-                setValue(
-                  'articleIds',
-                  newValue.map((element: any) =>
-                    Number(element.value),
-                  ),
-                  {
-                    shouldDirty: true,
-                    shouldValidate: true,
-                  },
-                );
-              }}
-              className="mt-2"
-            />
-            {errors.articleIds?.message && (
-              <p className="mt-1 text-red-500">
-                {formatJoiErorr(`${errors.articleIds.message}`)}
-              </p>
-            )}
-          </label>
-
-          <label className="flex flex-col">
-            <span className="text-sm font-medium text-gray-900 dark:text-gray-300">
-              Extension Materials
-            </span>
-            <Select
-              isMulti={true}
-              {...register('extensionIds')}
-              defaultValue={selectedExtensionOption}
-              options={articlesOptions}
-              onChange={newValue => {
-                setValue(
-                  'extensionIds',
-                  newValue.map((element: any) =>
-                    Number(element.value),
-                  ),
-                  {
-                    shouldDirty: true,
-                    shouldValidate: true,
-                  },
-                );
-              }}
-              className="mt-2"
-            />
-            {errors.extensionIds?.message && (
-              <p className="mt-1 text-red-500">
-                {formatJoiErorr(`${errors.extensionIds.message}`)}
-              </p>
-            )}
-          </label> */}
 
           <div className="flex items-center space-x-3 justify-between md:col-span-2">
             <button

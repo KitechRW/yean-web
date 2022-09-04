@@ -8,11 +8,14 @@ export default class LandingController {
   static async getOne(req: NextApiRequest, res: NextApiResponse) {
     const { id } = req.query;
     try {
-      const found = await Landing.findByPk(`${id}`);
+      let found = await Landing.findByPk(`${id}`);
       if (!found) {
+        found = (await Landing.findAll())[0];
+        if (!found) {
         return Response.error(res, 404, {
           message: 'page not found',
         });
+      }
       }
       const { slideIds, articleIds, extensionIds } =
         found?.toJSON() || {};
