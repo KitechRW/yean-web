@@ -184,7 +184,7 @@ const Signup: NextPage = () => {
 
             <p className="text-brand-green mt-6">
               <span className="text-gray-800">
-                Alredy have an account?{' '}
+                Already have an account?{' '}
               </span>
               <Link href="/login">Login</Link>
             </p>
