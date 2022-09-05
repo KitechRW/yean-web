@@ -14,12 +14,6 @@ const Landing = sequelize.define(
     slideIds: {
       type: DataTypes.JSON,
     },
-    articleIds: {
-      type: DataTypes.JSON,
-    },
-    extensionIds: {
-      type: DataTypes.JSON,
-    },
   },
   {
     tableName: 'tbl_landing',

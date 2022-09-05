@@ -10,33 +10,29 @@ export default class LandingController {
     try {
       let found = await Landing.findByPk(`${id}`);
       if (!found) {
-        found = (await Landing.findAll())[0];
-        if (!found) {
-        return Response.error(res, 404, {
-          message: 'page not found',
-        });
+        const landings = await Landing.findAll();
+        if (landings?.length) {
+          found = landings[0];
+        } else {
+          return Response.error(res, 404, {
+            message: 'page not found',
+          });
+        }
       }
-      }
-      const { slideIds, articleIds, extensionIds } =
-        found?.toJSON() || {};
-      // const articles = await Article.findAll({
-      //   where: { id: JSON.parse(articleIds) },
-      // });
+      const { slideIds } = found?.toJSON() || {};
       const ids = JSON.parse(slideIds);
       const slides = await Article.findAll({
         where: { id: ids },
       });
-      // const extensions = await Article.findAll({
-      //   where: { id: JSON.parse(extensionIds) },
-      // });
 
       return Response.success(res, 200, {
         message: 'Landings fetched successfuly',
         data: { slideIds: ids, slides },
       });
-    } catch (error) {
+    } catch (error: any) {
       return Response.error(res, 500, {
         message: 'something went wrong',
+        reason: error?.message,
       });
     }
   }

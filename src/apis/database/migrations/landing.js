@@ -11,12 +11,6 @@ module.exports = {
       slideIds: {
         type: DataTypes.JSON,
       },
-      articleIds: {
-        type: DataTypes.JSON,
-      },
-      extensionIds: {
-        type: DataTypes.JSON,
-      },
     }),
   down: queryInterface => queryInterface.dropTable('tbl_landing'),
 };

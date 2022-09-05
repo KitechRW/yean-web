@@ -41,29 +41,6 @@ const User = sequelize.define(
 
 (async () => {
   await sequelize.sync({ alter: false });
-  User.hasMany(Article, {
-    foreignKey: {
-      name: 'author_id',
-    },
-  });
-
-  User.hasMany(Like, {
-    foreignKey: {
-      name: 'user',
-    },
-  });
-
-  User.hasOne(Picture, {
-    foreignKey: {
-      name: 'user',
-    },
-  });
-
-  User.hasMany(Post, {
-    foreignKey: {
-      name: 'user',
-    },
-  });
 })();
 
 export default User;
