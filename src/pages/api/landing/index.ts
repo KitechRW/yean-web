@@ -1,11 +1,10 @@
+import withRoles from 'apis/middlewares/auth';
 import LandingController from 'apis/restful/controllers/LandingController';
 import Response from 'apis/utils/helpers/response';
 import { NextApiRequest, NextApiResponse } from 'next';
+import { withSessionRoute } from 'system/lib/withSession';
 
-export default function handler(
-  req: NextApiRequest,
-  res: NextApiResponse,
-) {
+function handler(req: NextApiRequest, res: NextApiResponse) {
   switch (req.method) {
     case 'GET':
       return LandingController.getAll(req, res);
@@ -17,3 +16,7 @@ export default function handler(
       });
   }
 }
+
+export default withSessionRoute(
+  withRoles(handler, ['admin'], ['POST', 'PATCH', 'DELETE']),
+);

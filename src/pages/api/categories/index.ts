@@ -1,11 +1,10 @@
+import withRoles from 'apis/middlewares/auth';
 import CategoryController from 'apis/restful/controllers/CategoryController';
 import Response from 'apis/utils/helpers/response';
 import { NextApiRequest, NextApiResponse } from 'next';
+import { withSessionRoute } from 'system/lib/withSession';
 
-export default function handler(
-  req: NextApiRequest,
-  res: NextApiResponse,
-) {
+function handler(req: NextApiRequest, res: NextApiResponse) {
   switch (req.method) {
     case 'GET':
       return CategoryController.getAll(req, res);
@@ -17,6 +16,10 @@ export default function handler(
       });
   }
 }
+
+export default withSessionRoute(
+  withRoles(handler, ['admin'], ['POST']),
+);
 
 export const config = {
   api: {

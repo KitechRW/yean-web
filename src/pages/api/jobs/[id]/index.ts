@@ -1,8 +1,10 @@
+import withRoles from 'apis/middlewares/auth';
 import JobController from 'apis/restful/controllers/JobController';
 import Response from 'apis/utils/helpers/response';
 import { NextApiRequest, NextApiResponse } from 'next';
+import { withSessionRoute } from 'system/lib/withSession';
 
-export default function handler(
+function handler(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
@@ -19,3 +21,7 @@ export default function handler(
       });
   }
 }
+
+export default withSessionRoute(
+  withRoles(handler, ['admin'], ['PATCH', 'DELETE']),
+);
