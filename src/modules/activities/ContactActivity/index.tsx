@@ -139,11 +139,11 @@ const ContactActivity = () => {
             </a>
           </div>
           <a
-            href="mailto:info@yeanagro.com"
+            href="mailto:info@yeanrwanda.org"
             className="text-sm flex text-gray-500 items-center"
           >
             <Email className="text-brand-green " />
-            <span>info@yeanagro.com</span>
+            <span>info@yeanrwanda.org</span>
           </a>
         </div>
 

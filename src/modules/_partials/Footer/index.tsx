@@ -71,7 +71,9 @@ const Footer = () => {
             <p className="text-xs">
               Youth Engagement in Agriculture Network (YEAN ) is a
               Youth Led Private Agriculture Extension Social
-              enterprise created in 2014
+              enterprise created in 2014. We serve farmers, farmers
+              organizations and Development Organizations for better
+              livelihoods, job and wealth creation.
             </p>
           </div>
           <div className="flex flex-col">
@@ -83,8 +85,8 @@ const Footer = () => {
               </div>
             </div>
             <div className="mt-3 flex flex-col space-y-2">
-              <Link href="/services">Service</Link>
-              <Link href="/models">Modal</Link>
+              <Link href="/services">Services</Link>
+              <Link href="/models">Models</Link>
               <Link href="/projects">Projects</Link>
               <Link href="/models?q=impact">Impacts</Link>
             </div>
@@ -151,21 +153,21 @@ const Footer = () => {
         </div>
         <div className="flex items-center space-x-3 mt-6">
           <a
-            href="http://www.facebook.com/yeanrwanda"
+            href="https://web.facebook.com/YEANAGRO"
             target="_blank"
             rel="noopener noreferrer"
           >
             <FacebookIcon />
           </a>
           <a
-            href="http://www.twitter.com/yean_rwanda"
+            href="https://twitter.com/YEAN_Agro"
             target="_blank"
             rel="noopener noreferrer"
           >
             <TwitterIcon />
           </a>
           <a
-            href="https://www.instagram.com/yean_rwanda/"
+            href="https://www.instagram.com/yean_agro/"
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -216,7 +218,6 @@ const Footer = () => {
           />
         </svg>
       </a>
-      
     </>
   );
 };

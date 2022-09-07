@@ -20,12 +20,12 @@ const Article = sequelize.define(
   },
   {
     tableName: 'article',
-    timestamps: false,
+    timestamps: true,
   },
 );
 
 (async () => {
-  await sequelize.sync({ alter: false });
+  await sequelize.sync({ alter: true });
 })();
 
 export default Article;

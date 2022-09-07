@@ -1,11 +1,11 @@
-import Image from 'next/image';
+import CustomImage from 'modules/_partials/CustomImage';
 import React from 'react';
 
 const Partners = ({ partners = [] }) => {
   return (
     <>
       {partners.map(element => (
-        <Image
+        <CustomImage
           key={element}
           src={element}
           alt=""

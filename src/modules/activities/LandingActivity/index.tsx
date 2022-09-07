@@ -18,25 +18,30 @@ import Testimonial from 'modules/_partials/Testimonial';
 import Slides from 'modules/_partials/Slides';
 import CustomImage from 'modules/_partials/CustomImage';
 import CarouselPartners from 'modules/_partials/CarouselPartners';
-import { useProtectedFetcher } from 'apis/utils/fetcher';
+import {
+  useOpenFetcher,
+  useProtectedFetcher,
+} from 'apis/utils/fetcher';
 import { useRouter } from 'next/router';
 
 const LandingAcitivity = ({
   data,
   articles,
-  partners,
 }: {
   data: any;
   articles: any[];
-  partners: any;
 }) => {
   const { push } = useRouter();
   const {
     data: { data: subCategories },
   } = useProtectedFetcher('/api/sub-categories');
   const slides = data?.slides || [];
-  const confirmedPartners: any[] =
-    partners?.rows?.filter((item: any) => !!item.confirmed) || [];
+  const {
+    data: { data: partners },
+    isLoading,
+  } = useOpenFetcher(`/api/partners`);
+
+  const confirmedPartners = partners?.rows;
 
   const articleList: any[] =
     articles.map((item: any) => {
@@ -93,13 +98,15 @@ const LandingAcitivity = ({
               width="149.27px"
               height="101.75px"
             />
-            <p className="text-brand-green font-bold text-base">
-              Extension Materials Imfashanyigisho
+            <p className="text-brand-green font-bold text-base text-center">
+              Extension material
+            </p>
+            <p className="text-brand-green font-bold text-base text-center">
+              Imfashanyigisho
             </p>
             <p className="text-sm text-white text-center">
-              Some text summary for Extension materials when a visitor
-              put cursor(hovering) Some text summary for Extension
-              materials when a visitor put cursor (hovering){' '}
+              Extension materials for Crop and Livestock Commodities
+              for extension agents and farmers
             </p>
           </div>
           <Image
@@ -125,7 +132,14 @@ const LandingAcitivity = ({
             objectFit="cover"
           />
           <p className="text-brand-green text-center font-bold text-base">
-            Farmer Platform Urubuga rw’abahinzi borozi
+            Urubuga rw&apos;Abahinzi-Borozi
+          </p>
+          <p className="text-brand-green text-center font-bold text-base">
+            Farmer Platform
+          </p>
+          <p className="text-sm text-center">
+            A virtual community of farmers and agriprenuers. Exchange
+            with them on our Farmer Platform
           </p>
           <button
             type="button"
@@ -230,29 +244,33 @@ const LandingAcitivity = ({
               <div className="flex items-center space-x-2 bg-brand-yellow text-white px-8 py-4 rounded-sm">
                 <CowIcon />
                 <div className="flex flex-col">
-                  <p className="font-bold text-base">29,000</p>
-                  <p className="text-xs mt-1">Communities</p>
+                  <p className="font-bold text-base">240,000+</p>
+                  <p className="text-xs mt-1">Farmer served</p>
                 </div>
               </div>
               <div className="flex items-center space-x-2 bg-brand-yellow text-white px-8 py-4 rounded-sm">
                 <SorgohIcon />
                 <div className="flex flex-col">
-                  <p className="font-bold text-base">29,000</p>
-                  <p className="text-xs mt-1">Cultivated</p>
+                  <p className="font-bold text-base">150,000</p>
+                  <p className="text-xs mt-1">
+                    Target farmers by 2025
+                  </p>
                 </div>
               </div>
               <div className="flex items-center space-x-2 bg-brand-yellow text-white px-8 py-4 rounded-sm">
                 <HandIcon />
                 <div className="flex flex-col">
-                  <p className="font-bold text-base">29,000</p>
-                  <p className="text-xs mt-1">Plants</p>
+                  <p className="font-bold text-base">30</p>
+                  <p className="text-xs mt-1">Districts</p>
                 </div>
               </div>
               <div className="flex items-center space-x-2 bg-brand-yellow text-white px-8 py-4 rounded-sm">
                 <TruckIcon />
                 <div className="flex flex-col">
-                  <p className="font-bold text-base">29,000</p>
-                  <p className="text-xs mt-1">Tractors</p>
+                  <p className="font-bold text-base">27</p>
+                  <p className="text-xs mt-1">
+                    Commodity specific platforms
+                  </p>
                 </div>
               </div>
             </div>

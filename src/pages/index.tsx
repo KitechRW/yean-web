@@ -23,7 +23,6 @@ const LandingPage = ({
       <LandingActivity
         data={data}
         articles={articles}
-        partners={partners}
       />
       <Script src="/assets/js/main.js" />
     </>
