@@ -94,7 +94,7 @@ const UsersActivity = ({page}:any) => {
               <th></th>
             </tr>
             {
-              data?.map((eachUser:any) => <ViewUser key={eachUser.id+"unique@22!"} user={eachUser}/>)
+              data?.map((eachUser:any) => <ViewUser key={eachUser.id+"unique@22!"} data={eachUser}/>)
             }
 
             </tbody>

@@ -1,26 +1,44 @@
-import BlockIcon from "@mui/icons-material/Block";
 import DeleteIcon from "@mui/icons-material/Delete";
 import React, {useEffect, useState} from "react";
 import Select from "react-select";
-import {useForm} from "react-hook-form";
-import {joiResolver} from "@hookform/resolvers/joi";
-import joi from "joi";
 import DefaultApi from "apis/restful";
+import swal from "sweetalert";
 
 
 
-const ViewUser = ({key,user}:{key:any,user:any}) => {
+const ViewUser = ({key,data}:{key:any,data:any}) => {
   const [selectedType, setSelectedType] = useState<any>(null)
+  const [prevSelectedType, setPrevSelectedType] = useState<any>(null)
+  const [user, setUser] = useState(data);
+  const [newData, setNewData] = useState(false)
+  const update = (field:any, value:any) =>  {
+    DefaultApi.PatchRoute.patchRoute("/api/users/"+user?.id, {[field]:value}).then(response => {
+      swal(
+        'Updated!',
+        response.data.message || 'Updated successfully',
+        'success',
+      ).then(() => {
+        setUser({...response.data?.data})
+        setNewData(false)
+      });
 
-  const approve = (id:string) =>  {
-    // DefaultApi.PatchRoute.patchRoute("/api")
+
+    })
   }
 
   useEffect(()=> {
     if(user?.type){
       setSelectedType({label:user?.type, value:user?.type})
+      setPrevSelectedType({label:user?.type, value:user?.type})
+
     }
   }, [user])
+
+  useEffect(()=>{
+    if(selectedType?.value !== prevSelectedType?.value){
+      setNewData(true)
+    }
+  }, [selectedType, prevSelectedType])
 
   return <tr key={key} className="border-b hover:bg-orange-100 bg-gray-100">
       <td className="p-3 px-5"><label  className="bg-transparent">{user?.firstname +" "+ user?.lastname}</label></td>
@@ -33,6 +51,13 @@ const ViewUser = ({key,user}:{key:any,user:any}) => {
           options={[{label:"admin", value:"admin"},{label:"member", value:"member"},]}
           value={selectedType}
           onChange={(newValue: any) => {
+            if(!newData){
+              setPrevSelectedType(selectedType)
+            }else{
+              if(prevSelectedType?.value===newValue?.value){
+                setNewData(false)
+              }
+            }
             setSelectedType(newValue);
           }}
         />
@@ -40,14 +65,22 @@ const ViewUser = ({key,user}:{key:any,user:any}) => {
 
 
       <td className="p-3 px-5 flex justify-end">
-        {!user?.active ?
-        <button onClick={() => {approve(user?.id)}}
-          type="button" className="mr-3 text-sm bg-blue-500 hover:bg-blue-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline">
-          Approve
-        </button> : null}
-        <button type="button"
-                className="text-sm bg-red-500 hover:bg-red-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline"><DeleteIcon/>
-        </button>
+        {newData?<button onClick={() => {update("type", selectedType.value)}}
+            type="button" className="mr-3 text-sm bg-brand-green hover:bg-brand-green/80 text-white py-3 px-5 rounded focus:outline-none focus:shadow-outline">
+          Save
+          </button>:
+        <div>
+          {!user?.active ?
+            <button onClick={() => {update("active", true)}}
+                    type="button" className="mr-3 text-sm bg-emerald-700 hover:bg-emerald-900 text-white py-2 px-3 rounded focus:outline-none focus:shadow-outline">
+              Approve
+            </button> : null}
+          <button type="button"
+                  className="text-sm hover:bg-gray-100 text-black py-2 px-3 rounded focus:outline-none focus:shadow-outline"><DeleteIcon/>
+          </button>
+        </div>
+        }
+
       </td>
     </tr>
 }
