@@ -19,11 +19,16 @@ export default class UserController {
   }
 
   static async getAll(req: NextApiRequest, res: NextApiResponse) {
+    const attributes: string = req.query.attributes as string;
     try {
       return Response.success(res, 200, {
         message: 'Users fetched successfuly',
         data: await User.findAndCountAll({
-          attributes: ['id', 'firstname', 'lastname'],
+          attributes: attributes.split(',') || [
+            'id',
+            'firstname',
+            'lastname',
+          ],
         }),
       });
     } catch (error) {
