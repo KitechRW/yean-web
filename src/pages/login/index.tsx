@@ -46,7 +46,7 @@ const Login: NextPage = () => {
         setProfile({ token, user });
         Secure.setToken(token);
         Secure.set(Keys.USER_INFO as string, { token, user });
-        if (['admin', 'manager'].includes(`${user?.type}`)) {
+        if (['admin',].includes(`${user?.type}`)) {
           push('/admin');
         } else {
           push('/');
@@ -140,10 +140,7 @@ export const getServerSideProps = withSessionSsr(
   async ({ req, res }) => {
     const { user, token } = req.session;
 
-    if (
-      isAuth(token) &&
-      ['admin', 'member'].includes(`${user?.type}`)
-    ) {
+    if (['admin'].includes(`${user?.type}`)) {
       return {
         redirect: {
           permanent: false,
@@ -152,7 +149,7 @@ export const getServerSideProps = withSessionSsr(
       };
     }
 
-    if (isAuth(token)) {
+    if (token) {
       return {
         redirect: {
           permanent: false,

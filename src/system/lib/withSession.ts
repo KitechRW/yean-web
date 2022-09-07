@@ -13,7 +13,7 @@ declare module 'iron-session' {
   interface IronSessionData {
     user?: {
       id: number;
-      roleId: number;
+      email: string;
       type: string;
     };
     token: string;
@@ -33,8 +33,8 @@ export function withSessionSsr<
   handler: (
     context: GetServerSidePropsContext,
   ) =>
-  | GetServerSidePropsResult<P>
-  | Promise<GetServerSidePropsResult<P>>,
+    | GetServerSidePropsResult<P>
+    | Promise<GetServerSidePropsResult<P>>,
 ) {
   return withIronSessionSsr(handler, ironOptions);
 }

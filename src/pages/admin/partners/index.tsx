@@ -4,14 +4,12 @@ import Head from 'next/head';
 import AdminScaffold from 'modules/layouts/AdminScaffold';
 import PartnerActivity from 'modules/admin/PartnerActivity';
 import { withSessionSsr } from 'system/lib/withSession';
-import isAuth from 'system/helpers/isAuth';
-import Keys from 'apis/utils/constants/keys';
 
 const Partner: NextPage = () => {
   return (
     <>
       <Head>
-        <title>Forshop</title>
+        <title>Yean</title>
       </Head>
       <AdminScaffold>
         <PartnerActivity />
@@ -20,35 +18,35 @@ const Partner: NextPage = () => {
   );
 };
 
-// export const getServerSideProps = withSessionSsr(
-//   async ({ req, res }) => {
-//     const { user, token } = req.session;
+export const getServerSideProps = withSessionSsr(
+  async ({ req, res }) => {
+    const { user, token } = req.session;
 
-//     if (token && !isAuth(token)) {
-//       return {
-//         redirect: {
-//           permanent: false,
-//           destination: '/logout',
-//         },
-//       };
-//     }
+    if (!token) {
+      return {
+        redirect: {
+          permanent: false,
+          destination: '/logout',
+        },
+      };
+    }
 
-//     if (!['admin', 'member'].includes(`${user?.type}`)) {
-//       return {
-//         redirect: {
-//           permanent: false,
-//           destination: '/',
-//         },
-//       };
-//     }
+    if (!['admin'].includes(`${user?.type}`)) {
+      return {
+        redirect: {
+          permanent: false,
+          destination: '/',
+        },
+      };
+    }
 
-//     return {
-//       props: {
-//         user: user || null,
-//         token: token || null,
-//       },
-//     };
-//   },
-// );
+    return {
+      props: {
+        user: user || null,
+        token: token || null,
+      },
+    };
+  },
+);
 
 export default Partner;

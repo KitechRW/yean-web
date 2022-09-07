@@ -2,9 +2,9 @@ import React from 'react';
 import { NextPage } from 'next';
 import Head from 'next/head';
 import AdminScaffold from 'modules/layouts/AdminScaffold';
-import TopNav from 'modules/_partials/TopNav';
 import CategoryActivity from 'modules/admin/CategoryActivity';
 import SubCategoryActivity from 'modules/admin/SubCategoryActivity';
+import { withSessionSsr } from 'system/lib/withSession';
 
 const Category: NextPage = () => {
   return (
@@ -23,35 +23,35 @@ const Category: NextPage = () => {
   );
 };
 
-// export const getServerSideProps = withSessionSsr(
-//   async ({ req, res }) => {
-//     const { user, token } = req.session;
+export const getServerSideProps = withSessionSsr(
+  async ({ req, res }) => {
+    const { user, token } = req.session;
 
-//     if (token && !isAuth(token)) {
-//       return {
-//         redirect: {
-//           permanent: false,
-//           destination: '/logout',
-//         },
-//       };
-//     }
+    if (!token) {
+      return {
+        redirect: {
+          permanent: false,
+          destination: '/logout',
+        },
+      };
+    }
 
-//     if (user?.roleId !== 1) {
-//       return {
-//         redirect: {
-//           permanent: false,
-//           destination: '/',
-//         },
-//       };
-//     }
+    if (!['admin'].includes(`${user?.type}`)) {
+      return {
+        redirect: {
+          permanent: false,
+          destination: '/',
+        },
+      };
+    }
 
-//     return {
-//       props: {
-//         user: user || null,
-//         token: token || null,
-//       },
-//     };
-//   },
-// );
+    return {
+      props: {
+        user: user || null,
+        token: token || null,
+      },
+    };
+  },
+);
 
 export default Category;

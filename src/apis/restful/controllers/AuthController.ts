@@ -91,7 +91,7 @@ export default class AuthController {
       };
       const token = signinToken(userData);
 
-      req.session.user = user;
+      req.session.user = userData;
       req.session.token = token;
       await req.session.save();
       
