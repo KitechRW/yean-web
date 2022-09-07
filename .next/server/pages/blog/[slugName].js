@@ -56,7 +56,7 @@ var jsx_runtime_ = __webpack_require__(997);
 const SingleBlogActivity = ({
   data
 }) => {
-  var _data$article2, _data$article3, _data$article3$author, _data$author, _data$author2, _data$article4, _data$article5;
+  var _data$article2, _data$article3, _data$article3$author, _data$author, _data$author2, _data$article4, _data$article5, _data$article6;
 
   const contentRef = external_react_default().useRef(null);
   const {
@@ -119,14 +119,14 @@ const SingleBlogActivity = ({
           children: [/*#__PURE__*/(0,jsx_runtime_.jsxs)("h1", {
             className: "text-sm font-bold",
             children: [data === null || data === void 0 ? void 0 : (_data$author = data.author) === null || _data$author === void 0 ? void 0 : _data$author.firstname, " ", data === null || data === void 0 ? void 0 : (_data$author2 = data.author) === null || _data$author2 === void 0 ? void 0 : _data$author2.lastname]
-          }), /*#__PURE__*/jsx_runtime_.jsx("p", {
+          }), (data === null || data === void 0 ? void 0 : (_data$article4 = data.article) === null || _data$article4 === void 0 ? void 0 : _data$article4.createdAt) && /*#__PURE__*/jsx_runtime_.jsx("p", {
             className: "text-xs",
-            children: (0,external_date_fns_namespaceObject.format)(new Date(data === null || data === void 0 ? void 0 : (_data$article4 = data.article) === null || _data$article4 === void 0 ? void 0 : _data$article4.createdAt), 'dd MMMM yyyy')
+            children: (0,external_date_fns_namespaceObject.format)(new Date(data === null || data === void 0 ? void 0 : (_data$article5 = data.article) === null || _data$article5 === void 0 ? void 0 : _data$article5.createdAt), 'dd MMMM yyyy')
           })]
         })]
       }), /*#__PURE__*/jsx_runtime_.jsx("h1", {
         className: "mt-6 text-[#6F7D1D] text-lg md:text-xl font-semibold",
-        children: data === null || data === void 0 ? void 0 : (_data$article5 = data.article) === null || _data$article5 === void 0 ? void 0 : _data$article5.title
+        children: data === null || data === void 0 ? void 0 : (_data$article6 = data.article) === null || _data$article6 === void 0 ? void 0 : _data$article6.title
       }), /*#__PURE__*/jsx_runtime_.jsx("div", {
         ref: contentRef,
         className: "mt-4 text-justify leading-relaxed flex flex-col space-y-3 hideContentNotInTagUL"
