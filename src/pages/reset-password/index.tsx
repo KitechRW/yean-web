@@ -9,6 +9,7 @@ import { useTranslation } from 'react-i18next';
 import Logo from 'modules/_partials/Logo';
 import Link from 'next/link';
 import MetaData from 'modules/_partials/MetaData';
+import Head from 'next/head';
 
 const schema = yup
   .object({
@@ -47,18 +48,18 @@ const RestPassword: NextPage = (props: any) => {
     setMessage(null);
     isSubmitting(true);
     axios
-      .put('/api/auth/reset-password', {
+      .patch('/api/auth/reset-password', {
         ...data,
         token: props.token,
       })
       .then(response => {
         isSubmitting(false);
-        console.log(response);
         if (response.status === 201 || response.status === 200) {
           setMessage(
             response?.data?.message ||
               'reset successfully, go to login ',
           );
+          push('/login');
         } else {
           setErrorMessage('Something went wrong, try again.');
         }
@@ -77,8 +78,10 @@ const RestPassword: NextPage = (props: any) => {
   };
   return (
     <>
-      <title>Yean</title>
-      <MetaData />
+      <Head>
+        <title>Yean</title>
+        <MetaData />
+      </Head>
       <div className="bg-top bg-cover bg-no-repeat bg-[url(/assets/images/login.svg)] flex flex-col items-center min-h-screen">
         <div className="flex flex-col bg-black/50 flex-grow w-full items-center justify-center p-4 md:p-8">
           <div className="bg-white flex flex-col w-full md:max-w-md rounded shadow-xl border-t-[0.5px] border-gray-50 justify-center">
