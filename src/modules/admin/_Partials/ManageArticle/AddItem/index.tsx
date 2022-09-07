@@ -190,7 +190,7 @@ const AddItem = ({
     },
   );
 
-  const authorOptions = authors?.rows?.map((element: any) => ({
+  const authorOptions = authors?.map((element: any) => ({
     value: element.id,
     label: `${element.firstname} ${element.lastname}`,
   }));

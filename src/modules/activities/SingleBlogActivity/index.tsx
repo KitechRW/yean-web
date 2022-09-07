@@ -1,4 +1,5 @@
 import { Avatar } from '@mui/material';
+import { format } from 'date-fns';
 import Scaffold from 'modules/layouts/Scaffold';
 import CustomImage from 'modules/_partials/CustomImage';
 import Image from 'next/image';
@@ -53,14 +54,18 @@ const SingleBlogActivity = ({ data }: any) => {
         <div className="px-3 py-3 space-x-3 flex items-center">
           <Avatar
             src="/assets/images/avatar.png"
-            alt={data?.article?.author?.firstname || ""}
+            alt={data?.article?.author?.firstname || ''}
           />
           <div className="flex flex-col text-[#767676]">
             <h1 className="text-sm font-bold">
-              {data?.author?.firstname}{' '}
-              {data?.author?.lastname}
+              {data?.author?.firstname} {data?.author?.lastname}
             </h1>
-            {/* <p className="text-xs">12 April 2022</p> */}
+            <p className="text-xs">
+              {format(
+                new Date(data?.article?.createdAt),
+                'dd MMMM yyyy',
+              )}
+            </p>
           </div>
         </div>
 

@@ -28,7 +28,7 @@ export default class UserController {
       const offset = (page - 1) * limit;
 
       const { count, rows } = await User.findAndCountAll({
-        attributes: attributes.split(',') || [
+        attributes: (attributes && attributes.split(',')) || [
           'id',
           'firstname',
           'lastname',
@@ -50,9 +50,10 @@ export default class UserController {
         data: rows,
         pagination,
       });
-    } catch (error) {
+    } catch (error: any) {
       return Response.error(res, 500, {
         message: 'something went wrong',
+        reason: error.message,
       });
     }
   }

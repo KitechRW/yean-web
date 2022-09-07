@@ -202,7 +202,7 @@ const LandingAcitivity = ({
         <button
           type="button"
           onClick={() => {
-            push('/blogs');
+            push('/blog');
           }}
           className="mt-4 flex items-center space-x-2 mx-auto px-12 py-2 text-white bg-brand-green rounded-sm"
         >

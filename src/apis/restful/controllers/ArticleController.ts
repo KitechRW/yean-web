@@ -13,7 +13,7 @@ export default class ArticleController {
         message: 'Articles fetched successfuly',
         data: await ArticleServices.findOne(
           { id },
-          ['id', 'title', 'image', 'author_id', 'text', 'category'],
+          ['id', 'title', 'image', 'author_id', 'text', 'category', 'createdAt'],
           ['firstname', 'lastname', 'phone', 'gender'],
         ),
       });
