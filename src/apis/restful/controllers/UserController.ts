@@ -21,6 +21,10 @@ export default class UserController {
   static async getAll(req: NextApiRequest, res: NextApiResponse) {
     const attributes: string = req.query.attributes as string;
     try {
+      let { page = 1, limit = 100000 } = req.query;
+      page = Number(page);
+      limit = Number(limit);
+      const offset = (page - 1) * limit;
       return Response.success(res, 200, {
         message: 'Users fetched successfuly',
         data: await User.findAndCountAll({
@@ -29,6 +33,8 @@ export default class UserController {
             'firstname',
             'lastname',
           ],
+          limit,
+          offset,
         }),
       });
     } catch (error) {
