@@ -1,11 +1,13 @@
 import TopNav from 'modules/_partials/TopNav';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React from 'react';
+import React, {useEffect} from 'react';
 import { adminNavs } from 'system/static';
+import {useNavbar} from "modules/contexts/NavbarContext";
 
 const AdminScaffold = ({ children }: any) => {
   const { pathname } = useRouter();
+  const { profile} = useNavbar();
   return (
     <div className="flex flex-col w-full h-screen overflow-y-auto">
       <TopNav />
@@ -14,6 +16,11 @@ const AdminScaffold = ({ children }: any) => {
           <div className="flex w-full mt-2" />
           {adminNavs.map(element => {
             const active = pathname === element.path;
+            if(element.onlyAdmin){
+              if(profile?.user?.type !== "admin"){
+                return
+              }
+            }
             return (
               <Link key={element.label} href={element.path}>
                 <div

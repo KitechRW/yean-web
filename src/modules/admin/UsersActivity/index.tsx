@@ -7,9 +7,10 @@ import Select from "react-select";
 import joi from "joi";
 import {useForm} from "react-hook-form";
 import {joiResolver} from "@hookform/resolvers/joi";
+import ViewUser from "modules/admin/_Partials/ManageUsers/ViewUser";
 
 const schema = joi.object({
-  staff_role: joi.string(),
+  staff_type: joi.string(),
 });
 
 
@@ -39,7 +40,7 @@ const UsersActivity = () => {
   });
 
   const onSubmit = async (query: any) => {
-    setJobTitleFilter(query['staff_role']);
+    setJobTitleFilter(query['staff_type']);
   };
 
   return(
@@ -57,12 +58,12 @@ const UsersActivity = () => {
           className="mt-6 w-full justify-center flex items-center gap-6 flex-wrap"
         >
           <Select
-            placeholder={'Staff role'}
+            placeholder={'Staff Type'}
             isMulti={false}
-            {...register('staff_role')}
+            {...register('staff_type')}
             options={jobTitles}
             onChange={(newValue: any) => {
-              setValue('staff_role', newValue.value);
+              setValue('staff_type', newValue.value);
             }}
           />
 
@@ -77,33 +78,20 @@ const UsersActivity = () => {
             Find
           </button>
         </form>
-        <div className="px-3 py-4 flex justify-center">
+        <div className="px-3 py-4 flex justify-center overflow-x-auto ">
           <table className="w-full text-md bg-white shadow-md rounded mb-4">
             <tbody>
             <tr className="border-b">
               <th className="text-left p-3 px-5">First name</th>
+              <th className="text-left p-3 px-5">Second name</th>
               <th className="text-left p-3 px-5">Email</th>
-              <th className="text-left p-3 px-5">Role</th>
+              <th className="text-left p-3 px-5">Type</th>
+              <th className="text-left p-3 px-5">active</th>
+              <th className="text-left p-3 px-5">status</th>
+
               <th></th>
             </tr>
-            <tr className="border-b hover:bg-orange-100 bg-gray-100">
-              <td className="p-3 px-5"><label  className="bg-transparent">Kwizera</label></td>
-              <td className="p-3 px-5"><label  className="bg-transparent">Email.yean@gmail</label></td>
-              <td className="p-3 px-5">
-                <select value="user.role" className="bg-transparent">
-                  <option value="user">user</option>
-                  <option value="admin">admin</option>
-                </select>
-              </td>
-              <td className="p-3 px-5 flex justify-end">
-                <button type="button"
-                        className="mr-3 text-sm bg-blue-500 hover:bg-blue-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline"><BlockIcon/>
-                </button>
-                <button type="button"
-                        className="text-sm bg-red-500 hover:bg-red-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline"><DeleteIcon/>
-                </button>
-              </td>
-            </tr>
+            <ViewUser/>
             </tbody>
           </table>
         </div>

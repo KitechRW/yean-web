@@ -135,6 +135,7 @@ export const adminNavs = [
     icon: Group,
     label: 'Users',
     path: '/admin/users',
+    onlyAdmin:true,
   },
 
 ];
