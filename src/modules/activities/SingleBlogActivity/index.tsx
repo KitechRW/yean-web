@@ -60,12 +60,14 @@ const SingleBlogActivity = ({ data }: any) => {
             <h1 className="text-sm font-bold">
               {data?.author?.firstname} {data?.author?.lastname}
             </h1>
-            <p className="text-xs">
-              {format(
-                new Date(data?.article?.createdAt),
-                'dd MMMM yyyy',
-              )}
-            </p>
+            {data?.article?.createdAt && (
+              <p className="text-xs">
+                {format(
+                  new Date(data?.article?.createdAt),
+                  'dd MMMM yyyy',
+                )}
+              </p>
+            )}
           </div>
         </div>
 
