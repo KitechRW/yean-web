@@ -98,24 +98,21 @@ export default class UserController {
       }
 
       const { fields, files } = await parseForm(req);
-      if (!files.media) {
-        return Response.error(res, 500, {
-          message: 'Please upload image',
-        });
-      }
+      let images;
+      if (files.media) {
+        const file = files.media;
+        images = Array.isArray(file)
+          ? file.map(f => `/uploads/${f.newFilename}`)
+          : `/uploads/${file.newFilename}`;
 
-      const file = files.media;
-      let images = Array.isArray(file)
-        ? file.map(f => `/uploads/${f.newFilename}`)
-        : `/uploads/${file.newFilename}`;
-
-      if (images) {
-        removeFile(item.toJSON()?.image);
+        if (images) {
+          removeFile(item.toJSON()?.image);
+        }
       }
 
       const payload = {
         ...fields,
-        profile_image: images,
+        profile_image: images || item.toJSON().profile_image,
       };
 
       item.set(payload);
