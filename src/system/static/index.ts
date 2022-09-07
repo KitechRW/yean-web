@@ -10,6 +10,7 @@ import {
   Pageview,
   Category,
   Work,
+  Group,
 } from '@mui/icons-material';
 
 export const navs = [
@@ -130,4 +131,11 @@ export const adminNavs = [
     label: 'Projects',
     path: '/admin/projects',
   },
+  {
+    icon: Group,
+    label: 'Users',
+    path: '/admin/users',
+    onlyAdmin:true,
+  },
+
 ];
