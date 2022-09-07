@@ -10,11 +10,20 @@ const Article = sequelize.define(
     image: DataTypes.STRING,
     text: DataTypes.TEXT,
     category: DataTypes.STRING,
-    views: DataTypes.BIGINT,
+    views: {
+      type: DataTypes.BIGINT,
+      defaultValue: 0,
+    },
     author_id: DataTypes.BIGINT,
     tags: DataTypes.STRING,
-    comment: DataTypes.BIGINT,
-    status: DataTypes.STRING,
+    comment: {
+      type: DataTypes.BIGINT,
+      defaultValue: 0,
+    },
+    status: {
+      type: DataTypes.STRING,
+      defaultValue: 'online',
+    },
     success: DataTypes.STRING,
     success_photo: DataTypes.STRING,
   },
