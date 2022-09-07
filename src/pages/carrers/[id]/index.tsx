@@ -4,6 +4,7 @@ import CarrersActivity from "modules/activities/CarrersActivity";
 import React from "react";
 import CarrerActivity from "modules/activities/CarrerActivity";
 import axios from "axios";
+import MetaData from "modules/_partials/MetaData";
 
 export async function getServerSideProps({query:{id}}:any) {
   return axios.get(`${process.env.DEFAULT_API}/api/jobs/${id}`).then(resp => {
@@ -24,6 +25,7 @@ const JobDescriptionPage :NextPage = (props:any)=> {
   return <>
     <Head>
       <title>Yean</title>
+      <MetaData />
     </Head>
     <CarrerActivity data={props.data} />
   </>

@@ -7,12 +7,12 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useRouter } from 'next/router';
 import { withSessionSsr } from 'system/lib/withSession';
 import Secure from 'system/helpers/secureLs';
-import isAuth from 'system/helpers/isAuth';
-import { useTranslation } from 'react-i18next';
 import Logo from 'modules/_partials/Logo';
 import Link from 'next/link';
 import { useNavbar } from 'modules/contexts/NavbarContext';
 import Keys from 'apis/utils/constants/keys';
+import Head from 'next/head';
+import MetaData from 'modules/_partials/MetaData';
 
 const schema = yup
   .object({
@@ -62,6 +62,11 @@ const Login: NextPage = () => {
       });
   };
   return (
+    <>
+    <Head>
+      <title>Login - Yean</title>
+      <MetaData />
+    </Head>
     <div className="bg-top bg-cover bg-no-repeat bg-[url(/assets/images/login.svg)] flex flex-col items-center min-h-screen">
       <div className="flex flex-col bg-black/50 flex-grow w-full items-center justify-center p-4 md:p-8">
         <div className="bg-white flex flex-col w-full md:max-w-md rounded shadow-xl border-t-[0.5px] border-gray-50 justify-center">
@@ -133,6 +138,7 @@ const Login: NextPage = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 

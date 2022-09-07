@@ -3,6 +3,7 @@ import Head from 'next/head';
 import BlogActivity from 'modules/activities/BlogActivity';
 import { useRouter } from 'next/router';
 import { useOpenFetcher } from 'apis/utils/fetcher';
+import MetaData from 'modules/_partials/MetaData';
 
 const SingleExtensionMaterial = () => {
   const {
@@ -16,6 +17,7 @@ const SingleExtensionMaterial = () => {
     <>
       <Head>
         <title>Yean</title>
+        <MetaData />
       </Head>
       <BlogActivity
         data={data}

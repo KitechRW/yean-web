@@ -3,6 +3,7 @@ import Head from 'next/head';
 import LandingActivity from 'modules/activities/LandingActivity';
 import Http from 'core/factory/fact.http';
 import Script from 'next/script';
+import MetaData from 'modules/_partials/MetaData';
 
 const LandingPage = ({
   data,
@@ -16,7 +17,8 @@ const LandingPage = ({
   return (
     <>
       <Head>
-        <title>Yean</title>
+        <title>YEAN - My farming story</title>
+        <MetaData />
       </Head>
       <LandingActivity
         data={data}
