@@ -25,6 +25,29 @@ const ViewUser = ({key,data}:{key:any,data:any}) => {
 
     })
   }
+  const deleteUser =() => {
+     swal({
+      title: 'Are you sure?',
+      text: 'Are you sure that you want to delete this article?',
+      icon: 'warning',
+      dangerMode: true,
+    }).then(willDelete => {
+       if(!willDelete){
+         return
+       }
+       DefaultApi.DeleteRoute.deleteRoute("/api/users/"+user?.id).then(response => {
+         swal(
+           'Deleted!',
+           response.data.message || 'Delete successfully',
+           'success',
+         ).then(() => {
+           setUser(null)
+         });
+       })
+     });
+
+
+  }
 
   useEffect(()=> {
     if(user?.type){
@@ -40,6 +63,9 @@ const ViewUser = ({key,data}:{key:any,data:any}) => {
     }
   }, [selectedType, prevSelectedType])
 
+  if(!user){
+    return null
+  }
   return <tr key={key} className="border-b hover:bg-orange-100 bg-gray-100">
       <td className="p-3 px-5"><label  className="bg-transparent">{user?.firstname +" "+ user?.lastname}</label></td>
       <td className="p-3 px-5"><label  className="bg-transparent">{user?.phone}</label></td>
@@ -74,9 +100,12 @@ const ViewUser = ({key,data}:{key:any,data:any}) => {
             <button onClick={() => {update("active", true)}}
                     type="button" className="mr-3 text-sm bg-emerald-700 hover:bg-emerald-900 text-white py-2 px-3 rounded focus:outline-none focus:shadow-outline">
               Approve
-            </button> : null}
-          <button type="button"
-                  className="text-sm hover:bg-gray-100 text-black py-2 px-3 rounded focus:outline-none focus:shadow-outline"><DeleteIcon/>
+            </button> : <button onClick={() => {update("active", false)}}
+                                type="button" className="mr-3 text-sm bg-orange-600 hover:bg-orange-900 text-white py-2 px-3 rounded focus:outline-none focus:shadow-outline">
+              Refuse
+            </button>}
+          <button onClick={()=> {deleteUser()}}
+            type="button" className="text-sm hover:bg-gray-100 text-black py-2 px-3 rounded focus:outline-none focus:shadow-outline"><DeleteIcon/>
           </button>
         </div>
         }

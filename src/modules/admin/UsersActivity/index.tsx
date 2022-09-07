@@ -29,59 +29,81 @@ const UsersActivity = ({page}:any) => {
   useEffect(()=> {
     const types = []
   }, [data])
-  const [jobTitles, setJobTitles] = useState<any>([]);
+  // const [jobTitles, setJobTitles] = useState<any>([]);
 
-  const [jobTitleFilter, setJobTitleFilter] = useState(null);
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    getValues,
-    reset,
-    formState: { errors },
-  } = useForm({
-    resolver: joiResolver(schema),
-  });
+  // const [jobTitleFilter, setJobTitleFilter] = useState(null);
+  // const {
+  //   register,
+  //   handleSubmit,
+  //   setValue,
+  //   getValues,
+  //   reset,
+  //   formState: { errors },
+  // } = useForm({
+  //   resolver: joiResolver(schema),
+  // });
 
-  const onSubmit = async (query: any) => {
-    setJobTitleFilter(query['staff_type']);
-  };
+  // const onSubmit = async (query: any) => {
+  //   setJobTitleFilter(query['staff_type']);
+  // };
 
   return(
     <div ref={topRef}>
-      <div className="">
-        <div className="p-4 flex">
-          <h1 className="text-3xl">
+      <div className="pb-14">
+        <div className="p-4 flex justify-around ">
+          <h1 className="text-3xl self-center">
             Users
           </h1>
-        </div>
-        <form
-          onSubmit={event => {
-            handleSubmit(onSubmit)(event);
-          }}
-          className="mt-6 w-full justify-center flex items-center gap-6 flex-wrap"
-        >
-          <Select
-            placeholder={'Staff Type'}
-            isMulti={false}
-            {...register('staff_type')}
-            options={jobTitles}
-            onChange={(newValue: any) => {
-              setValue('staff_type', newValue.value);
-            }}
-          />
-
-          {/*<button className="text-gray-400 rounded-lg py-3 px-12 border border-gray-200 bg-white">*/}
-          {/*  Keyword*/}
-          {/*</button>*/}
-
-          <button
-            type={'submit'}
-            className="text-white rounded-lg py-3 px-12 border border-dark-green bg-dark-green"
+          <div
+            className={`flex flex-col p-3 px-8 justify-center min-w-[255px] min-h-[145px] drop-shadow rounded-lg bg-white`}
           >
-            Find
-          </button>
-        </form>
+            <h2
+              className={`text-base font-semibold`}
+            >
+              Users
+            </h2>
+            <div className="flex items-center space-x-2 mt-3">
+              <p
+                className={`bg-[#E6F3FF] p-2 px-3 rounded text-dark-green font-bold`}
+              >
+                {pagination?.count}
+              </p>
+              <p
+                className={`text-[#AAB1B7]`}
+              >
+                Registered
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/*<form*/}
+        {/*  onSubmit={event => {*/}
+        {/*    handleSubmit(onSubmit)(event);*/}
+        {/*  }}*/}
+        {/*  className="mt-6 w-full justify-center flex items-center gap-6 flex-wrap"*/}
+        {/*>*/}
+        {/*  <Select*/}
+        {/*    placeholder={'Staff Type'}*/}
+        {/*    isMulti={false}*/}
+        {/*    {...register('staff_type')}*/}
+        {/*    options={jobTitles}*/}
+        {/*    onChange={(newValue: any) => {*/}
+        {/*      setValue('staff_type', newValue.value);*/}
+        {/*    }}*/}
+        {/*  />*/}
+
+        {/*  /!*<button className="text-gray-400 rounded-lg py-3 px-12 border border-gray-200 bg-white">*!/*/}
+        {/*  /!*  Keyword*!/*/}
+        {/*  /!*</button>*!/*/}
+
+        {/*  <button*/}
+        {/*    type={'submit'}*/}
+        {/*    className="text-white rounded-lg py-3 px-12 border border-dark-green bg-dark-green"*/}
+        {/*  >*/}
+        {/*    Find*/}
+        {/*  </button>*/}
+        {/*</form>*/}
         <div className="px-3 py-4 flex justify-center overflow-x-auto ">
           <table className="w-full text-md bg-white shadow-md rounded mb-4">
             <tbody>
@@ -100,14 +122,17 @@ const UsersActivity = ({page}:any) => {
             </tbody>
           </table>
         </div>
-        <Pagination
-          showNumbers={false}
-          pageCount={pagination?.pageCount}
-          currentPage={pagination?.currentPage}
-          setPageNumber={(page: number) => {
-            router.push("/admin/users?page="+page);
-          }}
-        />
+        <div className={"flex justify-end mr-10"}>
+          <Pagination
+            showNumbers={false}
+            pageCount={pagination?.pageCount}
+            currentPage={pagination?.currentPage}
+            setPageNumber={(page: number) => {
+              router.push("/admin/users?page="+page);
+            }}
+          />
+        </div>
+
       </div>
     </div>
   )
