@@ -1,6 +1,6 @@
 import DeleteIcon from '@mui/icons-material/Delete';
 import BlockIcon from '@mui/icons-material/Block';
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {useOpenFetcher} from "apis/utils/fetcher";
 import Pagination from "modules/_partials/Pagination";
 import Select from "react-select";
@@ -8,23 +8,27 @@ import joi from "joi";
 import {useForm} from "react-hook-form";
 import {joiResolver} from "@hookform/resolvers/joi";
 import ViewUser from "modules/admin/_Partials/ManageUsers/ViewUser";
+import {useRouter} from "next/router";
 
 const schema = joi.object({
   staff_type: joi.string(),
 });
 
 
-const UsersActivity = () => {
+const UsersActivity = ({page}:any) => {
   const topRef = React.useRef(null);
-  const [pageNumber, setPageNumber] = React.useState(1);
+  const router = useRouter();
 
 
   const {
     data: { data, pagination },
     isLoading,
   } = useOpenFetcher(
-    `/api/users?page=${pageNumber || 1}&limit=20`,
+    `/api/users?attributes=id,type,email,firstname,lastname,phone,active&page=${page || 1}&limit=20`,
   );
+  useEffect(()=> {
+    const types = []
+  }, [data])
   const [jobTitles, setJobTitles] = useState<any>([]);
 
   const [jobTitleFilter, setJobTitleFilter] = useState(null);
@@ -82,35 +86,26 @@ const UsersActivity = () => {
           <table className="w-full text-md bg-white shadow-md rounded mb-4">
             <tbody>
             <tr className="border-b">
-              <th className="text-left p-3 px-5">First name</th>
-              <th className="text-left p-3 px-5">Second name</th>
+              <th className="text-left p-3 px-5">Names</th>
+              <th className="text-left p-3 px-5">Phone</th>
               <th className="text-left p-3 px-5">Email</th>
               <th className="text-left p-3 px-5">Type</th>
-              <th className="text-left p-3 px-5">active</th>
-              <th className="text-left p-3 px-5">status</th>
 
               <th></th>
             </tr>
-            <ViewUser/>
+            {
+              data?.map((eachUser:any) => <ViewUser key={eachUser.id+"unique@22!"} user={eachUser}/>)
+            }
+
             </tbody>
           </table>
         </div>
-        {/*<Pagination*/}
-        {/*  pageCount={pagination?.pageCount}*/}
-        {/*  currentPage={pagination?.currentPage}*/}
-        {/*  setPageNumber={(page: number) => {*/}
-        {/*    setPageNumber(page);*/}
-        {/*    // @ts-ignore*/}
-        {/*    topRef.current.scrollIntoView();*/}
-        {/*  }}*/}
-        {/*/>*/}
         <Pagination
-          pageCount={10}
-          currentPage={3}
+          showNumbers={false}
+          pageCount={pagination?.pageCount}
+          currentPage={pagination?.currentPage}
           setPageNumber={(page: number) => {
-            setPageNumber(page);
-            // @ts-ignore
-            topRef.current.scrollIntoView();
+            router.push("/admin/users?page="+page);
           }}
         />
       </div>

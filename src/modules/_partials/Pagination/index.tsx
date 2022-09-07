@@ -5,10 +5,12 @@ const Pagination = ({
   currentPage = 1,
   pageCount = 1,
   setPageNumber,
+  showNumbers=true,
 }: {
   currentPage: number;
   pageCount: number;
   setPageNumber: (page: number) => void;
+  showNumbers?:boolean;
 }) => {
   const handleNextPage = () => {
     setPageNumber(currentPage + 1);
@@ -34,7 +36,7 @@ const Pagination = ({
         <NavigateBeforeIcon />
         <span>Previous</span>
       </button>
-      {new Array(pageCount || 1).fill(0).map((element, index) => (
+      {showNumbers && new Array(pageCount || 1).fill(0).map((element, index) => (
         <button
           key={index + 'paginationKey'}
           onClick={() => {
