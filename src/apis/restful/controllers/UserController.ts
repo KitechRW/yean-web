@@ -2,6 +2,7 @@ import Response from 'apis/utils/helpers/response';
 import { NextApiRequest, NextApiResponse } from 'next';
 import User from 'apis/database/models/user.model';
 import removeFile, { parseForm } from 'apis/utils/libForm';
+import { paginate } from 'apis/utils/pagnation';
 
 export default class UserController {
   static async getOne(req: NextApiRequest, res: NextApiResponse) {
@@ -25,17 +26,29 @@ export default class UserController {
       page = Number(page);
       limit = Number(limit);
       const offset = (page - 1) * limit;
+
+      const { count, rows } = await User.findAndCountAll({
+        attributes: attributes.split(',') || [
+          'id',
+          'firstname',
+          'lastname',
+        ],
+        limit,
+        offset,
+      });
+
+      const pagination = paginate(page, count, rows, limit);
+
+      if (offset >= count) {
+        return Response.success(res, 404, {
+          message: 'page not found',
+        });
+      }
+
       return Response.success(res, 200, {
         message: 'Users fetched successfuly',
-        data: await User.findAndCountAll({
-          attributes: attributes.split(',') || [
-            'id',
-            'firstname',
-            'lastname',
-          ],
-          limit,
-          offset,
-        }),
+        data: rows,
+        pagination,
       });
     } catch (error) {
       return Response.error(res, 500, {
