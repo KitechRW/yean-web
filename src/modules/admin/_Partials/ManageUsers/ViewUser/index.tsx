@@ -28,7 +28,7 @@ const ViewUser = ({key,data}:{key:any,data:any}) => {
   const deleteUser =() => {
      swal({
       title: 'Are you sure?',
-      text: 'Are you sure that you want to delete this article?',
+      text: 'Are you sure that you want to delete this user?',
       icon: 'warning',
       dangerMode: true,
     }).then(willDelete => {

@@ -10,7 +10,7 @@ const User = sequelize.define(
   {
     type: DataTypes.STRING,
     email: DataTypes.STRING,
-    password: DataTypes.STRING,
+    password: DataTypes.TEXT,
     level: DataTypes.STRING,
     firstname: DataTypes.STRING,
     lastname: DataTypes.STRING,
@@ -40,7 +40,7 @@ const User = sequelize.define(
 );
 
 (async () => {
-  await sequelize.sync({ alter: false });
+  await sequelize.sync({ alter: true });
 })();
 
 export default User;

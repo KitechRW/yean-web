@@ -101,11 +101,11 @@ export const adminNavs = [
     label: 'Home Page',
     path: '/admin/home',
   },
-  {
-    icon: Pageview,
-    label: 'About us',
-    path: '/admin/about-us',
-  },
+  // {
+  //   icon: Pageview,
+  //   label: 'About us',
+  //   path: '/admin/about-us',
+  // },
   // {
   //   icon: Pageview,
   //   label: 'Impact',
