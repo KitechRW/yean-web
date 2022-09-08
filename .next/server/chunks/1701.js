@@ -30,7 +30,7 @@ const Category = _config_sequelize__WEBPACK_IMPORTED_MODULE_1__/* ["default"].de
 
 (async () => {
   await _config_sequelize__WEBPACK_IMPORTED_MODULE_1__/* ["default"].sync */ .Z.sync({
-    alter: false
+    alter: true
   });
 })();
 

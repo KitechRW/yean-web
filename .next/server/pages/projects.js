@@ -14,7 +14,7 @@ __webpack_require__.r(__webpack_exports__);
 // EXPORTS
 __webpack_require__.d(__webpack_exports__, {
   "default": () => (/* binding */ projects),
-  "getStaticProps": () => (/* binding */ getStaticProps)
+  "getServerSideProps": () => (/* binding */ getServerSideProps)
 });
 
 // EXTERNAL MODULE: external "next/head"
@@ -122,8 +122,8 @@ var MetaData = __webpack_require__(3405);
 
 
 
-async function getStaticProps() {
-  return fact_http/* default.axios.get */.Z.axios.get(`${"https://witwad.com"}/api/projects`).then(resp => {
+async function getServerSideProps() {
+  return fact_http/* default.axios.get */.Z.axios.get(`${"http://test.yeanagro.org"}/api/projects`).then(resp => {
     var _resp$data;
 
     return {

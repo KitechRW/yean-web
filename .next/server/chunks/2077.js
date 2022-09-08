@@ -284,11 +284,12 @@ const adminNavs = [{
   icon: (_mui_icons_material_Pageview__WEBPACK_IMPORTED_MODULE_2___default()),
   label: 'Home Page',
   path: '/admin/home'
-}, {
-  icon: (_mui_icons_material_Pageview__WEBPACK_IMPORTED_MODULE_2___default()),
-  label: 'About us',
-  path: '/admin/about-us'
 }, // {
+//   icon: Pageview,
+//   label: 'About us',
+//   path: '/admin/about-us',
+// },
+// {
 //   icon: Pageview,
 //   label: 'Impact',
 //   path: '/admin/impact',

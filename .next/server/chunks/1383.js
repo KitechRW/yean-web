@@ -47,7 +47,7 @@ var __webpack_async_dependencies__ = __webpack_handle_async_dependencies__([sequ
 const User = _config_sequelize__WEBPACK_IMPORTED_MODULE_1__/* ["default"].define */ .Z.define('User', {
   type: sequelize__WEBPACK_IMPORTED_MODULE_0__.DataTypes.STRING,
   email: sequelize__WEBPACK_IMPORTED_MODULE_0__.DataTypes.STRING,
-  password: sequelize__WEBPACK_IMPORTED_MODULE_0__.DataTypes.STRING,
+  password: sequelize__WEBPACK_IMPORTED_MODULE_0__.DataTypes.TEXT,
   level: sequelize__WEBPACK_IMPORTED_MODULE_0__.DataTypes.STRING,
   firstname: sequelize__WEBPACK_IMPORTED_MODULE_0__.DataTypes.STRING,
   lastname: sequelize__WEBPACK_IMPORTED_MODULE_0__.DataTypes.STRING,
@@ -76,7 +76,7 @@ const User = _config_sequelize__WEBPACK_IMPORTED_MODULE_1__/* ["default"].define
 
 (async () => {
   await _config_sequelize__WEBPACK_IMPORTED_MODULE_1__/* ["default"].sync */ .Z.sync({
-    alter: false
+    alter: true
   });
 })();
 

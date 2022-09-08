@@ -10,15 +10,15 @@ exports.modules = {
 /* harmony export */   "Z": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 const Keys = {
-  DEFAULT_API: "https://witwad.com",
-  DEFAULT_JWT_SECRET: "9ihsilZlxA",
-  REDIRECT_TO: "0rx21MJ5vHEI2h9ZEdqImRy2sHu4Vpdb",
+  DEFAULT_API: "http://test.yeanagro.org",
+  DEFAULT_JWT_SECRET: process.env.DEFAULT_JWT_SECRET,
+  REDIRECT_TO: process.env.REDIRECT_TO,
   USER_INFO: "1B28429678ED6E22",
   SPEECHLY_APP_ID: process.env.SPEECHLY_APP_ID,
   REACT_APP_ACCESS_TOKEN: "F926F54FAF8B261DDEE44445EA85F",
   ISSERVER: true,
   SESSION_PASSWORD: "{!-@5MytKz!eb\"hdBX-DM+~>EBeSw9n]",
-  HOST: "https://witwad.com"
+  HOST: "http://test.yeanagro.org"
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Keys);
 
