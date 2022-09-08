@@ -3,7 +3,7 @@
   "scripts": {
     "dev": "next dev -p 3001",
     "build": "next build",
-    "start": "next start -p $PORT",
+    "start": "next start -p 3001",
     "heroku-postbuild": "npm run build",
     "db:migrate": "sequelize db:migrate --env database --migrations-path ./src/apis/database/migrations",
     "db:migrate:undo": "sequelize db:migrate:undo:all --env database --migrations-path ./src/apis/database/migrations",
