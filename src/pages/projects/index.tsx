@@ -4,7 +4,7 @@ import ProjectsActivity from 'modules/activities/ProjectsActivity';
 import Http from 'core/factory/fact.http';
 import MetaData from 'modules/_partials/MetaData';
 
-export async function getStaticProps() {
+export async function getServerSideProps() {
   return Http.axios
     .get(`${process.env.DEFAULT_API}/api/projects`)
     .then(resp => {
