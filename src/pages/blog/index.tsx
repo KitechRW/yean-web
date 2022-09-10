@@ -29,18 +29,6 @@ export async function getServerSideProps({
 
 const BlogPage = (props: any) => {
   const router = useRouter();
-
-  useEffect(() => {
-    if (props.status === 404) {
-      router
-        .push('/404')
-        .then(r => console.log('navigate ' + JSON.stringify(r)));
-    } else if (props.status === 500) {
-      router
-        .push('/500')
-        .then(r => console.log('navigate ' + JSON.stringify(r)));
-    }
-  }, []);
   return (
     <>
       <Head>

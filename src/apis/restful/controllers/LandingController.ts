@@ -20,7 +20,7 @@ export default class LandingController {
         }
       }
       const { slideIds } = found?.toJSON() || {};
-      const ids = JSON.parse(slideIds);
+      const ids = slideIds?.split(',');
       const slides = await Article.findAll({
         where: { id: ids },
       });
@@ -93,7 +93,11 @@ export default class LandingController {
       if (!item?.toJSON()) {
         item = await Landing.create(req.body);
       } else {
-        item.set(req.body);
+        item.set({
+          ...req.body,
+          slideIds:
+            req.body.slideIds?.toString() || item.toJSON().slideIds,
+        });
       }
       return Response.success(res, 200, {
         message: 'Landing updated successfuly',

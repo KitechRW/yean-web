@@ -44,7 +44,7 @@ const LandingAcitivity = ({
   const confirmedPartners = partners?.rows;
 
   const articleList: any[] =
-    articles.map((item: any) => {
+    articles?.map((item: any) => {
       const sub = subCategories?.rows?.filter(
         (element: any) => element.id == item.category,
       );

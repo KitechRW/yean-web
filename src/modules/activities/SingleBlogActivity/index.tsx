@@ -1,8 +1,8 @@
 import { Avatar } from '@mui/material';
+import { useOpenFetcher } from 'apis/utils/fetcher';
 import { format } from 'date-fns';
 import Scaffold from 'modules/layouts/Scaffold';
 import CustomImage from 'modules/_partials/CustomImage';
-import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
@@ -11,8 +11,12 @@ import Blogs from '../_Partials/Blogs';
 const SingleBlogActivity = ({ data }: any) => {
   const contentRef = React.useRef(null);
   const { push } = useRouter();
-  const handleClick = () => {
-    push('/blog/cow-farmers');
+  const {
+    data: { data: relatedArticles },
+  } = useOpenFetcher(`/api/articles?cat=${data?.article?.category}`);
+
+  const handleClick = (id: any) => {
+    push('/blog/' + id);
   };
 
   React.useEffect(() => {
@@ -78,17 +82,20 @@ const SingleBlogActivity = ({ data }: any) => {
         <div
           ref={contentRef}
           className="mt-4 text-justify leading-relaxed flex flex-col space-y-3 hideContentNotInTagUL"
-        >
-          {/* {
-          article?.text
-          } */}
-        </div>
+        />
 
         <h1 className="mt-12 mb-6 text-xl md:text-2xl text-dark-green font-bold bg-brand-green/10 p-2 text-center">
           View Related Blogs
         </h1>
 
-        <Blogs size={3} onClick={handleClick} />
+        <Blogs
+          data={{
+            data: relatedArticles?.filter(
+              (item: any) => item.id != data.id,
+            ),
+          }}
+          onClick={handleClick}
+        />
       </div>
     </Scaffold>
   );

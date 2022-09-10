@@ -12,7 +12,7 @@ const Landing = sequelize.define(
       unique: true,
     },
     slideIds: {
-      type: DataTypes.JSON,
+      type: DataTypes.STRING,
     },
   },
   {

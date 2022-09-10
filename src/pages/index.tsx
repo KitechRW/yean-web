@@ -33,9 +33,6 @@ export async function getServerSideProps() {
   let results = null;
   let resultArticles = null;
   let partners = null;
-  await Http.axios.get('/api/partners').then(response => {
-    partners = response.data.data;
-  });
   try {
     const { data } = await Http.axios.get('/api/landing/1');
     results = data?.data;
