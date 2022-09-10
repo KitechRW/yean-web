@@ -94,14 +94,16 @@ export default class LandingController {
     const { id } = req.query;
     try {
       let item = await Landing.findByPk(`${id}`);
-
+      const payload = {
+        ...req.body,
+        slideIds: req.body.slideIds?.toString(),
+      };
       if (!item?.toJSON()) {
-        item = await Landing.create(req.body);
+        item = await Landing.create(payload);
       } else {
         item.set({
-          ...req.body,
-          slideIds:
-            req.body.slideIds?.toString() || item.toJSON().slideIds,
+          ...payload,
+          slideIds: payload.slideIds || item?.toJSON()?.slideIds,
         });
       }
       return Response.success(res, 200, {
