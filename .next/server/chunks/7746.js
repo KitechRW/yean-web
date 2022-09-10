@@ -169,17 +169,21 @@ class LandingController {
     } = req.query;
 
     try {
-      var _item;
+      var _req$body$slideIds, _item;
 
       let item = await apis_database_models_landing_model__WEBPACK_IMPORTED_MODULE_0__/* ["default"].findByPk */ .Z.findByPk(`${id}`);
 
-      if (!((_item = item) !== null && _item !== void 0 && _item.toJSON())) {
-        item = await apis_database_models_landing_model__WEBPACK_IMPORTED_MODULE_0__/* ["default"].create */ .Z.create(req.body);
-      } else {
-        var _req$body$slideIds;
+      const payload = _objectSpread(_objectSpread({}, req.body), {}, {
+        slideIds: (_req$body$slideIds = req.body.slideIds) === null || _req$body$slideIds === void 0 ? void 0 : _req$body$slideIds.toString()
+      });
 
-        item.set(_objectSpread(_objectSpread({}, req.body), {}, {
-          slideIds: ((_req$body$slideIds = req.body.slideIds) === null || _req$body$slideIds === void 0 ? void 0 : _req$body$slideIds.toString()) || item.toJSON().slideIds
+      if (!((_item = item) !== null && _item !== void 0 && _item.toJSON())) {
+        item = await apis_database_models_landing_model__WEBPACK_IMPORTED_MODULE_0__/* ["default"].create */ .Z.create(payload);
+      } else {
+        var _item2, _item2$toJSON;
+
+        item.set(_objectSpread(_objectSpread({}, payload), {}, {
+          slideIds: payload.slideIds || ((_item2 = item) === null || _item2 === void 0 ? void 0 : (_item2$toJSON = _item2.toJSON()) === null || _item2$toJSON === void 0 ? void 0 : _item2$toJSON.slideIds)
         }));
       }
 
