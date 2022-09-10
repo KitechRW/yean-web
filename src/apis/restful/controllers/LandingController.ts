@@ -21,6 +21,11 @@ export default class LandingController {
       }
       const { slideIds } = found?.toJSON() || {};
       const ids = slideIds?.split(',');
+      if (!ids?.length) {
+        return Response.error(res, 409, {
+          message: 'No slides',
+        });
+      }
       const slides = await Article.findAll({
         where: { id: ids },
       });
@@ -58,7 +63,7 @@ export default class LandingController {
       let attributes = req.query.attributes as string;
       const articles = await ArticleServices.findAndCountAll(
         undefined,
-        attributes.split(','),
+        attributes?.split(','),
       );
       return Response.success(res, 200, {
         message: 'Landings fetched successfuly',
