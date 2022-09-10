@@ -94,6 +94,13 @@ class LandingController {
         slideIds
       } = ((_found = found) === null || _found === void 0 ? void 0 : _found.toJSON()) || {};
       const ids = slideIds === null || slideIds === void 0 ? void 0 : slideIds.split(',');
+
+      if (!(ids !== null && ids !== void 0 && ids.length)) {
+        return apis_utils_helpers_response__WEBPACK_IMPORTED_MODULE_3__/* ["default"].error */ .Z.error(res, 409, {
+          message: 'No slides'
+        });
+      }
+
       const slides = await apis_database_models_article_model__WEBPACK_IMPORTED_MODULE_1__/* ["default"].findAll */ .Z.findAll({
         where: {
           id: ids
@@ -130,7 +137,7 @@ class LandingController {
   static async getSomeArticles(req, res) {
     try {
       let attributes = req.query.attributes;
-      const articles = await apis_services_articleServices__WEBPACK_IMPORTED_MODULE_2__/* ["default"].findAndCountAll */ .Z.findAndCountAll(undefined, attributes.split(','));
+      const articles = await apis_services_articleServices__WEBPACK_IMPORTED_MODULE_2__/* ["default"].findAndCountAll */ .Z.findAndCountAll(undefined, attributes === null || attributes === void 0 ? void 0 : attributes.split(','));
       return apis_utils_helpers_response__WEBPACK_IMPORTED_MODULE_3__/* ["default"].success */ .Z.success(res, 200, {
         message: 'Landings fetched successfuly',
         data: articles.rows.slice(0, 16)
