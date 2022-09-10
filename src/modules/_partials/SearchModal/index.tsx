@@ -60,7 +60,7 @@ function SearchModal({ id, searchId, modalOpen, setModalOpen }) {
       {/* Modal dialog */}
       <Transition
         id={id}
-        className="fixed inset-0 z-50 overflow-hidden flex items-start top-20 mb-4 justify-center transform px-4 sm:px-6"
+        className="fixed inset-0 z-50 overflow-hidden flex items-start top-4 mb-4 justify-center transform px-4 sm:px-6"
         role="dialog"
         aria-modal="true"
         show={modalOpen}

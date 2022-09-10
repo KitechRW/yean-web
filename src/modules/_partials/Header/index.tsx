@@ -27,7 +27,7 @@ const Header = () => {
           <HeaderNavItems />
           <label
             htmlFor="search"
-            className="hidden md:flex text-white items-center relative"
+            className="hidden z-20 md:flex text-white items-center relative"
           >
             <Search className="left-3 absolute" />
             <input

@@ -45,14 +45,7 @@ const TopNav = ({
         <div className="hidden md:block">
           <Logo />
         </div>
-        <div className="ml-auto pl-6 md:pl-12 flex items-center space-x-6">
-          <button
-            type="button"
-            className="text-[#7979B2] space-x-12 bg-cyan-201 px-4 py-3 flex items-center rounded rounded-tl-3xl rounded-br-3xl"
-          >
-            <span>Search</span>
-            <Search />
-          </button>
+        <div className="ml-auto pl-6 md:pl-12 flex items-center space-x-6 relative">
           <NotificationList />
           <ProfilePopup />
         </div>

@@ -7,6 +7,8 @@ import { Menu as MenuIcon, Search } from '@mui/icons-material';
 import Logo from '../Logo';
 import NavItems from '../NavItems';
 import { navs } from 'system/static';
+import ProfilePopup from '../ProfilePopup';
+import { useNavbar } from 'modules/contexts/NavbarContext';
 
 const LeftDrawer = ({
   items = navs,
@@ -15,6 +17,7 @@ const LeftDrawer = ({
   items?: any[];
   onSearch?: any;
 }) => {
+  const { profile } = useNavbar();
   const { pathname } = useRouter();
   const [toggle, setToggle] = React.useState(false);
   const toggleDrawer = (open: boolean) => (event: any) => {
@@ -48,6 +51,11 @@ const LeftDrawer = ({
               className="w-full placeholder:text-center rounded-full px-12 placeholder:font-bold placeholder:text-white outline-none bg-brand-green/70 bg-opacity-20 py-2"
             />
           </label>
+        )}
+        {profile?.user && (
+          <div className="md:hidden relative flex flex-col">
+            <ProfilePopup />
+          </div>
         )}
         <button
           type="button"

@@ -1,9 +1,11 @@
 import { Person } from '@mui/icons-material';
 import { useNavbar } from 'modules/contexts/NavbarContext';
+import { useWindow } from 'modules/contexts/WindowContext';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { navs } from 'system/static';
+import ProfilePopup from '../ProfilePopup';
 
 const NavItems = ({
   items = navs,
@@ -12,12 +14,16 @@ const NavItems = ({
   items?: any[];
   className?: string;
 }) => {
+  const { isSmallDevice } = useWindow();
   const { pathname } = useRouter();
   const { profile } = useNavbar();
   return (
     <div className={className}>
       {items.map((element, index) => {
         const isLogin = '/login' === element.path;
+        if (profile?.user && isLogin && !isSmallDevice) {
+          return <ProfilePopup />;
+        }
         return (
           <Link
             key={element.label}
