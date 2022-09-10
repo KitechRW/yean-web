@@ -6,7 +6,7 @@ import sequelize from '../config/sequelize';
 const Article = sequelize.define(
   'Article',
   {
-    title: DataTypes.STRING,
+    title: DataTypes.TEXT,
     image: DataTypes.STRING,
     text: DataTypes.TEXT,
     category: DataTypes.STRING,

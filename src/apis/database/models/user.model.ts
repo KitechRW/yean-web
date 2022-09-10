@@ -22,7 +22,7 @@ const User = sequelize.define(
     sector: DataTypes.STRING,
     agrilo: DataTypes.STRING,
     essay: DataTypes.TEXT,
-    profile_image: DataTypes.STRING,
+    profile_image: DataTypes.TEXT,
     active: {
       type: DataTypes.BOOLEAN,
       defaultValue: false,

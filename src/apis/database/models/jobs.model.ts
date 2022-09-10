@@ -4,7 +4,7 @@ import sequelize from '../config/sequelize';
 const Job = sequelize.define(
   'Job',
   {
-    title: DataTypes.STRING,
+    title: DataTypes.TEXT,
     category: DataTypes.STRING,
     keyword: DataTypes.STRING,
     location: DataTypes.STRING,
