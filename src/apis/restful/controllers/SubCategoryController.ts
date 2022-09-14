@@ -1,7 +1,9 @@
 import Response from 'apis/utils/helpers/response';
 import { NextApiRequest, NextApiResponse } from 'next';
-import SubCategory from 'apis/database/models/subcategory.model';
 import removeFile, { parseForm } from 'apis/utils/libForm';
+import DB from 'apis/database';
+
+const { SubCategories: SubCategory } = DB;
 
 export default class SubCategoryController {
   static async getOne(req: NextApiRequest, res: NextApiResponse) {

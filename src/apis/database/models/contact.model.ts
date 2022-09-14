@@ -1,21 +1,26 @@
 import { Sequelize, Model, DataTypes } from 'sequelize';
-import sequelize from '../config/sequelize';
 
-const Contact = sequelize.define(
-  'Contact',
-  {
-    name: DataTypes.STRING,
-    email: DataTypes.STRING,
-    message: DataTypes.TEXT,
-  },
-  {
-    tableName: 'contacts',
-    timestamps: true,
-  },
-);
+class Contact extends Model {}
 
-(async () => {
-  await sequelize.sync({ alter: true });
-})();
+const ContactModel = (sequelize: Sequelize) => {
+  Contact.init(
+    {
+      id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+      },
+      name: DataTypes.STRING,
+      email: DataTypes.STRING,
+      message: DataTypes.TEXT,
+    },
+    {
+      tableName: 'contacts',
+      timestamps: true,
+      sequelize,
+    },
+  );
+  return Contact;
+};
 
-export default Contact;
+export default ContactModel;

@@ -1,5 +1,7 @@
-import Library from "../database/models/library.model";
 import { FindAttributeOptions, WhereOptions } from 'sequelize/types';
+import DB from 'apis/database';
+
+const { Libraries: Library } = DB;
 
 export default class LibraryServices{
 

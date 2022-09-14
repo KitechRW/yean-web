@@ -1,8 +1,11 @@
 import Response from 'apis/utils/helpers/response';
 import { NextApiRequest, NextApiResponse } from 'next';
-import User from 'apis/database/models/user.model';
 import removeFile, { parseForm } from 'apis/utils/libForm';
 import { paginate } from 'apis/utils/pagnation';
+
+import DB from 'apis/database';
+
+const { Users: User } = DB;
 
 export default class UserController {
   static async getOne(req: NextApiRequest, res: NextApiResponse) {

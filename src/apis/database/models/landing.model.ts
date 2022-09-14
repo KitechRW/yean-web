@@ -1,28 +1,26 @@
 import { Sequelize, Model, DataTypes } from 'sequelize';
-import sequelize from '../config/sequelize';
 
-const Landing = sequelize.define(
-  'Landing',
-  {
-    id: {
-      type: DataTypes.BIGINT,
-      allowNull: false,
-      primaryKey: true,
-      autoIncrement: true,
-      unique: true,
+class Landing extends Model {}
+
+const LandingModel = (sequelize: Sequelize) => {
+  Landing.init(
+    {
+      id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+      },
+      slideIds: {
+        type: DataTypes.STRING,
+      },
     },
-    slideIds: {
-      type: DataTypes.STRING,
+    {
+      tableName: 'tbl_landing',
+      timestamps: false,
+      sequelize,
     },
-  },
-  {
-    tableName: 'tbl_landing',
-    timestamps: false,
-  },
-);
+  );
+  return Landing;
+};
 
-(async () => {
-  await sequelize.sync({ alter: true });
-})();
-
-export default Landing;
+export default LandingModel;

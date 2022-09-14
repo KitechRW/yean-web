@@ -1,7 +1,9 @@
 import Response from 'apis/utils/helpers/response';
 import { NextApiRequest, NextApiResponse } from 'next';
-import Project from 'apis/database/models/project.model';
 import removeFile, { parseForm } from 'apis/utils/libForm';
+import DB from 'apis/database';
+
+const { Projects: Project } = DB;
 
 export default class ProjectController {
   static async getOne(req: NextApiRequest, res: NextApiResponse) {

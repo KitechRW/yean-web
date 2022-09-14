@@ -1,27 +1,30 @@
-import { DataTypes } from 'sequelize';
-import sequelize from '../config/sequelize';
-// import User from './user.model';
+import { DataTypes, Model, Sequelize } from 'sequelize';
+import NotificationModel from './notification.model';
 
-const Tag = sequelize.define(
-  'Tag',
-  {
-    name: DataTypes.STRING,
-    count: DataTypes.INTEGER,
-  },
-  {
-    tableName: 'tag',
-    timestamps: false,
-  },
-);
+class Tag extends Model {}
 
-(async () => {
-  await sequelize.sync({ alter: false });
-  //   Tutor.belongsTo(User, {
-  //     as: 'user',
-  //     foreignKey: {
-  //       name: 'userId',
-  //     },
-  //   });
-})();
+const TagModel = (sequelize: Sequelize) => {
+  Tag.init(
+    {
+      id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+      },
+      name: DataTypes.STRING,
+      count: DataTypes.INTEGER,
+    },
+    {
+      tableName: 'tag',
+      modelName: 'Tag',
+      timestamps: true,
+      sequelize,
+    },
+  );
 
-export default Tag;
+  Tag.hasMany(NotificationModel(sequelize));
+
+  return Tag;
+};
+
+export default TagModel;

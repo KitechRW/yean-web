@@ -1,28 +1,34 @@
 import { Sequelize, Model, DataTypes } from 'sequelize';
-import sequelize from '../config/sequelize';
-import User from './user.model';
-// import User from './user.model';
+import UserModel from './user.model';
 
-const Picture = sequelize.define(
-  'Picture',
-  {
-    user: DataTypes.BIGINT,
-    location: DataTypes.STRING,
-  },
-  {
-    tableName: 'picture',
-    timestamps: false,
-  },
-);
+class Picture extends Model {}
 
-(async () => {
-  await sequelize.sync({ alter: false });
-  // Picture.belongsTo(User, {
-  //   as: 'owner',
-  //   foreignKey: {
-  //     name: 'user',
-  //   },
-  // });
-})();
+const PictureModel = (sequelize: Sequelize) => {
+  Picture.init(
+    {
+      id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+      },
+      user: DataTypes.BIGINT,
+      location: DataTypes.STRING,
+    },
+    {
+      tableName: 'picture',
+      timestamps: false,
+      sequelize,
+    },
+  );
 
-export default Picture;
+  Picture.belongsTo(UserModel(sequelize), {
+    as: 'owner',
+    foreignKey: {
+      name: 'user',
+    },
+  });
+
+  return Picture;
+};
+
+export default PictureModel;

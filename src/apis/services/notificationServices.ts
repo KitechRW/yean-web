@@ -1,4 +1,6 @@
-import Notification from "../database/models/notification.model";
+import DB from 'apis/database';
+
+const { Notifications: Notification } = DB;
 
 export default class NotificationServices{
 

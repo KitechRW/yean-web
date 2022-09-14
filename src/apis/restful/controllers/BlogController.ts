@@ -1,7 +1,9 @@
 import Response from 'apis/utils/helpers/response';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { paginate } from 'apis/utils/pagnation';
-import Article from 'apis/database/models/article.model';
+import DB from 'apis/database';
+
+const { Articles: Article } = DB;
 
 export default class BlogController {
   static async getOne(req: NextApiRequest, res: NextApiResponse) {

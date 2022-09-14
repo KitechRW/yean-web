@@ -1,7 +1,8 @@
 import Response from 'apis/utils/helpers/response';
 import { NextApiRequest, NextApiResponse } from 'next';
-import Job from 'apis/database/models/jobs.model';
+import DB from 'apis/database';
 
+const { Jobs: Job } = DB;
 export default class JobController {
   static async getOne(req: NextApiRequest, res: NextApiResponse) {
     const { id } = req.query;

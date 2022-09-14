@@ -1,4 +1,6 @@
-import Comment from "../database/models/comment.model";
+import DB from 'apis/database';
+
+const { Comments: Comment } = DB;
 
 export default class CommentServices{
 

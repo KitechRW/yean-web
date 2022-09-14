@@ -1,7 +1,10 @@
 import Response from 'apis/utils/helpers/response';
 import { NextApiRequest, NextApiResponse } from 'next';
-import Partner from 'apis/database/models/partner.model';
 import removeFile, { parseForm } from 'apis/utils/libForm';
+
+import DB from 'apis/database';
+
+const { Partners: Partner } = DB;
 
 export default class PartnerController {
   static async getOne(req: NextApiRequest, res: NextApiResponse) {
@@ -24,9 +27,10 @@ export default class PartnerController {
         message: 'Partners fetched successfuly',
         data: await Partner.findAndCountAll(),
       });
-    } catch (error) {
+    } catch (error: any) {
       return Response.error(res, 500, {
         message: 'something went wrong',
+        reason: error.message,
       });
     }
   }
@@ -125,26 +129,34 @@ export default class PartnerController {
     }
   }
 
-  static async request(req: NextApiRequest, res: NextApiResponse){
+  static async request(req: NextApiRequest, res: NextApiResponse) {
     try {
-      const {companyName,email,phone,address,message} = req.body;
-      await Partner.create({companyName,email,phone,address,message}).then((resp)=>{
-        return Response.success(res,201,{
-          message:"request sent successfully",
-          data:resp
-        })
-      }).catch((error)=>{
-        return Response.error(res,403,{
-          message:"Something failed",
-          error:error.message
-        })
+      const { companyName, email, phone, address, message } =
+        req.body;
+      await Partner.create({
+        companyName,
+        email,
+        phone,
+        address,
+        message,
       })
-    } catch (error:any) {
-      return Response.error(res,500,{
-        message:'server error',
-        error:error.message
-      })      
+        .then(resp => {
+          return Response.success(res, 201, {
+            message: 'request sent successfully',
+            data: resp,
+          });
+        })
+        .catch(error => {
+          return Response.error(res, 403, {
+            message: 'Something failed',
+            error: error.message,
+          });
+        });
+    } catch (error: any) {
+      return Response.error(res, 500, {
+        message: 'server error',
+        error: error.message,
+      });
     }
   }
-
 }

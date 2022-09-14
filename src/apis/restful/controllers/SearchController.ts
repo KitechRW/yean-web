@@ -1,8 +1,10 @@
-import Article from 'apis/database/models/article.model';
-import Library from 'apis/database/models/library.model';
 import Response from 'apis/utils/helpers/response';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { Op } from 'sequelize';
+
+import DB from 'apis/database';
+
+const { Articles: Article, Libraries: Library } = DB;
 
 export default class SearchController {
   static async search(req: NextApiRequest, res: NextApiResponse) {

@@ -1,4 +1,6 @@
-import Picture from "../database/models/picture.model";
+import DB from 'apis/database';
+
+const { Pictures: Picture } = DB;
 
 export default class PictureServices{
 

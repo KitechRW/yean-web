@@ -1,31 +1,42 @@
 import { Sequelize, Model, DataTypes } from 'sequelize';
-import sequelize from '../config/sequelize';
-import Post from './post.model';
-// import User from './user.model';
+import PostModel from './post.model';
 
-const Notification = sequelize.define(
-  'Notification',
-  {
-    type: DataTypes.STRING,
-    username: DataTypes.STRING,
-    notified: DataTypes.TEXT,
-    post: DataTypes.BIGINT,
-    on: DataTypes.STRING,
-    seen: DataTypes.STRING,
-  },
-  {
-    tableName: 'notification',
-    timestamps: false,
-  },
-);
+class Notification extends Model {}
 
-(async () => {
-  await sequelize.sync({ alter: false });
-  // Notification.belongsTo(Post, {
-  //   foreignKey: 'post',
-  //   as: 'Post_id',
-  //   onDelete: 'CASCADE',
+const NotificationModel = (sequelize: Sequelize) => {
+  Notification.init(
+    {
+      id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+      },
+      postId: {
+        type: DataTypes.INTEGER,
+      },
+      type: DataTypes.STRING,
+      username: DataTypes.STRING,
+      notified: DataTypes.TEXT,
+      on: DataTypes.STRING,
+      seen: DataTypes.STRING,
+    },
+    {
+      tableName: 'notification',
+      modelName: 'Notification',
+      timestamps: true,
+      sequelize,
+    },
+  );
+
+  // Notification.belongsTo(PostModel(sequelize), {
+  //   targetKey: 'id',
+  //   foreignKey: {
+  //     name: 'postId',
+  //   },
+  //   as: 'post',
   // });
-})();
 
-export default Notification;
+  return Notification;
+};
+
+export default NotificationModel;

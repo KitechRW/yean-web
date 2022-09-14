@@ -1,25 +1,27 @@
-import { DataTypes } from 'sequelize';
-import sequelize from '../config/sequelize';
+import { DataTypes, Model, Sequelize } from 'sequelize';
 
+class Subscribe extends Model {}
 
-const Subscribe = sequelize.define(
-  'Subscribe',
-  {
-    email: {
-        type:DataTypes.STRING,
-        allowNull:false
-    }
-    
-  },
-  {
-    tableName: 'subscribers',
-    timestamps: true,
-  },
-);
+const SubscribeModel = (sequelize: Sequelize) => {
+  Subscribe.init(
+    {
+      id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+      },
+      email: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+    },
+    {
+      tableName: 'subscribers',
+      timestamps: true,
+      sequelize,
+    },
+  );
+  return Subscribe;
+};
 
-(async () => {
-  await sequelize.sync({ alter: true });
-  
-})();
-
-export default Subscribe;
+export default SubscribeModel;

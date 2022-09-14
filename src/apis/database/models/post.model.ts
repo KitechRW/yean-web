@@ -1,28 +1,29 @@
-import { DataTypes } from 'sequelize';
-import sequelize from '../config/sequelize';
-import Like from './like.model';
-import Notification from './notification.model';
-import Post_comment from './post_comment.model';
-import User from './user.model';
+import { DataTypes, Model, Sequelize } from 'sequelize';
 
-const Post = sequelize.define(
-  'Post',
-  {
-    user: DataTypes.BIGINT,
-    text: DataTypes.TEXT,
-    like: DataTypes.BIGINT,
-    comment: DataTypes.BIGINT,
-    location: DataTypes.STRING,
-    email_notification: DataTypes.TEXT,
-  },
-  {
-    tableName: 'post',
-    timestamps: false,
-  },
-);
+class Post extends Model {}
 
-(async () => {
-  await sequelize.sync({ alter: false });
-})();
+const PostModel = (sequelize: Sequelize) => {
+  Post.init(
+    {
+      id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+      },
+      user: DataTypes.INTEGER,
+      text: DataTypes.TEXT,
+      like: DataTypes.BIGINT,
+      comment: DataTypes.BIGINT,
+      location: DataTypes.STRING,
+      email_notification: DataTypes.TEXT,
+    },
+    {
+      tableName: 'post',
+      timestamps: true,
+      sequelize,
+    },
+  );
+  return Post;
+};
 
-export default Post;
+export default PostModel;

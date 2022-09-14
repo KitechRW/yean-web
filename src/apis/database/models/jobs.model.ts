@@ -1,23 +1,28 @@
-import { DataTypes } from 'sequelize';
-import sequelize from '../config/sequelize';
+import { DataTypes, Model, Sequelize } from 'sequelize';
 
-const Job = sequelize.define(
-  'Job',
-  {
-    title: DataTypes.TEXT,
-    category: DataTypes.STRING,
-    keyword: DataTypes.STRING,
-    location: DataTypes.STRING,
-    description: DataTypes.TEXT,
-  },
-  {
-    tableName: 'tbl_jobs',
-    timestamps: false,
-  },
-);
+class Job extends Model {}
 
-(async () => {
-  await sequelize.sync({ alter: true });
-})();
+const JobModel = (sequelize: Sequelize) => {
+  Job.init(
+    {
+      id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+      },
+      title: DataTypes.TEXT,
+      category: DataTypes.STRING,
+      keyword: DataTypes.STRING,
+      location: DataTypes.STRING,
+      description: DataTypes.TEXT,
+    },
+    {
+      tableName: 'tbl_jobs',
+      timestamps: false,
+      sequelize,
+    },
+  );
+  return Job;
+};
 
-export default Job;
+export default JobModel;

@@ -1,24 +1,29 @@
 import { Sequelize, Model, DataTypes } from 'sequelize';
-import sequelize from '../config/sequelize';
 
-const Category = sequelize.define(
-  'Category',
-  {
-    name: {
-      type: DataTypes.STRING,
-      unique: true,
-      allowNull: false,
+class Category extends Model {}
+
+const CategoryModel = (sequelize: Sequelize) => {
+  Category.init(
+    {
+      id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+      },
+      name: {
+        type: DataTypes.STRING,
+        unique: true,
+        allowNull: false,
+      },
+      image: DataTypes.STRING,
     },
-    image: DataTypes.STRING,
-  },
-  {
-    tableName: 'tbl_category',
-    timestamps: false,
-  },
-);
+    {
+      tableName: 'tbl_category',
+      timestamps: false,
+      sequelize,
+    },
+  );
+  return Category;
+};
 
-(async () => {
-  await sequelize.sync({ alter: true });
-})();
-
-export default Category;
+export default CategoryModel;

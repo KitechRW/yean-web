@@ -1,23 +1,26 @@
 import { Sequelize, Model, DataTypes } from 'sequelize';
-import sequelize from '../config/sequelize';
-import Post from './post.model';
-import User from './user.model';
 
-const Like = sequelize.define(
-  'Like',
-  {
-    user: DataTypes.BIGINT,
-    post: DataTypes.BIGINT,
-    likes: DataTypes.BOOLEAN,
-  },
-  {
-    tableName: 'like',
-    timestamps: false,
-  },
-);
+class Like extends Model {}
 
-(async () => {
-  await sequelize.sync({ alter: true });
-})();
+const LikeModel = (sequelize: Sequelize) => {
+  Like.init(
+    {
+      id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+      },
+      user: DataTypes.BIGINT,
+      post: DataTypes.BIGINT,
+      likes: DataTypes.BOOLEAN,
+    },
+    {
+      tableName: 'like',
+      timestamps: true,
+      sequelize,
+    },
+  );
+  return Like;
+};
 
-export default Like;
+export default LikeModel;

@@ -1,6 +1,7 @@
-import User from 'apis/database/models/user.model';
 import { FindAttributeOptions, WhereOptions } from 'sequelize/types';
-import Article from '../database/models/article.model';
+import DB from 'apis/database';
+
+const { Articles: Article, Users: User } = DB;
 
 export default class ArticleServices {
   static create(data: any) {

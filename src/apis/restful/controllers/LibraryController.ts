@@ -1,6 +1,5 @@
 import Response from 'apis/utils/helpers/response';
 import { NextApiRequest, NextApiResponse } from 'next';
-import Library from 'apis/database/models/library.model';
 import LibraryServices from 'apis/services/libraryServices';
 import removeFile, { parseForm } from 'apis/utils/libForm';
 import { paginate } from 'apis/utils/pagnation';
@@ -8,6 +7,9 @@ import  Keys  from 'apis/utils/constants/keys'
 import stream from 'stream';
 import { promisify } from 'util';
 import fetch from 'node-fetch';
+import DB from 'apis/database';
+
+const { Libraries: Library } = DB;
 
 export default class LibraryController {
   static async getOne(req: NextApiRequest, res: NextApiResponse) {

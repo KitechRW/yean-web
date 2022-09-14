@@ -1,5 +1,6 @@
-import Subscribe from 'apis/database/models/subscriber.model';
+import DB from 'apis/database';
 
+const { Subscribes: Subscribe } = DB;
 export default class SubscribeService {
   
     static create(data: any) {

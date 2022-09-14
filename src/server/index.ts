@@ -1,8 +1,9 @@
-import { parse } from 'url';
+import { parse, UrlWithParsedQuery } from 'url';
 import express from 'express';
 import next from 'next';
 import dotenv from 'dotenv';
 import routes from './routes';
+import DB from '../apis/database';
 
 dotenv.config();
 
@@ -17,11 +18,14 @@ app.prepare().then(async () => {
   server.use(routes);
 
   server.get('*', (req, res) => {
-    const parsedUrl = parse(req.url, true);
+    const parsedUrl: UrlWithParsedQuery = parse(req.url, true);
 
     const { pathname } = parsedUrl;
 
-    if (pathname?.startsWith('/uploads') || pathname?.startsWith('/games')) {
+    if (
+      pathname?.startsWith('/uploads') ||
+      pathname?.startsWith('/games')
+    ) {
       parsedUrl.pathname = `/api${pathname}`;
       return handle(req, res, parsedUrl);
     }
@@ -43,7 +47,8 @@ app.prepare().then(async () => {
   server.put('*', (req, res) => {
     return handle(req, res);
   });
-
+  console.log(dev, 'devvvvvvvvvv');
+  await DB.sequelize.sync({ force: false, alter: dev });
   server.listen(port, () => {
     // eslint-disable-next-line no-console
     console.log(`> Ready on http://localhost:${port}`);

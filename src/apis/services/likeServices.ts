@@ -1,4 +1,6 @@
-import Like from "../database/models/like.model";
+import DB from 'apis/database';
+
+const { Likes: Like } = DB;
 
 export default class LikeServices{
 

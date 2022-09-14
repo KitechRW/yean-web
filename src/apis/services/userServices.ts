@@ -1,5 +1,6 @@
-import User from '../database/models/user.model';
+import DB from 'apis/database';
 
+const { Users: User } = DB;
 export default class UserService {
   
     static create(data: any) {

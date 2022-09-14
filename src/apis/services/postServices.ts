@@ -1,5 +1,6 @@
-import Post from "../database/models/post.model";
+import DB from 'apis/database';
 
+const { Posts: Post } = DB;
 export default class PostServices{
 
     static create(data: any) {

@@ -1,7 +1,9 @@
 import Response from 'apis/utils/helpers/response';
 import { NextApiRequest, NextApiResponse } from 'next';
-import Category from 'apis/database/models/category.model';
 import removeFile, { parseForm } from 'apis/utils/libForm';
+import DB from 'apis/database';
+
+const { Categories: Category } = DB;
 
 export default class CategoryController {
   static async getOne(req: NextApiRequest, res: NextApiResponse) {

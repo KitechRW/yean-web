@@ -1,9 +1,11 @@
 import Response from 'apis/utils/helpers/response';
 import { NextApiRequest, NextApiResponse } from 'next';
-import Article from 'apis/database/models/article.model';
 import ArticleServices from 'apis/services/articleServices';
 import removeFile, { parseForm } from 'apis/utils/libForm';
 import { paginate } from 'apis/utils/pagnation';
+import DB from 'apis/database';
+
+const { Articles: Article } = DB;
 
 export default class ArticleController {
   static async getOne(req: NextApiRequest, res: NextApiResponse) {
@@ -13,7 +15,15 @@ export default class ArticleController {
         message: 'Articles fetched successfuly',
         data: await ArticleServices.findOne(
           { id },
-          ['id', 'title', 'image', 'author_id', 'text', 'category', 'createdAt'],
+          [
+            'id',
+            'title',
+            'image',
+            'author_id',
+            'text',
+            'category',
+            'createdAt',
+          ],
           ['firstname', 'lastname', 'phone', 'gender'],
         ),
       });

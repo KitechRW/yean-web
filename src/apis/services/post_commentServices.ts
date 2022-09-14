@@ -1,5 +1,6 @@
-import Post_comment from "../database/models/post_comment.model";
+import DB from 'apis/database';
 
+const { PostComments: Post_comment } = DB;
 export default class Post_commentServices{
 
     static create(data: any) {

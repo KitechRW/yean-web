@@ -1,5 +1,6 @@
-import Service from "../database/models/services.model";
+import DB from 'apis/database';
 
+const { Services: Service } = DB;
 export default class ServiceServices{
 
     static create(data: any) {

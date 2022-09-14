@@ -1,4 +1,6 @@
-import Contact from 'apis/database/models/contact.model';
+import DB from 'apis/database';
+
+const { Contacts: Contact } = DB;
 
 export default class ContactService {
   

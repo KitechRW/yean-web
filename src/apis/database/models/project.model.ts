@@ -1,21 +1,26 @@
-import { DataTypes } from 'sequelize';
-import sequelize from '../config/sequelize';
+import { DataTypes, Model, Sequelize } from 'sequelize';
 
-const Project = sequelize.define(
-  'Project',
-  {
-    name: DataTypes.STRING,
-    image: DataTypes.STRING,
-    description: DataTypes.TEXT,
-  },
-  {
-    tableName: 'tbl_projects',
-    timestamps: false,
-  },
-);
+class Project extends Model {}
 
-(async () => {
-  await sequelize.sync({ alter: false });
-})();
+const ProjectModel = (sequelize: Sequelize) => {
+  Project.init(
+    {
+      id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+      },
+      name: DataTypes.STRING,
+      image: DataTypes.STRING,
+      description: DataTypes.TEXT,
+    },
+    {
+      tableName: 'tbl_projects',
+      timestamps: false,
+      sequelize,
+    },
+  );
+  return Project;
+};
 
-export default Project;
+export default ProjectModel;

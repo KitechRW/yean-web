@@ -1,10 +1,14 @@
-import Article from 'apis/database/models/article.model';
-import Job from 'apis/database/models/jobs.model';
-import Library from 'apis/database/models/library.model';
-import Partner from 'apis/database/models/partner.model';
-import User from 'apis/database/models/user.model';
 import Response from 'apis/utils/helpers/response';
 import { NextApiRequest, NextApiResponse } from 'next';
+import DB from 'apis/database';
+
+const {
+  Articles: Article,
+  Jobs: Job,
+  Partners: Partner,
+  Users: User,
+  Libraries: Library,
+} = DB;
 
 export default class DashboardController {
   static async stat(req: NextApiRequest, res: NextApiResponse) {

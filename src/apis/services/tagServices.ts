@@ -1,5 +1,6 @@
-import Tag from "../database/models/tags.model";
+import DB from 'apis/database';
 
+const { Tags: Tag } = DB;
 export default class TagServices{
 
     static create(data: any) {

@@ -1,9 +1,9 @@
 import Response from 'apis/utils/helpers/response';
 import { NextApiRequest, NextApiResponse } from 'next';
-import Landing from 'apis/database/models/landing.model';
-import Article from 'apis/database/models/article.model';
 import ArticleServices from 'apis/services/articleServices';
+import DB from 'apis/database';
 
+const { Articles: Article, Landings: Landing } = DB;
 export default class LandingController {
   static async getOne(req: NextApiRequest, res: NextApiResponse) {
     const { id } = req.query;

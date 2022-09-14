@@ -1,20 +1,26 @@
-import { DataTypes } from 'sequelize';
-import sequelize from '../config/sequelize';
+import { DataTypes, Model, Sequelize } from 'sequelize';
 
-const Service = sequelize.define(
-  'Service',
-  {
-    name: DataTypes.STRING,
-    content: DataTypes.TEXT,
-  },
-  {
-    tableName: 'service',
-    timestamps: false,
-  },
-);
+class Service extends Model {}
 
-(async () => {
-  await sequelize.sync({ alter: false });
-})();
+const ServiceModel = (sequelize: Sequelize) => {
+  Service.init(
+    {
+      id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+      },
+      image: DataTypes.STRING,
+      name: DataTypes.STRING,
+      content: DataTypes.TEXT,
+    },
+    {
+      tableName: 'service',
+      timestamps: false,
+      sequelize,
+    },
+  );
+  return Service;
+};
 
-export default Service;
+export default ServiceModel;
