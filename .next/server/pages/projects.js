@@ -123,7 +123,7 @@ var MetaData = __webpack_require__(3405);
 
 
 async function getServerSideProps() {
-  return fact_http/* default.axios.get */.Z.axios.get(`${"https://witwad.com"}/api/projects`).then(resp => {
+  return fact_http/* default.axios.get */.Z.axios.get(`${"http://test.yeanagro.org"}/api/projects`).then(resp => {
     var _resp$data;
 
     return {

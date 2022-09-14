@@ -146,7 +146,7 @@ async function getServerSideProps({
     id
   }
 }) {
-  return external_axios_default().get(`${"https://witwad.com"}/api/jobs/${id}`).then(resp => {
+  return external_axios_default().get(`${"http://test.yeanagro.org"}/api/jobs/${id}`).then(resp => {
     return {
       props: {
         data: resp.data.data

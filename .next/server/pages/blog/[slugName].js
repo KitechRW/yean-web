@@ -229,7 +229,7 @@ modules_activities_SingleBlogActivity__WEBPACK_IMPORTED_MODULE_2__ = (__webpack_
 async function getServerSideProps({
   query
 }) {
-  return core_factory_fact_http__WEBPACK_IMPORTED_MODULE_3__/* ["default"].axios.get */ .Z.axios.get(`${"https://witwad.com"}/api/articles/${query.slugName}`).then(resp => {
+  return core_factory_fact_http__WEBPACK_IMPORTED_MODULE_3__/* ["default"].axios.get */ .Z.axios.get(`${"http://test.yeanagro.org"}/api/articles/${query.slugName}`).then(resp => {
     return {
       props: {
         data: resp.data.data

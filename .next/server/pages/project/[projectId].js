@@ -91,7 +91,7 @@ async function getServerSideProps({
     projectId
   }
 }) {
-  return external_axios_default().get(`${"https://witwad.com"}/api/projects/${projectId}`).then(resp => {
+  return external_axios_default().get(`${"http://test.yeanagro.org"}/api/projects/${projectId}`).then(resp => {
     return {
       props: {
         data: resp.data.data

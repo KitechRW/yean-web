@@ -288,7 +288,7 @@ modules_activities_CarrersActivity__WEBPACK_IMPORTED_MODULE_2__ = (__webpack_asy
 
 
 async function getStaticProps() {
-  return core_factory_fact_http__WEBPACK_IMPORTED_MODULE_3__/* ["default"].axios.get */ .Z.axios.get(`${"https://witwad.com"}/api/jobs`).then(resp => {
+  return core_factory_fact_http__WEBPACK_IMPORTED_MODULE_3__/* ["default"].axios.get */ .Z.axios.get(`${"http://test.yeanagro.org"}/api/jobs`).then(resp => {
     var _resp$data;
 
     return {
