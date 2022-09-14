@@ -19,7 +19,9 @@ export const emailSender = async (options: any) => {
       debug: true,
     });
     const mailOptions = {
-      from: `YEAN <${process.env.SERVICE_USERNAME}>`,
+      from: `${options.from || 'YEAN'} <${
+        process.env.SERVICE_USERNAME
+      }>`,
       to: options.email,
       subject: options.subject,
       html: options.message,

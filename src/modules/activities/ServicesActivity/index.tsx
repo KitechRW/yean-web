@@ -2,7 +2,9 @@ import {
   ChevronRight,
   ConnectWithoutContact,
 } from '@mui/icons-material';
+import { useOpenFetcher } from 'apis/utils/fetcher';
 import Scaffold from 'modules/layouts/Scaffold';
+import CustomImage from 'modules/_partials/CustomImage';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -10,18 +12,27 @@ import React from 'react';
 import { services } from './data';
 
 const ServicesActivity = () => {
+  const [current, setCurrent] = React.useState<any>({});
   const {
     push,
     query: { service },
   } = useRouter();
+  const {
+    data: { data },
+  } = useOpenFetcher('/api/services');
 
   const handleChangeService = (index: number) => {
     push({ pathname: '/services', query: { service: index } });
   };
 
-  const id = parseInt(`${service}`, 10);
+  React.useEffect(() => {
+    const id = parseInt(`${service}`, 10);
+    const itemIndex = services[id] ? id : 0;
 
-  const itemIndex = services[id] ? id : 0;
+    if (data?.rows?.length) {
+      setCurrent(data.rows[itemIndex]);
+    }
+  }, [data, service]);
 
   return (
     <Scaffold>
@@ -39,37 +50,37 @@ const ServicesActivity = () => {
           </h1>
           <p className="flex items-center space-x-2 text-sm text-white">
             <Link href="/#">What we do?</Link> <ChevronRight />{' '}
-            Services - {services[itemIndex].title}
+            Services - {current.name}
           </p>
         </div>
       </div>
 
       <div className="md:flex w-full p-4 gap-3 md:p-8">
         <div className="flex overflow-x-auto gap-2 md:overflow-x-hidden md:flex-col shrink-0 whitespace-nowrap">
-          {services.map((element, index) => {
+          {data?.rows?.map((element: any, index: number) => {
             return (
               <button
-                key={element.title}
+                key={element.name}
                 type="button"
                 onClick={() => handleChangeService(index)}
                 className="flex text-left pr-3 pl-6 py-3 bg-[#F5F5F5] relative"
               >
                 <span
                   className={`${
-                    index === itemIndex
+                    element.id === current.id
                       ? 'bg-dark-green'
                       : 'bg-brand-yellow'
                   } w-2 left-0 top-0 absolute h-full`}
                 />
-                <span>{element.title}</span>
+                <span>{element.name}</span>
               </button>
             );
           })}
         </div>
         <div className="flex flex-col flex-grow">
           <div className="min-h-[400px] relative">
-            <Image
-              src={services[itemIndex].imageUrl}
+            <CustomImage
+              src={current.image}
               alt=""
               layout="fill"
               objectFit="cover"
@@ -77,10 +88,10 @@ const ServicesActivity = () => {
             />
           </div>
           <h1 className="mt-6 text-2xl md:text-3xl font-bold tracking-wide text-dark-green">
-            {services[itemIndex].title}
+            {current.name}
           </h1>
           <p className="mt-3 text-sm text-gray-600 text-justify">
-            {services[itemIndex].desc}
+            {current.desc}
           </p>
 
           <button

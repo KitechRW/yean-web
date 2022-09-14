@@ -4,7 +4,7 @@ import React from 'react';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
-import social_medias from './social_medias'
+import social_medias from './social_medias';
 import axios from 'axios';
 
 const schema = yup
@@ -19,6 +19,7 @@ const schema = yup
   .required();
 
 const ContactActivity = () => {
+  const [loading, setLoading] = React.useState(false);
   const [errorMessage, setErrorMessage] = React.useState(null);
   const [successMessage, setSuccessMessage] = React.useState(null);
 
@@ -31,19 +32,24 @@ const ContactActivity = () => {
     resolver: yupResolver(schema),
   });
 
-  const onSubmit = (data: any) => {
+  const onSubmit = async (data: any) => {
     setErrorMessage(null);
     setSuccessMessage(null);
-    axios
+    setLoading(true);
+    await axios
       .post('/api/contacts', data)
       .then(response => {
         console.log(response);
-        if(response.status === 201 || response.status === 200){
+        if (response.status === 201 || response.status === 200) {
           reset();
-          setSuccessMessage(response?.data?.message || "Thank you for contact us !");
-
-        }else {
-          setErrorMessage(response?.data?.message || "Something bad happed! try again later ");
+          setSuccessMessage(
+            response?.data?.message || 'Thank you for contact us !',
+          );
+        } else {
+          setErrorMessage(
+            response?.data?.message ||
+              'Something bad happed! try again later ',
+          );
         }
       })
       .catch(result => {
@@ -54,15 +60,22 @@ const ContactActivity = () => {
           error?.message || 'Something went wrong, try again',
         );
       });
+    setLoading(false);
+
+    setTimeout(() => {
+      setSuccessMessage(null);
+      setErrorMessage(null);
+    }, 5000);
   };
 
   return (
     <Scaffold>
-
-      <form onSubmit={event => {
-                handleSubmit(onSubmit)(event);
-              }}
-      className="items-center bg-gradient-to-r from-[#00F0FF]/20 to-white flex-grow h-full flex flex-col p-4 md:p-8">
+      <form
+        onSubmit={event => {
+          handleSubmit(onSubmit)(event);
+        }}
+        className="items-center bg-gradient-to-r from-[#00F0FF]/20 to-white flex-grow h-full flex flex-col p-4 md:p-8"
+      >
         {errorMessage ? (
           <div className="mt-3 flex flex-col items-center rounded-lg bg-red-500 px-4 py-3 ">
             <p className="text-white text-sm first-letter:uppercase">
@@ -86,42 +99,45 @@ const ContactActivity = () => {
 
         <div className="mt-6 flex gap-3 justify-between flex-wrap items-center max-w-4xl">
           <div className="w-full max-w-[340px]">
-          <input
-            type="text"
-            {...register('name')}
-            placeholder="Your Name"
-            className="rounded-full border border-dark-green py-3 px-4 w-full"
-          />
-          <p className="text-red-500 text-xs mt-1">
-                  {errors.name?.message}
-                </p>
+            <input
+              type="text"
+              {...register('name')}
+              placeholder="Your Name"
+              className="rounded-full border border-dark-green py-3 px-4 w-full"
+            />
+            <p className="text-red-500 text-xs mt-1">
+              {errors.name?.message}
+            </p>
           </div>
           <div className="w-full max-w-[340px]">
-          <input
-            type="email"
-            {...register('email')}
-            placeholder="Your Email Address"
-            className="flex-grow rounded-full border border-dark-green py-3 px-4 w-full"
-
-          />
-          <p className="text-red-500 text-xs mt-1">
-                  {errors.email?.message}
-                </p>
+            <input
+              type="email"
+              {...register('email')}
+              placeholder="Your Email Address"
+              className="flex-grow rounded-full border border-dark-green py-3 px-4 w-full"
+            />
+            <p className="text-red-500 text-xs mt-1">
+              {errors.email?.message}
+            </p>
           </div>
           <div className="w-full max-w-[763px]">
-          <textarea
-            {...register('message')}
-            id=""
-            rows={4}
-            placeholder="Your Messages..."
-            className="resize-none rounded-3xl border border-dark-green py-3 px-4 w-full"
-          />
-          <p className="text-red-500 text-xs mt-1">
-                  {errors.message?.message}
-                </p>
+            <textarea
+              {...register('message')}
+              id=""
+              rows={4}
+              placeholder="Your Messages..."
+              className="resize-none rounded-3xl border border-dark-green py-3 px-4 w-full"
+            />
+            <p className="text-red-500 text-xs mt-1">
+              {errors.message?.message}
+            </p>
           </div>
         </div>
-        <button className="text-base font-bold border-2 px-12 py-3 tracking-wide rounded-full mt-6 border-dark-green">
+        <button
+          type="submit"
+          disabled={loading}
+          className="disabled:cursor-not-allowed disabled:opacity-25 text-base font-bold border-2 px-12 py-3 tracking-wide rounded-full mt-6 border-dark-green"
+        >
           Submit
         </button>
 
@@ -149,16 +165,20 @@ const ContactActivity = () => {
 
         <div className="mt-12 place-content-between flex-wrap gap-3 pb-2 max-w-4xl w-full flex items-center">
           {social_medias.map((element, index) => (
-          <a key={element.name + index}
-            href={element.link || "https://www.goole.com"}
-            target="_blank"
-            rel="noopener noreferrer"
-            className={"hover:opacity-80 flex space-x-2 text-white items-center border rounded-lg px-3 py-2 font-bold " + element.bg_color}
-          >
-            <element.logo/>
-            <span>{element.name}</span>
-          </a>))}
-
+            <a
+              key={element.name + index}
+              href={element.link || 'https://www.goole.com'}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={
+                'hover:opacity-80 flex space-x-2 text-white items-center border rounded-lg px-3 py-2 font-bold ' +
+                element.bg_color
+              }
+            >
+              <element.logo />
+              <span>{element.name}</span>
+            </a>
+          ))}
         </div>
       </form>
     </Scaffold>

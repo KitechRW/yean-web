@@ -86,11 +86,11 @@ export const adminNavs = [
     label: 'Library',
     path: '/admin/libraries',
   },
-  // {
-  //   icon: Extension,
-  //   label: 'Extension Materials',
-  //   path: '/admin/extension-materials',
-  // },
+  {
+    icon: Extension,
+    label: 'Services',
+    path: '/admin/services',
+  },
   {
     icon: Handshake,
     label: 'Partners',
