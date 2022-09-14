@@ -39,8 +39,12 @@ app.prepare().then(async () => {
     server.put('*', (req, res) => {
         return handle(req, res);
     });
-    console.log(dev, 'devvvvvvvvvv');
-    await database_1.default.sequelize.sync({ force: false, alter: dev });
+    try {
+        await database_1.default.sequelize.sync({ force: false, alter: dev });
+    }
+    catch (error) {
+        console.log(error.message);
+    }
     server.listen(port, () => {
         // eslint-disable-next-line no-console
         console.log(`> Ready on http://localhost:${port}`);
