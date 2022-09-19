@@ -10,6 +10,11 @@ module.exports = {
     // !! WARN !!
     ignoreBuildErrors: true,
   },
+  eslint: {
+    // Warning: This allows production builds to successfully complete even if
+    // your project has ESLint errors.
+    ignoreDuringBuilds: true,
+  },
   env: {
     HOST: process.env.HOST,
     DEFAULT_API: process.env.DEFAULT_API,
