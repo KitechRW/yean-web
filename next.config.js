@@ -1,5 +1,7 @@
 /** @type {import('next').NextConfig} */
 module.exports = {
+  swcMinify: true,
+  staticPageGenerationTimeout: 1000,
   reactStrictMode: true,
   typescript: {
     // !! WARN !!
