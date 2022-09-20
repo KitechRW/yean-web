@@ -14,6 +14,7 @@ const handle = app.getRequestHandler();
 
 app.prepare().then(async () => {
   const server = express();
+  server.use(express.static('public'));
 
   server.use(routes);
 
@@ -21,14 +22,7 @@ app.prepare().then(async () => {
     const parsedUrl: UrlWithParsedQuery = parse(req.url, true);
 
     const { pathname } = parsedUrl;
-
-    if (
-      pathname?.startsWith('/uploads') ||
-      pathname?.startsWith('/games')
-    ) {
-      parsedUrl.pathname = `/api${pathname}`;
-      return handle(req, res, parsedUrl);
-    }
+    console.log(pathname);
     return handle(req, res);
   });
 

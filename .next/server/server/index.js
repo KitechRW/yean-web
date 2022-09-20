@@ -16,15 +16,12 @@ const app = (0, next_1.default)({ dev, port });
 const handle = app.getRequestHandler();
 app.prepare().then(async () => {
     const server = (0, express_1.default)();
+    server.use(express_1.default.static('public'));
     server.use(routes_1.default);
     server.get('*', (req, res) => {
         const parsedUrl = (0, url_1.parse)(req.url, true);
         const { pathname } = parsedUrl;
-        if ((pathname === null || pathname === void 0 ? void 0 : pathname.startsWith('/uploads')) ||
-            (pathname === null || pathname === void 0 ? void 0 : pathname.startsWith('/games'))) {
-            parsedUrl.pathname = `/api${pathname}`;
-            return handle(req, res, parsedUrl);
-        }
+        console.log(pathname);
         return handle(req, res);
     });
     server.post('*', (req, res) => {
