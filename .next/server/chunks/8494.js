@@ -10,7 +10,7 @@ exports.modules = {
 /* harmony export */   "Z": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 const Keys = {
-  DEFAULT_API: "http://localhost:3000",
+  DEFAULT_API: "https://witwad.com",
   DEFAULT_JWT_SECRET: process.env.DEFAULT_JWT_SECRET,
   REDIRECT_TO: process.env.REDIRECT_TO,
   USER_INFO: "1B28429678ED6E22",
@@ -18,7 +18,7 @@ const Keys = {
   REACT_APP_ACCESS_TOKEN: "F926F54FAF8B261DDEE44445EA85F",
   ISSERVER: true,
   SESSION_PASSWORD: "{!-@5MytKz!eb\"hdBX-DM+~>EBeSw9n]",
-  HOST: "http://localhost:3000"
+  HOST: "https://witwad.com"
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Keys);
 

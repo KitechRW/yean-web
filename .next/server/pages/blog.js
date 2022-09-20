@@ -38,7 +38,7 @@ async function getServerSideProps({
     pageNumber
   }
 }) {
-  return core_factory_fact_http__WEBPACK_IMPORTED_MODULE_3__/* ["default"].axios.get */ .Z.axios.get(`${"http://localhost:3000"}/api/articles?page=${pageNumber || 1}&limit=20`).then(resp => {
+  return core_factory_fact_http__WEBPACK_IMPORTED_MODULE_3__/* ["default"].axios.get */ .Z.axios.get(`${"https://witwad.com"}/api/articles?page=${pageNumber || 1}&limit=20`).then(resp => {
     return {
       props: {
         data: resp.data,

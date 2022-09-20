@@ -1,1 +1,1 @@
-{"pageProps":{"data":{},"status":404},"__N_SSG":true}
+{"pageProps":{"data":{"count":2,"rows":[{"id":2,"title":"jbo is available","category":"Job","keyword":"jjob","location":"kigali rwanda","description":"We are hiring"},{"id":3,"title":"Hello world","category":"Parttime","keyword":"KG","location":"Kigali","description":"We are available"}],"categories":["Job","Parttime"],"keywords":["jjob","KG"],"locations":["kigali rwanda","Kigali"]},"status":200},"__N_SSG":true}

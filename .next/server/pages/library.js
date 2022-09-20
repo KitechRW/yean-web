@@ -195,7 +195,7 @@ async function getServerSideProps({
     pageNumber
   }
 }) {
-  return external_axios_default().get(`${"http://localhost:3000"}/api/libraries?page=${pageNumber || 1}&limit=20`).then(resp => {
+  return external_axios_default().get(`${"https://witwad.com"}/api/libraries?page=${pageNumber || 1}&limit=20`).then(resp => {
     return {
       props: {
         data: resp.data
