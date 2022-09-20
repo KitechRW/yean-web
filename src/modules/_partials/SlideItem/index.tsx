@@ -1,8 +1,13 @@
 import { LocalLibrary } from '@mui/icons-material';
+import { useRouter } from 'next/router';
 import React from 'react';
 import CustomImage from '../CustomImage';
 
 const SlideItem = ({ data }: { data: any }) => {
+  const router = useRouter();
+  const handleClick = () => {
+    router.push(`/blog/${data?.id}`);
+  };
   let image: string = data?.image || '';
   image = image.startsWith('/uploads') ? image : `/uploads/${image}`;
   return (
@@ -16,6 +21,7 @@ const SlideItem = ({ data }: { data: any }) => {
         </p> */}
         <button
           type="button"
+          onClick={handleClick}
           className="uppercase rounded-sm mt-3 md:mt-6 px-4 py-2 bg-brand-yellow flex items-center space-x-2 text-white"
         >
           <LocalLibrary />

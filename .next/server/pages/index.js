@@ -19,6 +19,8 @@ var external_react_ = __webpack_require__(6689);
 // EXTERNAL MODULE: external "@mui/icons-material/LocalLibrary"
 var LocalLibrary_ = __webpack_require__(1419);
 var LocalLibrary_default = /*#__PURE__*/__webpack_require__.n(LocalLibrary_);
+// EXTERNAL MODULE: external "next/router"
+var router_ = __webpack_require__(1853);
 // EXTERNAL MODULE: ./src/modules/_partials/CustomImage/index.tsx
 var CustomImage = __webpack_require__(1663);
 // EXTERNAL MODULE: external "react/jsx-runtime"
@@ -30,9 +32,16 @@ var jsx_runtime_ = __webpack_require__(997);
 
 
 
+
 const SlideItem = ({
   data
 }) => {
+  const router = (0,router_.useRouter)();
+
+  const handleClick = () => {
+    router.push(`/blog/${data?.id}`);
+  };
+
   let image = data?.image || '';
   image = image.startsWith('/uploads') ? image : `/uploads/${image}`;
   return /*#__PURE__*/(0,jsx_runtime_.jsxs)("div", {
@@ -44,6 +53,7 @@ const SlideItem = ({
         children: data?.title
       }), /*#__PURE__*/(0,jsx_runtime_.jsxs)("button", {
         type: "button",
+        onClick: handleClick,
         className: "uppercase rounded-sm mt-3 md:mt-6 px-4 py-2 bg-brand-yellow flex items-center space-x-2 text-white",
         children: [/*#__PURE__*/jsx_runtime_.jsx((LocalLibrary_default()), {}), /*#__PURE__*/jsx_runtime_.jsx("span", {
           children: "Learn more"
