@@ -1,9 +1,9 @@
 {
   "private": true,
   "scripts": {
-    "dev": "nodemon",
-    "build": "next build && tsc --project tsconfig.server.json",
-    "start": "cross-env NODE_ENV=production node .next/server/server",
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start -p 3001",
     "db:migrate": "sequelize db:migrate --env database --migrations-path ./src/apis/database/migrations",
     "db:migrate:undo": "sequelize db:migrate:undo:all --env database --migrations-path ./src/apis/database/migrations",
     "db:seed": "sequelize db:seed:all --env database --seeders-path ./src/apis/database/seeders",
