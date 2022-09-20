@@ -1033,7 +1033,7 @@ async function getServerSideProps() {
   try {
     const {
       data: articles
-    } = await core_factory_fact_http__WEBPACK_IMPORTED_MODULE_3__/* ["default"].axios.get */ .Z.axios.get('/api/landing/1?attributes=id,title,author_id,comment,views,category');
+    } = await core_factory_fact_http__WEBPACK_IMPORTED_MODULE_3__/* ["default"].axios.get */ .Z.axios.get('/api/landing/1?attributes=id,title,author_id,comment,views,category,image');
     resultArticles = articles?.data;
   } catch (error) {
     console.log(error.message);

@@ -42,7 +42,7 @@ export async function getServerSideProps() {
 
   try {
     const { data: articles } = await Http.axios.get(
-      '/api/landing/1?attributes=id,title,author_id,comment,views,category',
+      '/api/landing/1?attributes=id,title,author_id,comment,views,category,image',
     );
     resultArticles = articles?.data;
   } catch (error: any) {

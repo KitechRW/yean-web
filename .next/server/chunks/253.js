@@ -167,7 +167,7 @@ const HeaderNavItems = ({
           icon: /*#__PURE__*/jsx_runtime_.jsx(element.icon, {}),
           active: pathname === element.path,
           label: element.label
-        });
+        }, element.label);
       }
 
       return /*#__PURE__*/jsx_runtime_.jsx((link_default()), {

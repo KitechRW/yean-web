@@ -13,6 +13,7 @@ const HeaderNavItems = ({ className = 'flex items-center' }) => {
         if (index === 1) {
           return (
             <WedoPopup
+              key={element.label}
               icon={<element.icon />}
               active={pathname === element.path}
               label={element.label}
