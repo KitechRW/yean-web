@@ -35,7 +35,7 @@ const LatestBlog = ({ data }: { data: any }) => {
           <Comment /> <span>{data?.comment}</span>
         </button>
       </div>
-      <p className="px-2 text-gray-600 line-clamp-2">{data?.title}</p>
+      <p className="px-2 text-gray-600 line-clamp-3">{data?.title}</p>
     </div>
   );
 };

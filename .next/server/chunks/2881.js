@@ -68,7 +68,7 @@ const ReadBooks = ({
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
         className: "flex flex-col",
         children: [/*#__PURE__*/react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx("h1", {
-          className: "uppercase font-semibold text-base line-clamp-2",
+          className: "first-letter:uppercase font-semibold text-base line-clamp-6",
           children: element?.name
         }), /*#__PURE__*/react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx("p", {
           className: "text-gray-600 mt-2",

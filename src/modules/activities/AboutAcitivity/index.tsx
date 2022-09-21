@@ -1,5 +1,7 @@
 import Scaffold from 'modules/layouts/Scaffold';
 import BioPopup from 'modules/_partials/BioPopup';
+import MissionFigure from 'modules/_partials/_drawable/missionFigure';
+import VisionFigure from 'modules/_partials/_drawable/visionFigure';
 import Image from 'next/image';
 import React from 'react';
 
@@ -20,8 +22,8 @@ const AboutActivity = () => {
           </h1>
         </div>
       </div>
-      <div className="py-12 px-4 md:px-8 text-justify">
-        <p className="text-sm text-gray-800">
+      <div className="py-12 px-4 md:px-8 text-justify flex flex-col items-center">
+        <p className="text-sm text-gray-800 max-w-4xl">
           YEAN works to maximize its impact by applying strategies
           that optimize improvements in financial, social and
           environmental well-being of beneficiaries. We provide our
@@ -32,57 +34,29 @@ const AboutActivity = () => {
         </p>
       </div>
 
-      <div className="px-4 md:px-8 py-12 flex flex-wrap md:flex-nowrap w-full gap-x-12 gap-y-5 bg-gradient-to-r from-cyan-01 to-cyan-02">
-        <div className="flex flex-col">
-          <Image
-            src="/assets/images/mission.png"
-            alt=""
-            width="150px"
-            height="282.42px"
-            loading="lazy"
-          />
+      <div className="px-4 md:px-8 py-12 flex flex-wrap justify-center md:flex-nowrap w-full gap-x-20 gap-y-5 bg-gradient-to-r from-cyan-01 to-cyan-02">
+        <div className="flex flex-col max-w-sm">
+          <MissionFigure className="w-full object-contain" />
           <h2 className="text-xl md:text-2xl font-bold py-3">
             Our Mission
           </h2>
           <p className="text-sm text-gray-600">
             Spread agriculture information and facts to the community
             to inspire change for the pursuit of beauty and excellence
-            in young agri-preneurs and the farmers’ community
+            in young agripreneurs and the community.
           </p>
         </div>
 
-        <div className="flex flex-col">
-          <Image
-            src="/assets/images/vision.png"
-            alt=""
-            width="150px"
-            height="282.42px"
-            loading="lazy"
-          />
+        <div className="flex flex-col max-w-sm">
+          <VisionFigure className="w-full object-contain" />
           <h2 className="text-xl md:text-2xl font-bold py-3">
-            Our Mission
+            Our Vision
           </h2>
           <p className="text-sm text-gray-600">
-            Spread agriculture information and facts to the community
-            to inspire change for the pursuit of beauty and excellence
-            in young agri-preneurs and the farmers’ community
-          </p>
-        </div>
-
-        <div className="flex flex-col">
-          <Image
-            src="/assets/images/values.png"
-            alt=""
-            width="150px"
-            height="282.42px"
-          />
-          <h2 className="text-xl md:text-2xl font-bold py-3">
-            Our Mission
-          </h2>
-          <p className="text-sm text-gray-600">
-            Spread agriculture information and facts to the community
-            to inspire change for the pursuit of beauty and excellence
-            in young agri-preneurs and the farmers’ community
+            Transforming traditional subsistence agriculture into
+            agribusiness through youth innovations as skilled and
+            powerful weapon for leading the change toward sustainable
+            livelihood.
           </p>
         </div>
       </div>
@@ -103,21 +77,23 @@ const AboutActivity = () => {
           that the transfer of technology and skills from content
           owners and researchers to farmers is a key solution to the
           skills gaps we have in accessing what’s needed to be a
-          professional farmer. Since its creation, YEAN have inspired
-          hundreds of youth to start professional farming activities
-          and have significantly contributed to farming technology
-          upgrade among farmers. YEAN have been creating contents for
-          its agriculture extension services and has acquired
-          extensive experience in what information needed, where it is
-          needed and how to transfer it to be adopted by farmers. YEAN
-          have implemented a number of research and extension projects
-          in collaboration with individual farmers, farmers’
-          organizations and development organizations in both animal
-          and crop production. This journey has shaped our
-          understanding of extension and advisory sector and have
-          contributed to our goal of creating jobs to young
-          professionals in agriculture to contribute to agriculture
-          transformation
+          professional farmer.
+        </p>
+        <p className="text-sm text-gray-800 mt-2 w-full text-justify md:max-w-4xl">
+          Since its creation, YEAN have inspired hundreds of youth to
+          start professional farming activities and have significantly
+          contributed to farming technology upgrade among farmers.
+          YEAN have been creating contents for its agriculture
+          extension services and has acquired extensive experience in
+          what information needed, where it is needed and how to
+          transfer it to be adopted by farmers. YEAN have implemented
+          a number of research and extension projects in collaboration
+          with individual farmers, farmers’ organizations and
+          development organizations in both animal and crop
+          production. This journey has shaped our understanding of
+          extension and advisory sector and have contributed to our
+          goal of creating jobs to young professionals in agriculture
+          to contribute to agriculture transformation
         </p>
       </div>
 

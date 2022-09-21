@@ -2,6 +2,7 @@ import {
   ChevronRight,
 } from '@mui/icons-material';
 import Scaffold from 'modules/layouts/Scaffold';
+import ImpactFigure from 'modules/_partials/_drawable/impactFigure';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -33,14 +34,7 @@ const ModelsActivity = () => {
       </div>
 
       <div className="flex flex-col items-center w-full p-4 md:p-8 max-w-4xl mx-auto">
-        <Image
-          src="/assets/images/model.png"
-          width="656"
-          height="332"
-          alt=""
-          loading="lazy"
-        />
-
+        <ImpactFigure />
         <div
           className={`flex ${
             q === 'impact' ? 'flex-col-reverse' : 'flex-col'

@@ -12,7 +12,7 @@ const Scaffold = ({
 }) => {
   return (
     <div
-      className={`relative min-h-screen flex flex-col w-full overflow-y-auto overflow-x-hidden ${className}`}
+      className={`relative h-screen flex flex-col w-full overflow-y-auto overflow-x-hidden ${className}`}
     >
       <Header />
       <Wrapper className="flex-grow">{children}</Wrapper>

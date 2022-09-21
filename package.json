@@ -61,6 +61,7 @@
     "react-redux": "^8.0.2",
     "react-redux-loading-bar": "^5.0.4",
     "react-select": "^5.4.0",
+    "react-share": "^4.4.0",
     "redux": "^4.2.0",
     "secure-ls": "^1.2.6",
     "sequelize": "^6.21.3",

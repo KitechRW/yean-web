@@ -14,7 +14,7 @@ const Header = () => {
     setSearchModalOpen(true);
   };
   return (
-    <>
+    <div className="sticky top-0 z-50 flex flex-col">
       <Wrapper className="bg-white px-4 md:px-8">
         <nav className="w-full flex items-center justify-between space-x-12">
           <Logo />
@@ -48,7 +48,7 @@ const Header = () => {
           setModalOpen={setSearchModalOpen}
         />
       </Wrapper>
-    </>
+    </div>
   );
 };
 

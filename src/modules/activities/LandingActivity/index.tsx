@@ -6,6 +6,9 @@ import {
   ChevronLeft,
   ChevronRight,
   LocalLibrary,
+  LocationCity,
+  Shop,
+  SupervisedUserCircle,
 } from '@mui/icons-material';
 import Link from 'next/link';
 import MinPost from '../_Partials/MinPost';
@@ -23,6 +26,8 @@ import {
   useProtectedFetcher,
 } from 'apis/utils/fetcher';
 import { useRouter } from 'next/router';
+import { slideUpItems } from './data';
+import SlideUpItem from './SlideUpItem';
 
 const LandingAcitivity = ({
   data,
@@ -57,97 +62,62 @@ const LandingAcitivity = ({
   return (
     <Scaffold>
       <Slides data={slides} />
-      <div className="px-4 md:px-8 py-2 bg-white inline-grid md:grid-cols-3 gap-x-10 gap-y-3">
-        <div
-          role="button"
-          onClick={() => {
-            push('/services');
-          }}
-          className="flex space-y-6 justify-between flex-col items-center py-4 px-6 rounded-[15px] drop-shadow border border-gray-400"
-        >
+      <div className="px-4 md:px-8 py-2 bg-white">
+        <div className="flex flex-col items-center justify-center relative min-h-[200px]">
           <Image
-            src="/assets/images/Business Network.png"
-            alt=""
-            loading="lazy"
-            width="138px"
-            height="131px"
-            objectFit="cover"
-          />
-          <p className="text-brand-green font-bold text-base">
-            Services
-          </p>
-          <button
-            type="button"
-            className="text-xl font-bold w-8 h-8 rounded-full bg-brand-green text-white"
-          >
-            +
-          </button>
-        </div>
-        <div
-          role="button"
-          onClick={() => {
-            push('/extension-material');
-          }}
-          className="flex flex-col relative rounded-[15px]"
-        >
-          <div className="z-10 flex-grow flex bg-[#660A0A] bg-opacity-80 space-y-6 justify-between flex-col items-center py-4 px-6 rounded-[15px] drop-shadow border border-gray-400">
-            <Image
-              src="/assets/images/extension 1.png"
-              alt=""
-              loading="lazy"
-              width="149.27px"
-              height="101.75px"
-            />
-            <p className="text-brand-green font-bold text-base text-center">
-              Extension material
-            </p>
-            <p className="text-brand-green font-bold text-base text-center">
-              Imfashanyigisho
-            </p>
-            <p className="text-sm text-white text-center">
-              Extension materials for Crop and Livestock Commodities
-              for extension agents and farmers
-            </p>
-          </div>
-          <Image
-            src="/assets/images/blog post 1.png"
+            src="/assets/images/bg-stat.png"
             alt=""
             layout="fill"
-            className="rounded-[15px]"
-          />
-        </div>
-        <div
-          role="button"
-          onClick={() => {
-            push('/farmer-platform');
-          }}
-          className="flex space-y-6 justify-between flex-col items-center py-4 px-6 rounded-[15px] drop-shadow border border-gray-400"
-        >
-          <Image
-            src="/assets/images/farmer 1.png"
-            alt=""
             loading="lazy"
-            width="118px"
-            height="131px"
+            objectPosition="center"
             objectFit="cover"
+            className="z-0"
           />
-          <p className="text-brand-green text-center font-bold text-base">
-            Urubuga rw&apos;Abahinzi-Borozi
-          </p>
-          <p className="text-brand-green text-center font-bold text-base">
-            Farmer Platform
-          </p>
-          <p className="text-sm text-center">
-            A virtual community of farmers and agriprenuers. Exchange
-            with them on our Farmer Platform
-          </p>
-          <button
-            type="button"
-            className="text-xl font-bold w-8 h-8 rounded-full bg-brand-green text-white"
-          >
-            +
-          </button>
+          <div className="top-0 absolute flex-grow h-full flex flex-col items-center justify-center">
+            <div className="px-2 inline-grid grid-cols-2 md:grid-cols-4 justify-center gap-x-10 gap-y-3">
+              <div className="flex items-center space-x-2 bg-brand-yellow text-white px-8 py-4 rounded-sm">
+                <SupervisedUserCircle style={{ fontSize: 60 }} />
+                <div className="flex flex-col">
+                  <p className="font-bold text-xl">40,000+</p>
+                  <p className="mt-1">Farmer served</p>
+                </div>
+              </div>
+              <div className="flex items-center space-x-2 bg-brand-yellow text-white px-8 py-4 rounded-sm">
+                <SupervisedUserCircle style={{ fontSize: 60 }} />
+                <div className="flex flex-col">
+                  <p className="font-bold text-xl">150,000</p>
+                  <p className="mt-1">Target farmers by 2025</p>
+                </div>
+              </div>
+              <div className="flex items-center space-x-2 bg-brand-yellow text-white px-8 py-4 rounded-sm">
+                <LocationCity style={{ fontSize: 60 }} />
+                <div className="flex flex-col">
+                  <p className="font-bold text-xl">30</p>
+                  <p className="mt-1">Districts</p>
+                </div>
+              </div>
+              <div className="flex items-center space-x-2 bg-brand-yellow text-white px-8 py-4 rounded-sm">
+                <Shop style={{ fontSize: 60 }} />
+                <div className="flex flex-col">
+                  <p className="font-bold text-xl">27</p>
+                  <p className="mt-1">Commodity specific platforms</p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
+      </div>
+      <div className="px-4 md:px-8 py-2 bg-white inline-grid md:grid-cols-3 gap-x-10 gap-y-3">
+        {slideUpItems.map(item => (
+          <SlideUpItem
+            key={item.path}
+            title={item.title}
+            desc={item.desc}
+            path={item.path}
+            image={item.image}
+            subTitle={item.subTitle}
+          />
+        ))}
       </div>
       <div className="px-4 md:px-8 py-2 bg-white">
         <div className="flex flex-col relative min-h-[64px] md:min-h-[195px]">
@@ -173,11 +143,23 @@ const LandingAcitivity = ({
             <MinPost key={element.id} data={element} />
           ))}
         </div>
+        <button
+          type="button"
+          onClick={() => {
+            push('/extension-material');
+          }}
+          className="mt-4 flex items-center space-x-2 mx-auto px-12 py-2 text-white bg-brand-green rounded-sm"
+        >
+          <span className="p-1 rounded-full bg-white text-brand-green">
+            <Add />
+          </span>
+          <span>View More</span>
+        </button>
       </div>
 
       <div className="px-4 md:px-8 py-2 bg-white">
         <div className="flex flex-col relative min-h-[64px] md:min-h-[195px]">
-          <Link href="/farmer-platform">
+          <Link href="/services">
             <Image
               src="/assets/images/greenhouse.png"
               alt=""
@@ -215,7 +197,7 @@ const LandingAcitivity = ({
 
       <div className="px-4 md:px-8 py-2 bg-white">
         <div className="flex flex-col relative min-h-[64px] md:min-h-[195px]">
-          <Link href="/farmer-platform">
+          <Link href="/services">
             <Image
               src="/assets/images/Inputs.png"
               alt=""
@@ -225,56 +207,6 @@ const LandingAcitivity = ({
               className="cursor-pointer"
             />
           </Link>
-        </div>
-      </div>
-
-      <div className="px-4  md:px-8 py-2 bg-white">
-        <div className="flex flex-col items-center justify-center relative min-h-[200px] md:min-h-[461px]">
-          <Image
-            src="/assets/images/bg-stat.png"
-            alt=""
-            layout="fill"
-            loading="lazy"
-            objectPosition="center"
-            objectFit="cover"
-            className="z-0"
-          />
-          <div className="top-0 absolute flex-grow h-full flex flex-col items-center justify-center">
-            <div className="px-2 inline-grid grid-cols-2 md:grid-cols-4 justify-center gap-x-10 gap-y-3">
-              <div className="flex items-center space-x-2 bg-brand-yellow text-white px-8 py-4 rounded-sm">
-                <CowIcon />
-                <div className="flex flex-col">
-                  <p className="font-bold text-base">240,000+</p>
-                  <p className="text-xs mt-1">Farmer served</p>
-                </div>
-              </div>
-              <div className="flex items-center space-x-2 bg-brand-yellow text-white px-8 py-4 rounded-sm">
-                <SorgohIcon />
-                <div className="flex flex-col">
-                  <p className="font-bold text-base">150,000</p>
-                  <p className="text-xs mt-1">
-                    Target farmers by 2025
-                  </p>
-                </div>
-              </div>
-              <div className="flex items-center space-x-2 bg-brand-yellow text-white px-8 py-4 rounded-sm">
-                <HandIcon />
-                <div className="flex flex-col">
-                  <p className="font-bold text-base">30</p>
-                  <p className="text-xs mt-1">Districts</p>
-                </div>
-              </div>
-              <div className="flex items-center space-x-2 bg-brand-yellow text-white px-8 py-4 rounded-sm">
-                <TruckIcon />
-                <div className="flex flex-col">
-                  <p className="font-bold text-base">27</p>
-                  <p className="text-xs mt-1">
-                    Commodity specific platforms
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
 

@@ -50,7 +50,7 @@ const ReadBooks = ({ books }: any) => {
             />
           </div>
           <div className="flex flex-col">
-            <h1 className="uppercase font-semibold text-base line-clamp-2">
+            <h1 className="first-letter:uppercase font-semibold text-base line-clamp-6">
               {element?.name}
             </h1>
             <p className="text-gray-600 mt-2">{element.desc}</p>

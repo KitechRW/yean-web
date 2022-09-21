@@ -1,3 +1,4 @@
+import { ArrowRightAlt } from '@mui/icons-material';
 import CustomImage from 'modules/_partials/CustomImage';
 import { useRouter } from 'next/router';
 import React from 'react';
@@ -10,7 +11,7 @@ const MinPost = ({ data }: { data: any }) => {
         `/extension-material/${data?.category?.id}?sub=${data?.category?.name}`,
       );
     } else {
-      push(`/extension-material`);
+      push(`/blog/${data?.id}`);
     }
   };
   return (
@@ -35,12 +36,12 @@ const MinPost = ({ data }: { data: any }) => {
           {data.category.name}
         </button>
       )}
-      <p className="px-2 text-dark-green line-clamp-2">
+      <p className="px-2 text-dark-green line-clamp-3">
         {data?.title}
       </p>
       <div className="pt-2 p-2 mt-auto">
-        <button className="font-semibold px-4 py-2 mr-auto text-white rounded-lg bg-dark-green">
-          Learn More
+        <button className={'font-bold self-start'}>
+          Learn More <ArrowRightAlt />
         </button>
       </div>
     </div>

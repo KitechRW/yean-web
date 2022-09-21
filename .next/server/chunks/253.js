@@ -443,7 +443,6 @@ function SearchModal({
 
 
 
-
 const Header = () => {
   const [searchModalOpen, setSearchModalOpen] = external_react_default().useState(false);
 
@@ -452,7 +451,8 @@ const Header = () => {
     setSearchModalOpen(true);
   };
 
-  return /*#__PURE__*/(0,jsx_runtime_.jsxs)(jsx_runtime_.Fragment, {
+  return /*#__PURE__*/(0,jsx_runtime_.jsxs)("div", {
+    className: "sticky top-0 z-50 flex flex-col",
     children: [/*#__PURE__*/jsx_runtime_.jsx(layouts_Wrapper, {
       className: "bg-white px-4 md:px-8",
       children: /*#__PURE__*/(0,jsx_runtime_.jsxs)("nav", {
@@ -904,7 +904,7 @@ const Scaffold = ({
   children = /*#__PURE__*/jsx_runtime_.jsx("div", {})
 }) => {
   return /*#__PURE__*/(0,jsx_runtime_.jsxs)("div", {
-    className: `relative min-h-screen flex flex-col w-full overflow-y-auto overflow-x-hidden ${className}`,
+    className: `relative h-screen flex flex-col w-full overflow-y-auto overflow-x-hidden ${className}`,
     children: [/*#__PURE__*/jsx_runtime_.jsx(_partials_Header, {}), /*#__PURE__*/jsx_runtime_.jsx(layouts_Wrapper, {
       className: "flex-grow",
       children: children

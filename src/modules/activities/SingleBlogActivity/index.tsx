@@ -1,4 +1,5 @@
 import { Avatar } from '@mui/material';
+import Keys from 'apis/utils/constants/keys';
 import { useOpenFetcher } from 'apis/utils/fetcher';
 import { format } from 'date-fns';
 import Scaffold from 'modules/layouts/Scaffold';
@@ -6,11 +7,25 @@ import CustomImage from 'modules/_partials/CustomImage';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
+import {
+  EmailIcon,
+  EmailShareButton,
+  FacebookIcon,
+  FacebookShareButton,
+  InstapaperIcon,
+  InstapaperShareButton,
+  LinkedinIcon,
+  LinkedinShareButton,
+  TwitterIcon,
+  TwitterShareButton,
+  WhatsappIcon,
+  WhatsappShareButton,
+} from 'react-share';
 import Blogs from '../_Partials/Blogs';
 
 const SingleBlogActivity = ({ data }: any) => {
   const contentRef = React.useRef(null);
-  const { push } = useRouter();
+  const { push, asPath } = useRouter();
   const {
     data: { data: relatedArticles },
   } = useOpenFetcher(`/api/articles?cat=${data?.article?.category}`);
@@ -25,6 +40,8 @@ const SingleBlogActivity = ({ data }: any) => {
       contentRef.current.innerHTML = data.article.text;
     }
   }, [data]);
+
+  const url = `${Keys.HOST}${asPath}`;
   return (
     <Scaffold>
       <div className="w-full px-4 bg-white md:px-8 pt-12 border-b border-[#E6E6E6]">
@@ -55,23 +72,45 @@ const SingleBlogActivity = ({ data }: any) => {
             <p className="w-full bg-[#FCB316] h-1" />
           </div>
         </div>
-        <div className="px-3 py-3 space-x-3 flex items-center">
-          <Avatar
-            src="/assets/images/avatar.png"
-            alt={data?.article?.author?.firstname || ''}
-          />
-          <div className="flex flex-col text-[#767676]">
-            <h1 className="text-sm font-bold">
-              {data?.author?.firstname} {data?.author?.lastname}
-            </h1>
-            {data?.article?.createdAt && (
-              <p className="text-xs">
-                {format(
-                  new Date(data?.article?.createdAt),
-                  'dd MMMM yyyy',
-                )}
-              </p>
-            )}
+        <div className="flex flex-col-reverse md:flex-row gap-3 md:items-center">
+          <div className="px-3 py-3 space-x-3 flex items-center">
+            <Avatar
+              src="/assets/images/avatar.png"
+              alt={data?.article?.author?.firstname || ''}
+            />
+            <div className="flex flex-col text-[#767676]">
+              <h1 className="text-sm font-bold">
+                {data?.author?.firstname} {data?.author?.lastname}
+              </h1>
+              {data?.article?.createdAt && (
+                <p className="text-xs">
+                  {format(
+                    new Date(data?.article?.createdAt),
+                    'dd MMMM yyyy',
+                  )}
+                </p>
+              )}
+            </div>
+          </div>
+          <div className="ml-auto flex items-center gap-2 py-2">
+            <TwitterShareButton url={url}>
+              <TwitterIcon size={32} round={true} />
+            </TwitterShareButton>
+            <FacebookShareButton url={url}>
+              <FacebookIcon size={32} round={true} />
+            </FacebookShareButton>
+            <WhatsappShareButton url={url}>
+              <WhatsappIcon size={32} round={true} />
+            </WhatsappShareButton>
+            <LinkedinShareButton url={url}>
+              <LinkedinIcon size={32} round={true} />
+            </LinkedinShareButton>
+            <EmailShareButton url={url}>
+              <EmailIcon size={32} round={true} />
+            </EmailShareButton>
+            <InstapaperShareButton url={url}>
+              <InstapaperIcon size={32} round={true} />
+            </InstapaperShareButton>
           </div>
         </div>
 

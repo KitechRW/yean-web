@@ -5,7 +5,7 @@ import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
-import CarouselPartners from 'modules/_partials/CarouselPartners';
+import PartnersList from 'modules/_partials/PartnersList';
 import { useOpenFetcher } from 'apis/utils/fetcher';
 import { useRouter } from 'next/router';
 
@@ -104,7 +104,7 @@ const PartnerActivity = () => {
         <h1 className="text-3xl font-black text-dark-green tracking-wide w-full text-center">
           Our Partnets
         </h1>
-        <CarouselPartners data={confirmedPartners} />
+        <PartnersList data={confirmedPartners} />
         <div className="flex flex-col items-center mt-3">
           <p className="">
             We would love to partner with you if you find our work

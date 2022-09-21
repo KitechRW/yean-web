@@ -5,7 +5,7 @@ exports.id = 3327;
 exports.ids = [3327];
 exports.modules = {
 
-/***/ 1252:
+/***/ 7812:
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 // ESM COMPAT FLAG
@@ -33,9 +33,9 @@ var image_default = /*#__PURE__*/__webpack_require__.n(next_image);
 // EXTERNAL MODULE: ./node_modules/next/link.js
 var next_link = __webpack_require__(1664);
 var link_default = /*#__PURE__*/__webpack_require__.n(next_link);
-;// CONCATENATED MODULE: external "@mui/icons-material/ArrowRightAlt"
-const ArrowRightAlt_namespaceObject = require("@mui/icons-material/ArrowRightAlt");
-var ArrowRightAlt_default = /*#__PURE__*/__webpack_require__.n(ArrowRightAlt_namespaceObject);
+// EXTERNAL MODULE: external "@mui/icons-material/ArrowRightAlt"
+var ArrowRightAlt_ = __webpack_require__(3060);
+var ArrowRightAlt_default = /*#__PURE__*/__webpack_require__.n(ArrowRightAlt_);
 // EXTERNAL MODULE: external "react/jsx-runtime"
 var jsx_runtime_ = __webpack_require__(997);
 ;// CONCATENATED MODULE: ./src/modules/activities/ProjectsActivity/index.tsx
@@ -166,6 +166,13 @@ module.exports = require("@mui/icons-material/AccountBox");
 /***/ ((module) => {
 
 module.exports = require("@mui/icons-material/ArrowDropDown");
+
+/***/ }),
+
+/***/ 3060:
+/***/ ((module) => {
+
+module.exports = require("@mui/icons-material/ArrowRightAlt");
 
 /***/ }),
 
@@ -568,7 +575,7 @@ module.exports = require("secure-ls");
 var __webpack_require__ = require("../webpack-runtime.js");
 __webpack_require__.C(exports);
 var __webpack_exec__ = (moduleId) => (__webpack_require__(__webpack_require__.s = moduleId))
-var __webpack_exports__ = __webpack_require__.X(0, [676,3061,6945,4653,8844,9391,637,3113,8805,253], () => (__webpack_exec__(1252)));
+var __webpack_exports__ = __webpack_require__.X(0, [676,3061,6945,4653,8844,9391,637,3113,8805,253], () => (__webpack_exec__(7812)));
 module.exports = __webpack_exports__;
 
 })();

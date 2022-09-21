@@ -78,7 +78,10 @@ const ServicesActivity = () => {
           })}
         </div>
         <div className="flex flex-col flex-grow">
-          <div className="min-h-[400px] relative">
+          <h1 className="text-2xl md:text-3xl font-bold tracking-wide text-dark-green">
+            {current.name}
+          </h1>
+          <div className="min-h-[400px] relative mt-3">
             <CustomImage
               src={current.image}
               alt=""
@@ -87,11 +90,8 @@ const ServicesActivity = () => {
               loading="lazy"
             />
           </div>
-          <h1 className="mt-6 text-2xl md:text-3xl font-bold tracking-wide text-dark-green">
-            {current.name}
-          </h1>
           <p className="mt-3 text-sm text-gray-600 text-justify">
-            {current.desc}
+            {current.content}
           </p>
 
           <button

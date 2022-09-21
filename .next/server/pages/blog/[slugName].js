@@ -69,22 +69,27 @@ __webpack_require__.a(module, async (__webpack_handle_async_dependencies__, __we
 /* harmony export */ });
 /* harmony import */ var _mui_material_Avatar__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2120);
 /* harmony import */ var _mui_material_Avatar__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_mui_material_Avatar__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var apis_utils_fetcher__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5377);
-/* harmony import */ var date_fns__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(4146);
-/* harmony import */ var date_fns__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(date_fns__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var modules_layouts_Scaffold__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(253);
-/* harmony import */ var modules_partials_CustomImage__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(1663);
-/* harmony import */ var next_link__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(1664);
-/* harmony import */ var next_link__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(next_link__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var next_router__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(1853);
-/* harmony import */ var next_router__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(next_router__WEBPACK_IMPORTED_MODULE_6__);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(6689);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_7__);
-/* harmony import */ var _Partials_Blogs__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(5475);
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(997);
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__);
-var __webpack_async_dependencies__ = __webpack_handle_async_dependencies__([apis_utils_fetcher__WEBPACK_IMPORTED_MODULE_1__]);
-apis_utils_fetcher__WEBPACK_IMPORTED_MODULE_1__ = (__webpack_async_dependencies__.then ? (await __webpack_async_dependencies__)() : __webpack_async_dependencies__)[0];
+/* harmony import */ var apis_utils_constants_keys__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(122);
+/* harmony import */ var apis_utils_fetcher__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5377);
+/* harmony import */ var date_fns__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(4146);
+/* harmony import */ var date_fns__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(date_fns__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var modules_layouts_Scaffold__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(253);
+/* harmony import */ var modules_partials_CustomImage__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(1663);
+/* harmony import */ var next_link__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(1664);
+/* harmony import */ var next_link__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(next_link__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var next_router__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(1853);
+/* harmony import */ var next_router__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(next_router__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(6689);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_8__);
+/* harmony import */ var react_share__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(6158);
+/* harmony import */ var react_share__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(react_share__WEBPACK_IMPORTED_MODULE_9__);
+/* harmony import */ var _Partials_Blogs__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(5475);
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(997);
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__);
+var __webpack_async_dependencies__ = __webpack_handle_async_dependencies__([apis_utils_fetcher__WEBPACK_IMPORTED_MODULE_2__]);
+apis_utils_fetcher__WEBPACK_IMPORTED_MODULE_2__ = (__webpack_async_dependencies__.then ? (await __webpack_async_dependencies__)() : __webpack_async_dependencies__)[0];
+
+
 
 
 
@@ -100,85 +105,129 @@ apis_utils_fetcher__WEBPACK_IMPORTED_MODULE_1__ = (__webpack_async_dependencies_
 const SingleBlogActivity = ({
   data
 }) => {
-  const contentRef = react__WEBPACK_IMPORTED_MODULE_7___default().useRef(null);
+  const contentRef = react__WEBPACK_IMPORTED_MODULE_8___default().useRef(null);
   const {
-    push
-  } = (0,next_router__WEBPACK_IMPORTED_MODULE_6__.useRouter)();
+    push,
+    asPath
+  } = (0,next_router__WEBPACK_IMPORTED_MODULE_7__.useRouter)();
   const {
     data: {
       data: relatedArticles
     }
-  } = (0,apis_utils_fetcher__WEBPACK_IMPORTED_MODULE_1__/* .useOpenFetcher */ .TB)(`/api/articles?cat=${data?.article?.category}`);
+  } = (0,apis_utils_fetcher__WEBPACK_IMPORTED_MODULE_2__/* .useOpenFetcher */ .TB)(`/api/articles?cat=${data?.article?.category}`);
 
   const handleClick = id => {
     push('/blog/' + id);
   };
 
-  react__WEBPACK_IMPORTED_MODULE_7___default().useEffect(() => {
+  react__WEBPACK_IMPORTED_MODULE_8___default().useEffect(() => {
     if (data?.article?.text && contentRef.current) {
       // @ts-ignore
       contentRef.current.innerHTML = data.article.text;
     }
   }, [data]);
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)(modules_layouts_Scaffold__WEBPACK_IMPORTED_MODULE_3__/* ["default"] */ .Z, {
-    children: [/*#__PURE__*/react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx("div", {
+  const url = `${apis_utils_constants_keys__WEBPACK_IMPORTED_MODULE_1__/* ["default"].HOST */ .Z.HOST}${asPath}`;
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)(modules_layouts_Scaffold__WEBPACK_IMPORTED_MODULE_4__/* ["default"] */ .Z, {
+    children: [/*#__PURE__*/react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx("div", {
       className: "w-full px-4 bg-white md:px-8 pt-12 border-b border-[#E6E6E6]",
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("div", {
         className: "px-4 md:px-8 w-full max-w-6xl mx-auto flex items-center space-x-4",
-        children: [/*#__PURE__*/react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx((next_link__WEBPACK_IMPORTED_MODULE_5___default()), {
+        children: [/*#__PURE__*/react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx((next_link__WEBPACK_IMPORTED_MODULE_6___default()), {
           href: "/blog",
-          children: /*#__PURE__*/react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx("span", {
+          children: /*#__PURE__*/react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx("span", {
             className: "cursor-pointer text-sm font-medium pb-3",
             children: "All"
           })
-        }), /*#__PURE__*/react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx("span", {
+        }), /*#__PURE__*/react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx("span", {
           className: "cursor-pointer text-sm font-medium pb-3 border-b-2 border-b-[#FCB316]",
           children: "Blogs"
         })]
       })
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("div", {
       className: "w-full px-4 bg-white md:px-8 py-6 max-w-6xl mx-auto flex flex-col",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("div", {
         className: "group-hover:opacity-80 flex flex-col relative w-full max-w-[912px] min-h-[490px]",
-        children: [/*#__PURE__*/react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx(modules_partials_CustomImage__WEBPACK_IMPORTED_MODULE_4__/* ["default"] */ .Z, {
+        children: [/*#__PURE__*/react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx(modules_partials_CustomImage__WEBPACK_IMPORTED_MODULE_5__/* ["default"] */ .Z, {
           src: data?.article?.image,
           alt: "",
           layout: "fill",
           loading: "lazy"
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("div", {
           className: "bottom-0 left-0 right-0 absolute flex flex-col items-start w-ful",
-          children: [/*#__PURE__*/react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx("p", {
+          children: [/*#__PURE__*/react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx("p", {
             className: "text-dark-green bg-[#FCB316] px-4 py-3",
             children: "Blog"
-          }), /*#__PURE__*/react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx("p", {
+          }), /*#__PURE__*/react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx("p", {
             className: "w-full bg-[#FCB316] h-1"
           })]
         })]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
-        className: "px-3 py-3 space-x-3 flex items-center",
-        children: [/*#__PURE__*/react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx((_mui_material_Avatar__WEBPACK_IMPORTED_MODULE_0___default()), {
-          src: "/assets/images/avatar.png",
-          alt: data?.article?.author?.firstname || ''
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
-          className: "flex flex-col text-[#767676]",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("h1", {
-            className: "text-sm font-bold",
-            children: [data?.author?.firstname, " ", data?.author?.lastname]
-          }), data?.article?.createdAt && /*#__PURE__*/react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx("p", {
-            className: "text-xs",
-            children: (0,date_fns__WEBPACK_IMPORTED_MODULE_2__.format)(new Date(data?.article?.createdAt), 'dd MMMM yyyy')
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("div", {
+        className: "flex flex-col-reverse md:flex-row gap-3 md:items-center",
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("div", {
+          className: "px-3 py-3 space-x-3 flex items-center",
+          children: [/*#__PURE__*/react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx((_mui_material_Avatar__WEBPACK_IMPORTED_MODULE_0___default()), {
+            src: "/assets/images/avatar.png",
+            alt: data?.article?.author?.firstname || ''
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("div", {
+            className: "flex flex-col text-[#767676]",
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("h1", {
+              className: "text-sm font-bold",
+              children: [data?.author?.firstname, " ", data?.author?.lastname]
+            }), data?.article?.createdAt && /*#__PURE__*/react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx("p", {
+              className: "text-xs",
+              children: (0,date_fns__WEBPACK_IMPORTED_MODULE_3__.format)(new Date(data?.article?.createdAt), 'dd MMMM yyyy')
+            })]
+          })]
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("div", {
+          className: "ml-auto flex items-center gap-2 py-2",
+          children: [/*#__PURE__*/react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx(react_share__WEBPACK_IMPORTED_MODULE_9__.TwitterShareButton, {
+            url: url,
+            children: /*#__PURE__*/react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx(react_share__WEBPACK_IMPORTED_MODULE_9__.TwitterIcon, {
+              size: 32,
+              round: true
+            })
+          }), /*#__PURE__*/react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx(react_share__WEBPACK_IMPORTED_MODULE_9__.FacebookShareButton, {
+            url: url,
+            children: /*#__PURE__*/react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx(react_share__WEBPACK_IMPORTED_MODULE_9__.FacebookIcon, {
+              size: 32,
+              round: true
+            })
+          }), /*#__PURE__*/react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx(react_share__WEBPACK_IMPORTED_MODULE_9__.WhatsappShareButton, {
+            url: url,
+            children: /*#__PURE__*/react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx(react_share__WEBPACK_IMPORTED_MODULE_9__.WhatsappIcon, {
+              size: 32,
+              round: true
+            })
+          }), /*#__PURE__*/react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx(react_share__WEBPACK_IMPORTED_MODULE_9__.LinkedinShareButton, {
+            url: url,
+            children: /*#__PURE__*/react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx(react_share__WEBPACK_IMPORTED_MODULE_9__.LinkedinIcon, {
+              size: 32,
+              round: true
+            })
+          }), /*#__PURE__*/react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx(react_share__WEBPACK_IMPORTED_MODULE_9__.EmailShareButton, {
+            url: url,
+            children: /*#__PURE__*/react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx(react_share__WEBPACK_IMPORTED_MODULE_9__.EmailIcon, {
+              size: 32,
+              round: true
+            })
+          }), /*#__PURE__*/react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx(react_share__WEBPACK_IMPORTED_MODULE_9__.InstapaperShareButton, {
+            url: url,
+            children: /*#__PURE__*/react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx(react_share__WEBPACK_IMPORTED_MODULE_9__.InstapaperIcon, {
+              size: 32,
+              round: true
+            })
           })]
         })]
-      }), /*#__PURE__*/react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx("h1", {
+      }), /*#__PURE__*/react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx("h1", {
         className: "mt-6 text-[#6F7D1D] text-lg md:text-xl font-semibold",
         children: data?.article?.title
-      }), /*#__PURE__*/react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx("div", {
+      }), /*#__PURE__*/react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx("div", {
         ref: contentRef,
         className: "mt-4 text-justify leading-relaxed flex flex-col space-y-3 hideContentNotInTagUL"
-      }), /*#__PURE__*/react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx("h1", {
+      }), /*#__PURE__*/react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx("h1", {
         className: "mt-12 mb-6 text-xl md:text-2xl text-dark-green font-bold bg-brand-green/10 p-2 text-center",
         children: "View Related Blogs"
-      }), /*#__PURE__*/react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx(_Partials_Blogs__WEBPACK_IMPORTED_MODULE_8__/* ["default"] */ .Z, {
+      }), /*#__PURE__*/react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx(_Partials_Blogs__WEBPACK_IMPORTED_MODULE_10__/* ["default"] */ .Z, {
         data: {
           data: relatedArticles?.filter(item => item.id != data.id)
         },
@@ -657,6 +706,13 @@ module.exports = require("next/router");
 /***/ ((module) => {
 
 module.exports = require("react");
+
+/***/ }),
+
+/***/ 6158:
+/***/ ((module) => {
+
+module.exports = require("react-share");
 
 /***/ }),
 
