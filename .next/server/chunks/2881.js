@@ -77,12 +77,11 @@ const ReadBooks = ({
           children: element.desc
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
           className: "flex items-center space-x-3 mt-3",
-          children: [/*#__PURE__*/react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx("button", {
-            type: "button",
-            onClick: () => {
-              router.push(`/library/${element.id}`);
-            },
+          children: [/*#__PURE__*/react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx("a", {
             className: "bg-dark-green text-white p-2 text-xs",
+            target: "_blank",
+            rel: "noopener noreferrer",
+            href: element.link && !element.link.startsWith('/uploads/') && !element.link.startsWith('http') ? `/uploads/${element.link}` : element.link,
             children: "Read"
           }), /*#__PURE__*/react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx("button", {
             onClick: () => {
