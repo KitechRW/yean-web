@@ -50,7 +50,7 @@ export const sequelize = new Sequelize.Sequelize(
 
 sequelize.authenticate();
 
-export const DB = {
+const DB = {
   Articles: ArticleModel(sequelize),
   Categories: CategoryModel(sequelize),
   Comments: CommentModel(sequelize),
@@ -72,5 +72,13 @@ export const DB = {
   Projects: ProjectModel(sequelize),
   sequelize, // connection instance (RAW queries)
 };
+
+(async () => {
+  await sequelize.sync({
+    force: false,
+    alter: process.env.NODE_ENV !== 'production',
+  });
+  // code
+})();
 
 export default DB;
