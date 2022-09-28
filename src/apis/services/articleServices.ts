@@ -26,7 +26,6 @@ export default class ArticleServices {
       offset,
       order: [['id', 'DESC']],
     });
-    rows.sort((a: any, b: any) => Number(b.id) - Number(a.id));
     const articleRows = await Promise.all(
       rows.map(row => {
         return User.findByPk(row.toJSON()?.author_id, {

@@ -73,12 +73,12 @@ const DB = {
   sequelize, // connection instance (RAW queries)
 };
 
-(async () => {
-  await sequelize.sync({
-    force: false,
-    alter: process.env.NODE_ENV !== 'production',
-  });
-  // code
-})();
+// (async () => {
+//   await sequelize.sync({
+//     force: false,
+//     alter: process.env.NODE_ENV !== 'production',
+//   });
+//   // code
+// })();
 
 export default DB;

@@ -17,11 +17,15 @@ const LibraryActivity = ({ data }: any) => {
       setBooksPart1([]);
       setBooksPart2([]);
       data?.data?.rows?.forEach((eachBook: any, index: number) => {
-        if (index < 6) {
-          setBooksPart1((i: any[]) => [...i, eachBook]);
-        } else {
-          setBooksPart2((i: any[]) => [...i, eachBook]);
-        }
+        // if (index < 6) {
+        //   setBooksPart1((i: any[]) => [...i, eachBook]);
+        // } else {
+        //   setBooksPart2((i: any[]) => [...i, eachBook]);
+        // }
+        setBooksPart1((previousBook: any[]) => [
+          ...previousBook,
+          eachBook,
+        ]);
       });
     }
   }, [data]);
@@ -101,7 +105,7 @@ const LibraryActivity = ({ data }: any) => {
 
       <div className="p-4 md:p-8 justify-center gap-6 flex md:gap-x-10 flex-wrap w-full">
         <ReadBooks books={booksPart1} />
-        <div className="w-full justify-center flex p-4 md:p-8 gap-3 items-center">
+        <div className="hidden w-full justify-center p-4 md:p-8 gap-3 items-center">
           <Image
             src="/assets/images/green-book.png"
             alt=""
@@ -112,7 +116,7 @@ const LibraryActivity = ({ data }: any) => {
             FEATURED Things To Know About Green Flat Design
           </h1>
         </div>
-        <ReadBooks books={booksPart2} />
+        {/* <ReadBooks books={booksPart2} /> */}
       </div>
       <div className={'justify-center flex mt-10'}>
         <Pagination

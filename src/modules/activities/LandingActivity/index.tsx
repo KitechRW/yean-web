@@ -3,9 +3,6 @@ import Scaffold from 'modules/layouts/Scaffold';
 import Image from 'next/image';
 import {
   Add,
-  ChevronLeft,
-  ChevronRight,
-  LocalLibrary,
   LocationCity,
   Shop,
   SupervisedUserCircle,
@@ -13,13 +10,8 @@ import {
 import Link from 'next/link';
 import MinPost from '../_Partials/MinPost';
 import LatestBlog from '../_Partials/LatestBlog';
-import CowIcon from 'modules/_partials/_drawable/icons/cowIcon';
-import SorgohIcon from 'modules/_partials/_drawable/icons/sorgohIcon';
-import HandIcon from 'modules/_partials/_drawable/icons/handIcon';
-import TruckIcon from 'modules/_partials/_drawable/icons/truckIcon';
 import Testimonial from 'modules/_partials/Testimonial';
 import Slides from 'modules/_partials/Slides';
-import CustomImage from 'modules/_partials/CustomImage';
 import CarouselPartners from 'modules/_partials/CarouselPartners';
 import {
   useOpenFetcher,
@@ -217,7 +209,7 @@ const LandingAcitivity = ({
         <CarouselPartners data={confirmedPartners} />
       </div>
 
-      <div className="flex flex-col px-4 md:px-8 py-2 bg-white">
+      <div className="hidden flex-col px-4 md:px-8 py-2 bg-white">
         <h1 className="text-2xl md:text-4xl text-white font-bold bg-brand-green p-2 text-center">
           Our Testmonials
         </h1>

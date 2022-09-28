@@ -88,7 +88,7 @@ const Carrers = ({ data }: any) => {
   return (
     <Scaffold>
       <div className="flex-wrap bg-white justify-center items-center w-full p-4 md:p-8 flex gap-4">
-        <div className="flex flex-col">
+        <div className="hidden flex-col">
           <h1 className="text-2xl md:text-4xl text-dark-green tracking-wide font-black">
             Find your Dream Job
           </h1>

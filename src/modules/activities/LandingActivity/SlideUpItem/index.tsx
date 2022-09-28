@@ -34,7 +34,7 @@ const SlideUpItem = ({
           width="149.27px"
           height="101.75px"
         />
-        <p className="text-brand-green font-bold text-base text-center">
+        <p className="text-brand-green font-bold text-xl text-center">
           {title}
         </p>
         <p className="text-brand-green font-bold text-base text-center">

@@ -43,7 +43,7 @@ const LibraryActivity = () => {
   const handleAdd = (item: any) => {
     setLibraries(prev => ({
       ...libraries,
-      rows: [...prev.rows, item],
+      rows: [item, ...prev.rows],
     }));
   };
 

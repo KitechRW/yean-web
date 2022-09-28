@@ -2,13 +2,18 @@ import React from 'react';
 import DefaultApi from 'apis/restful';
 import swal from 'sweetalert';
 import joi from 'joi';
-import Select from 'react-select';
 import DrawerLayout from 'modules/layouts/DrawerLayout';
 import { useForm } from 'react-hook-form';
 import { joiResolver } from '@hookform/resolvers/joi';
 import UploadImage from 'modules/_partials/UploadImage';
 import { formatJoiErorr } from 'system/format';
-import { useProtectedFetcher } from 'apis/utils/fetcher';
+import 'react-quill/dist/quill.snow.css';
+import dynamic from 'next/dynamic';
+import RichText from 'system/config/richtext';
+
+const ReactQuill = dynamic(() => import('react-quill'), {
+  ssr: false,
+});
 
 const schema = joi.object({
   name: joi.string().required(),
@@ -173,23 +178,26 @@ const AddItem = ({
               </p>
             )}
           </div>
-
-          <label className="flex flex-col">
-            <span className="text-sm font-medium text-gray-900 dark:text-gray-300">
-              Description
-            </span>
-            <textarea
-              rows={5}
-              placeholder={'Description'}
-              {...register('description')}
-              className="resize-none mt-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          <div className="flex flex-col">
+            <p className="mt-3 w-full font-medium">Description</p>
+            <ReactQuill
+              theme="snow"
+              defaultValue={dataValues?.description}
+              modules={RichText.modules}
+              formats={RichText.formats}
+              onChange={newValue => {
+                setValue('description', newValue, {
+                  shouldDirty: true,
+                  shouldValidate: true,
+                });
+              }}
             />
             {errors.description?.message && (
               <p className="mt-1 text-red-500">
-                {formatJoiErorr(`${errors.description.message}`)}
+                {formatJoiErorr(`${errors.description?.message}`)}
               </p>
             )}
-          </label>
+          </div>
 
           <div className="flex items-center space-x-3 justify-between md:col-span-2">
             {dataValues ? (

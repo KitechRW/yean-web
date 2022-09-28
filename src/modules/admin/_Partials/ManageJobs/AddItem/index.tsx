@@ -7,6 +7,13 @@ import { useForm } from 'react-hook-form';
 import { joiResolver } from '@hookform/resolvers/joi';
 import { formatJoiErorr } from 'system/format';
 import { useProtectedFetcher } from 'apis/utils/fetcher';
+import 'react-quill/dist/quill.snow.css';
+import dynamic from 'next/dynamic';
+import RichText from 'system/config/richtext';
+
+const ReactQuill = dynamic(() => import('react-quill'), {
+  ssr: false,
+});
 
 const schema = joi.object({
   title: joi.string().required(),
@@ -14,16 +21,15 @@ const schema = joi.object({
   location: joi.string().required(),
   category: joi.string().required(),
   description: joi.string().required(),
-
 });
 
 const AddJob = ({
-                   handleAdd,
-                   children,
-                   handleEdit,
-                   dataValues,
-                   handleDelete,
-                 }: {
+  handleAdd,
+  children,
+  handleEdit,
+  dataValues,
+  handleDelete,
+}: {
   handleAdd?: (item: any) => void;
   children: any;
   handleEdit?: (item: any) => void;
@@ -43,18 +49,14 @@ const AddJob = ({
     resolver: joiResolver(schema),
   });
 
-
   const onSubmit = async (query: any) => {
     setLoading(true);
     const { data, error } = await (!dataValues
-      ? DefaultApi.PostRoute.postRoute(
-        '/api/jobs',
-        {...query},
-      )
+      ? DefaultApi.PostRoute.postRoute('/api/jobs', { ...query })
       : DefaultApi.PatchRoute.patchRoute(
-        `/api/jobs/${dataValues.id}`,
-        {...query},
-      ));
+          `/api/jobs/${dataValues.id}`,
+          { ...query },
+        ));
     setLoading(false);
 
     if (data) {
@@ -92,7 +94,6 @@ const AddJob = ({
       });
     }
   }, [dataValues, reset]);
-
 
   const onDelete = async () => {
     const willDelete = await swal({
@@ -232,28 +233,26 @@ const AddJob = ({
               </p>
             )}
           </label>
-          <label className="flex flex-col">
-            <span className="text-sm font-medium text-gray-900 dark:text-gray-300">
-              Description
-            </span>
-            <textarea
-              rows={10}
-              placeholder={'Description'}
-              {...register('description')}
-              onChange={(event: any) => {
-                setValue('description', event.target.value, {
+          <div className="flex flex-col">
+            <p className="mt-3 w-full font-medium">Description</p>
+            <ReactQuill
+              theme="snow"
+              defaultValue={dataValues?.description}
+              modules={RichText.modules}
+              formats={RichText.formats}
+              onChange={newValue => {
+                setValue('description', newValue, {
                   shouldDirty: true,
                   shouldValidate: true,
                 });
               }}
-              className="mt-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             />
             {errors.description?.message && (
               <p className="mt-1 text-red-500">
-                {formatJoiErorr(`${errors.description.message}`)}
+                {formatJoiErorr(`${errors.description?.message}`)}
               </p>
             )}
-          </label>
+          </div>
 
           <div className="flex items-center space-x-3 justify-between md:col-span-2">
             {dataValues ? (

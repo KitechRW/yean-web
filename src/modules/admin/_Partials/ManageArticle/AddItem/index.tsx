@@ -20,7 +20,7 @@ const ReactQuill = dynamic(() => import('react-quill'), {
 
 const fields = {
   title: joi.string().required(),
-  image: joi.object().required(),
+  image: joi.object().required().optional(),
   text: joi.string().required(),
   parentCat: joi.number().required().label('Category'),
   category: joi.number().required().label('Sub category'),
@@ -150,7 +150,8 @@ const AddItem = ({
     }
   }, [dataValues]);
 
-  React.useEffect(() => {
+  const resetForm = React.useRef(() => {});
+  resetForm.current = () => {
     if (data) {
       const defaultValues: any = {};
       Object.keys(fields).map(key => {
@@ -160,6 +161,10 @@ const AddItem = ({
       });
       reset(defaultValues);
     }
+  };
+
+  React.useEffect(() => {
+    resetForm.current();
   }, [data]);
 
   const categoryOptions = categories?.rows?.map((element: any) => ({
@@ -189,6 +194,7 @@ const AddItem = ({
       return false;
     },
   );
+  console.log(defaultCategoryOptions);
 
   const authorOptions = authors?.map((element: any) => ({
     value: element.id,

@@ -3,7 +3,7 @@ import { CloudUpload, Delete } from '@mui/icons-material';
 import ImagePreview from '../ImagePreview';
 
 const KILO_BYTES_PER_BYTE = 1000;
-const DEFAULT_MAX_FILE_SIZE_IN_BYTES = 1000000;
+const DEFAULT_MAX_FILE_SIZE_IN_BYTES = 5000000;
 
 const convertNestedObjectToArray = (nestedObj: any) => {
   return Object.keys(nestedObj).map(key => nestedObj[key]);

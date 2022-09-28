@@ -130,7 +130,7 @@ const SingleBlogActivity = ({ data }: any) => {
         <Blogs
           data={{
             data: relatedArticles?.filter(
-              (item: any) => item.id != data.id,
+              (item: any) => item.id !== data.id,
             ),
           }}
           onClick={handleClick}

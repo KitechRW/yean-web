@@ -29,6 +29,7 @@ const CustomImage = (props: ImageProps) => {
   return (
     <Image
       {...props}
+      objectFit={props.objectFit || 'cover'}
       alt={alt}
       src={imageUrl}
       onError={() => {

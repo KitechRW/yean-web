@@ -1,8 +1,8 @@
 import { Add, Search } from '@mui/icons-material';
 import { useOpenFetcher } from 'apis/utils/fetcher';
 import React from 'react';
-import ViewJob from "modules/admin/_Partials/ManageJobs/ViewItem";
-import AddJob from "modules/admin/_Partials/ManageJobs/AddItem";
+import ViewJob from 'modules/admin/_Partials/ManageJobs/ViewItem';
+import AddJob from 'modules/admin/_Partials/ManageJobs/AddItem';
 
 const JobActivity = () => {
   const [jobs, setJobs] = React.useState<{
@@ -20,8 +20,11 @@ const JobActivity = () => {
     const rows = data?.rows || [];
     if (rows.length) {
       const matchJobs = rows.filter((element: any) =>
-        element?.title?element?.title?.toLowerCase()
-          .includes(filterValue.toLowerCase()) : false,
+        element?.title
+          ? element?.title
+              ?.toLowerCase()
+              .includes(filterValue.toLowerCase())
+          : false,
       );
       setJobs(prev => ({ ...prev, rows: matchJobs }));
     }
@@ -37,7 +40,7 @@ const JobActivity = () => {
   const handleAdd = (item: any) => {
     setJobs(prev => ({
       ...jobs,
-      rows: [...prev.rows, item],
+      rows: [item, ...prev.rows],
     }));
   };
 
@@ -67,7 +70,6 @@ const JobActivity = () => {
 
   return (
     <div className="px-4 md:pl-6 bg-white py-4 flex flex-col flex-grow items-center md:px-8 w-full">
-
       <h2 className="font-semibold text-slate-900 self-start mr-2 mb-5">
         Jobs
       </h2>
@@ -97,7 +99,7 @@ const JobActivity = () => {
         {jobs.rows.map((item, index) => {
           return (
             <ViewJob
-              key={item?.id + "keyForJob"}
+              key={item?.id + 'keyForJob'}
               data={item}
               handleEdit={handleEdit}
               handleDelete={handleDelete}

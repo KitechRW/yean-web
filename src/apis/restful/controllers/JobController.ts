@@ -20,7 +20,9 @@ export default class JobController {
 
   static async getAll(req: NextApiRequest, res: NextApiResponse) {
     try {
-      const jobs = await Job.findAndCountAll();
+      const jobs = await Job.findAndCountAll({
+        order: [['id', 'DESC']],
+      });
       const categories: string[] = [];
       const keywords: string[] = [];
       const locations: string[] = [];

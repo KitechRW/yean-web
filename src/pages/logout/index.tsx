@@ -9,12 +9,16 @@ import Keys from 'apis/utils/constants/keys';
 const Logout: NextPage = () => {
   const { push } = useRouter();
   const { setProfile } = useNavbar();
-  React.useEffect(() => {
+  const resetProfile = React.useRef(() => {});
+  resetProfile.current = () => {
     axios.post('/api/logout').then(() => {
       setProfile(null);
       Secure.remove(Keys.USER_INFO as string);
       push('/');
     });
+  };
+  React.useEffect(() => {
+    resetProfile.current();
   }, []);
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-white p-4 md:p-8">

@@ -2,8 +2,8 @@ import { PictureAsPdf } from '@mui/icons-material';
 import Image from 'next/image';
 import React from 'react';
 import swal from 'sweetalert';
-import { useRouter } from 'next/router';
 import PDFPreview from 'modules/_partials/PDFPreview';
+import { useRouter } from 'next/router';
 
 export const downloadPDF = (book: any) => {
   let link: string = book.link;
@@ -32,6 +32,7 @@ export const downloadPDF = (book: any) => {
 };
 
 const ReadBooks = ({ books }: any) => {
+  const router = useRouter();
   return (
     <>
       {books.map((element: any) => (
@@ -55,11 +56,15 @@ const ReadBooks = ({ books }: any) => {
             </h1>
             <p className="text-gray-600 mt-2">{element.desc}</p>
             <div className="flex items-center space-x-3 mt-3">
-              <PDFPreview title={element?.name} src={element.link}>
-                <span className="bg-dark-green text-white p-2 text-xs">
-                  Read
-                </span>
-              </PDFPreview>
+              <button
+                type="button"
+                onClick={() => {
+                  router.push(`/library/${element.id}`);
+                }}
+                className="bg-dark-green text-white p-2 text-xs"
+              >
+                Read
+              </button>
 
               <button
                 onClick={() => {
