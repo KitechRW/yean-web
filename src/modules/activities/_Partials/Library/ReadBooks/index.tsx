@@ -2,7 +2,6 @@ import { PictureAsPdf } from '@mui/icons-material';
 import Image from 'next/image';
 import React from 'react';
 import swal from 'sweetalert';
-import PDFPreview from 'modules/_partials/PDFPreview';
 import { useRouter } from 'next/router';
 
 export const downloadPDF = (book: any) => {
@@ -56,15 +55,20 @@ const ReadBooks = ({ books }: any) => {
             </h1>
             <p className="text-gray-600 mt-2">{element.desc}</p>
             <div className="flex items-center space-x-3 mt-3">
-              <button
-                type="button"
-                onClick={() => {
-                  router.push(`/library/${element.id}`);
-                }}
+              <a
                 className="bg-dark-green text-white p-2 text-xs"
+                target="_blank"
+                rel="noopener noreferrer"
+                href={
+                  element.link &&
+                  !element.link.startsWith('/uploads/') &&
+                  !element.link.startsWith('http')
+                    ? `/uploads/${element.link}`
+                    : element.link
+                }
               >
                 Read
-              </button>
+              </a>
 
               <button
                 onClick={() => {

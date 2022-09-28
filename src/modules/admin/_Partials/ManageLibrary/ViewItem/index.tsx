@@ -1,10 +1,7 @@
 import React from 'react';
-import { useRouter } from 'next/router';
 import { IconButton } from '@mui/material';
-import CustomImage from 'modules/_partials/CustomImage';
 import EditItem from '../EditItem';
 import { Edit, PictureAsPdf } from '@mui/icons-material';
-import PDFPreview from 'modules/_partials/PDFPreview';
 
 const ViewItem = ({
   data,
@@ -19,12 +16,20 @@ const ViewItem = ({
   return (
     <>
       <div className="flex flex-col bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700">
-        {/* <CustomImage src={image} width="150" height="150" /> */}
-
         <div className="p-3 flex-grow flex flex-col items-center justify-between gap-y-2">
-          <PDFPreview src={link} title={name}>
+          <a
+            target="_blank"
+            rel="noopener noreferrer"
+            href={
+              link &&
+              !link.startsWith('/uploads/') &&
+              !link.startsWith('http')
+                ? `/uploads/${link}`
+                : link
+            }
+          >
             <PictureAsPdf className="text-red-500" fontSize="large" />
-          </PDFPreview>
+          </a>
 
           <p className="font-semibold pl-2 w-full text-center">
             {name}
