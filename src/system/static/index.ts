@@ -101,6 +101,11 @@ export const adminNavs = [
     label: 'Home Page',
     path: '/admin/home',
   },
+  {
+    icon: Pageview,
+    label: 'Innovation center',
+    path: '/admin/innovation-center',
+  },
   // {
   //   icon: Pageview,
   //   label: 'About us',

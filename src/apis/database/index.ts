@@ -19,6 +19,7 @@ import SubCategoryModel from './models/subcategory.model';
 import UserModel from './models/user.model';
 import SubscribeModel from './models/subscriber.model';
 import ProjectModel from './models/project.model';
+import InnovationModel from './models/innovation';
 
 dotenv.config();
 
@@ -51,6 +52,7 @@ export const sequelize = new Sequelize.Sequelize(
 sequelize.authenticate();
 
 const DB = {
+  Innovation: InnovationModel(sequelize),
   Articles: ArticleModel(sequelize),
   Categories: CategoryModel(sequelize),
   Comments: CommentModel(sequelize),
@@ -70,6 +72,7 @@ const DB = {
   Tags: TagModel(sequelize),
   Users: UserModel(sequelize),
   Projects: ProjectModel(sequelize),
+
   sequelize, // connection instance (RAW queries)
 };
 
