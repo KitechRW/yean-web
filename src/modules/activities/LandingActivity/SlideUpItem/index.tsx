@@ -6,7 +6,7 @@ const SlideUpItem = ({
   path = '/extension-material',
   title = 'Extension material',
   subTitle = 'Imfashanyigisho',
-  image = '/assets/images/extension 1.png',
+  image = 'agriculture',
   desc = `Extension materials for Crop and Livestock Commodities for extension agents and farmers`,
 }) => {
   const router = useRouter();
@@ -27,13 +27,9 @@ const SlideUpItem = ({
         />
       </div>
       <div className="flex-grow flex group-hover:bg-[#660A0A]/80 space-y-6 justify-center flex-col items-center py-4 px-6 rounded-[15px] drop-shadow border border-gray-400">
-        <Image
-          src={image}
-          alt=""
-          loading="lazy"
-          width="149.27px"
-          height="101.75px"
-        />
+        <span className="text-brand-green material-symbols-outlined text-5xl md:text-6xl group-hover:text-white">
+          {image}
+        </span>
         <p className="text-brand-green font-bold text-xl text-center">
           {title}
         </p>
