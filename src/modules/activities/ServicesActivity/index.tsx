@@ -81,23 +81,25 @@ const ServicesActivity = () => {
           <h1 className="text-2xl md:text-3xl font-bold tracking-wide text-dark-green">
             {current.name}
           </h1>
-          <div className="min-h-[400px] relative mt-3">
+          <div className="min-h-[400px] relative mt-3 max-w-4xl">
             <CustomImage
               src={current.image}
               alt=""
               layout="fill"
               objectFit="cover"
+              objectPosition="top left"
               loading="lazy"
             />
           </div>
-          <p className="mt-3 text-sm text-gray-600 text-justify">
-            {current.content}
-          </p>
+          <div
+            className="my-3 text-sm text-gray-600 text-justify"
+            dangerouslySetInnerHTML={{ __html: current.content }}
+          />
 
           <button
             type="button"
             onClick={() => push('/contact')}
-            className="bg-white mx-auto text-dark-green font-semibold flex items-center space-x-2 mt-6 rounded-[20px] border border-dark-green py-3 px-20"
+            className="bg-white mx-auto text-dark-green font-semibold flex items-center space-x-2 mt-10 rounded-[20px] border border-dark-green py-3 px-20"
           >
             <ConnectWithoutContact />
             <span>Contact us </span>

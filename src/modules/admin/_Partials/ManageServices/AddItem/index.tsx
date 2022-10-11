@@ -7,7 +7,13 @@ import { useForm } from 'react-hook-form';
 import { joiResolver } from '@hookform/resolvers/joi';
 import UploadImage from 'modules/_partials/UploadImage';
 import { formatJoiErorr } from 'system/format';
-import { useProtectedFetcher } from 'apis/utils/fetcher';
+import 'react-quill/dist/quill.snow.css';
+import dynamic from 'next/dynamic';
+import RichText from 'system/config/richtext';
+
+const ReactQuill = dynamic(() => import('react-quill'), {
+  ssr: false,
+});
 
 const schema = joi.object({
   name: joi.string().required(),
@@ -153,22 +159,26 @@ const AddItem = ({
               </p>
             )}
           </label>
-          <label className="flex flex-col">
-            <span className="text-sm font-medium text-gray-900 dark:text-gray-300">
-              Content
-            </span>
-            <textarea
-              rows={5}
-              placeholder={'Content'}
-              {...register('content')}
-              className="resize-none mt-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          <div className="flex flex-col">
+            <p className="mt-3 w-full font-medium">Centent</p>
+            <ReactQuill
+              theme="snow"
+              defaultValue={dataValues?.content}
+              modules={RichText.modules}
+              formats={RichText.formats}
+              onChange={newValue => {
+                setValue('content', newValue, {
+                  shouldDirty: true,
+                  shouldValidate: true,
+                });
+              }}
             />
             {errors.content?.message && (
               <p className="mt-1 text-red-500">
-                {formatJoiErorr(`${errors.content.message}`)}
+                {formatJoiErorr(`${errors.content?.message}`)}
               </p>
             )}
-          </label>
+          </div>
           <div className="flex flex-col">
             <span className="text-sm mb-2 font-medium text-gray-900 dark:text-gray-300">
               Image
