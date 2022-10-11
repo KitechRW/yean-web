@@ -11,7 +11,7 @@ interface IItem {
 
 const PartnersList = ({ data }: { data: IItem[] }) => {
   return (
-    <div className="grid grid-cols-3 md:grid-cols-8 gap-5">
+    <div className="flex flex-wrap justify-center gap-x-3 gap-5 w-full">
       {data?.map((element, index) => {
         return (
           <a
@@ -23,10 +23,11 @@ const PartnersList = ({ data }: { data: IItem[] }) => {
           >
             <CustomImage
               src={element.image}
-              alt=""
-              layout="fixed"
+              alt={element.companyName}
               width="150px"
-              height="92px"
+              height="150px"
+              layout="fixed"
+              loading="lazy"
             />
             <p className="sr-only">{element.companyName}</p>
           </a>

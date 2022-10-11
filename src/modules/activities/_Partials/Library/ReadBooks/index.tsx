@@ -37,7 +37,7 @@ const ReadBooks = ({ books }: any) => {
       {books.map((element: any) => (
         <div
           key={element.id + 'book_id_unic@22'}
-          className="flex flex-shrink-0 space-x-2 max-w-[360px]"
+          className="flex flex-shrink-0 space-x-2 w-full max-w-[360px]"
         >
           <div className="flex flex-col">
             <Image
