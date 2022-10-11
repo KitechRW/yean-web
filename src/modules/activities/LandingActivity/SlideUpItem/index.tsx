@@ -27,7 +27,7 @@ const SlideUpItem = ({
         />
       </div>
       <div className="flex-grow flex group-hover:bg-[#660A0A]/80 space-y-6 justify-center flex-col items-center py-4 px-6 rounded-[15px] drop-shadow border border-gray-400">
-        <span className="text-brand-green material-symbols-outlined text-6xl md:text-9xl group-hover:text-white">
+        <span className="text-brand-green material-symbols-outlined text-[48px] md:text-[60px] group-hover:text-white">
           {image}
         </span>
         <p className="text-brand-green font-bold text-xl text-center">
