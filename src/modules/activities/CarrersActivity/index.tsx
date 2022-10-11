@@ -7,13 +7,20 @@ import joi from 'joi';
 import { useForm } from 'react-hook-form';
 import { joiResolver } from '@hookform/resolvers/joi';
 import { Divider } from '@mui/material';
+import { useOpenFetcher } from 'apis/utils/fetcher';
+import DataWidget from 'modules/layouts/DataWidget';
 
 const schema = joi.object({
   keyword: joi.string(),
   category: joi.string(),
   location: joi.string(),
 });
-const Carrers = ({ data }: any) => {
+const Carrers = () => {
+  const {
+    data: { data },
+    isLoading,
+    isError,
+  } = useOpenFetcher('/api/jobs');
   const [categories, setCategories] = useState<any>([]);
   const [keywords, setKeywords] = useState<any>([]);
   const [locations, setLocations] = useState<any>([]);
@@ -35,8 +42,8 @@ const Carrers = ({ data }: any) => {
   });
 
   useEffect(() => {
-    if (data.rows) {
-      const results = data.rows.filter((eachJob: any) => {
+    if (data?.rows) {
+      const results = data?.rows.filter((eachJob: any) => {
         let found = true;
         if (
           categoryFilter &&
@@ -57,7 +64,7 @@ const Carrers = ({ data }: any) => {
       });
       setJobsToShow(results);
     }
-  }, [categoryFilter, data.rows, keywordFilter, locationFilter]);
+  }, [categoryFilter, data?.rows, keywordFilter, locationFilter]);
 
   useEffect(() => {
     if (data) {
@@ -164,38 +171,46 @@ const Carrers = ({ data }: any) => {
           {/*</button>*/}
         </div>
 
-        {jobsToShow.map((element: any, index) => (
+        <DataWidget isLoading={isLoading} isError={isError}>
           <>
-            <div
-              key={element.id}
-              className="flex items-start gap-3 mt-4 py-4 px-2 flex-wrap justify-between max-w-6xl w-full hover:bg-white"
-            >
-              <div className="flex flex-col gap-3">
-                <div className="flex items-center gap-3">
-                  <h1 className="text-lg md:text-xl font-light">
-                    {element.title}
-                  </h1>
-                  <button className="rounded-full bg-dark-green text-white px-3 ml-24 py-2">
-                    {element.category}
-                  </button>
-                </div>
-                <div className="flex items-center ml-3 gap-3 gap-x-12">
-                  <p className="text-dark-green">{element.keyword}</p>
-                  <p className="text-gray-400">{element.location}</p>
-                </div>
-              </div>
+            {jobsToShow.map((element: any, index) => (
+              <>
+                <div
+                  key={element.id}
+                  className="flex items-start gap-3 mt-4 py-4 px-2 flex-wrap justify-between max-w-6xl w-full hover:bg-white"
+                >
+                  <div className="flex flex-col gap-3">
+                    <div className="flex items-center gap-3">
+                      <h1 className="text-lg md:text-xl font-light">
+                        {element.title}
+                      </h1>
+                      <button className="rounded-full bg-dark-green text-white px-3 ml-24 py-2">
+                        {element.category}
+                      </button>
+                    </div>
+                    <div className="flex items-center ml-3 gap-3 gap-x-12">
+                      <p className="text-dark-green">
+                        {element.keyword}
+                      </p>
+                      <p className="text-gray-400">
+                        {element.location}
+                      </p>
+                    </div>
+                  </div>
 
-              <Link href={'/carrers/' + element.id}>
-                <p className="cursor-pointer rounded-lg bg-dark-green text-white px-8 py-3">
-                  View more
-                </p>
-              </Link>
-            </div>
-            {index < jobsToShow.length-1 && (
-              <div className="bg-white w-full h-0.5" />
-            )}
+                  <Link href={'/carrers/' + element.id}>
+                    <p className="cursor-pointer rounded-lg bg-dark-green text-white px-8 py-3">
+                      View more
+                    </p>
+                  </Link>
+                </div>
+                {index < jobsToShow.length - 1 && (
+                  <div className="bg-white w-full h-0.5" />
+                )}
+              </>
+            ))}
           </>
-        ))}
+        </DataWidget>
       </div>
     </Scaffold>
   );
