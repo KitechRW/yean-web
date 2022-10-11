@@ -100,7 +100,7 @@ const CarouselPartners = ({ data }: { data: IItem[] }) => {
                   alt=""
                   layout="fixed"
                   width="150px"
-                  height="92px"
+                  height="150px"
                 />
                 <p className="sr-only">{element.companyName}</p>
               </a>

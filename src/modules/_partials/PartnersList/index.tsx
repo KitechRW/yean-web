@@ -28,6 +28,7 @@ const PartnersList = ({ data }: { data: IItem[] }) => {
               height="150px"
               layout="fixed"
               loading="lazy"
+              // objectFit="contain"
             />
             <p className="sr-only">{element.companyName}</p>
           </a>

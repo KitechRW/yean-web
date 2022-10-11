@@ -36,9 +36,10 @@ const MinPost = ({ data }: { data: any }) => {
           {data.category.name}
         </button>
       )}
-      <p className="px-2 text-dark-green line-clamp-3">
-        {data?.title}
-      </p>
+      <div
+        className="px-2 text-dark-green line-clamp-3"
+        dangerouslySetInnerHTML={{ __html: data?.title }}
+      />
       <div className="pt-2 p-2 mt-auto">
         <button className={'font-bold self-start'}>
           Learn More <ArrowRightAlt />

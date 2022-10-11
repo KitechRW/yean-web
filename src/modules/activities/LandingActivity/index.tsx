@@ -55,45 +55,34 @@ const LandingAcitivity = ({
     <Scaffold>
       <Slides data={slides} />
       <div className="px-4 md:px-8 py-2 bg-white">
-        <div className="flex flex-col items-center justify-center relative min-h-[200px]">
-          <Image
-            src="/assets/images/bg-stat.png"
-            alt=""
-            layout="fill"
-            loading="lazy"
-            objectPosition="center"
-            objectFit="cover"
-            className="z-0"
-          />
-          <div className="top-0 absolute flex-grow h-full flex flex-col items-center justify-center">
-            <div className="px-2 inline-grid grid-cols-2 md:grid-cols-4 justify-center gap-x-10 gap-y-3">
-              <div className="flex items-center space-x-2 bg-brand-yellow text-white px-8 py-4 rounded-sm">
-                <SupervisedUserCircle style={{ fontSize: 60 }} />
-                <div className="flex flex-col">
-                  <p className="font-bold text-xl">40,000+</p>
-                  <p className="mt-1">Farmer served</p>
-                </div>
+        <div className="flex flex-col items-center justify-center p-2 md:px-4 relative min-h-[200px] bg-[url(/assets/images/bg-stat.png)]">
+          <div className="flex flex-col sm:inline-grid grid-cols-2 md:grid-cols-4 justify-center gap-x-10 gap-y-3">
+            <div className="flex items-center space-x-2 bg-brand-yellow text-white px-8 py-4 rounded-sm">
+              <SupervisedUserCircle style={{ fontSize: 60 }} />
+              <div className="flex flex-col">
+                <p className="font-bold text-xl">40,000+</p>
+                <p className="mt-1">Farmer served</p>
               </div>
-              <div className="flex items-center space-x-2 bg-brand-yellow text-white px-8 py-4 rounded-sm">
-                <SupervisedUserCircle style={{ fontSize: 60 }} />
-                <div className="flex flex-col">
-                  <p className="font-bold text-xl">150,000</p>
-                  <p className="mt-1">Target farmers by 2025</p>
-                </div>
+            </div>
+            <div className="flex items-center space-x-2 bg-brand-yellow text-white px-8 py-4 rounded-sm">
+              <SupervisedUserCircle style={{ fontSize: 60 }} />
+              <div className="flex flex-col">
+                <p className="font-bold text-xl">150,000</p>
+                <p className="mt-1">Target farmers by 2025</p>
               </div>
-              <div className="flex items-center space-x-2 bg-brand-yellow text-white px-8 py-4 rounded-sm">
-                <LocationCity style={{ fontSize: 60 }} />
-                <div className="flex flex-col">
-                  <p className="font-bold text-xl">30</p>
-                  <p className="mt-1">Districts</p>
-                </div>
+            </div>
+            <div className="flex items-center space-x-2 bg-brand-yellow text-white px-8 py-4 rounded-sm">
+              <LocationCity style={{ fontSize: 60 }} />
+              <div className="flex flex-col">
+                <p className="font-bold text-xl">30</p>
+                <p className="mt-1">Districts</p>
               </div>
-              <div className="flex items-center space-x-2 bg-brand-yellow text-white px-8 py-4 rounded-sm">
-                <Shop style={{ fontSize: 60 }} />
-                <div className="flex flex-col">
-                  <p className="font-bold text-xl">27</p>
-                  <p className="mt-1">Commodity specific platforms</p>
-                </div>
+            </div>
+            <div className="flex items-center space-x-2 bg-brand-yellow text-white px-8 py-4 rounded-sm">
+              <Shop style={{ fontSize: 60 }} />
+              <div className="flex flex-col">
+                <p className="font-bold text-xl">27</p>
+                <p className="mt-1">Commodity specific platforms</p>
               </div>
             </div>
           </div>

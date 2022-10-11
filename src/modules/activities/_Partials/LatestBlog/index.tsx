@@ -35,7 +35,7 @@ const LatestBlog = ({ data }: { data: any }) => {
           <Comment /> <span>{data?.comment}</span>
         </button>
       </div>
-      <p className="px-2 text-gray-600 line-clamp-3">{data?.title}</p>
+      <div className="px-2 text-gray-600 line-clamp-3" dangerouslySetInnerHTML={{__html: data?.title}} />
     </div>
   );
 };

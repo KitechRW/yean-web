@@ -98,29 +98,31 @@ const ContactActivity = () => {
         </p>
 
         <div className="mt-6 flex gap-3 justify-between flex-wrap items-center max-w-4xl">
-          <div className="w-full max-w-[340px]">
-            <input
-              type="text"
-              {...register('name')}
-              placeholder="Your Name"
-              className="rounded-full border border-dark-green py-3 px-4 w-full"
-            />
-            <p className="text-red-500 text-xs mt-1">
-              {errors.name?.message}
-            </p>
+          <div className="flex flex-col gap-3 md:grid grid-cols-2 w-full">
+            <div className="w-full flex flex-col">
+              <input
+                type="text"
+                {...register('name')}
+                placeholder="Your Name"
+                className="rounded-full border border-dark-green py-3 px-4 w-full"
+              />
+              <p className="text-red-500 text-xs mt-1">
+                {errors.name?.message}
+              </p>
+            </div>
+            <div className="w-full flex flex-col">
+              <input
+                type="email"
+                {...register('email')}
+                placeholder="Your Email Address"
+                className="flex-grow rounded-full border border-dark-green py-3 px-4 w-full"
+              />
+              <p className="text-red-500 text-xs mt-1">
+                {errors.email?.message}
+              </p>
+            </div>
           </div>
-          <div className="w-full max-w-[340px]">
-            <input
-              type="email"
-              {...register('email')}
-              placeholder="Your Email Address"
-              className="flex-grow rounded-full border border-dark-green py-3 px-4 w-full"
-            />
-            <p className="text-red-500 text-xs mt-1">
-              {errors.email?.message}
-            </p>
-          </div>
-          <div className="w-full max-w-[763px]">
+          <div className="w-full flex flex-col">
             <textarea
               {...register('message')}
               id=""

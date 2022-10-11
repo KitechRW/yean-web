@@ -7,8 +7,15 @@ import Image from 'next/image';
 import Link from 'next/link';
 import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt';
 import React from 'react';
+import { useOpenFetcher } from 'apis/utils/fetcher';
+import DataWidget from 'modules/layouts/DataWidget';
 
-const ProjectsActivity = ({data}:any) => {
+const ProjectsActivity = () => {
+  const {
+    data: { data },
+    isLoading,
+    isError,
+  } = useOpenFetcher('/api/projects');
   return (
     <Scaffold>
       <div className="flex flex-col w-full relative bg-brand-green min-h-[312px]">
@@ -31,32 +38,39 @@ const ProjectsActivity = ({data}:any) => {
       </div>
 
       <div className="flex flex-wrap justify-center w-full p-4 gap-10 md:p-8">
-        {data?.rows?.map((element:any, index:number) => (
-          <button key={`projects_${index}`} className={"max-w-xl"}
-          ><Link href={`/project/${element.id}`}>
-            <div
-              className="relative flex flex-col rounded-lg drop-shadow shadow-xl"
-            >
-              <Image
-                src={element.image}
-                alt=""
-                loading="lazy"
-                width="479.65"
-                height="289.99"
-              />
-              <h2 className={"font-bold text-3xl ml-3 mt-6"}>
-                {element.name}
-              </h2>
-              <p className={"mt-12 ml-3 line-clamp-3"}>
-                {element.description}
-              </p>
-              <button className={"font-bold mt-7 ml-5 mb-3 self-start"}>
-                Read more <ArrowRightAltIcon/>
-              </button>
-              <div className="flex flex-grow w-full h-full top-0 absolute" />
-            </div>
-          </Link></button>
-        ))}
+        <DataWidget isLoading={isLoading} isError={isError}>
+          {data?.rows?.map((element: any, index: number) => (
+            <button key={`projects_${index}`} className={'max-w-xl'}>
+              <Link href={`/project/${element.id}`}>
+                <div className="relative flex flex-col rounded-lg drop-shadow shadow-xl">
+                  <Image
+                    src={element.image}
+                    alt=""
+                    loading="lazy"
+                    width="479.65"
+                    height="289.99"
+                    objectFit="cover"
+                  />
+                  <h2 className={'font-bold text-3xl ml-3 mt-6'}>
+                    {element.name}
+                  </h2>
+                  <div
+                    className={'mt-12 ml-3 line-clamp-3'}
+                    dangerouslySetInnerHTML={{
+                      __html: element.description,
+                    }}
+                  />
+                  <button
+                    className={'font-bold mt-7 ml-5 mb-3 self-start'}
+                  >
+                    Read more <ArrowRightAltIcon />
+                  </button>
+                  <div className="flex flex-grow w-full h-full top-0 absolute" />
+                </div>
+              </Link>
+            </button>
+          ))}
+        </DataWidget>
       </div>
     </Scaffold>
   );
