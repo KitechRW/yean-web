@@ -20,6 +20,8 @@ import UserModel from './models/user.model';
 import SubscribeModel from './models/subscriber.model';
 import ProjectModel from './models/project.model';
 import InnovationModel from './models/innovation';
+import AboutModel from './models/about';
+import TeamModel from './models/team';
 
 dotenv.config();
 
@@ -52,6 +54,8 @@ export const sequelize = new Sequelize.Sequelize(
 sequelize.authenticate();
 
 const DB = {
+  Team: TeamModel(sequelize),
+  About: AboutModel(sequelize),
   Innovation: InnovationModel(sequelize),
   Articles: ArticleModel(sequelize),
   Categories: CategoryModel(sequelize),
@@ -76,12 +80,12 @@ const DB = {
   sequelize, // connection instance (RAW queries)
 };
 
-// (async () => {
-//   await sequelize.sync({
-//     force: false,
-//     alter: process.env.NODE_ENV !== 'production',
-//   });
-//   // code
-// })();
+(async () => {
+  await sequelize.sync({
+    force: false,
+    alter: false, //process.env.NODE_ENV !== 'production',
+  });
+  // code
+})();
 
 export default DB;

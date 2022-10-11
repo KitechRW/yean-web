@@ -12,10 +12,12 @@ import { useNavbar } from 'modules/contexts/NavbarContext';
 
 const LeftDrawer = ({
   items = navs,
+  hideUser = false,
   onSearch,
 }: {
   items?: any[];
   onSearch?: any;
+  hideUser?: boolean;
 }) => {
   const { profile } = useNavbar();
   const { pathname } = useRouter();
@@ -52,8 +54,8 @@ const LeftDrawer = ({
             />
           </label>
         )}
-        {profile?.user && (
-          <div className="md:hidden relative flex flex-col">
+        {profile?.user && !hideUser && (
+          <div className="flex md:hidden relative flex-col">
             <ProfilePopup />
           </div>
         )}

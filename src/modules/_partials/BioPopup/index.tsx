@@ -2,16 +2,19 @@ import React from 'react';
 import Drawer from '@mui/material/Drawer';
 import { useRouter } from 'next/router';
 import CloseIcon from '@mui/icons-material/Close';
-import Image from 'next/image';
 import Team from 'modules/activities/_Partials/About/Team';
 
 const BioPopup = ({
-  firstName,
-  lastName,
-  desc,
-  image,
+  name,
+  text,
   title,
-}: any) => {
+  image,
+}: {
+  name: string;
+  image: string;
+  text: string;
+  title: string;
+}) => {
   const { pathname } = useRouter();
   const [toggle, setToggle] = React.useState(false);
   const toggleDrawer = (open: boolean) => (event: any) => {
@@ -34,7 +37,12 @@ const BioPopup = ({
 
   return (
     <>
-      <Team onClick={() => setToggle(!toggle)} />
+      <Team
+        onClick={() => setToggle(!toggle)}
+        image={image}
+        title={title}
+        name={name}
+      />
       <Drawer
         anchor="top"
         open={toggle}
@@ -63,28 +71,25 @@ const BioPopup = ({
             </button>
 
             <div className="w-full md:grid grid-cols-3 gap-x-10 flex-flex-col mt-4">
-              <Team />
+              <Team
+                onClick={() => setToggle(!toggle)}
+                image={image}
+                title={title}
+                name={name}
+              />
               <div className="flex flex-col md:col-span-2">
                 <div className="flex flex-col pb-2 border-b border-brand-green">
-                  <p className="text-xl md:text-2xl text-brand-green">
-                    <span className="font-bold">{firstName}Etienne</span>{' '}
-                    {lastName}NIYIGABA
+                  <p className="text-xl font-semibold md:text-2xl text-brand-green">
+                    {name}
                   </p>
                   <p className="mt-1 text-brand-green text-sm">
-                    {title}Founder & CEO
+                    {title}
                   </p>
                 </div>
-                <p className="mt-3 text-sm">
-                  {desc}Kelvin is a social entrepreneur based in the
-                  Western region of Kenya. He is dedicated to
-                  empowering youth and children through his SAIDE
-                  Community Library by providing free learning
-                  opportunities through digital literacy programs and
-                  community outreach programs. Kelvin has worked with
-                  partners such as American Friends of Kenya,
-                  Worldreader, Population Service International Kenya,
-                  Foundation for Sustainable Development among others.
-                </p>
+                <div
+                  className="mt-3 text-sm"
+                  dangerouslySetInnerHTML={{ __html: text }}
+                />
               </div>
             </div>
           </div>

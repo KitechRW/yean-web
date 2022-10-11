@@ -106,11 +106,16 @@ export const adminNavs = [
     label: 'Innovation center',
     path: '/admin/innovation-center',
   },
-  // {
-  //   icon: Pageview,
-  //   label: 'About us',
-  //   path: '/admin/about-us',
-  // },
+  {
+    icon: Pageview,
+    label: 'About us',
+    path: '/admin/about-us',
+  },
+  {
+    icon: Pageview,
+    label: 'Team',
+    path: '/admin/team',
+  },
   // {
   //   icon: Pageview,
   //   label: 'Impact',
@@ -140,7 +145,6 @@ export const adminNavs = [
     icon: Group,
     label: 'Users',
     path: '/admin/users',
-    onlyAdmin:true,
+    onlyAdmin: true,
   },
-
 ];

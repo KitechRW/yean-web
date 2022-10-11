@@ -40,7 +40,7 @@ const TopNav = ({
         } bg-[#FBFBFB] border-b border-gray-200 z-50`}
       >
         <div className="flex items-center lg:hidden">
-          <LeftDrawer items={adminNavs} />
+          <LeftDrawer items={adminNavs} hideUser />
         </div>
         <div className="hidden md:block">
           <Logo />

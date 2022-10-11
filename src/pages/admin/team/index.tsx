@@ -2,17 +2,17 @@ import React from 'react';
 import { NextPage } from 'next';
 import Head from 'next/head';
 import AdminScaffold from 'modules/layouts/AdminScaffold';
-import AboutActivity from 'modules/admin/AboutActivity';
+import TeamActivity from 'modules/admin/TeamActivity';
 import { withSessionSsr } from 'system/lib/withSession';
 
-const About: NextPage = () => {
+const Team: NextPage = () => {
   return (
     <>
       <Head>
         <title>Yean</title>
       </Head>
       <AdminScaffold>
-        <AboutActivity />
+        <TeamActivity />
       </AdminScaffold>
     </>
   );
@@ -49,4 +49,4 @@ export const getServerSideProps = withSessionSsr(
   },
 );
 
-export default About;
+export default Team;
