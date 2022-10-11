@@ -47,7 +47,7 @@ export default class ArticleController {
       const offset = (page - 1) * limit;
       const { rows, count } = await ArticleServices.findAndCountAll(
         where,
-        ['id', 'title', 'image', 'author_id', 'category'],
+        ['id', 'title', 'image', 'author_id', 'category', 'createdAt'],
         ['firstname', 'lastname', 'phone', 'gender'],
         limit,
         offset,

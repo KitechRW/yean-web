@@ -3,6 +3,7 @@ import CustomImage from 'modules/_partials/CustomImage';
 import React from 'react';
 import { useRouter } from 'next/router';
 import Pagination from 'modules/_partials/Pagination';
+import { format } from 'date-fns';
 
 const Blogs = ({
   onClick = (id: any) => {},
@@ -42,7 +43,7 @@ const Blogs = ({
             </p>
             <div className="px-3 pb-3 space-x-2 flex items-center mt-auto pt-3">
               <Avatar
-                src="/assets/images/avatar.png"
+                src={element?.author?.avatar}
                 sx={{ width: '24px', height: '24px' }}
                 alt={element?.author?.firstname}
               />
@@ -51,7 +52,14 @@ const Blogs = ({
                   {element?.author?.firstname}{' '}
                   {element?.author?.lastname}
                 </h1>
-                {/* <p className="text-xs">12 April 2022</p> */}
+                {element?.createdAt ? (
+                  <p className="text-xs">
+                    {format(
+                      new Date(element?.createdAt),
+                      'dd MMMM yyyy',
+                    )}
+                  </p>
+                ) : null}
               </div>
             </div>
           </div>
