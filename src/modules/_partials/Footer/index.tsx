@@ -190,6 +190,17 @@ const Footer = () => {
               alt=""
             />
           </a>
+          <a
+            href="https://www.youtube.com/channel/UCeCpm2bjaE6gPgmyooNr1-Q/featured/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <img
+              src="/assets/icons/youtube.png"
+              className="w-8 h-8 rounded-full"
+              alt=""
+            />
+          </a>
           {/* <a href="http://" target="_blank" rel="noopener noreferrer">
             <YouTubeIcon />
           </a>
