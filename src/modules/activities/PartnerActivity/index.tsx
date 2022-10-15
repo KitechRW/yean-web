@@ -102,7 +102,7 @@ const PartnerActivity = () => {
 
       <div className="bg-gradient-to-r from-cyan-01 to-white p-4 md:p-8 justify-center gap-6 flex md:gap-x-10 flex-wrap w-full">
         <h1 className="text-3xl font-black text-dark-green tracking-wide w-full text-center">
-          Our Partnets
+        Our Partners
         </h1>
         <PartnersList data={confirmedPartners} />
         <div className="flex flex-col items-center mt-3">

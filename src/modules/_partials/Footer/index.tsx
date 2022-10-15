@@ -69,11 +69,7 @@ const Footer = () => {
           <div className="flex flex-col space-y-3">
             <Logo logo="/assets/images/white_logo.png" />
             <p className="text-xs">
-              Youth Engagement in Agriculture Network (YEAN ) is a
-              Youth Led Private Agriculture Extension Social
-              enterprise created in 2014. We serve farmers, farmers
-              organizations and Development Organizations for better
-              livelihoods, job and wealth creation.
+            Youth Engagement in Agriculture Network (YEAN ) is a Youth Led Private Agriculture services enterprise. We serve farmers, farmers organizations and Development Organizations for better livelihoods, job and wealth creation
             </p>
           </div>
           <div className="flex flex-col">
