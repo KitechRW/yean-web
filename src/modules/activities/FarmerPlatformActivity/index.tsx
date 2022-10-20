@@ -14,7 +14,7 @@ const FarmerPlatformActivity = () => {
       <div className="flex flex-col w-full relative bg-brand-green min-h-[312px] h-full">
         <Image
           // src="/assets/images/farmer-platrom.png"
-          src="/assets/images/partner.png"
+          src="/assets/images/farmer-platform.jpeg"
           alt=""
           layout="fill"
           objectFit="cover"

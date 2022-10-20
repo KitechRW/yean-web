@@ -40,6 +40,7 @@ export const sequelize = new Sequelize.Sequelize(
       min: 0,
       max: 5,
     },
+    logging: false,
     logQueryParameters: process.env.NODE_ENV !== 'production',
     benchmark: true,
     // dialectOptions: {

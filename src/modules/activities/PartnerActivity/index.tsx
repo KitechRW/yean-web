@@ -73,15 +73,16 @@ const PartnerActivity = () => {
 
   return (
     <Scaffold>
-      <div className="flex flex-col w-full relative bg-brand-green min-h-[312px]">
+      <div className="flex flex-col w-full relative bg-brand-green min-h-[312px] md:min-h-[500px]">
         <Image
-          src="/assets/images/partner.png"
+          src="/assets/images/partner.jpg"
           alt=""
           layout="fill"
           objectFit="cover"
+          objectPosition="top"
           priority
         />
-        <div className="flex flex-col h-full w-full items-center justify-center p-4 md:p-8 top-0 absolute z-10">
+        <div className="flex flex-col h-full w-full items-center justify-end p-4 md:p-8 top-0 absolute z-10">
           <h1 className="text-3xl md:text-6xl font-black tracking-wide text-white">
             Partner with us
           </h1>

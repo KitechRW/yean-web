@@ -38,7 +38,7 @@ const ServicesActivity = () => {
     <Scaffold>
       <div className="flex flex-col w-full relative bg-brand-green min-h-[312px]">
         <Image
-          src="/assets/images/services.png"
+          src="/assets/images/services.jpeg"
           alt=""
           layout="fill"
           objectFit="cover"
