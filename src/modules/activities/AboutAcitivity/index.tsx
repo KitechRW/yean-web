@@ -24,12 +24,13 @@ const AboutActivity = () => {
     <Scaffold>
       <DataWidget isLoading={isAboutLoading} isError={false}>
         <>
-          <div className="flex flex-col w-full relative bg-brand-green min-h-[250px]">
+          <div className="flex flex-col w-full relative bg-brand-green min-h-[250px] md:min-h-[450px]">
             <Image
-              src={aboutData.image || '/assets/images/about-page.png'}
+              src={aboutData.image || '/assets/images/about-page.jpg'}
               alt=""
               layout="fill"
               objectFit="cover"
+              objectPosition="top"
               priority
             />
             <div className="flex flex-col h-full w-full items-center justify-end p-4 md:p-8 top-0 absolute z-10">

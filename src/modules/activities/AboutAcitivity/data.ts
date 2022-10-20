@@ -1,5 +1,5 @@
 export const dummyAboutData = {
-  image: '/assets/images/about-page.png',
+  image: '/assets/images/about-page.jpg',
   text: `YEAN works to maximize its impact by applying strategies
   that optimize improvements in financial, social and
   environmental well-being of beneficiaries. We provide our
