@@ -1,15 +1,24 @@
 import { FindAttributeOptions, WhereOptions } from 'sequelize/types';
 import DB from 'apis/database';
 
-const { Articles: Article, Users: User } = DB;
+const {
+  Articles: Article,
+  Users: User,
+  Material,
+  Author,
+  Categories,
+  SubCategories,
+} = DB;
 
 export default class ArticleServices {
-  static create(data: any) {
-    return Article.create(data);
+  static create(data: any, material = false) {
+    const ArticleModel = !material ? Article : Material;
+    return ArticleModel.create(data);
   }
 
-  static findAll() {
-    return Article.findAll();
+  static findAll(material = false) {
+    const ArticleModel = !material ? Article : Material;
+    return ArticleModel.findAll();
   }
 
   static async findAndCountAll(
@@ -18,8 +27,10 @@ export default class ArticleServices {
     autherAttributes?: FindAttributeOptions | undefined,
     limit?: number | undefined,
     offset?: number | undefined,
+    material = false,
   ) {
-    const { count, rows } = await Article.findAndCountAll({
+    const ArticleModel = !material ? Article : Material;
+    const { count, rows } = await ArticleModel.findAndCountAll({
       attributes,
       where,
       limit,
@@ -28,9 +39,41 @@ export default class ArticleServices {
     });
     const articleRows = await Promise.all(
       rows.map(row => {
-        return User.findByPk(row.toJSON()?.author_id, {
+        return Author.findByPk(row.toJSON()?.author_id, {
           attributes: autherAttributes,
-        }).then(author => ({ author, ...row.toJSON() }));
+        })
+          .then(author => {
+            if (!author) {
+              return User.findByPk(row.toJSON()?.author_id, {
+                attributes: autherAttributes,
+              }).then(author => ({ author, ...row.toJSON() }));
+            }
+            return { author, ...row.toJSON() };
+          })
+          .then((articleData: any) => {
+            const categoryId = articleData.category_id;
+            if (categoryId) {
+              return Categories.findByPk(categoryId).then(
+                category => ({
+                  category: category?.toJSON(),
+                  ...articleData,
+                }),
+              );
+            }
+            return articleData;
+          })
+          .then((articleData: any) => {
+            const subcategoryId = articleData.subcategory_id;
+            if (subcategoryId) {
+              return SubCategories.findByPk(subcategoryId).then(
+                subcategory => ({
+                  subcategory: subcategory?.toJSON(),
+                  ...articleData,
+                }),
+              );
+            }
+            return articleData;
+          });
       }),
     );
     return { count, rows: articleRows };
@@ -40,34 +83,72 @@ export default class ArticleServices {
     where?: WhereOptions<any> | undefined,
     attributes?: FindAttributeOptions | undefined,
     autherAttributes?: FindAttributeOptions | undefined,
+    material = false,
   ) {
-    const article: any = await Article.findOne({
+    const ArticleModel = !material ? Article : Material;
+    const article: any = await ArticleModel.findOne({
       attributes,
       where,
     });
-    const articleRows = await User.findByPk(
+    if (!article) {
+      return null;
+    }
+    const articleData = await Author.findByPk(
       article.toJSON()?.author_id,
       {
         attributes: autherAttributes,
       },
-    ).then(author => ({ article, author }));
+    )
+      .then(author => {
+        if (!author) {
+          return User.findByPk(article.toJSON()?.author_id, {
+            attributes: autherAttributes,
+          }).then(author => ({ author, ...article.toJSON() }));
+        }
+        return { author, ...article.toJSON() };
+      })
+      .then((articleData: any) => {
+        const categoryId = articleData.category_id;
+        if (categoryId) {
+          return Categories.findByPk(categoryId).then(category => ({
+            category: category?.toJSON(),
+            ...articleData,
+          }));
+        }
+        return articleData;
+      })
+      .then((articleData: any) => {
+        const subcategoryId = articleData.subcategory_id;
+        if (subcategoryId) {
+          return SubCategories.findByPk(subcategoryId).then(
+            subcategory => ({
+              subcategory: subcategory?.toJSON(),
+              ...articleData,
+            }),
+          );
+        }
+        return articleData;
+      });
 
-    return articleRows;
+    return articleData;
   }
 
-  static findByPk(id: number) {
-    return Article.findByPk(id);
+  static findByPk(id: number, material = false) {
+    const ArticleModel = !material ? Article : Material;
+    return ArticleModel.findByPk(id);
   }
 
-  static update(set: object, conditon: any) {
-    return Article.update(set, {
+  static update(set: object, conditon: any, material = false) {
+    const ArticleModel = !material ? Article : Material;
+    return ArticleModel.update(set, {
       where: conditon,
       returning: true,
     });
   }
 
-  static destroy(condition: any) {
-    return Article.destroy({
+  static destroy(condition: any, material = false) {
+    const ArticleModel = !material ? Article : Material;
+    return ArticleModel.destroy({
       where: condition,
     });
   }

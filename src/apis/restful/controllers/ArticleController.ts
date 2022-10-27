@@ -5,12 +5,17 @@ import removeFile, { parseForm } from 'apis/utils/libForm';
 import { paginate } from 'apis/utils/pagnation';
 import DB from 'apis/database';
 
-const { Articles: Article } = DB;
+const { Articles: Article, Material } = DB;
 
 export default class ArticleController {
   static async getOne(req: NextApiRequest, res: NextApiResponse) {
     const { id } = req.query;
+    const material = Boolean(req.query.material);
     try {
+      const materialParams = [];
+      if (material) {
+        materialParams.push('category_id', 'subcategory_id');
+      }
       return Response.success(res, 200, {
         message: 'Articles fetched successfuly',
         data: await ArticleServices.findOne(
@@ -21,13 +26,16 @@ export default class ArticleController {
             'image',
             'author_id',
             'text',
-            'category',
+            ...materialParams,
             'createdAt',
+            'updatedAt',
           ],
-          ['firstname', 'lastname', 'phone', 'gender'],
+          ['firstname', 'lastname', 'profile_image'],
+          material,
         ),
       });
     } catch (error: any) {
+      console.log(error);
       return Response.error(res, 500, {
         message: 'something went wrong',
         error: error.message,
@@ -38,6 +46,11 @@ export default class ArticleController {
   static async getAll(req: NextApiRequest, res: NextApiResponse) {
     try {
       let { page = 1, limit = 10, cat } = req.query;
+      const material = Boolean(req.query.material);
+      const materialParams = [];
+      if (material) {
+        materialParams.push('category_id', 'subcategory_id');
+      }
       page = Number(page);
       limit = Number(limit);
       const where: any = {};
@@ -47,10 +60,19 @@ export default class ArticleController {
       const offset = (page - 1) * limit;
       const { rows, count } = await ArticleServices.findAndCountAll(
         where,
-        ['id', 'title', 'image', 'author_id', 'category', 'createdAt'],
-        ['firstname', 'lastname', 'phone', 'gender'],
+        [
+          'id',
+          'title',
+          'image',
+          'author_id',
+          ...materialParams,
+          'createdAt',
+          'updatedAt',
+        ],
+        ['firstname', 'lastname', 'profile_image'],
         limit,
         offset,
+        material,
       );
       const pagination = paginate(page, count, rows, limit);
 
@@ -74,6 +96,7 @@ export default class ArticleController {
   }
 
   static async create(req: NextApiRequest, res: NextApiResponse) {
+    const material = Boolean(req.query.material);
     try {
       const { fields, files } = await parseForm(req);
       if (!files.media) {
@@ -93,7 +116,7 @@ export default class ArticleController {
       };
       return Response.success(res, 200, {
         message: 'Article created successfuly',
-        data: await Article.create(payload),
+        data: await ArticleServices.create(payload, material),
       });
     } catch (error) {
       return Response.error(res, 500, {
@@ -104,8 +127,10 @@ export default class ArticleController {
 
   static async update(req: NextApiRequest, res: NextApiResponse) {
     const { id } = req.query;
+    const material = Boolean(req.query.material);
     try {
-      const item = await Article.findByPk(`${id}`);
+      const ArticleModel = !material ? Article : Material;
+      const item = await ArticleModel.findByPk(`${id}`);
 
       if (!item?.toJSON()) {
         return Response.error(res, 404, {
@@ -152,8 +177,12 @@ export default class ArticleController {
 
   static async delete(req: NextApiRequest, res: NextApiResponse) {
     const { id } = req.query;
+    const material = Boolean(req.query.material);
     try {
-      const item = await Article.findByPk(`${id}`);
+      const item = await ArticleServices.findByPk(
+        Number(id),
+        material,
+      );
       if (!item) {
         return Response.error(res, 409, {
           message: 'Article is not found',

@@ -22,6 +22,8 @@ import ProjectModel from './models/project.model';
 import InnovationModel from './models/innovation';
 import AboutModel from './models/about';
 import TeamModel from './models/team';
+import MaterialModel from './models/material.model';
+import AuthorModel from './models/author.model';
 
 dotenv.config();
 
@@ -55,6 +57,8 @@ export const sequelize = new Sequelize.Sequelize(
 sequelize.authenticate();
 
 const DB = {
+  Author: AuthorModel(sequelize),
+  Material: MaterialModel(sequelize),
   Team: TeamModel(sequelize),
   About: AboutModel(sequelize),
   Innovation: InnovationModel(sequelize),
@@ -87,6 +91,15 @@ const DB = {
     alter: false, //process.env.NODE_ENV !== 'production',
   });
   // code
+
+  DB.Material.belongsTo(DB.Categories, {
+    as: 'category',
+    foreignKey: 'category_id',
+  });
+  DB.Material.belongsTo(DB.SubCategories, {
+    as: 'subcategory',
+    foreignKey: 'subcategory_id',
+  });
 })();
 
 export default DB;
