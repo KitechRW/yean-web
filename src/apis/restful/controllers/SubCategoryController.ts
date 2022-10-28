@@ -74,16 +74,13 @@ export default class SubCategoryController {
       }
 
       const { fields, files } = await parseForm(req);
-      if (!files.media) {
-        return Response.error(res, 500, {
-          message: 'Please upload image',
-        });
-      }
-
       const file = files.media;
-      let images = Array.isArray(file)
-        ? file.map(f => `/uploads/${f.newFilename}`)
-        : `/uploads/${file.newFilename}`;
+      let images: string | string[] | null = null;
+      if (file) {
+        images = Array.isArray(file)
+          ? file.map(f => `/uploads/${f.newFilename}`)
+          : `/uploads/${file.newFilename}`;
+      }
 
       if (images) {
         removeFile(item.toJSON()?.image);
@@ -91,7 +88,7 @@ export default class SubCategoryController {
 
       const payload = {
         ...fields,
-        image: images,
+        image: images || item.toJSON()?.image,
       };
 
       item.set(payload);
@@ -116,6 +113,7 @@ export default class SubCategoryController {
           message: 'SubCategory is not found',
         });
       }
+      removeFile(item.toJSON()?.image);
       return Response.success(res, 200, {
         message: 'Subcategorys deleted successfuly',
         data: await item.destroy(),

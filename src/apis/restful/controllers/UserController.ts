@@ -110,7 +110,7 @@ export default class UserController {
           : `/uploads/${file.newFilename}`;
 
         if (images) {
-          removeFile(item.toJSON()?.image);
+          removeFile(item.toJSON()?.profile_image);
         }
       }
 
@@ -141,8 +141,9 @@ export default class UserController {
           message: 'User is not found',
         });
       }
+      removeFile(item.toJSON()?.profile_image);
       return Response.success(res, 200, {
-        message: 'Users deleted successfuly',
+        message: 'User deleted successfuly',
         data: await item.destroy(),
       });
     } catch (error) {

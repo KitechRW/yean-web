@@ -220,6 +220,7 @@ export default class ArticleController {
           message: 'Article is not found',
         });
       }
+      removeFile(item.toJSON()?.image);
       return Response.success(res, 200, {
         message: 'Articles deleted successfuly',
         data: await item.destroy(),

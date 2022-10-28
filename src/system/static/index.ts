@@ -78,6 +78,11 @@ export const adminNavs = [
   },
   {
     icon: Feed,
+    label: 'Authors',
+    path: '/admin/authors',
+  },
+  {
+    icon: Feed,
     label: 'Articles',
     path: '/admin/articles',
   },

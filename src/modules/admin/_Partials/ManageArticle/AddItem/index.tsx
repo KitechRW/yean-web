@@ -55,7 +55,7 @@ const AddItem = ({
   } = useProtectedFetcher('/api/sub-categories');
   const {
     data: { data: authors },
-  } = useProtectedFetcher('/api/users');
+  } = useProtectedFetcher('/api/authors');
   const {
     register,
     unregister,
@@ -203,7 +203,7 @@ const AddItem = ({
     (item: any) => item.value == data?.category_id,
   );
 
-  const authorOptions = authors?.map((element: any) => ({
+  const authorOptions = authors?.rows?.map((element: any) => ({
     value: element.id,
     label: `${element.firstname} ${element.lastname}`,
   }));

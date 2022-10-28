@@ -3,15 +3,15 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import removeFile, { parseForm } from 'apis/utils/libForm';
 import DB from 'apis/database';
 
-const { Projects: Project } = DB;
+const { Author } = DB;
 
-export default class ProjectController {
+export default class AuthorController {
   static async getOne(req: NextApiRequest, res: NextApiResponse) {
     const { id } = req.query;
     try {
       return Response.success(res, 200, {
-        message: 'Projects fetched successfuly',
-        data: await Project.findByPk(`${id}`),
+        message: 'Authors fetched successfuly',
+        data: await Author.findByPk(`${id}`),
       });
     } catch (error) {
       return Response.error(res, 500, {
@@ -23,10 +23,8 @@ export default class ProjectController {
   static async getAll(req: NextApiRequest, res: NextApiResponse) {
     try {
       return Response.success(res, 200, {
-        message: 'Projects fetched successfuly',
-        data: await Project.findAndCountAll({
-          order: [['id', 'DESC']],
-        }),
+        message: 'Authors fetched successfuly',
+        data: await Author.findAndCountAll(),
       });
     } catch (error) {
       return Response.error(res, 500, {
@@ -51,11 +49,11 @@ export default class ProjectController {
 
       const payload = {
         ...fields,
-        image: images,
+        profile_image: images,
       };
       return Response.success(res, 200, {
-        message: 'Project created successfuly',
-        data: await Project.create(payload),
+        message: 'Author created successfuly',
+        data: await Author.create(payload),
       });
     } catch (error) {
       return Response.error(res, 500, {
@@ -67,15 +65,21 @@ export default class ProjectController {
   static async update(req: NextApiRequest, res: NextApiResponse) {
     const { id } = req.query;
     try {
-      const item = await Project.findByPk(`${id}`);
+      const item = await Author.findByPk(`${id}`);
 
       if (!item?.toJSON()) {
         return Response.error(res, 404, {
-          message: 'Project is not found',
+          message: 'Author is not found',
         });
       }
 
       const { fields, files } = await parseForm(req);
+      // if (!files.media) {
+      //   return Response.error(res, 500, {
+      //     message: 'Please upload image',
+      //   });
+      // }
+
       const file = files.media;
       let images: string | string[] | null = null;
       if (file) {
@@ -85,18 +89,18 @@ export default class ProjectController {
       }
 
       if (images) {
-        removeFile(item.toJSON()?.image);
+        removeFile(item.toJSON()?.profile_image);
       }
 
       const payload = {
         ...fields,
-        image: images || item.toJSON()?.image,
+        profile_image: images || item.toJSON().profile_image,
       };
 
       item.set(payload);
 
       return Response.success(res, 200, {
-        message: 'Project updated successfuly',
+        message: 'Author updated successfuly',
         data: await item.save(),
       });
     } catch (error) {
@@ -109,15 +113,15 @@ export default class ProjectController {
   static async delete(req: NextApiRequest, res: NextApiResponse) {
     const { id } = req.query;
     try {
-      const item = await Project.findByPk(`${id}`);
+      const item = await Author.findByPk(`${id}`);
       if (!item) {
         return Response.error(res, 409, {
-          message: 'Project is not found',
+          message: 'Author is not found',
         });
       }
-      removeFile(item.toJSON()?.image);
+      removeFile(item.toJSON()?.profile_image);
       return Response.success(res, 200, {
-        message: 'Projects deleted successfuly',
+        message: 'Authors deleted successfuly',
         data: await item.destroy(),
       });
     } catch (error) {

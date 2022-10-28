@@ -15,7 +15,6 @@ const ViewItem = ({
   handleDelete: (id: any) => void;
 }) => {
   const { name, image, } = data || {};
-  console.log(data);
   return (
     <>
       <div className="flex flex-col bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700">
