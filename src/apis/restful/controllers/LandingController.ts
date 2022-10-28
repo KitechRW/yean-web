@@ -3,7 +3,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import ArticleServices from 'apis/services/articleServices';
 import DB from 'apis/database';
 
-const { Articles: Article, Landings: Landing } = DB;
+const { Articles: Article, Landings: Landing, Material } = DB;
 export default class LandingController {
   static async getOne(req: NextApiRequest, res: NextApiResponse) {
     const { id } = req.query;
@@ -26,8 +26,9 @@ export default class LandingController {
           message: 'No slides',
         });
       }
-      const slides = await Article.findAll({
+      const slides = await Material.findAll({
         where: { id: ids },
+        attributes: ['title', 'image'],
       });
 
       return Response.success(res, 200, {
@@ -60,14 +61,51 @@ export default class LandingController {
     res: NextApiResponse,
   ) {
     try {
-      let attributes = req.query.attributes as string;
+      // let attributes = req.query.attributes as string;
       const articles = await ArticleServices.findAndCountAll(
         undefined,
-        attributes?.split(','),
+        [
+          'id',
+          'title',
+          'image',
+          'author_id',
+          'views',
+          'comment',
+          'createdAt',
+          'updatedAt',
+        ],
+        ['firstname', 'lastname', 'profile_image'],
+        8,
+        0,
+      );
+
+      const materialParams = [
+        'category_id',
+        'subcategory_id',
+        'slug',
+        'material',
+      ];
+
+      const materials = await ArticleServices.findAndCountAll(
+        undefined,
+        [
+          'id',
+          'title',
+          'image',
+          'author_id',
+          ...materialParams,
+          'createdAt',
+          'updatedAt',
+        ],
+        ['firstname', 'lastname', 'profile_image'],
+        8,
+        0,
+        true,
       );
       return Response.success(res, 200, {
         message: 'Landings fetched successfuly',
-        data: articles.rows.slice(0, 16),
+        data: articles,
+        materials,
       });
     } catch (error: any) {
       return Response.error(res, 500, {

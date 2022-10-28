@@ -24,14 +24,13 @@ import SlideUpItem from './SlideUpItem';
 const LandingAcitivity = ({
   data,
   articles,
+  materials,
 }: {
   data: any;
-  articles: any[];
+  articles: any;
+  materials: any;
 }) => {
   const { push } = useRouter();
-  const {
-    data: { data: subCategories },
-  } = useProtectedFetcher('/api/sub-categories');
   const slides = data?.slides || [];
   const {
     data: { data: partners },
@@ -40,16 +39,8 @@ const LandingAcitivity = ({
 
   const confirmedPartners = partners?.rows;
 
-  const articleList: any[] =
-    articles?.map((item: any) => {
-      const sub = subCategories?.rows?.filter(
-        (element: any) => element.id == item.category,
-      );
-      if (sub?.length) {
-        return { ...item, category: sub[0] };
-      }
-      return item;
-    }) || [];
+  const articleList: any[] = articles?.rows || [];
+  const materialList: any[] = materials?.rows || [];
 
   return (
     <Scaffold>
@@ -120,7 +111,7 @@ const LandingAcitivity = ({
           Extension Materials
         </h1>
         <div className="pt-2 inline-grid sm:grid-cols-2 md:grid-cols-4 gap-3">
-          {articleList.slice(0, 8)?.map((element: any) => (
+          {articleList.map((element: any) => (
             <MinPost key={element.id} data={element} />
           ))}
         </div>
@@ -158,7 +149,7 @@ const LandingAcitivity = ({
           Latest Blog
         </h1>
         <div className="pt-2 inline-grid sm:grid-cols-2 md:grid-cols-4 gap-3">
-          {articles?.slice(8)?.map((element: any) => (
+          {materialList.map((element: any) => (
             <LatestBlog key={element.id} data={element} />
           ))}
         </div>

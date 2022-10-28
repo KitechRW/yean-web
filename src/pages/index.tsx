@@ -9,10 +9,12 @@ const LandingPage = ({
   data,
   articles,
   partners,
+  materials,
 }: {
   data: any;
   articles: any;
   partners: any;
+  materials: any;
 }) => {
   return (
     <>
@@ -22,6 +24,7 @@ const LandingPage = ({
       </Head>
       <LandingActivity
         data={data}
+        materials={materials}
         articles={articles}
       />
       <Script src="/assets/js/main.js" />
@@ -33,6 +36,7 @@ export async function getServerSideProps() {
   let results = null;
   let resultArticles = null;
   let partners = null;
+  let materials = null;
   try {
     const { data } = await Http.axios.get('/api/landing/1');
     results = data?.data;
@@ -45,6 +49,7 @@ export async function getServerSideProps() {
       '/api/landing/1?attributes=id,title,author_id,comment,views,category,image',
     );
     resultArticles = articles?.data;
+    materials = articles?.materials;
   } catch (error: any) {
     console.log(error.message);
   }
@@ -53,6 +58,7 @@ export async function getServerSideProps() {
       data: results,
       articles: resultArticles,
       partners,
+      materials,
     },
   };
 }

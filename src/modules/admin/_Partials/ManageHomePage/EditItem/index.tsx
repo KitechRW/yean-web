@@ -106,7 +106,7 @@ const EditItem = ({
 
   const {
     data: { data: articles },
-  } = useProtectedFetcher('/api/articles?limit=200');
+  } = useProtectedFetcher('/api/articles?limit=200&material=1');
 
   const articlesOptions = articles?.map((element: any) => ({
     value: element.id,

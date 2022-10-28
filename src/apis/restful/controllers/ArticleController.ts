@@ -56,7 +56,7 @@ export default class ArticleController {
 
   static async getAll(req: NextApiRequest, res: NextApiResponse) {
     try {
-      let { page = 1, limit = 10, cat } = req.query;
+      let { page = 1, limit = 10, cat, sub } = req.query;
       const material = Number(req.query.material) > 0;
       const materialParams = [];
       if (material) {
@@ -71,7 +71,10 @@ export default class ArticleController {
       limit = Number(limit);
       const where: any = {};
       if (Number(cat)) {
-        where.category = cat;
+        where.category_id = cat;
+      }
+      if (Number(sub)) {
+        where.subcategory_id = sub;
       }
       const offset = (page - 1) * limit;
       const { rows, count } = await ArticleServices.findAndCountAll(
