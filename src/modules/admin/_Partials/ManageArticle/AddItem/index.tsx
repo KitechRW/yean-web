@@ -13,6 +13,7 @@ import RichText from 'system/config/richtext';
 import Select from 'react-select';
 import { useProtectedFetcher } from 'apis/utils/fetcher';
 import Http from 'core/factory/fact.http';
+import { Checkbox, FormControlLabel, FormGroup } from '@mui/material';
 
 const ReactQuill = dynamic(() => import('react-quill'), {
   ssr: false,
@@ -22,8 +23,8 @@ const fields = {
   title: joi.string().required(),
   image: joi.object().required().optional(),
   text: joi.string().required(),
-  parentCat: joi.number().required().label('Category'),
-  category: joi.number().required().label('Sub category'),
+  category_id: joi.number().label('Category'),
+  subcategory_id: joi.number().label('Sub category'),
   author_id: joi.number().required().label('Author'),
 };
 
@@ -42,6 +43,7 @@ const AddItem = ({
   handleDelete?: (id: any) => void;
   dataValues?: any;
 }) => {
+  const [material, setMaterial] = React.useState(false);
   const [data, setData] = React.useState<any>(null);
   const [loading, setLoading] = React.useState(false);
   const [toggle, setToggle] = React.useState(false);
@@ -56,10 +58,12 @@ const AddItem = ({
   } = useProtectedFetcher('/api/users');
   const {
     register,
+    unregister,
     handleSubmit,
     setValue,
     getValues,
     reset,
+    setError,
     formState: { errors },
   } = useForm({
     resolver: joiResolver(schema),
@@ -69,14 +73,17 @@ const AddItem = ({
     setLoading(true);
     const formData = new FormData();
     Object.keys(query).forEach(key => {
-      if (key !== 'parentCat') {
-        formData.append(key === 'image' ? 'media' : key, query[key]);
-      }
+      formData.append(key === 'image' ? 'media' : key, query[key]);
     });
     const { data: res, error } = await (!dataValues
-      ? DefaultApi.PostRoute.postRoute('/api/articles', formData)
+      ? DefaultApi.PostRoute.postRoute(
+          `/api/articles?material=${material ? 1 : 0}`,
+          formData,
+        )
       : DefaultApi.PatchRoute.patchRoute(
-          `/api/articles/${dataValues.id}`,
+          `/api/articles/${dataValues.id}?material=${
+            material ? 1 : 0
+          }`,
           formData,
         ));
     setLoading(false);
@@ -92,10 +99,10 @@ const AddItem = ({
         setToggle(false);
         if (dataValues) {
           // @ts-ignore
-          handleEdit(res.data);
+          handleEdit(res.data, material);
         } else {
           // @ts-ignore
-          handleAdd(res.data);
+          handleAdd(res.data, material);
         }
       });
     }
@@ -118,7 +125,7 @@ const AddItem = ({
     }
     setLoading(true);
     const { data, error } = await DefaultApi.DeleteRoute.deleteRoute(
-      `/api/articles/${dataValues.id}`,
+      `/api/articles/${dataValues.id}?material=${material ? 1 : 0}`,
     );
     setLoading(false);
 
@@ -141,30 +148,40 @@ const AddItem = ({
   };
 
   React.useEffect(() => {
+    if (dataValues?.material) {
+      setMaterial(!!dataValues.material);
+    }
     if (dataValues?.id) {
       Http.axios
-        .get(`/api/articles/${dataValues.id}`)
-        .then(response => {
-          setData(response.data.data.article);
+        .get(
+          `/api/articles/${dataValues.id}?material=${
+            !!dataValues.material ? 1 : 0
+          }`,
+        )
+        .then(response => response.data)
+        .then(result => {
+          const article = result.data;
+          setData(article);
         });
     }
   }, [dataValues]);
 
   const resetForm = React.useRef(() => {});
+
   resetForm.current = () => {
-    if (data) {
-      const defaultValues: any = {};
-      Object.keys(fields).map(key => {
-        if (!['image', 'parentCat'].includes(key)) {
-          defaultValues[key] = data[key];
-        }
-      });
-      reset(defaultValues);
-    }
+    reset({
+      title: data.title,
+      text: data.text,
+      category_id: data.category_id,
+      subcategory_id: data.subcategory_id,
+      author_id: data.author_id,
+    });
   };
 
   React.useEffect(() => {
-    resetForm.current();
+    if (data) {
+      resetForm.current();
+    }
   }, [data]);
 
   const categoryOptions = categories?.rows?.map((element: any) => ({
@@ -173,28 +190,18 @@ const AddItem = ({
   }));
 
   const subCategoryOptions = subCategories?.rows
-    ?.filter((item: any) => item.categoryId == getValues('parentCat'))
+    ?.filter((item: any) => item.id == getValues('category_id'))
     ?.map((element: any) => ({
       value: element.id,
       label: element.name,
     }));
 
-  const defaultSubCategoryOptions = subCategories?.rows
-    ?.filter((item: any) => item.id == data?.category)
-    ?.map((item: any) => ({
-      value: item.id,
-      label: item.name,
-      categoryId: item.categoryId,
-    }));
-  const defaultCategoryOptions = categoryOptions?.filter(
-    (item: any) => {
-      if (defaultSubCategoryOptions?.length) {
-        return defaultSubCategoryOptions[0].categoryId == item.value;
-      }
-      return false;
-    },
+  const defaultSubCategoryOptions = subCategoryOptions?.filter(
+    (item: any) => item.value == data?.subcategory_id,
   );
-  console.log(defaultCategoryOptions);
+  const defaultCategoryOptions = categoryOptions?.filter(
+    (item: any) => item.value == data?.category_id,
+  );
 
   const authorOptions = authors?.map((element: any) => ({
     value: element.id,
@@ -215,6 +222,13 @@ const AddItem = ({
       <div className="flex flex-col">
         <form
           onSubmit={event => {
+            event.preventDefault();
+            if (!material) {
+              unregister(['subcategory_id', 'category_id']);
+            } else {
+              setError('category_id', { type: 'required' });
+              setError('subcategory_id', { type: 'required' });
+            }
             handleSubmit(onSubmit)(event);
           }}
           className="gap-y-3 flex flex-col"
@@ -227,6 +241,7 @@ const AddItem = ({
               type="text"
               placeholder={'Title'}
               {...register('title')}
+              defaultValue={data?.title}
               className="mt-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             />
             {errors.title?.message && (
@@ -235,52 +250,74 @@ const AddItem = ({
               </p>
             )}
           </label>
-          <label className="flex flex-col">
-            <span className="text-sm font-medium text-gray-900 dark:text-gray-300">
-              Category
-            </span>
-            <Select
-              isMulti={false}
-              {...register('parentCat')}
-              options={categoryOptions}
-              defaultValue={defaultCategoryOptions}
-              onChange={(newValue: any) => {
-                setValue('parentCat', newValue.value, {
-                  shouldDirty: true,
-                  shouldValidate: true,
-                });
-              }}
-              className="mt-2"
+          <FormGroup>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  onChange={event => {
+                    if (dataValues?.id && material) {
+                      return;
+                    }
+                    setMaterial(event.target.checked);
+                  }}
+                  checked={!!material}
+                />
+              }
+              label="Extension material"
             />
-            {errors.parentCat?.message && (
-              <p className="mt-1 text-red-500">
-                {formatJoiErorr(`${errors.parentCat.message}`)}
-              </p>
-            )}
-          </label>
-          <label className="flex flex-col">
-            <span className="text-sm font-medium text-gray-900 dark:text-gray-300">
-              Sub Category
-            </span>
-            <Select
-              isMulti={false}
-              {...register('category')}
-              options={subCategoryOptions}
-              defaultValue={defaultSubCategoryOptions}
-              onChange={(newValue: any) => {
-                setValue('category', newValue.value, {
-                  shouldDirty: true,
-                  shouldValidate: true,
-                });
-              }}
-              className="mt-2"
-            />
-            {errors.category?.message && (
-              <p className="mt-1 text-red-500">
-                {formatJoiErorr(`${errors.category.message}`)}
-              </p>
-            )}
-          </label>
+          </FormGroup>
+          {material ? (
+            <>
+              <label className="flex flex-col">
+                <span className="text-sm font-medium text-gray-900 dark:text-gray-300">
+                  Category
+                </span>
+                <Select
+                  isMulti={false}
+                  {...register('category_id')}
+                  options={categoryOptions}
+                  defaultValue={defaultCategoryOptions}
+                  onChange={(newValue: any) => {
+                    setValue('category_id', newValue.value, {
+                      shouldDirty: true,
+                      shouldValidate: true,
+                    });
+                  }}
+                  className="mt-2"
+                />
+                {errors.category_id?.message && (
+                  <p className="mt-1 text-red-500">
+                    {formatJoiErorr(`${errors.category_id.message}`)}
+                  </p>
+                )}
+              </label>
+              <label className="flex flex-col">
+                <span className="text-sm font-medium text-gray-900 dark:text-gray-300">
+                  Sub Category
+                </span>
+                <Select
+                  isMulti={false}
+                  {...register('subcategory_id')}
+                  options={subCategoryOptions}
+                  defaultValue={defaultSubCategoryOptions}
+                  onChange={(newValue: any) => {
+                    setValue('subcategory_id', newValue.value, {
+                      shouldDirty: true,
+                      shouldValidate: true,
+                    });
+                  }}
+                  className="mt-2"
+                />
+                {errors.subcategory_id?.message && (
+                  <p className="mt-1 text-red-500">
+                    {formatJoiErorr(
+                      `${errors.subcategory_id.message}`,
+                    )}
+                  </p>
+                )}
+              </label>
+            </>
+          ) : null}
           <label className="flex flex-col">
             <span className="text-sm font-medium text-gray-900 dark:text-gray-300">
               Author

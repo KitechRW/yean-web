@@ -1,4 +1,5 @@
 import { Add, Search } from '@mui/icons-material';
+import { FormControlLabel, Radio, RadioGroup } from '@mui/material';
 import { useOpenFetcher } from 'apis/utils/fetcher';
 import Pagination from 'modules/_partials/Pagination';
 import React from 'react';
@@ -7,6 +8,7 @@ import ViewItem from '../_Partials/ManageArticle/ViewItem';
 
 const ArticleActivity = () => {
   const topRef = React.useRef(null);
+  const [material, setMaterial] = React.useState(false);
   const [pageNumber, setPageNumber] = React.useState(1);
   const [articles, setArticles] = React.useState<{
     count: number;
@@ -15,7 +17,12 @@ const ArticleActivity = () => {
   const {
     data: { data, pagination },
     isLoading,
-  } = useOpenFetcher(`/api/articles?page=${pageNumber}&limit=20`);
+  } = useOpenFetcher(
+    `/api/articles?material=${
+      material ? 1 : 0
+    }&page=${pageNumber}&limit=20`,
+  );
+  console.log(material);
 
   const [filterValue, setFilterValue] = React.useState('');
 
@@ -38,14 +45,15 @@ const ArticleActivity = () => {
     }
   }, [data]);
 
-  const handleAdd = (item: any) => {
+  const handleAdd = (item: any, notBlog = false) => {
     setArticles(prev => ({
       ...articles,
       rows: [item, ...prev.rows],
     }));
+    setMaterial(notBlog);
   };
 
-  const handleEdit = (item: any) => {
+  const handleEdit = (item: any, notBlog = false) => {
     const rows = articles.rows.map(row => {
       if (Number(row.id) === Number(item.id)) {
         return item;
@@ -56,6 +64,7 @@ const ArticleActivity = () => {
       ...prev,
       rows: rows,
     }));
+    setMaterial(notBlog);
   };
 
   const handleDelete = (id: any) => {
@@ -74,7 +83,7 @@ const ArticleActivity = () => {
       ref={topRef}
       className="px-4 md:pl-6 bg-white py-4 flex flex-col flex-grow items-center md:px-8 w-full"
     >
-      <div className="space-x-6 md:space-x-12 bg-white flex justify-between w-full">
+      <div className="space-x-6 md:space-x-12 bg-white flex flex-wrap md:flex-nowrap gap-2 justify-between w-full">
         <div className="group flex-grow flex items-center relative">
           <Search className="left-2 absolute text-slate-400" />
           <input
@@ -85,6 +94,26 @@ const ArticleActivity = () => {
             placeholder="Filter articles..."
           />
         </div>
+        <RadioGroup
+          aria-labelledby="demo-radio-buttons-group-label"
+          defaultValue="blog"
+          name="radio-buttons-group"
+          row
+          onChange={event => {
+            setMaterial(event.target.value === 'material');
+          }}
+        >
+          <FormControlLabel
+            value="blog"
+            control={<Radio checked={material === false} />}
+            label="Blog"
+          />
+          <FormControlLabel
+            value="material"
+            control={<Radio checked={material === true} />}
+            label="Material"
+          />
+        </RadioGroup>
         <AddItem
           handleAdd={item => {
             handleAdd(item);

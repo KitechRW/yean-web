@@ -91,15 +91,6 @@ const DB = {
     alter: false, //process.env.NODE_ENV !== 'production',
   });
   // code
-
-  DB.Material.belongsTo(DB.Categories, {
-    as: 'category',
-    foreignKey: 'category_id',
-  });
-  DB.Material.belongsTo(DB.SubCategories, {
-    as: 'subcategory',
-    foreignKey: 'subcategory_id',
-  });
 })();
 
 export default DB;

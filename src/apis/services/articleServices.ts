@@ -1,5 +1,6 @@
 import { FindAttributeOptions, WhereOptions } from 'sequelize/types';
 import DB from 'apis/database';
+import { convertToSlug } from 'system/format';
 
 const {
   Articles: Article,
@@ -13,6 +14,9 @@ const {
 export default class ArticleServices {
   static create(data: any, material = false) {
     const ArticleModel = !material ? Article : Material;
+    if (data.slug && material) {
+      data.slug = convertToSlug(data.slug);
+    }
     return ArticleModel.create(data);
   }
 

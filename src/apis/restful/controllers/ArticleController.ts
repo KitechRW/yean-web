@@ -10,16 +10,27 @@ const { Articles: Article, Material } = DB;
 export default class ArticleController {
   static async getOne(req: NextApiRequest, res: NextApiResponse) {
     const { id } = req.query;
-    const material = Boolean(req.query.material);
+    const material = Number(req.query.material) > 0;
     try {
       const materialParams = [];
       if (material) {
-        materialParams.push('category_id', 'subcategory_id');
+        materialParams.push(
+          'category_id',
+          'subcategory_id',
+          'slug',
+          'material',
+        );
+      }
+      const query: any = {};
+      if (material && !Number(id)) {
+        query.slug = id;
+      } else {
+        query.id = id;
       }
       return Response.success(res, 200, {
         message: 'Articles fetched successfuly',
         data: await ArticleServices.findOne(
-          { id },
+          query,
           [
             'id',
             'title',
@@ -46,10 +57,15 @@ export default class ArticleController {
   static async getAll(req: NextApiRequest, res: NextApiResponse) {
     try {
       let { page = 1, limit = 10, cat } = req.query;
-      const material = Boolean(req.query.material);
+      const material = Number(req.query.material) > 0;
       const materialParams = [];
       if (material) {
-        materialParams.push('category_id', 'subcategory_id');
+        materialParams.push(
+          'category_id',
+          'subcategory_id',
+          'slug',
+          'material',
+        );
       }
       page = Number(page);
       limit = Number(limit);
@@ -75,12 +91,6 @@ export default class ArticleController {
         material,
       );
       const pagination = paginate(page, count, rows, limit);
-
-      if (offset >= count) {
-        return Response.success(res, 404, {
-          message: 'page not found',
-        });
-      }
 
       return Response.success(res, 200, {
         message: 'Articles fetched successfuly',
@@ -127,12 +137,34 @@ export default class ArticleController {
 
   static async update(req: NextApiRequest, res: NextApiResponse) {
     const { id } = req.query;
-    const material = Boolean(req.query.material);
+    const material = Number(req.query.material) > 0;
     try {
       const ArticleModel = !material ? Article : Material;
       const item = await ArticleModel.findByPk(`${id}`);
 
       if (!item?.toJSON()) {
+        if (material) {
+          const foundArticle = await Article.findByPk(`${id}`);
+          if (foundArticle) {
+            const { fields, files } = await parseForm(req);
+            const file = files.media;
+            let images: string | string[] | null = null;
+            if (file) {
+              images = Array.isArray(file)
+                ? file.map(f => `/uploads/${f.newFilename}`)
+                : `/uploads/${file.newFilename}`;
+            }
+            const data = await Material.create({
+              ...fields,
+              image: images || foundArticle.toJSON()?.image,
+            });
+            foundArticle.destroy();
+            return Response.success(res, 200, {
+              message: 'Article updated successfuly',
+              data,
+            });
+          }
+        }
         return Response.error(res, 404, {
           message: 'Article is not found',
         });

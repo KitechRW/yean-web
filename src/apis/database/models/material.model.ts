@@ -16,6 +16,10 @@ const MaterialModel = (sequelize: Sequelize) => {
       text: DataTypes.TEXT,
       category_id: DataTypes.INTEGER,
       subcategory_id: DataTypes.INTEGER,
+      material: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: true,
+      },
       views: {
         type: DataTypes.INTEGER,
         defaultValue: 0,
