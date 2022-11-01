@@ -1,14 +1,30 @@
 import Scaffold from 'modules/layouts/Scaffold';
 import Image from 'next/image';
 import React from 'react';
+import {
+  EmailIcon,
+  EmailShareButton,
+  FacebookIcon,
+  FacebookShareButton,
+  InstapaperIcon,
+  InstapaperShareButton,
+  LinkedinIcon,
+  LinkedinShareButton,
+  TwitterIcon,
+  TwitterShareButton,
+  WhatsappIcon,
+  WhatsappShareButton,
+} from 'react-share';
 import { useOpenFetcher } from 'apis/utils/fetcher';
 import { useRouter } from 'next/router';
+import Keys from 'apis/utils/constants/keys';
 
 const CarrerActivity = () => {
   const router = useRouter();
   const {
     data: { data },
   } = useOpenFetcher(`/api/jobs/${router.query.id}`);
+  const url = `${Keys.HOST}${router.asPath}`;
   return (
     <Scaffold>
       <div className="flex-wrap bg-white justify-center items-center w-full p-4 md:p-8 flex gap-4">
@@ -19,6 +35,44 @@ const CarrerActivity = () => {
           <p className="mt-2 text-[#767676] max-w-sm">
             The following are the description about this job
           </p>
+          <div className="mx-auto flex items-center gap-2 p-2">
+            <TwitterShareButton
+              title={`Job - ` + data?.title}
+              url={url}
+            >
+              <TwitterIcon size={32} round={true} />
+            </TwitterShareButton>
+            <FacebookShareButton
+              title={`Job - ` + data?.title}
+              url={url}
+            >
+              <FacebookIcon size={32} round={true} />
+            </FacebookShareButton>
+            <WhatsappShareButton
+              title={`Job - ` + data?.title}
+              url={url}
+            >
+              <WhatsappIcon size={32} round={true} />
+            </WhatsappShareButton>
+            <LinkedinShareButton
+              title={`Job - ` + data?.title}
+              url={url}
+            >
+              <LinkedinIcon size={32} round={true} />
+            </LinkedinShareButton>
+            <EmailShareButton
+              title={`Job - ` + data?.title}
+              url={url}
+            >
+              <EmailIcon size={32} round={true} />
+            </EmailShareButton>
+            <InstapaperShareButton
+              title={`Job - ` + data?.title}
+              url={url}
+            >
+              <InstapaperIcon size={32} round={true} />
+            </InstapaperShareButton>
+          </div>
         </div>
         <Image
           src="/assets/images/finding_worker.svg"
@@ -29,8 +83,8 @@ const CarrerActivity = () => {
       </div>
 
       <div className="p-4 md:p-8 items-center flex flex-col bg-[#F5F7FA]">
-        <div className="overflow-hidden bg-white shadow sm:rounded-lg">
-          <div className="px-4 py-5 sm:px-6">
+        <div className="flex flex-col bg-white shadow sm:rounded-lg">
+          <div className="px-4 flex flex-col py-5 sm:px-6">
             <h3 className="text-lg font-medium leading-6 text-gray-900">
               Job Information
             </h3>

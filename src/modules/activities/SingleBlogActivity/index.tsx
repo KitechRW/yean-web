@@ -23,29 +23,55 @@ import {
 } from 'react-share';
 import Blogs from '../_Partials/Blogs';
 
-const SingleBlogActivity = ({ data }: any) => {
+const SingleBlogActivity = () => {
   const contentRef = React.useRef(null);
-  const { push, asPath } = useRouter();
+  const { push, asPath, query } = useRouter();
+  const material = Number(query.material);
+  const {
+    data: { data },
+  } = useOpenFetcher(
+    `/api/articles/${query.slugName}?material=${query.material}`,
+  );
   const {
     data: { data: relatedArticles },
-  } = useOpenFetcher(`/api/articles?cat=${data?.article?.category}`);
+  } = useOpenFetcher(
+    `/api/articles?cat=${data?.article?.category}&material=${query.material}`,
+  );
 
   const handleClick = (id: any) => {
-    push('/blog/' + id);
+    if (material) {
+      push(`/blog/${id}?material=1`);
+    } else {
+      push(`/blog/${id}`);
+    }
   };
+
+  React.useEffect(() => {
+    if (data?.title) {
+      document.title = `Yean - ${data?.title}`;
+    }
+  }, [data]);
 
   const url = `${Keys.HOST}${asPath}`;
   return (
     <Scaffold>
       <div className="w-full px-4 bg-white md:px-8 pt-12 border-b border-[#E6E6E6]">
         <div className="px-4 md:px-8 w-full max-w-6xl mx-auto flex items-center space-x-4">
-          <Link href="/blog">
+          <Link
+            href={
+              Number(query.material)
+                ? `/extension-material/${data?.category_id}?category_name=${data?.category?.name}&subcategory=${data?.subcategory?.name}&material=1`
+                : '/blog'
+            }
+          >
             <span className="cursor-pointer text-sm font-medium pb-3">
-              All
+              {Number(query.material) ? data?.category?.name : 'All'}
             </span>
           </Link>
           <span className="cursor-pointer text-sm font-medium pb-3 border-b-2 border-b-[#FCB316]">
-            Blogs
+            {!Number(query.material)
+              ? 'Blogs'
+              : data?.subcategory?.name}
           </span>
         </div>
       </div>
@@ -53,7 +79,7 @@ const SingleBlogActivity = ({ data }: any) => {
       <div className="w-full px-4 bg-white md:px-8 py-6 max-w-6xl mx-auto flex flex-col">
         <div className="group-hover:opacity-80 flex flex-col relative w-full max-w-4xl min-h-[490px]">
           <CustomImage
-            src={data?.article?.image}
+            src={data?.image}
             alt=""
             layout="fill"
             loading="lazy"
@@ -68,66 +94,65 @@ const SingleBlogActivity = ({ data }: any) => {
         <div className="flex flex-col-reverse md:flex-row gap-3 md:items-center max-w-4xl">
           <div className="px-3 py-3 space-x-3 flex items-center">
             <Avatar
-              src={data?.article?.author?.avatar}
-              alt={data?.article?.author?.firstname}
+              src={data?.author?.profile_name}
+              alt={data?.author?.firstname}
             />
             <div className="flex flex-col text-[#767676]">
               <h1 className="text-sm font-bold">
                 {data?.author?.firstname} {data?.author?.lastname}
               </h1>
-              {data?.article?.createdAt && (
+              {data?.createdAt && (
                 <p className="text-xs">
-                  {format(
-                    new Date(data?.article?.createdAt),
-                    'dd MMMM yyyy',
-                  )}
+                  {format(new Date(data?.createdAt), 'dd MMMM yyyy')}
                 </p>
               )}
             </div>
           </div>
           <div className="ml-auto flex items-center gap-2 py-2">
-            <TwitterShareButton url={url}>
+            <TwitterShareButton title={data?.title} url={url}>
               <TwitterIcon size={32} round={true} />
             </TwitterShareButton>
-            <FacebookShareButton url={url}>
+            <FacebookShareButton title={data?.title} url={url}>
               <FacebookIcon size={32} round={true} />
             </FacebookShareButton>
-            <WhatsappShareButton url={url}>
+            <WhatsappShareButton title={data?.title} url={url}>
               <WhatsappIcon size={32} round={true} />
             </WhatsappShareButton>
-            <LinkedinShareButton url={url}>
+            <LinkedinShareButton title={data?.title} url={url}>
               <LinkedinIcon size={32} round={true} />
             </LinkedinShareButton>
-            <EmailShareButton url={url}>
+            <EmailShareButton title={data?.title} url={url}>
               <EmailIcon size={32} round={true} />
             </EmailShareButton>
-            <InstapaperShareButton url={url}>
+            <InstapaperShareButton title={data?.title} url={url}>
               <InstapaperIcon size={32} round={true} />
             </InstapaperShareButton>
           </div>
         </div>
 
         <h1 className="mt-6 text-[#6F7D1D] text-lg md:text-xl font-semibold max-w-4xl">
-          {data?.article?.title}
+          {data?.title}
         </h1>
 
         <div
           className="mt-4 text-justify leading-relaxed flex flex-col space-y-3 max-w-4xl hideContentNotInTagUL"
-          dangerouslySetInnerHTML={{__html: data?.article?.text}}
+          dangerouslySetInnerHTML={{ __html: data?.text }}
         />
 
         <h1 className="mt-12 mb-6 text-xl md:text-2xl text-dark-green font-bold bg-brand-green/10 p-2 text-center">
-          View Related Blogs
+          View Related
         </h1>
 
-        <Blogs
-          data={{
-            data: relatedArticles?.filter(
-              (item: any) => item.id !== data.id,
-            ),
-          }}
-          onClick={handleClick}
-        />
+        {data ? (
+          <Blogs
+            data={{
+              data: relatedArticles?.filter(
+                (item: any) => item.id !== data.id,
+              ),
+            }}
+            onClick={handleClick}
+          />
+        ) : null}
       </div>
     </Scaffold>
   );

@@ -10,7 +10,9 @@ const SingleExtensionMaterial = () => {
     query: { pageNumber, cat, id, category_name, sub },
   } = useRouter();
   const { data } = useOpenFetcher(
-    `/api/articles?page=${pageNumber || 1}&limit=20&cat=${cat}`,
+    `/api/articles?page=${
+      pageNumber || 1
+    }&limit=20&cat=${cat}&material=1`,
   );
 
   return (

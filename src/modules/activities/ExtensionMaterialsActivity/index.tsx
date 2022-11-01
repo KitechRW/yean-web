@@ -66,7 +66,7 @@ const ExtensionMaterialsActivity = () => {
           data={matchSubCategories}
           onClick={(id, name) => {
             push(
-              `/extension-material/${current.id}?cat=${id}&category_name=${current.name}&sub=${name}`,
+              `/extension-material/${current.id}?cat=${id}&category_name=${current.name}&sub=${name}&material=1`,
             );
           }}
         />

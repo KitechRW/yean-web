@@ -27,7 +27,7 @@ const JobDescriptionPage :NextPage = (props:any)=> {
       <title>Yean</title>
       <MetaData />
     </Head>
-    <CarrerActivity data={props.data} />
+    <CarrerActivity />
   </>
 }
 

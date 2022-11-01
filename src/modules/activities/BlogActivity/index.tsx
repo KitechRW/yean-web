@@ -11,9 +11,10 @@ const BlogActivity = ({
   data: any;
   extension?: any;
 }) => {
-  const { push } = useRouter();
+  const { push, query } = useRouter();
+  const material = Number(query.material) || 0;
   const handleClick = (id: any) => {
-    push('/blog/' + id);
+    push(`/blog/${id}?material=${material}`);
   };
   return (
     <Scaffold>
@@ -21,11 +22,13 @@ const BlogActivity = ({
         <div className="px-4 md:px-8 w-full max-w-6xl mx-auto flex items-center space-x-4">
           <Link href={extension ? '/extension-material' : '/blog'}>
             <span className="cursor-pointer text-sm font-medium pb-3 border-b-2 border-b-[#FCB316]">
-              {extension?.category_name || 'All'}
+              {query.category_name ||
+                extension?.category_name ||
+                'All'}
             </span>
           </Link>
           <span className="cursor-pointer text-sm font-medium pb-3">
-            {extension?.sub || 'Blogs'}
+            {query.subcategory || extension?.sub || 'Blogs'}
           </span>
         </div>
       </div>

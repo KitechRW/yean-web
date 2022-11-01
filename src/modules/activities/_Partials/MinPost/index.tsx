@@ -6,12 +6,8 @@ import React from 'react';
 const MinPost = ({ data }: { data: any }) => {
   const { push } = useRouter();
   const handleClick = () => {
-    if (data?.category?.id) {
-      push(
-        `/extension-material/${data?.category?.id}?sub=${data?.category?.name}`,
-      );
-    } else {
-      push(`/blog/${data?.id}`);
+    if (data?.category_id) {
+      push(`/blog/${data?.id}?material=1`);
     }
   };
   return (
@@ -31,9 +27,9 @@ const MinPost = ({ data }: { data: any }) => {
         />
       </div>
 
-      {data?.category && (
+      {data?.subcategory && (
         <button className="mr-auto rounded-sm bg-dark-green -translate-y-4 text-white py-2 px-3">
-          {data.category.name}
+          {data.subcategory.name}
         </button>
       )}
       <div

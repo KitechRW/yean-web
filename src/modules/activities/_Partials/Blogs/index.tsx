@@ -8,7 +8,6 @@ import { format } from 'date-fns';
 const Blogs = ({
   onClick = (id: any) => {},
   data = {},
-  extension = {},
 }: any) => {
   const router = useRouter();
   return (
@@ -33,7 +32,9 @@ const Blogs = ({
               />
               <div className="bottom-0 left-0 right-0 absolute flex flex-col items-start w-ful">
                 <p className="text-dark-green bg-[#FCB316] px-4 py-3">
-                  {extension?.sub || 'Blog'}
+                  {!Number(router.query.material)
+                    ? 'Blog'
+                    : element?.subcategory?.name}
                 </p>
                 <p className="w-full bg-[#FCB316] h-1" />
               </div>

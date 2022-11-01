@@ -111,7 +111,7 @@ const LandingAcitivity = ({
           Extension Materials
         </h1>
         <div className="pt-2 inline-grid sm:grid-cols-2 md:grid-cols-4 gap-3">
-          {articleList.map((element: any) => (
+          {materialList.map((element: any) => (
             <MinPost key={element.id} data={element} />
           ))}
         </div>
@@ -149,7 +149,7 @@ const LandingAcitivity = ({
           Latest Blog
         </h1>
         <div className="pt-2 inline-grid sm:grid-cols-2 md:grid-cols-4 gap-3">
-          {materialList.map((element: any) => (
+          {articleList.map((element: any) => (
             <LatestBlog key={element.id} data={element} />
           ))}
         </div>
