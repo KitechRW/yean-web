@@ -10,7 +10,7 @@ import { formatJoiErorr } from 'system/format';
 
 const schema = joi.object({
   name: joi.string().required(),
-  image: joi.object().required(),
+  image: joi.object().optional(),
 });
 
 const EditItem = ({

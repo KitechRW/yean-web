@@ -190,7 +190,9 @@ const AddItem = ({
   }));
 
   const subCategoryOptions = subCategories?.rows
-    ?.filter((item: any) => item.id == getValues('category_id'))
+    ?.filter(
+      (item: any) => item.categoryId == getValues('category_id'),
+    )
     ?.map((element: any) => ({
       value: element.id,
       label: element.name,

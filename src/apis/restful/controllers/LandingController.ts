@@ -3,7 +3,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import ArticleServices from 'apis/services/articleServices';
 import DB from 'apis/database';
 
-const { Articles: Article, Landings: Landing, Material } = DB;
+const { Articles: Article, Landings: Landing, } = DB;
 export default class LandingController {
   static async getOne(req: NextApiRequest, res: NextApiResponse) {
     const { id } = req.query;
@@ -26,9 +26,9 @@ export default class LandingController {
           message: 'No slides',
         });
       }
-      const slides = await Material.findAll({
+      const slides = await Article.findAll({
         where: { id: ids },
-        attributes: ['title', 'image'],
+        attributes: ['title', 'image', 'id'],
       });
 
       return Response.success(res, 200, {

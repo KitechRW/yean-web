@@ -12,7 +12,7 @@ import { useProtectedFetcher } from 'apis/utils/fetcher';
 
 const schema = joi.object({
   name: joi.string().required(),
-  image: joi.object().required(),
+  image: joi.object().optional(),
   categoryId: joi.number().required().label('Category'),
 });
 
