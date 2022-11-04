@@ -212,7 +212,7 @@ export default class ArticleController {
 
   static async delete(req: NextApiRequest, res: NextApiResponse) {
     const { id } = req.query;
-    const material = Boolean(req.query.material);
+    const material = Number(req.query.material) > 0;
     try {
       const item = await ArticleServices.findByPk(
         Number(id),

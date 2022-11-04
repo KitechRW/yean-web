@@ -24,7 +24,7 @@ import {
 import Blogs from '../_Partials/Blogs';
 
 const SingleBlogActivity = () => {
-  const contentRef = React.useRef(null);
+  const contentRef = React.useRef<HTMLDivElement>(null);
   const { push, asPath, query } = useRouter();
   const material = Number(query.material);
   const {
@@ -49,6 +49,12 @@ const SingleBlogActivity = () => {
   React.useEffect(() => {
     if (data?.title) {
       document.title = `Yean - ${data?.title}`;
+    }
+  }, [data]);
+
+  React.useEffect(() => {
+    if (data?.text && contentRef.current) {
+      contentRef.current.innerHTML = data?.text;
     }
   }, [data]);
 
@@ -94,7 +100,7 @@ const SingleBlogActivity = () => {
         <div className="flex flex-col-reverse md:flex-row gap-3 md:items-center max-w-4xl">
           <div className="px-3 py-3 space-x-3 flex items-center">
             <Avatar
-              src={data?.author?.profile_name}
+              src={data?.author?.profile_image}
               alt={data?.author?.firstname}
             />
             <div className="flex flex-col text-[#767676]">
@@ -137,6 +143,7 @@ const SingleBlogActivity = () => {
         <div
           className="mt-4 text-justify leading-relaxed flex flex-col space-y-3 max-w-4xl hideContentNotInTagUL"
           dangerouslySetInnerHTML={{ __html: data?.text }}
+          // ref={contentRef}
         />
 
         <h1 className="mt-12 mb-6 text-xl md:text-2xl text-dark-green font-bold bg-brand-green/10 p-2 text-center">
