@@ -1,4 +1,4 @@
-import { ArrowRightAlt } from '@mui/icons-material';
+import { ArrowRightAlt, RemoveRedEye } from '@mui/icons-material';
 import CustomImage from 'modules/_partials/CustomImage';
 import { useRouter } from 'next/router';
 import React from 'react';
@@ -32,6 +32,10 @@ const MinPost = ({ data }: { data: any }) => {
           {data.subcategory.name}
         </button>
       )}
+      <p className="px-2 py-1 space-x-1 flex items-center">
+        <RemoveRedEye className="text-brand-violet" />{' '}
+        <span className="text-base">{data?.views}</span>
+      </p>
       <div
         className="px-2 text-dark-green line-clamp-3"
         dangerouslySetInnerHTML={{ __html: data?.title }}

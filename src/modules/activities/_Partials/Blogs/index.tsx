@@ -4,11 +4,9 @@ import React from 'react';
 import { useRouter } from 'next/router';
 import Pagination from 'modules/_partials/Pagination';
 import { format } from 'date-fns';
+import { RemoveRedEye } from '@mui/icons-material';
 
-const Blogs = ({
-  onClick = (id: any) => {},
-  data = {},
-}: any) => {
+const Blogs = ({ onClick = (id: any) => {}, data = {} }: any) => {
   const router = useRouter();
   return (
     <div className={'flex flex-col items-center space-y-6'}>
@@ -38,6 +36,12 @@ const Blogs = ({
                 </p>
                 <p className="w-full bg-[#FCB316] h-1" />
               </div>
+            </div>
+            <div className="flex items-center">
+              <p className="px-3 py-1 space-x-1 flex items-center">
+                <RemoveRedEye className="text-brand-violet" />{' '}
+                <span className="text-base">{element?.views}</span>
+              </p>
             </div>
             <p className="px-3 py-4 text-[#6F7D1D] w-full line-clamp-1">
               {element?.title}

@@ -92,6 +92,7 @@ export default class LandingController {
           'id',
           'title',
           'image',
+          'views',
           'author_id',
           ...materialParams,
           'createdAt',
