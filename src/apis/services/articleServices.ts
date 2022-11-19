@@ -90,12 +90,19 @@ export default class ArticleServices {
     material = false,
   ) {
     const ArticleModel = !material ? Article : Material;
-    const article: any = await ArticleModel.findOne({
+    const article = await ArticleModel.findOne({
       attributes,
       where,
     });
     if (!article) {
       return null;
+    }
+    const views = article.toJSON().views;
+    if (views >= 0) {
+      article.set({
+        views: article.toJSON().views + 1,
+      });
+      await article.save();
     }
     const articleData = await Author.findByPk(
       article.toJSON()?.author_id,

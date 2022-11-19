@@ -1,3 +1,4 @@
+import { RemoveRedEye } from '@mui/icons-material';
 import { Avatar } from '@mui/material';
 import Keys from 'apis/utils/constants/keys';
 import { useOpenFetcher } from 'apis/utils/fetcher';
@@ -116,6 +117,11 @@ const SingleBlogActivity = () => {
             </div>
           </div>
           <div className="ml-auto flex items-center gap-2 py-2">
+            <p className="mr-12 space-x-1 flex items-center">
+              <RemoveRedEye className="text-brand-violet" />{' '}
+              <span className="text-base">{data?.views}</span>
+            </p>
+            
             <TwitterShareButton title={data?.title} url={url}>
               <TwitterIcon size={32} round={true} />
             </TwitterShareButton>
