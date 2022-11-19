@@ -1,6 +1,6 @@
 import { DataTypes, Model, Sequelize } from 'sequelize';
 
-class Subscribe extends Model {}
+export class Subscribe extends Model {}
 
 const SubscribeModel = (sequelize: Sequelize) => {
   Subscribe.init(

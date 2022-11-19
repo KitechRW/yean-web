@@ -121,21 +121,6 @@ export const adminNavs = [
     label: 'Team',
     path: '/admin/team',
   },
-  // {
-  //   icon: Pageview,
-  //   label: 'Impact',
-  //   path: '/admin/impact',
-  // },
-  // {
-  //   icon: Pageview,
-  //   label: 'Models',
-  //   path: '/admin/models',
-  // },
-  // {
-  //   icon: Pageview,
-  //   label: 'Partner with us',
-  //   path: '/admin/partner-with-us',
-  // },
   {
     icon: Work,
     label: 'Jobs',
@@ -151,5 +136,10 @@ export const adminNavs = [
     label: 'Users',
     path: '/admin/users',
     onlyAdmin: true,
+  },
+  {
+    icon: Group,
+    label: 'Subscribers',
+    path: '/admin/subscribers',
   },
 ];

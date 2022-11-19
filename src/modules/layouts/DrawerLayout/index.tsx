@@ -10,7 +10,7 @@ const DrawerLayout = ({
 }: {
   toggle: boolean;
   setToggle: React.Dispatch<React.SetStateAction<boolean>>;
-  children: JSX.Element[];
+  children: React.ReactNode[];
   title: string;
 }) => {
   const toggleDrawer = (open: boolean) => (event: any) => {
