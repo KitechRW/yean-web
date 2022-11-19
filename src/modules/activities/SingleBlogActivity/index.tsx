@@ -59,6 +59,7 @@ const SingleBlogActivity = () => {
   }, [data]);
 
   const url = `${Keys.HOST}${asPath}`;
+  console.log(data?.text);
   return (
     <Scaffold>
       <div className="w-full px-4 bg-white md:px-8 pt-12 border-b border-[#E6E6E6]">

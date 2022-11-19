@@ -112,6 +112,7 @@ export default class ArticleController {
     const material = Boolean(req.query.material);
     try {
       const { fields, files } = await parseForm(req);
+      console.log(fields.text);
       if (!files.media) {
         return Response.error(res, 500, {
           message: 'Please upload image',
@@ -127,13 +128,15 @@ export default class ArticleController {
         ...fields,
         image: images,
       };
+
       return Response.success(res, 200, {
         message: 'Article created successfuly',
         data: await ArticleServices.create(payload, material),
       });
-    } catch (error) {
+    } catch (error: any) {
       return Response.error(res, 500, {
         message: 'something went wrong',
+        reason: error?.message,
       });
     }
   }
@@ -161,6 +164,7 @@ export default class ArticleController {
               ...fields,
               image: images || foundArticle.toJSON()?.image,
             });
+
             foundArticle.destroy();
             return Response.success(res, 200, {
               message: 'Article updated successfuly',
@@ -168,6 +172,7 @@ export default class ArticleController {
             });
           }
         }
+
         return Response.error(res, 404, {
           message: 'Article is not found',
         });

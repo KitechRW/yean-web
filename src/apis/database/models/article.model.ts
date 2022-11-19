@@ -14,7 +14,7 @@ const ArticleModel = (sequelize: Sequelize) => {
       },
       title: DataTypes.TEXT,
       image: DataTypes.STRING,
-      text: DataTypes.TEXT,
+      text: DataTypes.TEXT('long'),
       category: DataTypes.STRING,
       views: {
         type: DataTypes.INTEGER,

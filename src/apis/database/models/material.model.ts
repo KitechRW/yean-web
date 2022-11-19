@@ -13,7 +13,7 @@ const MaterialModel = (sequelize: Sequelize) => {
       title: DataTypes.TEXT,
       slug: DataTypes.TEXT,
       image: DataTypes.STRING,
-      text: DataTypes.TEXT,
+      text: DataTypes.TEXT('long'),
       category_id: DataTypes.INTEGER,
       subcategory_id: DataTypes.INTEGER,
       material: {

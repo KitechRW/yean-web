@@ -43,6 +43,7 @@ const AddItem = ({
   handleDelete?: (id: any) => void;
   dataValues?: any;
 }) => {
+  const [text, setText] = React.useState('');
   const [material, setMaterial] = React.useState(false);
   const [data, setData] = React.useState<any>(null);
   const [loading, setLoading] = React.useState(false);
@@ -375,6 +376,7 @@ const AddItem = ({
                   shouldDirty: true,
                   shouldValidate: true,
                 });
+                setText(newValue);
               }}
             />
             {errors.text?.message && (
