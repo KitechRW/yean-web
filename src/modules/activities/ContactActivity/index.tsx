@@ -70,10 +70,10 @@ const ContactActivity = () => {
 
   return (
     <Scaffold>
-      <form
-        onSubmit={event => {
-          handleSubmit(onSubmit)(event);
-        }}
+      <div
+        // onSubmit={event => {
+        //   handleSubmit(onSubmit)(event);
+        // }}
         className="items-center bg-gradient-to-r from-[#00F0FF]/20 to-white flex-grow h-full flex flex-col p-4 md:p-8"
       >
         {errorMessage ? (
@@ -84,7 +84,7 @@ const ContactActivity = () => {
           </div>
         ) : null}
         {successMessage ? (
-          <div className="mt-3 flex flex-col items-center rounded-lg bg-green-500 px-4 py-3  self-center">
+          <div className="mt-3 flex flex-col justify-center items-center rounded-lg bg-green-500 px-4 py-3  self-center">
             <p className="text-white text-sm first-letter:uppercase">
               {successMessage}
             </p>
@@ -94,10 +94,43 @@ const ContactActivity = () => {
           Contact us
         </h1>
         <p className="text-sm text-brand-green mt-1">
-          Please fill out , we will reach out ASAP
+          Youth Engagement in Agriculture Network (YEAN)
         </p>
 
-        <div className="mt-6 flex gap-3 justify-between flex-wrap items-center max-w-4xl">
+        <div className="mt-6 items-start justify-center inline-grid grid-cols-6 gap-2 md:gap-3">
+          <h2 className="font-semibold col-span-2">Head office address:</h2>
+          <a
+            href="https://goo.gl/maps/CFYpuX8iejp2u9Ps9"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="col-span-4"
+          >
+            KK 3 Rd, Kigali, Gasabo, Rwanda
+          </a>
+
+          <h2 className="font-semibold col-span-2">Telephone:</h2>
+          <a
+            href="tel:+250788845727"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="col-span-4"
+          >
+            +250 788 845 727
+          </a>
+
+          <h2 className="font-semibold col-span-2">Email:</h2>
+          <p className="col-span-4 flex items-center">
+            <a href="mailto:info@yeanrwanda.org">
+              info@yeanrwanda.org
+            </a>
+            ,{' '}
+            <a href="mailto:ryeanetwork@gmail.com">
+              ryeanetwork@gmail.com
+            </a>
+          </p>
+        </div>
+
+        {/* <div className="mt-6 flex gap-3 justify-between flex-wrap items-center max-w-4xl">
           <div className="flex flex-col gap-3 md:grid grid-cols-2 w-full">
             <div className="w-full flex flex-col">
               <input
@@ -134,16 +167,19 @@ const ContactActivity = () => {
               {errors.message?.message}
             </p>
           </div>
-        </div>
-        <button
+        </div> */}
+        {/* <button
           type="submit"
           disabled={loading}
           className="disabled:cursor-not-allowed disabled:opacity-25 text-base font-bold border-2 px-12 py-3 tracking-wide rounded-full mt-6 border-dark-green"
         >
           Submit
-        </button>
+        </button> */}
 
-        <div className="mt-12 justify-between flex-wrap gap-3 pb-2 max-w-4xl w-full flex items-center border-b border-b-[#8E8E93]">
+        <h1 className="mt-12 font-bold tracking-wide">
+          Contact us through our social media pages
+        </h1>
+        <div className="mt-3 justify-between flex-wrap gap-3 pb-2 max-w-4xl w-full flex items-center border-b border-b-[#8E8E93]">
           <div className="flex items-center space-x-2">
             <p className="font-bold text-gray-500">Contact us:</p>
             <a
@@ -182,7 +218,7 @@ const ContactActivity = () => {
             </a>
           ))}
         </div>
-      </form>
+      </div>
     </Scaffold>
   );
 };
