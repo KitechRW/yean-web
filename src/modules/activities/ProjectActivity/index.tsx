@@ -32,7 +32,7 @@ const ProjectActivity = () => {
                 {data?.name}
               </h1>
               <div
-                className="text-gray-600 mt-3 text-justify"
+                className="text-gray-600 mt-3 md:text-justify"
                 dangerouslySetInnerHTML={{
                   __html: data?.description,
                 }}
