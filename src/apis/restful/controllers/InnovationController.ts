@@ -28,7 +28,7 @@ export default class InnovationController {
       });
     } catch (error) {
       return Response.error(res, 500, {
-        message: 'something went wrong',
+        message: 'Something went wrong',
       });
     }
   }
