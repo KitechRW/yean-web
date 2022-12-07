@@ -53,7 +53,7 @@ const AboutActivity = () => {
                 Our Mission
               </h2>
               <div
-                className="text-sm text-gray-600"
+                className="text-sm text-gray-600 prose prose-lg"
                 dangerouslySetInnerHTML={{
                   __html: aboutData.mission,
                 }}
@@ -66,7 +66,7 @@ const AboutActivity = () => {
                 Our Vision
               </h2>
               <div
-                className="text-sm text-gray-600"
+                className="text-sm text-gray-600 prose prose-lg"
                 dangerouslySetInnerHTML={{ __html: aboutData.vision }}
               />
             </div>
@@ -77,7 +77,7 @@ const AboutActivity = () => {
               Our History
             </h1>
             <div
-              className="flex flex-col md:max-w-4xl py-3"
+              className="flex flex-col md:max-w-4xl py-3 prose prose-lg"
               dangerouslySetInnerHTML={{ __html: aboutData.history }}
             />
           </div>

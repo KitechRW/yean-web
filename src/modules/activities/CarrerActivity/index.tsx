@@ -131,7 +131,7 @@ const CarrerActivity = () => {
                   Description
                 </dt>
                 <dd
-                  className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0"
+                  className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0 prose prose-lg"
                   dangerouslySetInnerHTML={{
                     __html: data?.description,
                   }}

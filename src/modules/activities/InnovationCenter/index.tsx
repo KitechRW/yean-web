@@ -38,7 +38,7 @@ const InnovationCenterActivity = () => {
           />
           <div className="text-justify flex flex-col items-center">
             <div
-              className="text-justify"
+              className="text-justify prose prose-lg"
               dangerouslySetInnerHTML={{ __html: item.text }}
             ></div>
             <button
