@@ -9,7 +9,7 @@ import UploadImage from 'modules/_partials/UploadImage';
 import { formatJoiErorr } from 'system/format';
 import 'react-quill/dist/quill.snow.css';
 import dynamic from 'next/dynamic';
-import RichText from 'system/config/richtext';
+import { NoMediaRichText } from 'system/config/richtext';
 import Select from 'react-select';
 import Http from 'core/factory/fact.http';
 
@@ -115,8 +115,8 @@ const SendEmail = ({ children }: { children: React.ReactNode }) => {
             <p className="mt-3 w-full font-medium">Text</p>
             <ReactQuill
               theme="snow"
-              modules={RichText.modules}
-              formats={RichText.formats}
+              modules={NoMediaRichText.modules}
+              formats={NoMediaRichText.formats}
               onChange={newValue => {
                 setValue('message', newValue, {
                   shouldDirty: true,

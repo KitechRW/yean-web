@@ -131,7 +131,7 @@ const AddItem = ({
 
   return (
     <DrawerLayout
-      title={`${dataValues ? 'Edit' : 'New'} Sub Category`}
+      title={`${dataValues ? 'Edit' : 'New'} Service`}
       toggle={toggle}
       setToggle={setToggle}
     >
