@@ -32,7 +32,7 @@ const ProjectActivity = () => {
                 {data?.name}
               </h1>
               <div
-                className="text-gray-600 mt-3 md:text-justify prose prose-lg"
+                className="text-gray-600 mt-3 md:text-justify prose prose-lg prose-img:max-h-80"
                 dangerouslySetInnerHTML={{
                   __html: data?.description,
                 }}

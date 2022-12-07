@@ -55,7 +55,7 @@ const ProjectsActivity = () => {
                     {element.name}
                   </h2>
                   <div
-                    className={'mt-12 ml-3 line-clamp-3 prose prose-lg'}
+                    className={'mt-12 ml-3 line-clamp-3 prose prose-lg prose-img:max-h-80'}
                     dangerouslySetInnerHTML={{
                       __html: element.description,
                     }}

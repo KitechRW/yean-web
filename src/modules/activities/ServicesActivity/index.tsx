@@ -92,7 +92,7 @@ const ServicesActivity = () => {
             />
           </div>
           <div
-            className="my-3 text-sm text-gray-600 text-justify prose prose-lg w-full"
+            className="my-3 text-sm text-gray-600 text-justify prose prose-lg prose-img:max-h-80 w-full"
             dangerouslySetInnerHTML={{ __html: current.content }}
           />
 
