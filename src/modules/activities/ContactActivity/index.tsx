@@ -179,27 +179,7 @@ const ContactActivity = () => {
         <h1 className="mt-12 font-bold tracking-wide">
           Contact us through our social media pages
         </h1>
-        <div className="mt-3 justify-between flex-wrap gap-3 pb-2 max-w-4xl w-full flex items-center border-b border-b-[#8E8E93]">
-          <div className="flex items-center space-x-2">
-            <p className="font-bold text-gray-500">Contact us:</p>
-            <a
-              href="tel:+250 788 845 727"
-              className="text-sm flex text-gray-500 items-center"
-            >
-              <span className="text-brand-green ">
-                <Call />
-              </span>
-              <span>+250 788 845 727</span>
-            </a>
-          </div>
-          <a
-            href="mailto:info@yeanrwanda.org"
-            className="text-sm flex text-gray-500 items-center"
-          >
-            <Email className="text-brand-green " />
-            <span>info@yeanrwanda.org</span>
-          </a>
-        </div>
+     
 
         <div className="mt-12 place-content-between flex-wrap gap-3 pb-2 max-w-4xl w-full flex items-center">
           {social_medias.map((element, index) => (
