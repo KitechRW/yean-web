@@ -1,8 +1,6 @@
 import { Sequelize, Model, DataTypes } from 'sequelize';
-import User from './user.model';
-import Comment from './comment.model';
 
-class Article extends Model {}
+export class Article extends Model {}
 
 const ArticleModel = (sequelize: Sequelize) => {
   Article.init(
@@ -32,11 +30,20 @@ const ArticleModel = (sequelize: Sequelize) => {
       },
       success: DataTypes.STRING,
       success_photo: DataTypes.STRING,
+      createdAt: {
+        type: DataTypes.DATE,
+        field: 'time',
+      },
+      updatedAt: {
+        field: 'time',
+        type: DataTypes.DATE,
+      },
     },
     {
       tableName: 'article',
       modelName: 'Article',
       timestamps: true,
+      updatedAt: false,
       sequelize,
     },
   );
