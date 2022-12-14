@@ -29,7 +29,7 @@ export default class AuthController {
         email: user.email,
       };
       const token = signinToken(userData);
-      const emailOptions = {
+      const emailOptions:any = {
         email: user.email,
         message: await emailMocks.verifyAccount({
           ...userData,
@@ -208,7 +208,7 @@ export default class AuthController {
         email: inUser.email,
       };
       const token = signinToken(userData);
-      const emailOptions = {
+      const emailOptions:any = {
         email: inUser.email,
         message: await emailMocks.forgetPassword({
           ...inUser,
