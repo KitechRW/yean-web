@@ -12,7 +12,7 @@ const UserModel = (sequelize: Sequelize) => {
       },
       type: DataTypes.STRING,
       email: DataTypes.STRING,
-      password: DataTypes.TEXT,
+      password: DataTypes.STRING,
       level: DataTypes.STRING,
       firstname: DataTypes.STRING,
       lastname: DataTypes.STRING,

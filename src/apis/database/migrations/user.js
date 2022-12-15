@@ -37,7 +37,7 @@ module.exports = {
       }),
       queryInterface.changeColumn('user', 'birthday', {
         allowNull: true,
-        type: Sequelize.STRING,
+        type: Sequelize.DATE,
       }),
       queryInterface.changeColumn('user', 'province', {
         allowNull: true,
