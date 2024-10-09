@@ -27,8 +27,10 @@ import AuthorModel from './models/author.model';
 
 dotenv.config();
 
-export const sequelize = new Sequelize.Sequelize(
-  `${process.env.DATABASE_URL}`,
+const isProduction = process.env.NODE_ENV === 'production';
+
+export const sequelize = isProduction ? new Sequelize.Sequelize(
+    `${process.env.DATABASE_URL}`,
   {
     dialect: 'mysql',
     timezone: '+09:00',
@@ -52,9 +54,35 @@ export const sequelize = new Sequelize.Sequelize(
     //   },
     // },
   },
-);
+): new Sequelize.Sequelize(
+  process.env.DB_NAME || 'yeanrwanda', // Default to local DB
+  process.env.DB_USER || 'root',
+  process.env.DB_PASSWORD || 'password',
+  {
+    host: process.env.DB_HOST || 'localhost',
+    dialect: 'mysql',
+    timezone: '+09:00',
+    define: {
+      charset: 'utf8mb4',
+      collate: 'utf8mb4_general_ci',
+      underscored: true,
+      freezeTableName: true,
+    },
+    pool: {
+      min: 0,
+      max: 5,
+    },
+    logging: false,
+    logQueryParameters: process.env.NODE_ENV !== 'production',
+    benchmark: true,
+  }
+); 
 
-sequelize.authenticate();
+sequelize.authenticate().then(() => {
+  console.log('Database Connected successfully')
+}).catch((err:Error) => {
+    console.error('Unable to connect To database');
+});
 
 const DB = {
   Author: AuthorModel(sequelize),
