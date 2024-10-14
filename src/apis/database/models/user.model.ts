@@ -6,7 +6,7 @@ const UserModel = (sequelize: Sequelize) => {
   User.init(
     {
       id: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.BIGINT,
         primaryKey: true,
         autoIncrement: true,
       },
