@@ -44,6 +44,7 @@ export default class AuthController {
         token,
       });
     } catch (error: any) {
+      console.log(error);
       return Response.error(res, 500, {
         error: error.message,
         message: 'something went wrong',
@@ -101,6 +102,7 @@ export default class AuthController {
         token,
       });
     } catch (error: any) {
+      console.log(error);
       const message = error ? error.message : 'something went wrong';
       return Response.error(res, 500, { message });
     }
@@ -151,6 +153,8 @@ export default class AuthController {
         },
       });
     } catch (err:any) {
+      
+      console.log(err);
       const message = err.message || 'something went wrong';
       return Response.error(res, 500, { message });
     }
@@ -176,6 +180,8 @@ export default class AuthController {
         message: 'logout successfully',
       });
     } catch (error: any) {
+      
+      console.log(error);
       return Response.error(res, 500, {
         message: 'something went wrong',
         error: error.message,
@@ -221,6 +227,8 @@ export default class AuthController {
         message: 'check your email',
       });
     } catch (error: any) {
+      
+      console.log(error);
       return Response.error(res, 500, {
         message: 'something went wrong',
         error: error.message,
@@ -262,6 +270,8 @@ export default class AuthController {
           error: err.message,
         });
       }
+      
+      console.log(err);
       return Response.error(res, 500, {
         message: 'server errror',
         error: err.message,
@@ -289,6 +299,8 @@ export default class AuthController {
         profile: isLogged,
       });
     } catch (error: any) {
+      
+      console.log(error);
       return Response.error(res, 500, {
         message: 'something went wrong',
         error: error.message,
