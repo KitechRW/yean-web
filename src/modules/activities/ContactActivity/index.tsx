@@ -120,12 +120,8 @@ const ContactActivity = () => {
 
           <h2 className="font-semibold col-span-2">Email:</h2>
           <p className="col-span-4 flex items-center">
-            <a href="mailto:info@yeanrwanda.org">
-              info@yeanrwanda.org
-            </a>
-            ,{' '}
-            <a href="mailto:ryeanetwork@gmail.com">
-              ryeanetwork@gmail.com
+            <a href="mailto:yean@yeanagro.org">
+              yean@yeanagro.org
             </a>
           </p>
         </div>
