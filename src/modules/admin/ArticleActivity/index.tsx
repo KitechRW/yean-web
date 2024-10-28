@@ -5,6 +5,8 @@ import Pagination from 'modules/_partials/Pagination';
 import React from 'react';
 import AddItem from '../_Partials/ManageArticle/AddItem';
 import ViewItem from '../_Partials/ManageArticle/ViewItem';
+import { RemoveRedEye } from '@mui/icons-material';
+import Link from 'next/link';
 
 const ArticleActivity = () => {
   const topRef = React.useRef(null);
@@ -114,6 +116,13 @@ const ArticleActivity = () => {
             label="Material"
           />
         </RadioGroup>
+        <Link href='/admin/articles/appendedArticles'>
+          <button className="hover:bg-brand-green group flex items-center rounded-md bg-brand-green/80 text-white text-sm font-medium px-8 py-2 shadow-sm">
+              <RemoveRedEye className='text-white mr-2' />
+              <span>Appended Articles</span>
+          </button>
+        </Link>
+        
         <AddItem
           handleAdd={item => {
             handleAdd(item);

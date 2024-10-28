@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import Head from 'next/head';
 import BlogActivity from 'modules/activities/BlogActivity';
 import Http from 'core/factory/fact.http';
-import { useRouter } from 'next/router';
 import MetaData from 'modules/_partials/MetaData';
 
 export async function getServerSideProps({
@@ -28,7 +27,6 @@ export async function getServerSideProps({
 }
 
 const BlogPage = (props: any) => {
-  const router = useRouter();
   return (
     <>
       <Head>

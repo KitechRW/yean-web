@@ -24,7 +24,7 @@ const fields = {
   text: joi.string().required(),
   category_id: joi.number().label('Category'),
   subcategory_id: joi.number().label('Sub category'),
-  author_id: joi.number().required().label('Author'),
+  author_name: joi.string().required()
 };
 
 const schema = joi.object(fields);
@@ -53,9 +53,9 @@ const AddItem = ({
   const {
     data: { data: subCategories },
   } = useProtectedFetcher('/api/sub-categories');
-  const {
-    data: { data: authors },
-  } = useProtectedFetcher('/api/authors');
+  // const {
+  //   data: { data: authors },
+  // } = useProtectedFetcher('/api/authors');
   const {
     register,
     unregister,
@@ -70,6 +70,7 @@ const AddItem = ({
   });
 
   const onSubmit = async (query: any) => {
+    console.log("hello");
     setLoading(true);
     const formData = new FormData();
     Object.keys(query).forEach(key => {
@@ -174,7 +175,7 @@ const AddItem = ({
       text: data.text,
       category_id: data.category_id,
       subcategory_id: data.subcategory_id,
-      author_id: data.author_id,
+      author_name: data.author_name,
     });
   };
 
@@ -205,14 +206,14 @@ const AddItem = ({
     (item: any) => item.value == data?.category_id,
   );
 
-  const authorOptions = authors?.rows?.map((element: any) => ({
-    value: element.id,
-    label: `${element.firstname} ${element.lastname}`,
-  }));
+  // const authorOptions = authors?.rows?.map((element: any) => ({
+  //   value: element.id,
+  //   label: `${element.firstname} ${element.lastname}`,
+  // }));
 
-  const defaultAuthorOptions = authorOptions?.filter(
-    (item: any) => item.value == data?.author_id,
-  );
+  // const defaultAuthorOptions = authorOptions?.filter(
+  //   (item: any) => item.value == data?.author_name,
+  // );
 
   return (
     <DrawerLayout
@@ -324,22 +325,16 @@ const AddItem = ({
             <span className="text-sm font-medium text-gray-900 dark:text-gray-300">
               Author
             </span>
-            <Select
-              isMulti={false}
-              {...register('author_id')}
-              options={authorOptions}
-              defaultValue={defaultAuthorOptions}
-              onChange={(newValue: any) => {
-                setValue('author_id', newValue.value, {
-                  shouldDirty: true,
-                  shouldValidate: true,
-                });
-              }}
-              className="mt-2"
+            <input
+              type="text"
+              placeholder={'Author'}
+              {...register('author_name')}
+              defaultValue={data?.author_name}
+              className="mt-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             />
-            {errors.author_id?.message && (
+            {errors.author_name?.message && (
               <p className="mt-1 text-red-500">
-                {formatJoiErorr(`${errors.author_id.message}`)}
+                {formatJoiErorr(`${errors.author_name.message}`)}
               </p>
             )}
           </label>
@@ -376,18 +371,6 @@ const AddItem = ({
                   shouldValidate: true,
                 });
                 setText(newValue);
-              }}
-            />
-             <ReactQuill
-              theme="snow"
-              defaultValue={dataValues?.text}
-              modules={RichText.modules}
-              formats={RichText.formats}
-              onChange={newValue => {
-                setValue('text', newValue, {
-                  shouldDirty: true,
-                  shouldValidate: true,
-                });
               }}
             />
             {errors.text?.message && (

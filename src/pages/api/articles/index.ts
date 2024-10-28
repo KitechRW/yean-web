@@ -18,7 +18,7 @@ function handler(req: NextApiRequest, res: NextApiResponse) {
 }
 
 export default withSessionRoute(
-  withRoles(handler, ['admin'], ['POST']),
+  withRoles(handler, ['admin','member' ], ['POST']),
 );
 
 export const config = {
