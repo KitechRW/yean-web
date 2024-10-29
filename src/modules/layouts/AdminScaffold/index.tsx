@@ -1,20 +1,29 @@
 import TopNav from 'modules/_partials/TopNav';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React, {useEffect} from 'react';
-import { adminNavs } from 'system/static';
+import React from 'react';
+import { adminNavs, memberNavs } from 'system/static';
 import {useNavbar} from "modules/contexts/NavbarContext";
 
 const AdminScaffold = ({ children }: any) => {
   const { pathname } = useRouter();
   const { profile} = useNavbar();
+  const [nav, setNav] = React.useState<any>([]);
+  
+  React.useEffect(() => {
+      if(profile?.user?.type !== "admin"){
+        setNav(memberNavs);
+      }else{
+        setNav(adminNavs);
+      }
+  },[])
   return (
     <div className="flex flex-col w-full h-screen overflow-y-auto">
       <TopNav />
       <div className="relative flex-grow h-full flex w-full bg-cyan-201 overflow-y-auto overflow-x-hidden">
         <div className="top-0 sticky hidden md:flex flex-col w-1/6 px-2 bg-[#FBFBFB] border-r border-gray-200 overflow-y-auto">
           <div className="flex w-full mt-2" />
-          {adminNavs.map(element => {
+          {nav.map((element: any) => {
             const active = pathname === element.path;
             if(element.onlyAdmin){
               if(profile?.user?.type !== "admin"){

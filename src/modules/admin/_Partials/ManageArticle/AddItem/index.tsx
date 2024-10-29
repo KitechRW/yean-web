@@ -378,18 +378,7 @@ const AddItem = ({
                 setText(newValue);
               }}
             />
-             <ReactQuill
-              theme="snow"
-              defaultValue={dataValues?.text}
-              modules={RichText.modules}
-              formats={RichText.formats}
-              onChange={newValue => {
-                setValue('text', newValue, {
-                  shouldDirty: true,
-                  shouldValidate: true,
-                });
-              }}
-            />
+             
             {errors.text?.message && (
               <p className="mt-1 text-red-500">
                 {formatJoiErorr(`${errors.text?.message}`)}

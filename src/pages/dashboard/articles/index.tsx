@@ -31,7 +31,7 @@ export const getServerSideProps = withSessionSsr(
       };
     }
 
-    if (!['admin'].includes(`${user?.type}`)) {
+    if (!['admin','member'].includes(`${user?.type}`)) {
       return {
         redirect: {
           permanent: false,

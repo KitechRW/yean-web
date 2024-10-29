@@ -24,7 +24,6 @@ import AboutModel from './models/about';
 import TeamModel from './models/team';
 import MaterialModel from './models/material.model';
 import AuthorModel from './models/author.model';
-import MemberArticlesModel from './models/memberArticle.model';
 
 dotenv.config();
 
@@ -110,7 +109,6 @@ const DB = {
   Tags: TagModel(sequelize),
   Users: UserModel(sequelize),
   Projects: ProjectModel(sequelize),
-  MemberArticles: MemberArticlesModel(sequelize),
 
   sequelize, // connection instance (RAW queries)
 };

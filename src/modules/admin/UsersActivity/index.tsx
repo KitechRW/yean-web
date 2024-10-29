@@ -128,7 +128,7 @@ const UsersActivity = ({page}:any) => {
             pageCount={pagination?.pageCount}
             currentPage={pagination?.currentPage}
             setPageNumber={(page: number) => {
-              router.push("/admin/users?page="+page);
+              router.push("/dashboard/users?page="+page);
             }}
           />
         </div>
