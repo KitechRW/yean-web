@@ -16,7 +16,7 @@ const AdminScaffold = ({ children }: any) => {
       }else{
         setNav(adminNavs);
       }
-  },[])
+  },[nav])
   return (
     <div className="flex flex-col w-full h-screen overflow-y-auto">
       <TopNav />
