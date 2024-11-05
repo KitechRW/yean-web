@@ -12,13 +12,15 @@ const ArticleModel = (sequelize: Sequelize) => {
       },
       title: DataTypes.TEXT,
       image: DataTypes.STRING,
+      slug: DataTypes.TEXT,
       text: DataTypes.TEXT('long'),
-      category: DataTypes.STRING,
+      category_id: DataTypes.INTEGER,
+      subcategory_id: DataTypes.INTEGER,
       views: {
         type: DataTypes.INTEGER,
         defaultValue: 0,
       },
-      author_id: DataTypes.INTEGER,
+      authorName: DataTypes.STRING,
       tags: DataTypes.STRING,
       comment: {
         type: DataTypes.INTEGER,
@@ -26,10 +28,7 @@ const ArticleModel = (sequelize: Sequelize) => {
       },
       status: {
         type: DataTypes.STRING,
-        defaultValue: 'online',
       },
-      success: DataTypes.STRING,
-      success_photo: DataTypes.STRING,
       createdAt: {
         type: DataTypes.DATE,
         field: 'time',
@@ -38,6 +37,8 @@ const ArticleModel = (sequelize: Sequelize) => {
         field: 'time',
         type: DataTypes.DATE,
       },
+
+
     },
     {
       tableName: 'article',

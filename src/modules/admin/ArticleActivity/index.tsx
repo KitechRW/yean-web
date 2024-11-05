@@ -23,7 +23,6 @@ const ArticleActivity = () => {
       material ? 1 : 0
     }&page=${pageNumber}&limit=20`,
   );
-  console.log(material);
 
   const [filterValue, setFilterValue] = React.useState('');
 
@@ -95,26 +94,6 @@ const ArticleActivity = () => {
             placeholder="Filter articles..."
           />
         </div>
-        <RadioGroup
-          aria-labelledby="demo-radio-buttons-group-label"
-          defaultValue="blog"
-          name="radio-buttons-group"
-          row
-          onChange={event => {
-            setMaterial(event.target.value === 'material');
-          }}
-        >
-          <FormControlLabel
-            value="blog"
-            control={<Radio checked={material === false} />}
-            label="Blog"
-          />
-          <FormControlLabel
-            value="material"
-            control={<Radio checked={material === true} />}
-            label="Material"
-          />
-        </RadioGroup>
         
         <AddItem
           handleAdd={item => {

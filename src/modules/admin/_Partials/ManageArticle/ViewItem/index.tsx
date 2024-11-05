@@ -14,10 +14,25 @@ const ViewItem = ({
   handleEdit: (item: any) => void;
   handleDelete: (id: any) => void;
 }) => {
-  const { title, image } = data || {};
+  const { title, image, status } = data || {};
   return (
     <>
-      <div className="flex flex-col bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700">
+      <div className="flex relative flex-col bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700">
+            {
+              status === 'submitted' ? 
+              (
+                <div className='flex absolute top-0 z-30 bg-yellow-500 hover:bg-brand-yellow rounded-md px-3 py-2'>
+                  <span className='text-white'>{status}</span> 
+                </div>
+              )
+              :
+              (
+              <div className='flex absolute top-0 z-30 hover:bg-brand-green bg-brand-green/80 rounded-md px-3 py-2'>
+                <span className='text-white'>{status}</span> 
+              </div>
+              )
+            }
+       
         <CustomImage src={image} width="150" height="150" />
         <div className="p-3 flex-grow flex flex-col items-center justify-between gap-y-2">
           <p className="font-semibold pl-2">{title}</p>

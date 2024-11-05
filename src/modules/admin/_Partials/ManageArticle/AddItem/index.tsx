@@ -13,6 +13,7 @@ import Select from 'react-select';
 import { useProtectedFetcher } from 'apis/utils/fetcher';
 import Http from 'core/factory/fact.http';
 import { Checkbox, FormControlLabel, FormGroup } from '@mui/material';
+import { useNavbar } from 'modules/contexts/NavbarContext';
 
 const ReactQuill = dynamic(() => import('react-quill'), {
   ssr: false,
@@ -24,7 +25,7 @@ const fields = {
   text: joi.string().required(),
   category_id: joi.number().label('Category'),
   subcategory_id: joi.number().label('Sub category'),
-  author_id: joi.number().required().label('Author'),
+  author_name: joi.string().required(),
 };
 
 const schema = joi.object(fields);
@@ -42,6 +43,8 @@ const AddItem = ({
   handleDelete?: (id: any) => void;
   dataValues?: any;
 }) => {
+
+  const {profile} = useNavbar();
   const [text, setText] = React.useState('');
   const [material, setMaterial] = React.useState(false);
   const [data, setData] = React.useState<any>(null);
@@ -53,9 +56,7 @@ const AddItem = ({
   const {
     data: { data: subCategories },
   } = useProtectedFetcher('/api/sub-categories');
-  const {
-    data: { data: authors },
-  } = useProtectedFetcher('/api/authors');
+
   const {
     register,
     unregister,
@@ -70,11 +71,15 @@ const AddItem = ({
   });
 
   const onSubmit = async (query: any) => {
+    
+    const status = 'submitted';
     setLoading(true);
     const formData = new FormData();
     Object.keys(query).forEach(key => {
       formData.append(key === 'image' ? 'media' : key, query[key]);
     });
+    formData.append('status', status);
+
     const { data: res, error } = await (!dataValues
       ? DefaultApi.PostRoute.postRoute(
           `/api/articles?material=${material ? 1 : 0}`,
@@ -84,7 +89,7 @@ const AddItem = ({
           `/api/articles/${dataValues.id}?material=${
             material ? 1 : 0
           }`,
-          formData,
+          formData
         ));
     setLoading(false);
 
@@ -147,6 +152,51 @@ const AddItem = ({
     }
   };
 
+    const OnPublish = async(query: any) => {
+      const status = 'published';
+      setLoading(true);
+    const formData = new FormData();
+    Object.keys(query).forEach(key => {
+      formData.append(key === 'image' ? 'media' : key, query[key]);
+    });
+    formData.append('status', status);
+
+    const { data: res, error} = await (!dataValues
+      ? DefaultApi.PostRoute.postRoute(
+          `/api/articles?material=${material ? 1 : 0}`,
+          formData
+        )
+      : DefaultApi.PatchRoute.patchRoute(
+          `/api/articles/${dataValues.id}?material=${
+            material ? 1 : 0
+          }`,
+          formData,
+        ));
+    setLoading(false);
+
+    if (res) {
+      const message = dataValues ? 'Edited & Published' : 'Published';
+      swal(
+        message,
+        res.message || `${message} successfully`,
+        'success',
+      ).then(() => {
+        reset();
+        setToggle(false);
+        if (dataValues) {
+          // @ts-ignore
+          handleEdit(res.data, material);
+        } else {
+          // @ts-ignore
+          handleAdd(res.data, material);
+        }
+      });
+    }
+
+    if (error) {
+      swal('Ooops!', error.message || 'Something went wrong');
+    }
+    }
   React.useEffect(() => {
     if (dataValues?.material) {
       setMaterial(!!dataValues.material);
@@ -174,7 +224,7 @@ const AddItem = ({
       text: data.text,
       category_id: data.category_id,
       subcategory_id: data.subcategory_id,
-      author_id: data.author_id,
+      author_name: data.author_name,
     });
   };
 
@@ -205,14 +255,6 @@ const AddItem = ({
     (item: any) => item.value == data?.category_id,
   );
 
-  const authorOptions = authors?.rows?.map((element: any) => ({
-    value: element.id,
-    label: `${element.firstname} ${element.lastname}`,
-  }));
-
-  const defaultAuthorOptions = authorOptions?.filter(
-    (item: any) => item.value == data?.author_id,
-  );
 
   return (
     <DrawerLayout
@@ -252,23 +294,7 @@ const AddItem = ({
               </p>
             )}
           </label>
-          <FormGroup>
-            <FormControlLabel
-              control={
-                <Checkbox
-                  onChange={event => {
-                    if (dataValues?.id && material) {
-                      return;
-                    }
-                    setMaterial(event.target.checked);
-                  }}
-                  checked={!!material}
-                />
-              }
-              label="Extension material"
-            />
-          </FormGroup>
-          {material ? (
+          
             <>
               <label className="flex flex-col">
                 <span className="text-sm font-medium text-gray-900 dark:text-gray-300">
@@ -319,27 +345,21 @@ const AddItem = ({
                 )}
               </label>
             </>
-          ) : null}
+         
           <label className="flex flex-col">
             <span className="text-sm font-medium text-gray-900 dark:text-gray-300">
-              Author
+              Author Names
             </span>
-            <Select
-              isMulti={false}
-              {...register('author_id')}
-              options={authorOptions}
-              defaultValue={defaultAuthorOptions}
-              onChange={(newValue: any) => {
-                setValue('author_id', newValue.value, {
-                  shouldDirty: true,
-                  shouldValidate: true,
-                });
-              }}
-              className="mt-2"
+            <input
+              type="text"
+              placeholder={'Enter Both Your names...'}
+              {...register('author_name')}
+              defaultValue={data?.author_name}
+              className="mt-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             />
-            {errors.author_id?.message && (
+            {errors.author_name?.message && (
               <p className="mt-1 text-red-500">
-                {formatJoiErorr(`${errors.author_id.message}`)}
+                {formatJoiErorr(`${errors.author_name.message}`)}
               </p>
             )}
           </label>
@@ -397,14 +417,39 @@ const AddItem = ({
                 Delete
               </button>
             ) : null}
-
-            <button
-              type="submit"
-              disabled={loading}
-              className="font-semibold disabled:cursor-not-allowed disabled:bg-slate-400 mt-12 text-white bg-brand-green/80 hover:bg-brand-green focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg text-sm w-full sm:w-auto px-12 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-            >
-              Save
-            </button>
+            {
+              profile?.user?.type !== "admin" ? 
+              (
+                <button
+                type="submit"
+                disabled={loading}
+                className="font-semibold disabled:cursor-not-allowed disabled:bg-slate-400 mt-12 text-white bg-brand-green/80 hover:bg-brand-green focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg text-sm w-full sm:w-auto px-12 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                >
+                Save
+              </button>
+              )
+              :
+              (
+              <div className='flex items-center space-x-3 justify-between md:col-span-2'>
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="font-semibold disabled:cursor-not-allowed disabled:bg-slate-400 mt-12 text-white bg-brand-green/80 hover:bg-brand-green focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg text-sm w-full sm:w-auto px-12 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                >
+                  Save
+                </button>
+                <button
+                  type="button"
+                  disabled={loading}
+                  className="font-semibold disabled:cursor-not-allowed disabled:bg-slate-400 mt-12 text-white bg-brand-green/80 hover:bg-brand-green focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg text-sm w-full sm:w-auto px-12 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                  onClick={OnPublish}
+                >
+                  Publish
+                </button>
+              </div>
+              )
+            }
+            
           </div>
         </form>
       </div>

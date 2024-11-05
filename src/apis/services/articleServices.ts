@@ -5,23 +5,22 @@ import { convertToSlug } from 'system/format';
 const {
   Articles: Article,
   Users: User,
-  Material,
   Author,
   Categories,
   SubCategories,
 } = DB;
 
 export default class ArticleServices {
-  static create(data: any, material = false) {
-    const ArticleModel = !material ? Article : Material;
-    if (data.slug && material) {
+  static create(data: any) {
+    const ArticleModel = Article ;
+    if (data.slug) {
       data.slug = convertToSlug(data.slug);
     }
     return ArticleModel.create(data);
   }
 
-  static findAll(material = false) {
-    const ArticleModel = !material ? Article : Material;
+  static findAll() {
+    const ArticleModel = Article ;
     return ArticleModel.findAll();
   }
 
@@ -31,9 +30,8 @@ export default class ArticleServices {
     autherAttributes?: FindAttributeOptions | undefined,
     limit?: number | undefined,
     offset?: number | undefined,
-    material = false,
   ) {
-    const ArticleModel = !material ? Article : Material;
+    const ArticleModel = Article;
     const { count, rows } = await ArticleModel.findAndCountAll({
       attributes,
       where,
@@ -87,9 +85,8 @@ export default class ArticleServices {
     where?: WhereOptions<any> | undefined,
     attributes?: FindAttributeOptions | undefined,
     autherAttributes?: FindAttributeOptions | undefined,
-    material = false,
   ) {
-    const ArticleModel = !material ? Article : Material;
+    const ArticleModel = Article;
     const article = await ArticleModel.findOne({
       attributes,
       where,
@@ -144,21 +141,21 @@ export default class ArticleServices {
     return articleData;
   }
 
-  static findByPk(id: number, material = false) {
-    const ArticleModel = !material ? Article : Material;
+  static findByPk(id: number) {
+    const ArticleModel = Article;
     return ArticleModel.findByPk(id);
   }
 
-  static update(set: object, conditon: any, material = false) {
-    const ArticleModel = !material ? Article : Material;
+  static update(set: object, conditon: any) {
+    const ArticleModel = Article;
     return ArticleModel.update(set, {
       where: conditon,
       returning: true,
     });
   }
 
-  static destroy(condition: any, material = false) {
-    const ArticleModel = !material ? Article : Material;
+  static destroy(condition: any) {
+    const ArticleModel = Article;
     return ArticleModel.destroy({
       where: condition,
     });

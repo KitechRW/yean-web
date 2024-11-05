@@ -68,7 +68,7 @@ export default class LandingController {
           'id',
           'title',
           'image',
-          'author_id',
+          'author_name',
           'views',
           'comment',
           'createdAt',
@@ -93,7 +93,7 @@ export default class LandingController {
           'title',
           'image',
           'views',
-          'author_id',
+          'author_name',
           ...materialParams,
           'createdAt',
           'updatedAt',
@@ -101,6 +101,7 @@ export default class LandingController {
         ['firstname', 'lastname', 'profile_image'],
         8,
         0,
+        //@ts-ignore
         true,
       );
       return Response.success(res, 200, {
