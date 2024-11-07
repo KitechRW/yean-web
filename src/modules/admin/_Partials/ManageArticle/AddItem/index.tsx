@@ -25,7 +25,7 @@ const fields = {
   text: joi.string().required(),
   category_id: joi.number().label('Category'),
   subcategory_id: joi.number().label('Sub category'),
-  author_name: joi.string().required(),
+  authorName: joi.string().required(),
 };
 
 const schema = joi.object(fields);
@@ -224,7 +224,7 @@ const AddItem = ({
       text: data.text,
       category_id: data.category_id,
       subcategory_id: data.subcategory_id,
-      author_name: data.author_name,
+      authorName: data.authorName,
     });
   };
 
@@ -267,12 +267,6 @@ const AddItem = ({
         <form
           onSubmit={event => {
             event.preventDefault();
-            if (!material) {
-              unregister(['subcategory_id', 'category_id']);
-            } else {
-              setError('category_id', { type: 'required' });
-              setError('subcategory_id', { type: 'required' });
-            }
             handleSubmit(onSubmit)(event);
           }}
           className="gap-y-3 flex flex-col"
@@ -306,7 +300,7 @@ const AddItem = ({
                   options={categoryOptions}
                   defaultValue={defaultCategoryOptions}
                   onChange={(newValue: any) => {
-                    setValue('category_id', newValue.value, {
+                    setValue('category_id', Number(newValue.value), {
                       shouldDirty: true,
                       shouldValidate: true,
                     });
@@ -329,7 +323,7 @@ const AddItem = ({
                   options={subCategoryOptions}
                   defaultValue={defaultSubCategoryOptions}
                   onChange={(newValue: any) => {
-                    setValue('subcategory_id', newValue.value, {
+                    setValue('subcategory_id', Number(newValue.value), {
                       shouldDirty: true,
                       shouldValidate: true,
                     });
@@ -353,13 +347,13 @@ const AddItem = ({
             <input
               type="text"
               placeholder={'Enter Both Your names...'}
-              {...register('author_name')}
-              defaultValue={data?.author_name}
+              {...register('authorName')}
+              defaultValue={data?.authorName}
               className="mt-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             />
-            {errors.author_name?.message && (
+            {errors.authorName?.message && (
               <p className="mt-1 text-red-500">
-                {formatJoiErorr(`${errors.author_name.message}`)}
+                {formatJoiErorr(`${errors.authorName.message}`)}
               </p>
             )}
           </label>

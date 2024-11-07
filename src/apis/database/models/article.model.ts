@@ -20,7 +20,7 @@ const ArticleModel = (sequelize: Sequelize) => {
         type: DataTypes.INTEGER,
         defaultValue: 0,
       },
-      authorName: DataTypes.STRING,
+      authorName: DataTypes.TEXT('long'),
       tags: DataTypes.STRING,
       comment: {
         type: DataTypes.INTEGER,
