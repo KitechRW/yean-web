@@ -4,7 +4,7 @@ import { IconButton } from '@mui/material';
 import CustomImage from 'modules/_partials/CustomImage';
 import AddItem from '../AddItem';
 import { Edit } from '@mui/icons-material';
-
+import { useNavbar } from 'modules/contexts/NavbarContext';
 const ViewItem = ({
   data,
   handleEdit,
@@ -15,6 +15,7 @@ const ViewItem = ({
   handleDelete: (id: any) => void;
 }) => {
   const { title, image, status } = data || {};
+  const {profile} = useNavbar();
   return (
     <>
       <div className="flex relative flex-col bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700">
@@ -36,15 +37,21 @@ const ViewItem = ({
         <CustomImage src={image} width="150" height="150" />
         <div className="p-3 flex-grow flex flex-col items-center justify-between gap-y-2">
           <p className="font-semibold pl-2">{title}</p>
-          <AddItem
-            dataValues={data}
-            handleEdit={handleEdit}
-            handleDelete={handleDelete}
-          >
-            <IconButton>
-              <Edit />
-            </IconButton>
-          </AddItem>
+            {
+              (status !== "published" || profile?.user?.type !== "member") && (
+                <AddItem
+                  dataValues={data}
+                  handleEdit={handleEdit}
+                  handleDelete={handleDelete}
+                >
+                  <IconButton>
+                    <Edit />
+                  </IconButton>
+                </AddItem>
+              )
+            }
+              
+            
         </div>
       </div>
     </>

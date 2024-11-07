@@ -118,18 +118,7 @@ const ArticleActivity = () => {
           );
         })}
 
-        <AddItem
-          handleAdd={item => {
-            handleAdd(item);
-          }}
-        >
-          <li className="flex">
-            <button className="hover:border-blue-500 hover:border-solid hover:bg-white hover:text-blue-500 group w-full flex flex-col items-center justify-center rounded-md border-2 border-dashed border-slate-300 text-sm leading-6 text-slate-900 font-medium p-3">
-              <Add className="group-hover:text-blue-500 mb-1 text-slate-400" />
-              New Article
-            </button>
-          </li>
-        </AddItem>
+       
       </ul>
 
       <Pagination
