@@ -54,7 +54,7 @@ export default class ArticleServices {
             return { author, ...row.toJSON() };
           })
           .then((articleData: any) => {
-            const categoryId = articleData.category_id;
+            const categoryId = articleData.category_name;
             if (categoryId) {
               return Categories.findByPk(categoryId).then(
                 category => ({
@@ -66,7 +66,7 @@ export default class ArticleServices {
             return articleData;
           })
           .then((articleData: any) => {
-            const subcategoryId = articleData.subcategory_id;
+            const subcategoryId = articleData.subcategory_name;
             if (subcategoryId) {
               return SubCategories.findByPk(subcategoryId).then(
                 subcategory => ({
@@ -117,7 +117,7 @@ export default class ArticleServices {
         return { author, ...article.toJSON() };
       })
       .then((articleData: any) => {
-        const categoryId = articleData.category_id;
+        const categoryId = articleData.category_name;
         if (categoryId) {
           return Categories.findByPk(categoryId).then(category => ({
             category: category?.toJSON(),
@@ -127,7 +127,7 @@ export default class ArticleServices {
         return articleData;
       })
       .then((articleData: any) => {
-        const subcategoryId = articleData.subcategory_id;
+        const subcategoryId = articleData.subcategory_name;
         if (subcategoryId) {
           return SubCategories.findByPk(subcategoryId).then(
             subcategory => ({

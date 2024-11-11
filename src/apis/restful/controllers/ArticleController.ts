@@ -16,10 +16,10 @@ export default class ArticleController {
       const materialParams = [];
       if (material) {
         materialParams.push(
-          'category_id',
-          'subcategory_id',
+          'category_name',
+          'subcategory_name',
           'slug',
-          'material',
+          
         );
       }
       const query: any = {};
