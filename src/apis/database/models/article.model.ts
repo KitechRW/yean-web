@@ -14,8 +14,8 @@ const ArticleModel = (sequelize: Sequelize) => {
       image: DataTypes.STRING,
       slug: DataTypes.TEXT,
       text: DataTypes.TEXT('long'),
-      category_id: DataTypes.INTEGER,
-      subcategory_id: DataTypes.INTEGER,
+      category_name: DataTypes.TEXT,
+      subcategory_name: DataTypes.TEXT,
       views: {
         type: DataTypes.INTEGER,
         defaultValue: 0,

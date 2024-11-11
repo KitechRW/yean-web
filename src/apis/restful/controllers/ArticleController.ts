@@ -64,20 +64,20 @@ export default class ArticleController {
       const materialParams = [];
       if (material) {
         materialParams.push(
-          'category_id',
-          'subcategory_id',
+          'category_name',
+          'subcategory_name',
           'slug',
-          'material',
+          // 'material',
         );
       }
       page = Number(page);
       limit = Number(limit);
       const where: any = {};
       if (Number(cat)) {
-        where.category_id = cat;
+        where.category_name = cat;
       }
       if (Number(sub)) {
-        where.subcategory_id = sub;
+        where.subcategory_name = sub;
       }
       const offset = (page - 1) * limit;
       const { rows, count } = await ArticleServices.findAndCountAll(
@@ -96,8 +96,8 @@ export default class ArticleController {
         ['firstname', 'lastname', 'profile_image'],
         limit,
         offset,
-        //@ts-ignore
-        material,
+        // //@ts-ignore
+        // material,
       );
       const pagination = paginate(page, count, rows, limit);
 
@@ -119,7 +119,6 @@ export default class ArticleController {
     const material = Boolean(req.query.material);
     try {
       const { fields, files} = await parseForm(req);
-      console.log(fields.author_name);
       if (!files.media) {
         return Response.error(res, 500, {
           message: 'Please upload image',

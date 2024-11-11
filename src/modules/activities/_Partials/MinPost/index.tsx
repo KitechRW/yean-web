@@ -6,7 +6,7 @@ import React from 'react';
 const MinPost = ({ data }: { data: any }) => {
   const { push } = useRouter();
   const handleClick = () => {
-    if (data?.category_id) {
+    if (data?.category_name) {
       push(`/blog/${data?.id}?material=1`);
     }
   };

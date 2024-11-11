@@ -23,8 +23,8 @@ const fields = {
   title: joi.string().required(),
   image: joi.object().required().optional(),
   text: joi.string().required(),
-  category_id: joi.number().label('Category'),
-  subcategory_id: joi.number().label('Sub category'),
+  category_name: joi.string().label('Category'),
+  subcategory_name: joi.string().label('Sub category'),
   authorName: joi.string().required(),
 };
 
@@ -50,6 +50,7 @@ const AddItem = ({
   const [data, setData] = React.useState<any>(null);
   const [loading, setLoading] = React.useState(false);
   const [toggle, setToggle] = React.useState(false);
+  const [triggle, setTriggle] = React.useState(true);
   const {
     data: { data: categories },
   } = useProtectedFetcher('/api/categories');
@@ -71,14 +72,19 @@ const AddItem = ({
   });
 
   const onSubmit = async (query: any) => {
-    
-    const status = 'submitted';
+    let status = 'submitted';
     setLoading(true);
     const formData = new FormData();
     Object.keys(query).forEach(key => {
       formData.append(key === 'image' ? 'media' : key, query[key]);
     });
-    formData.append('status', status);
+
+    if(triggle){
+      formData.append('status', status);
+    }else{
+      status = 'published';
+      formData.append('status', status);
+    }
 
     const { data: res, error } = await (!dataValues
       ? DefaultApi.PostRoute.postRoute(
@@ -94,7 +100,7 @@ const AddItem = ({
     setLoading(false);
 
     if (res) {
-      const message = dataValues ? 'Edited' : 'Added';
+      const message = dataValues ? (triggle ? 'Edited' : 'Published & Edited') : (triggle ? 'Added' : 'Published');
       swal(
         message,
         res.message || `${message} successfully`,
@@ -152,51 +158,6 @@ const AddItem = ({
     }
   };
 
-    const OnPublish = async(query: any) => {
-      const status = 'published';
-      setLoading(true);
-    const formData = new FormData();
-    Object.keys(query).forEach(key => {
-      formData.append(key === 'image' ? 'media' : key, query[key]);
-    });
-    formData.append('status', status);
-
-    const { data: res, error} = await (!dataValues
-      ? DefaultApi.PostRoute.postRoute(
-          `/api/articles?material=${material ? 1 : 0}`,
-          formData
-        )
-      : DefaultApi.PatchRoute.patchRoute(
-          `/api/articles/${dataValues.id}?material=${
-            material ? 1 : 0
-          }`,
-          formData,
-        ));
-    setLoading(false);
-
-    if (res) {
-      const message = dataValues ? 'Edited & Published' : 'Published';
-      swal(
-        message,
-        res.message || `${message} successfully`,
-        'success',
-      ).then(() => {
-        reset();
-        setToggle(false);
-        if (dataValues) {
-          // @ts-ignore
-          handleEdit(res.data, material);
-        } else {
-          // @ts-ignore
-          handleAdd(res.data, material);
-        }
-      });
-    }
-
-    if (error) {
-      swal('Ooops!', error.message || 'Something went wrong');
-    }
-    }
   React.useEffect(() => {
     if (dataValues?.material) {
       setMaterial(!!dataValues.material);
@@ -222,8 +183,8 @@ const AddItem = ({
     reset({
       title: data.title,
       text: data.text,
-      category_id: data.category_id,
-      subcategory_id: data.subcategory_id,
+      category_name: data.category_name,
+      subcategory_name: data.subcategory_name,
       authorName: data.authorName,
     });
   };
@@ -241,7 +202,7 @@ const AddItem = ({
 
   const subCategoryOptions = subCategories?.rows
     ?.filter(
-      (item: any) => item.categoryId == getValues('category_id'),
+      (item: any) => item.category_name == getValues('category_name'),
     )
     ?.map((element: any) => ({
       value: element.id,
@@ -249,10 +210,10 @@ const AddItem = ({
     }));
 
   const defaultSubCategoryOptions = subCategoryOptions?.filter(
-    (item: any) => item.value == data?.subcategory_id,
+    (item: any) => item.value == data?.subcategory_name,
   );
   const defaultCategoryOptions = categoryOptions?.filter(
-    (item: any) => item.value == data?.category_id,
+    (item: any) => item.value == data?.category_name,
   );
 
 
@@ -296,20 +257,20 @@ const AddItem = ({
                 </span>
                 <Select
                   isMulti={false}
-                  {...register('category_id')}
+                  {...register('category_name')}
                   options={categoryOptions}
                   defaultValue={defaultCategoryOptions}
                   onChange={(newValue: any) => {
-                    setValue('category_id', Number(newValue.value), {
+                    setValue('category_name', newValue.label, {
                       shouldDirty: true,
                       shouldValidate: true,
                     });
                   }}
                   className="mt-2"
                 />
-                {errors.category_id?.message && (
+                {errors.category_name?.message && (
                   <p className="mt-1 text-red-500">
-                    {formatJoiErorr(`${errors.category_id.message}`)}
+                    {formatJoiErorr(`${errors.category_name.message}`)}
                   </p>
                 )}
               </label>
@@ -319,21 +280,21 @@ const AddItem = ({
                 </span>
                 <Select
                   isMulti={false}
-                  {...register('subcategory_id')}
+                  {...register('subcategory_name')}
                   options={subCategoryOptions}
                   defaultValue={defaultSubCategoryOptions}
                   onChange={(newValue: any) => {
-                    setValue('subcategory_id', Number(newValue.value), {
+                    setValue('subcategory_name', newValue.label, {
                       shouldDirty: true,
                       shouldValidate: true,
                     });
                   }}
                   className="mt-2"
                 />
-                {errors.subcategory_id?.message && (
+                {errors.subcategory_name?.message && (
                   <p className="mt-1 text-red-500">
                     {formatJoiErorr(
-                      `${errors.subcategory_id.message}`,
+                      `${errors.subcategory_name.message}`,
                     )}
                   </p>
                 )}
@@ -419,7 +380,7 @@ const AddItem = ({
                 disabled={loading}
                 className="font-semibold disabled:cursor-not-allowed disabled:bg-slate-400 mt-12 text-white bg-brand-green/80 hover:bg-brand-green focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg text-sm w-full sm:w-auto px-12 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                 >
-                Save
+               {dataValues ? 'Edit' : 'Save'} 
               </button>
               )
               :
@@ -430,13 +391,13 @@ const AddItem = ({
                   disabled={loading}
                   className="font-semibold disabled:cursor-not-allowed disabled:bg-slate-400 mt-12 text-white bg-slate-600 hover:bg-slate-500 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg text-sm w-full sm:w-auto px-12 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                 >
-                  Save
+                  {dataValues ? 'Edit' : 'Save'} 
                 </button>
                 <button
-                  type="button"
+                  type="submit"
+                  onClick={ () => setTriggle(false)}
                   disabled={loading}
                   className="font-semibold disabled:cursor-not-allowed disabled:bg-slate-400 mt-12 text-white bg-brand-green/80 hover:bg-brand-green focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg text-sm w-full sm:w-auto px-12 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                  onClick={OnPublish}
                 >
                   Publish
                 </button>

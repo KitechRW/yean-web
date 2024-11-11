@@ -24,7 +24,7 @@ const ExtensionMaterialsActivity = () => {
   }, [categories]);
 
   const matchSubCategories = subCategories?.rows?.filter(
-    (item: any) => item.categoryId == current?.id,
+    (item: any) => item.category_name == current?.name,
   );
 
   return (
