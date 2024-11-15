@@ -33,7 +33,7 @@ const LandingAcitivity = ({
   banners?: Banner[];
 }) => {
   const { push } = useRouter();
-  const slides = data?.slides || [];
+  const slides = data || [];
   const {
     data: { data: partners },
   } = useOpenFetcher(`/api/partners`);

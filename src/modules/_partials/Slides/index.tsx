@@ -23,6 +23,7 @@ const Slides = ({
   const moveNext = useCallback(() => {
     if (
       carousel.current !== null &&
+      //@ts-ignore
       carousel.current.offsetWidth * currentIndex <=
         maxScrollWidth.current &&
       currentIndex < lastIndex
@@ -35,13 +36,16 @@ const Slides = ({
 
   useEffect(() => {
     if (carousel !== null && carousel.current !== null) {
+      //@ts-ignore
       carousel.current.scrollLeft =
+      //@ts-ignore
         carousel.current.offsetWidth * currentIndex;
     }
   }, [currentIndex]);
 
   useEffect(() => {
     maxScrollWidth.current = carousel.current
+    //@ts-ignore
       ? carousel.current.scrollWidth - carousel.current.offsetWidth
       : 0;
   }, []);
@@ -73,7 +77,7 @@ const Slides = ({
       className={`w-full relative overflow-hidden flex flex-col bg-brand-green`}
     >
       <div className="bottom-2 z-10 justify-center absolute flex items-center space-x-2 w-full">
-        {data.map((resource, index) => (
+        {data.filter(element => (element.status === 'published' && element.slide === 'Yes')).map((resource, index) => (
           <div
             role="button"
             tabIndex={index}
@@ -91,7 +95,7 @@ const Slides = ({
         ref={carousel}
         className="flex gap-1 overflow-hidden scroll-smooth snap-x snap-mandatory md:touch-pan-x z-0"
       >
-        {data.map((resource, index) => {
+        {data.filter(element => (element.status === 'published' && element.slide === 'Yes')).map((resource, index) => {
           return (
             <SlideItem
               key={`slide_${data.indexOf(resource)}`}

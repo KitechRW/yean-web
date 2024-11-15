@@ -39,11 +39,15 @@ export async function getServerSideProps() {
   let results = null;
   let resultArticles = null;
   let partners = null;
+<<<<<<< HEAD
   let materials = null;
   let banners = null;
 
+=======
+  const slide = 'yes';
+>>>>>>> 1bf01b7 (new feature added of slide option)
   try {
-    const { data } = await Http.axios.get('/api/landing/1');
+    const { data } = await Http.axios.get(`/api/articles`);
     results = data?.data;
   } catch (error) {
     console.log(error);

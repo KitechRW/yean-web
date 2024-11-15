@@ -26,6 +26,7 @@ const fields = {
   category_name: joi.string().label('Category'),
   subcategory_name: joi.string().label('Sub category'),
   authorName: joi.string().required(),
+  Slide: joi.string().required().optional(),
 };
 
 const schema = joi.object(fields);
@@ -51,6 +52,7 @@ const AddItem = ({
   const [loading, setLoading] = React.useState(false);
   const [toggle, setToggle] = React.useState(false);
   const [triggle, setTriggle] = React.useState(true);
+  const [selected, setSelected] = React.useState('');
   const {
     data: { data: categories },
   } = useProtectedFetcher('/api/categories');
@@ -85,7 +87,7 @@ const AddItem = ({
       status = 'published';
       formData.append('status', status);
     }
-
+    
     const { data: res, error } = await (!dataValues
       ? DefaultApi.PostRoute.postRoute(
           `/api/articles?material=${material ? 1 : 0}`,
@@ -318,6 +320,28 @@ const AddItem = ({
               </p>
             )}
           </label>
+          <label className='flex flex-col'>
+            <span className='mb-3'>Slide Show</span>
+            <div className='flex ml-3'>
+              <label className='flex items-center'>
+                  <span>Yes</span>
+                  <input {...register('Slide')} type="radio" value='Yes'  onChange={() => setSelected('Yes')} checked ={ selected === 'Yes'}/>
+              </label>
+              <label className='flex items-center'>
+                  <span>No</span>
+                  <input {...register('Slide')} type="radio" value='No' onChange={() => setSelected('No')} checked ={ selected === 'No'}/>
+              </label>
+            </div>
+            <div>
+              {
+                errors.slide?.message && (
+                  <p className="mt-1 text-red-500">
+                   {formatJoiErorr(`${errors.slide.message}`)}
+                  </p>
+                )
+              }
+            </div>
+          </label>
           <div className="flex flex-col">
             <span className="text-sm mb-2 font-medium text-gray-900 dark:text-gray-300">
               Image
@@ -337,7 +361,7 @@ const AddItem = ({
               </p>
             )}
           </div>
-
+          
           <div className="flex flex-col">
             <p className="mt-3 w-full font-medium">Text</p>
             <ReactQuill

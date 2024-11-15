@@ -25,8 +25,10 @@ export default class ArticleController {
       const query: any = {};
       if (material && !Number(id)) {
         query.slug = id;
+        console.log('he')
       } else {
         query.id = id;
+        console.log('me')
       }
       return Response.success(res, 200, {
         message: 'Articles fetched successfuly',
@@ -90,6 +92,7 @@ export default class ArticleController {
           'views',
           ...materialParams,
           'status',
+          'slide',
           'createdAt',
           'updatedAt',
         ],
@@ -135,12 +138,13 @@ export default class ArticleController {
         ...fields,
         image: images,
       };
-
+      console.log(payload);
       return Response.success(res, 200, {
         message: 'Article created successfuly',
         //@ts-ignore
         data: await ArticleServices.create(payload, material),
       });
+
     } catch (error: any) {
       console.log(error);
       return Response.error(res, 500, {
