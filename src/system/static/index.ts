@@ -10,7 +10,7 @@ import {
   Pageview,
   Category,
   Work,
-  Group, UploadFileTwoTone, UploadOutlined,
+  Group, UploadOutlined,
 } from '@mui/icons-material';
 
 export const navs = [
