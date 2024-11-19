@@ -38,7 +38,6 @@ async function handleDelete(req: NextApiRequest, res: NextApiResponse) {
       return res.status(400).json({ error: 'Invalid file ID' });
     }
 
-    // Get file details before deletion
     const file = await FileService.getFileById(id);
 
     if (!file) {
@@ -50,10 +49,9 @@ async function handleDelete(req: NextApiRequest, res: NextApiResponse) {
       const filePath = path.join(process.cwd(), 'public', file.publicUrl);
       console.log('Attempting to delete file at path:', filePath);
 
-      // Check if file exists before attempting deletion
       try {
-        await fs.access(filePath); // Ensure the file exists
-        await fs.unlink(filePath); // Delete the file
+        await fs.access(filePath);
+        await fs.unlink(filePath);
         console.log('File deleted successfully:', filePath);
       } catch (error) {
         console.warn('File not found or deletion failed:', error);
