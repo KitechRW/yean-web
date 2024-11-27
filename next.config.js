@@ -35,3 +35,22 @@ module.exports = {
     ]
   }
 }
+module.exports = {
+  images: {
+    domains: ['localhost'], // Add your domain
+  },
+}
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  images: {
+    domains: ['localhost'],
+  },
+  // Enable file uploads larger than 1MB (default limit)
+  api: {
+    bodyParser: {
+      sizeLimit: '10mb',
+    },
+  },
+}
+
+module.exports = nextConfig

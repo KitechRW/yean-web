@@ -31,6 +31,19 @@ CREATE TABLE `SequelizeMeta` (
 
 --
 -- Dumping data for table `SequelizeMeta`
+ALTER TABLE files
+    ADD COLUMN shareId VARCHAR(36) UNIQUE,
+ADD COLUMN shared BOOLEAN DEFAULT FALSE;
+CREATE TABLE files (
+                       id VARCHAR(36) PRIMARY KEY,
+                       filename VARCHAR(255) NOT NULL,
+                       originalName VARCHAR(255) NOT NULL,
+                       mimeType VARCHAR(100) NOT NULL,
+                       size BIGINT NOT NULL,
+                       publicUrl VARCHAR(255) NOT NULL,
+                       uploadDate DATETIME DEFAULT CURRENT_TIMESTAMP,
+                       downloads INT DEFAULT 0
+);
 --
 
 LOCK TABLES `SequelizeMeta` WRITE;
