@@ -19,7 +19,7 @@ const Banner: NextPage = () => {
 };
 
 export const getServerSideProps = withSessionSsr(
-  async ({ req, res }) => {
+  async ({ req }) => {
     const { user, token } = req.session;
 
     if (!token) {

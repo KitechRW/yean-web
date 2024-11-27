@@ -1,14 +1,8 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { createPool } from 'mysql2/promise';
 import formidable from 'formidable';
 import fs from 'fs';
 import { pool } from 'system/lib/db'
 
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const connection = await pool.getConnection();
