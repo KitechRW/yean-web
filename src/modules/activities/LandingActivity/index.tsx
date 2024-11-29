@@ -20,15 +20,18 @@ import {
 import { useRouter } from 'next/router';
 import { slideUpItems } from './data';
 import SlideUpItem from './SlideUpItem';
+import { Banner } from 'types/types';
 
 const LandingAcitivity = ({
-  data,
-  articles,
-  materials,
-}: {
+                           data,
+                           articles,
+                           materials,
+                           banners,
+                         }: {
   data: any;
   articles: any;
   materials: any;
+  banners?: Banner[];
 }) => {
   const { push } = useRouter();
   const slides = data?.slides || [];
@@ -41,7 +44,32 @@ const LandingAcitivity = ({
 
   const articleList: any[] = articles?.rows || [];
   const materialList: any[] = materials?.rows || [];
+  const renderBanners = (section: string) => {
+    // Find the first banner that matches the specified section
+    const banner = banners?.find(banner => banner.section === section);
 
+    if (!banner) return null;
+
+    return (
+      <div
+        key={banner.id}
+        className="px-4 md:px-8 py-2 bg-white"
+      >
+        <div className="flex flex-col relative min-h-[64px] md:min-h-[195px]">
+          <Link href={banner.url || '#'}>
+            <Image
+              src={`data:image/jpeg;base64,${banner.image}`}
+              alt={banner.title}
+              layout="fill"
+              loading="lazy"
+              objectPosition="center"
+              className="cursor-pointer"
+            />
+          </Link>
+        </div>
+      </div>
+    );
+  };
   return (
     <Scaffold>
       <Slides data={slides} />
@@ -91,21 +119,7 @@ const LandingAcitivity = ({
           />
         ))}
       </div>
-      <div className="px-4 md:px-8 py-2 bg-white">
-        <div className="flex flex-col relative min-h-[64px] md:min-h-[195px]">
-          <Link href="/innovation-center">
-            <Image
-              src="/assets/images/yean.png"
-              alt=""
-              layout="fill"
-              loading="lazy"
-              objectPosition="center"
-              className="cursor-pointer"
-            />
-          </Link>
-        </div>
-      </div>
-
+      {renderBanners('products')} {/* it must be section products */}
       <div className="flex flex-col px-4 md:px-8 py-2 bg-white">
         <h1 className="text-2xl md:text-4xl text-white font-bold bg-brand-green p-2 text-center">
           Extension Materials
@@ -128,22 +142,7 @@ const LandingAcitivity = ({
           <span>View More</span>
         </button>
       </div>
-
-      <div className="px-4 md:px-8 py-2 bg-white">
-        <div className="flex flex-col relative min-h-[64px] md:min-h-[195px]">
-          <Link href="/services">
-            <Image
-              src="/assets/images/greenhouse.png"
-              alt=""
-              layout="fill"
-              loading="lazy"
-              objectPosition="center"
-              className="cursor-pointer"
-            />
-          </Link>
-        </div>
-      </div>
-
+      {renderBanners('services')} {/* it must be section services */}
       <div className="flex flex-col px-4 md:px-8 py-2 bg-white">
         <h1 className="text-2xl md:text-4xl text-white font-bold bg-brand-green p-2 text-center">
           Latest Blog
@@ -166,22 +165,7 @@ const LandingAcitivity = ({
           <span>View More</span>
         </button>
       </div>
-
-      <div className="px-4 md:px-8 py-2 bg-white">
-        <div className="flex flex-col relative min-h-[64px] md:min-h-[195px]">
-          <Link href="/services">
-            <Image
-              src="/assets/images/Inputs.png"
-              alt=""
-              layout="fill"
-              loading="lazy"
-              objectPosition="center"
-              className="cursor-pointer"
-            />
-          </Link>
-        </div>
-      </div>
-
+      {renderBanners('about')} {/* it must be section about */}
       <div className="flex flex-col px-4 md:px-8 py-2 bg-white">
         <h1 className="text-2xl md:text-4xl text-white font-bold bg-brand-green p-2 text-center">
           Our Partners

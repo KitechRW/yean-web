@@ -9,7 +9,7 @@ interface Banner {
   url: string;
   section: string;
   path: string;
-  image_path: string;
+  image: string;
   created_at?: string;
   updated_at?: string;
 }
@@ -119,7 +119,7 @@ const BannerActivity: React.FC = () => {
   if (isLoading && !isRetrying) {
     return (
       <div className="flex h-64 items-center justify-center">
-        <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-blue-600"></div>
+        <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-green-600"></div>
       </div>
     );
   }
@@ -147,14 +147,14 @@ const BannerActivity: React.FC = () => {
           <input
             value={filterValue}
             onChange={(e) => setFilterValue(e.target.value)}
-            className="peer w-full appearance-none rounded-md py-2 pl-10 text-sm leading-6 text-slate-900 placeholder-slate-400 shadow-sm ring-1 ring-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="peer w-full appearance-none rounded-md py-2 pl-10 text-sm leading-6 text-slate-900 placeholder-slate-400 shadow-sm ring-1 ring-slate-200 focus:outline-none focus:ring-2 focus:ring-green-500"
             type="text"
             placeholder="Filter banners..."
           />
         </div>
 
         <AddBanner onAdd={handleAddBanner}>
-          <button className="group flex items-center rounded-md bg-blue-500 px-8 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-600">
+          <button className="group flex items-center rounded-md bg-green-500 px-8 py-2 text-sm font-medium text-white shadow-sm hover:bg-green-600">
             <Plus className="mr-1 h-5 w-5" />
             <span>New</span>
           </button>
@@ -173,8 +173,8 @@ const BannerActivity: React.FC = () => {
 
         <AddBanner onAdd={handleAddBanner}>
           <li className="flex">
-            <button className="group flex w-full flex-col items-center justify-center rounded-md border-2 border-dashed border-slate-300 p-3 text-sm font-medium leading-6 text-slate-900 hover:border-blue-500 hover:border-solid hover:bg-white hover:text-blue-500">
-              <Plus className="mb-1 h-6 w-6 text-slate-400 group-hover:text-blue-500" />
+            <button className="group flex w-full flex-col items-center justify-center rounded-md border-2 border-dashed border-slate-300 p-3 text-sm font-medium leading-6 text-slate-900 hover:border-green-500 hover:border-solid hover:bg-white hover:text-green-500">
+              <Plus className="mb-1 h-6 w-6 text-slate-400 group-hover:text-green-500" />
               New Banner
             </button>
           </li>

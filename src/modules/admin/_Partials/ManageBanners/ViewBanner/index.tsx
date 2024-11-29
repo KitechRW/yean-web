@@ -137,11 +137,10 @@ const ViewBanner: React.FC<ViewBannerProps> = ({ data, onEdit, onDelete }) => {
   };
 
   const sections = [
-    'homepage',
     'products',
     'services',
     'about',
-    // Add more sections as needed
+    // my sections
   ];
 
   return (
@@ -180,7 +179,7 @@ const ViewBanner: React.FC<ViewBannerProps> = ({ data, onEdit, onDelete }) => {
               href={data.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="ml-1 text-blue-500 hover:text-blue-600"
+              className="ml-1 text-green-500 hover:text-green-600"
             >
               <ExternalLink className="h-4 w-4" />
             </a>
@@ -229,7 +228,7 @@ const ViewBanner: React.FC<ViewBannerProps> = ({ data, onEdit, onDelete }) => {
                     name="title"
                     value={formData.title}
                     onChange={handleInputChange}
-                    className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                    className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-green-500 focus:outline-none focus:ring-1 focus:ring-green-500"
                     required
                   />
                 </div>
@@ -245,7 +244,7 @@ const ViewBanner: React.FC<ViewBannerProps> = ({ data, onEdit, onDelete }) => {
                     name="url"
                     value={formData.url}
                     onChange={handleInputChange}
-                    className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                    className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-green-500 focus:outline-none focus:ring-1 focus:ring-green-500"
                     required
                   />
                 </div>
@@ -260,7 +259,7 @@ const ViewBanner: React.FC<ViewBannerProps> = ({ data, onEdit, onDelete }) => {
                     name="section"
                     value={formData.section}
                     onChange={handleInputChange}
-                    className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                    className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-green-500 focus:outline-none focus:ring-1 focus:ring-green-500"
                     required
                   >
                     <option value="">Select a section</option>
@@ -283,7 +282,7 @@ const ViewBanner: React.FC<ViewBannerProps> = ({ data, onEdit, onDelete }) => {
                     name="path"
                     value={formData.path}
                     onChange={handleInputChange}
-                    className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                    className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-green-500 focus:outline-none focus:ring-1 focus:ring-green-500"
                     required
                   />
                 </div>
@@ -319,7 +318,7 @@ const ViewBanner: React.FC<ViewBannerProps> = ({ data, onEdit, onDelete }) => {
                           <div className="flex text-sm text-gray-600">
                             <label
                               htmlFor="image-upload"
-                              className="relative cursor-pointer rounded-md bg-white font-medium text-blue-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-blue-500 focus-within:ring-offset-2 hover:text-blue-500"
+                              className="relative cursor-pointer rounded-md bg-white font-medium text-green-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-green-500 focus-within:ring-offset-2 hover:text-green-500"
                             >
                               <span>Upload a new image</span>
                               <input
@@ -359,14 +358,14 @@ const ViewBanner: React.FC<ViewBannerProps> = ({ data, onEdit, onDelete }) => {
                   <button
                     type="button"
                     onClick={handleClose}
-                    className="inline-flex justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                    className="inline-flex justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
                     disabled={isEditing}
-                    className="inline-flex justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:bg-blue-400"
+                    className="inline-flex justify-center rounded-md border border-transparent bg-green-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:bg-green-400"
                   >
                     {isEditing ? 'Saving...' : 'Save Changes'}
                   </button>

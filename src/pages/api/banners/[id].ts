@@ -23,7 +23,7 @@ export default async function handler(
       }
 
       // Delete image file
-      const imagePath = path.join(process.cwd(), 'public', banner[0].image_path);
+      const imagePath = path.join(process.cwd(), 'public', banner[0].image);
       await fs.unlink(imagePath);
 
       // Delete from database

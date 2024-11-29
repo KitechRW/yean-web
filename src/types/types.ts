@@ -12,7 +12,7 @@ export interface Banner {
   id: number;
   title: string;
   url: string;
-  section: string;
+  section: 'about' | 'services' | 'products';
   path: string;
   image: string;
   is_active?: boolean;
