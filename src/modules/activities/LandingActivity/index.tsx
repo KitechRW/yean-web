@@ -50,15 +50,15 @@ const LandingAcitivity = ({
 
     if (!banner) return null;
 
+    // Ensure that the image is properly handled
+    const imageUrl = banner.image ? `data:image/jpeg;base64,${banner.image}` : '';
+
     return (
-      <div
-        key={banner.id}
-        className="px-4 md:px-8 py-2 bg-white"
-      >
+      <div key={banner.id} className="px-4 md:px-8 py-2 bg-white">
         <div className="flex flex-col relative min-h-[64px] md:min-h-[195px]">
           <Link href={banner.url || '#'}>
             <Image
-              src={`data:image/jpeg;base64,${banner.image}`}
+              src={banner.image}
               alt={banner.title}
               layout="fill"
               loading="lazy"
@@ -70,6 +70,7 @@ const LandingAcitivity = ({
       </div>
     );
   };
+
   return (
     <Scaffold>
       <Slides data={slides} />

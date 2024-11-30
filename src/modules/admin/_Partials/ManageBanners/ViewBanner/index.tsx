@@ -21,6 +21,8 @@ const ViewBanner: React.FC<ViewBannerProps> = ({ data, onEdit, onDelete }) => {
   const [isDeleting, setIsDeleting] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [error, setError] = useState<string>('');
+  const [deleteError, setDeleteError] = useState<string>('');
+  const [confirmDelete, setConfirmDelete] = useState(false);
   const [formData, setFormData] = useState<EditFormData>({
     title: data.title,
     url: data.url,
@@ -30,10 +32,20 @@ const ViewBanner: React.FC<ViewBannerProps> = ({ data, onEdit, onDelete }) => {
   });
   const [previewUrl, setPreviewUrl] = useState<string>(data.image);
 
+  // Sections for dropdown
+  const sections = [
+    'products',
+    'services',
+    'about',
+    // Add more sections as needed
+  ];
+
   const handleClose = () => {
     setShowModal(false);
     setError('');
+    setDeleteError('');
     setIsEditing(false);
+    setConfirmDelete(false);
     setFormData({
       title: data.title,
       url: data.url,
@@ -54,8 +66,8 @@ const ViewBanner: React.FC<ViewBannerProps> = ({ data, onEdit, onDelete }) => {
       }
 
       // Validate file size (5MB limit)
-      if (file.size > 89 * 1024 * 1024) {
-        setError('Not an image');
+      if (file.size > 5 * 1024 * 1024) {
+        setError('File size should not exceed 5MB');
         return;
       }
 
@@ -114,34 +126,41 @@ const ViewBanner: React.FC<ViewBannerProps> = ({ data, onEdit, onDelete }) => {
   };
 
   const handleDelete = async () => {
+    if (!confirmDelete) {
+      setConfirmDelete(true);
+      return;
+    }
+
     setIsDeleting(true);
-    setError('');
+    setDeleteError('');
 
     try {
       const response = await fetch(`/api/banners/${data.id}`, {
         method: 'DELETE',
       });
 
+      console.log('Delete Response Status:', response.status);
+      console.log('Response OK:', response.ok);
+
       if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.message || 'Failed to delete banner');
+        const errorData = await response.json();
+        console.error('Delete Error Response:', errorData);
+        throw new Error(errorData.message || 'Failed to delete banner');
       }
+
+      const result = await response.json();
+      console.log('Delete Result:', result);
 
       onDelete(data.id);
       handleClose();
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'An error occurred');
+      console.error('Delete Catch Error:', err);
+      setDeleteError(err instanceof Error ? err.message : 'An unexpected error occurred');
     } finally {
       setIsDeleting(false);
+      setConfirmDelete(false);
     }
   };
-
-  const sections = [
-    'products',
-    'services',
-    'about',
-    // my sections
-  ];
 
   return (
     <>
@@ -193,6 +212,7 @@ const ViewBanner: React.FC<ViewBannerProps> = ({ data, onEdit, onDelete }) => {
         </div>
       </li>
 
+      {/* Edit Modal */}
       {showModal && (
         <div className="fixed inset-0 z-50 overflow-y-auto">
           <div className="flex min-h-screen items-center justify-center px-4 text-center">
@@ -369,16 +389,67 @@ const ViewBanner: React.FC<ViewBannerProps> = ({ data, onEdit, onDelete }) => {
                   >
                     {isEditing ? 'Saving...' : 'Save Changes'}
                   </button>
-                  <button
-                    type="button"
-                    onClick={handleDelete}
-                    disabled={isDeleting}
-                    className="inline-flex justify-center rounded-md border border-transparent bg-red-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 disabled:bg-red-400"
-                  >
-                    {isDeleting ? 'Deleting...' : 'Delete banners'}
-                  </button>
                 </div>
               </form>
+            </div>
+          </div>
+        </div>
+      )}
+      {/* Confirmation Modal for Deletion */}
+      {confirmDelete && (
+        <div className="fixed inset-0 z-50 overflow-y-auto">
+          <div className="flex min-h-screen items-center justify-center px-4 text-center">
+            <div
+              className="fixed inset-0 bg-black bg-opacity-50 transition-opacity"
+              onClick={() => setConfirmDelete(false)}
+            />
+
+            <div className="inline-block w-full max-w-md transform overflow-hidden rounded-lg bg-white p-6 text-left align-middle shadow-xl transition-all">
+              <div className="flex items-center justify-between">
+                <h3 className="text-lg font-medium text-gray-900">
+                  Confirm Deletion
+                </h3>
+                <button
+                  onClick={() => setConfirmDelete(false)}
+                  className="text-gray-400 hover:text-gray-500"
+                >
+                  <X className="h-5 w-5" />
+                </button>
+              </div>
+
+              <p className="mt-4 text-sm text-gray-500">
+                Are you sure you want to delete this banner? This action cannot be undone.
+              </p>
+
+              {deleteError && (
+                <div className="mt-4 rounded-md bg-red-50 p-4">
+                  <div className="flex">
+                    <div className="ml-3">
+                      <h3 className="text-sm font-medium text-red-800">
+                        {deleteError}
+                      </h3>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              <div className="mt-5 flex justify-end space-x-3">
+                <button
+                  type="button"
+                  onClick={() => setConfirmDelete(false)}
+                  className="inline-flex justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  onClick={handleDelete}
+                  disabled={isDeleting}
+                  className="inline-flex justify-center rounded-md border border-transparent bg-red-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 disabled:bg-red-400"
+                >
+                  {isDeleting ? 'Deleting...' : 'Confirm Delete'}
+                </button>
+              </div>
             </div>
           </div>
         </div>

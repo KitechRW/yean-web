@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import formidable from 'formidable';
-import fs from 'fs';
+import fs from 'fs/promises';
 import { pool } from 'system/lib/db';
 
 // Disable the default body parser
@@ -11,105 +11,107 @@ export const config = {
 };
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const connection = await pool.getConnection();
-
+  let connection;
   try {
+    connection = await pool.getConnection();
+
     switch (req.method) {
       case 'GET':
         const [banners] = await connection.execute('SELECT * FROM banners');
 
-        // Convert image to base64
+        // Process the banners data and convert images to base64
         const processedBanners = (banners as any[]).map(banner => ({
-          ...banner,
-          image: banner.image_data ? banner.image_data.toString('base64') : null
+          id: banner.id,
+          title: banner.title,
+          url: banner.url,
+          section: banner.section,
+          path: banner.path,
+          image: banner.image_data
+            ? `data:${banner.image_type};base64,${banner.image_data.toString('base64')}`
+            : null,
+          created_at: banner.created_at
         }));
 
         return res.status(200).json(processedBanners);
 
       case 'POST':
-        const form = formidable({
-          maxFileSize: 100 * 1024 * 1024, // 100MB
-        });
-
-        const [fields, files] = await new Promise<[formidable.Fields, formidable.Files]>((resolve, reject) => {
-          form.parse(req, (err, fields, files) => {
-            if (err) reject(err);
-            resolve([fields, files]);
-          });
-        });
-
-        const imageFile = files.image as formidable.File;
-        const imageData = await fs.promises.readFile(imageFile.filepath);
-
-        const [result] = await connection.execute(
-          `INSERT INTO banners (
-            title, url, section, path,
-            image_data, image_name, image_type,
-            created_at
-          ) VALUES (?, ?, ?, ?, ?, ?, ?, NOW())`,
-          [
-            fields.title as string,
-            fields.url as string,
-            fields.section as string,
-            fields.path as string,
-            imageData,
-            imageFile.originalFilename,
-            imageFile.mimetype,
-          ]
-        );
-
-        await fs.promises.unlink(imageFile.filepath);
-
-        return res.status(201).json({
-          id: result.insertId,
-          title: fields.title,
-          url: fields.url,
-          section: fields.section,
-          path: fields.path,
-          image_name: imageFile.originalFilename,
-        });
-
-      case 'PUT':
-        const { id, ...updateData } = JSON.parse(req.body);
-        await connection.execute(
-          'UPDATE banners SET ? WHERE id = ?',
-          [updateData, id]
-        );
-        return res.status(200).json(updateData);
-
-      case 'DELETE':
-        const bannerId = req.query.id as string;
-        const section = req.query.section as string;
-
-        if (!bannerId || !section) {
-          return res.status(400).json({ message: 'Banner ID and Section are required' });
-        }
+        // Start a transaction for safe insertion
+        await connection.beginTransaction();
 
         try {
-          const [result] = await connection.execute(
-            'DELETE FROM banners WHERE id = ? AND section = ?',
-            [bannerId, section]
-          );
+          const form = formidable({
+            maxFileSize: 5 * 1024 * 1024, // 5MB
+            keepExtensions: true,
+          });
 
-          if ((result as any).affectedRows === 0) {
-            return res.status(404).json({
-              message: 'Banner not found or section mismatch',
+          const [fields, files] = await new Promise<[formidable.Fields, formidable.Files]>((resolve, reject) => {
+            form.parse(req, (err, fields, files) => {
+              if (err) reject(err);
+              resolve([fields, files]);
             });
+          });
+
+          // Validate required fields
+          const requiredFields = ['title', 'url', 'section', 'path'];
+          for (const field of requiredFields) {
+            if (!fields[field]) {
+              await connection.rollback();
+              return res.status(400).json({ message: `Missing required field: ${field}` });
+            }
           }
 
-          return res.status(200).json({
-            message: 'Banner deleted successfully',
-            id: bannerId,
+          // Validate image
+          const imageFile = files.image as formidable.File;
+          if (!imageFile) {
+            await connection.rollback();
+            return res.status(400).json({ message: 'Image is required' });
+          }
+
+          // Validate image type
+          const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+          if (!allowedTypes.includes(imageFile.mimetype || '')) {
+            await connection.rollback();
+            return res.status(400).json({ message: 'Invalid image type' });
+          }
+
+          const imageData = await fs.readFile(imageFile.filepath);
+
+          const [result] = await connection.execute(
+            `INSERT INTO banners (
+              title, url, section, path,
+              image_data, image_name, image_type,
+              created_at
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, NOW())`,
+            [
+              fields.title as string,
+              fields.url as string,
+              fields.section as string,
+              fields.path as string,
+              imageData,
+              imageFile.originalFilename,
+              imageFile.mimetype,
+            ]
+          );
+
+          // Clean up temporary file
+          await fs.unlink(imageFile.filepath);
+
+          // Commit the transaction
+          await connection.commit();
+
+          return res.status(201).json({
+            id: (result as any).insertId,
+            title: fields.title,
+            url: fields.url,
+            section: fields.section,
+            path: fields.path,
+            image: `data:${imageFile.mimetype};base64,${imageData.toString('base64')}`,
           });
-        } catch (error) {
-          console.error('Error deleting banner:', error);
-          return res.status(500).json({
-            message: 'Internal server error while deleting the banner',
-            error: error instanceof Error ? error.message : 'Unknown error',
-          });
+        } catch (postError) {
+          // Rollback the transaction in case of any error
+          await connection.rollback();
+          throw postError;
         }
-
-
 
       default:
         return res.status(405).json({ message: 'Method not allowed' });
@@ -121,6 +123,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       error: error instanceof Error ? error.message : 'Unknown error'
     });
   } finally {
-    connection.release();
+    if (connection) connection.release();
   }
 }

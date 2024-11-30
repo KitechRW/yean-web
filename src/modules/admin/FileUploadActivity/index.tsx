@@ -48,7 +48,7 @@ const FileUploadActivity: React.FC = () => {
     <input
       value={filterValue}
   onChange={(event) => setFilterValue(event.target.value)}
-  className="peer focus:ring-2 focus:ring-blue-500 focus:outline-none appearance-none w-full text-sm leading-6 text-slate-900 placeholder-slate-400 rounded-md py-2 pl-10 ring-1 ring-slate-200 shadow-sm"
+  className="peer focus:ring-2 focus:ring-green-500 focus:outline-none appearance-none w-full text-sm leading-6 text-slate-900 placeholder-slate-400 rounded-md py-2 pl-10 ring-1 ring-slate-200 shadow-sm"
   type="text"
   placeholder="Filter files..."
     />
@@ -71,8 +71,8 @@ const FileUploadActivity: React.FC = () => {
 ))}
   <AddFile onAdd={handleAddFile}>
   <li className="flex">
-  <button className="hover:border-blue-500 hover:border-solid hover:bg-white hover:text-blue-500 group w-full flex flex-col items-center justify-center rounded-md border-2 border-dashed border-slate-300 text-sm leading-6 text-slate-900 font-medium p-3">
-  <CloudUpload className="group-hover:text-blue-500 mb-1 text-slate-400" />
+  <button className="hover:border-green-500 hover:border-solid hover:bg-white hover:text-green-500 group w-full flex flex-col items-center justify-center rounded-md border-2 border-dashed border-slate-300 text-sm leading-6 text-slate-900 font-medium p-3">
+  <CloudUpload className="group-hover:text-green-500 mb-1 text-slate-400" />
     Upload File
   </button>
   </li>
