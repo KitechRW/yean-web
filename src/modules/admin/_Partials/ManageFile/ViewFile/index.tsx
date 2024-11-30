@@ -32,6 +32,7 @@ import {
   InsertDriveFile,
 } from '@mui/icons-material';
 import { formatDistanceToNow } from 'date-fns';
+
 interface FileRecord {
   id: string;
   filename: string;
@@ -56,7 +57,9 @@ const ViewFile: React.FC<ViewFileProps> = ({ data, onEdit, onDelete }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [shareDialogOpen, setShareDialogOpen] = useState(false);
   const [previewDialogOpen, setPreviewDialogOpen] = useState(false);
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [previewContent, setPreviewContent] = useState<string | null>(null);
+  const [editedName, setEditedName] = useState(data.originalName);
   const [isLoading, setIsLoading] = useState(false);
   const [snackbar, setSnackbar] = useState({
     open: false,
@@ -66,6 +69,7 @@ const ViewFile: React.FC<ViewFileProps> = ({ data, onEdit, onDelete }) => {
 
   useEffect(() => {
     setFileData(data);
+    setEditedName(data.originalName);
   }, [data]);
 
   const formatFileSize = (bytes: number): string => {
@@ -77,16 +81,16 @@ const ViewFile: React.FC<ViewFileProps> = ({ data, onEdit, onDelete }) => {
   };
 
   const getFileIcon = (mimeType: string) => {
-    if (mimeType.startsWith('image/')) return <Image className="text-blue-500" />;
-    if (mimeType.startsWith('video/')) return <VideoFile className="text-red-500" />;
-    if (mimeType.startsWith('audio/')) return <AudioFile className="text-green-500" />;
-    if (mimeType === 'application/pdf') return <PictureAsPdf className="text-red-700" />;
+    if (mimeType.startsWith('image/')) return <Image className="text-green-600" />;
+    if (mimeType.startsWith('video/')) return <VideoFile className="text-green-600" />;
+    if (mimeType.startsWith('audio/')) return <AudioFile className="text-green-600" />;
+    if (mimeType === 'application/pdf') return <PictureAsPdf className="text-green-700" />;
     if (mimeType.includes('text/') ||
       mimeType.includes('application/json') ||
-      mimeType.includes('application/xml')) return <Code className="text-gray-700" />;
+      mimeType.includes('application/xml')) return <Code className="text-green-700" />;
     if (mimeType.includes('document') ||
-      mimeType.includes('text/plain')) return <Description className="text-blue-700" />;
-    return <InsertDriveFile className="text-gray-500" />;
+      mimeType.includes('text/plain')) return <Description className="text-green-700" />;
+    return <InsertDriveFile className="text-green-600" />;
   };
 
   const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
@@ -102,7 +106,6 @@ const ViewFile: React.FC<ViewFileProps> = ({ data, onEdit, onDelete }) => {
     setIsLoading(true);
 
     try {
-      // Handle different file types
       if (fileData.mimeType.startsWith('image/')) {
         setPreviewContent(`
           <div class="flex justify-center items-center min-h-[200px]">
@@ -171,7 +174,6 @@ const ViewFile: React.FC<ViewFileProps> = ({ data, onEdit, onDelete }) => {
 
   const handleDownload = async () => {
     try {
-      // Log download
       await fetch(`/api/files/${fileData.id}/download`, {
         method: 'POST',
       });
@@ -224,6 +226,48 @@ const ViewFile: React.FC<ViewFileProps> = ({ data, onEdit, onDelete }) => {
     handleMenuClose();
   };
 
+  const handleEditSubmit = async () => {
+    if (!editedName.trim()) {
+      setSnackbar({
+        open: true,
+        message: 'File name cannot be empty',
+        severity: 'error'
+      });
+      return;
+    }
+
+    try {
+      const response = await fetch(`/api/files/${fileData.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ originalName: editedName }),
+      });
+
+      if (!response.ok) throw new Error('Edit failed');
+
+      const updatedFile = await response.json();
+
+      setFileData(updatedFile);
+      onEdit(updatedFile);
+
+      setEditDialogOpen(false);
+      setSnackbar({
+        open: true,
+        message: 'File renamed successfully',
+        severity: 'success'
+      });
+    } catch (error) {
+      console.error('Edit error:', error);
+      setSnackbar({
+        open: true,
+        message: 'Failed to rename file',
+        severity: 'error'
+      });
+    }
+  };
+
   const handleShare = async () => {
     try {
       if (!fileData.shareId) {
@@ -271,19 +315,19 @@ const ViewFile: React.FC<ViewFileProps> = ({ data, onEdit, onDelete }) => {
 
   return (
     <>
-      <Card className="hover:shadow-lg transition-shadow duration-200">
+      <Card className="hover:shadow-lg transition-shadow duration-200 border border-green-100">
         <div className="p-4 flex items-center justify-between">
           <div className="flex items-center gap-4 flex-grow min-w-0">
             {getFileIcon(fileData.mimeType)}
             <div className="flex-grow min-w-0">
               <Typography
                 variant="subtitle1"
-                className="font-medium truncate"
+                className="font-medium truncate text-green-800"
                 title={fileData.originalName}
               >
                 {fileData.originalName}
               </Typography>
-              <Typography variant="body2" className="text-gray-600 flex gap-2 items-center">
+              <Typography variant="body2" className="text-green-700 flex gap-2 items-center">
                 <span>{formatFileSize(fileData.size)}</span>
                 <span>•</span>
                 <span>
@@ -299,13 +343,13 @@ const ViewFile: React.FC<ViewFileProps> = ({ data, onEdit, onDelete }) => {
             <IconButton
               onClick={handlePreview}
               disabled={isLoading}
-              className="text-gray-600 hover:text-blue-500"
+              className="text-green-600 hover:text-green-800"
             >
               {isLoading ? <CircularProgress size={24} /> : <Visibility />}
             </IconButton>
             <IconButton
               onClick={handleMenuOpen}
-              className="text-gray-600 hover:text-blue-500"
+              className="text-green-600 hover:text-green-800"
             >
               <MoreVert />
             </IconButton>
@@ -313,7 +357,6 @@ const ViewFile: React.FC<ViewFileProps> = ({ data, onEdit, onDelete }) => {
         </div>
       </Card>
 
-      {/* Menu */}
       <Menu
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}
@@ -325,7 +368,14 @@ const ViewFile: React.FC<ViewFileProps> = ({ data, onEdit, onDelete }) => {
         <MenuItem onClick={handleShare} className="gap-2">
           <Share /> Share
         </MenuItem>
-        <MenuItem onClick={() => { onEdit(fileData); handleMenuClose(); }} className="gap-2">
+        <MenuItem
+          onClick={() => {
+            setEditedName(fileData.originalName);
+            setEditDialogOpen(true);
+            handleMenuClose();
+          }}
+          className="gap-2"
+        >
           <Edit /> Edit
         </MenuItem>
         <MenuItem onClick={handleDelete} className="gap-2 text-red-500">
@@ -333,7 +383,6 @@ const ViewFile: React.FC<ViewFileProps> = ({ data, onEdit, onDelete }) => {
         </MenuItem>
       </Menu>
 
-      {/* Share Dialog */}
       <Dialog
         open={shareDialogOpen}
         onClose={() => setShareDialogOpen(false)}
@@ -369,7 +418,6 @@ const ViewFile: React.FC<ViewFileProps> = ({ data, onEdit, onDelete }) => {
         </DialogActions>
       </Dialog>
 
-      {/* Preview Dialog */}
       <Dialog
         open={previewDialogOpen}
         onClose={() => setPreviewDialogOpen(false)}
@@ -415,22 +463,36 @@ const ViewFile: React.FC<ViewFileProps> = ({ data, onEdit, onDelete }) => {
         </DialogActions>
       </Dialog>
 
-      {/* Snackbar for notifications */}
-      <Snackbar
-        open={snackbar.open}
-        autoHideDuration={6000}
-        onClose={() => setSnackbar({ ...snackbar, open: false })}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+      <Dialog
+        open={editDialogOpen}
+        onClose={() => setEditDialogOpen(false)}
+        maxWidth="sm"
+        fullWidth
       >
-        <Alert
-          onClose={() => setSnackbar({ ...snackbar, open: false })}
-          severity={snackbar.severity}
-          variant="filled"
-          className="shadow-lg"
-        >
-          {snackbar.message}
-        </Alert>
-      </Snackbar>
+        <DialogTitle>Edit File Name</DialogTitle>
+        <DialogContent>
+          <TextField
+            autoFocus
+            margin="dense"
+            label="File Name"
+            fullWidth
+            variant="outlined"
+            value={editedName}
+            onChange={(e) => setEditedName(e.target.value)}
+            onKeyPress={(e) => {
+              if (e.key === 'Enter') handleEditSubmit();
+            }}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setEditDialogOpen(false)} color="secondary">
+            Cancel
+          </Button>
+          <Button onClick={handleEditSubmit} color="primary">
+            Save
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 };
