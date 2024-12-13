@@ -32,6 +32,6 @@ jobs:
           if [ "${{ github.ref }}" == "refs/heads/main" ]; then
             SCRIPT_PATH="/build.sh"
           else
-            SCRIPT_PATH="/build_dev.sh"
+            SCRIPT_PATH="/builddev.sh"
           fi
           ssh -o StrictHostKeyChecking=no -p 22 root@46.101.129.106 "$SCRIPT_PATH"
