@@ -49,7 +49,9 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
           
           # SSH into the server and make sure to source NVM before running any commands
-            ssh -o StrictHostKeyChecking=no -p 22 root@46.101.129.106 << 'EOF'# Navigate to the project directory (update the path if necessary)
+            ssh -o StrictHostKeyChecking=no -p 22 root@46.101.129.106 << 'EOF'
+            
+            # Navigate to the project directory (update the path if necessary)
             cd /srv/www/yean-web
 
             # Ensure NVM is sourced
