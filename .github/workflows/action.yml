@@ -18,12 +18,12 @@ jobs:
         run: |
           mkdir -p ~/.ssh
           touch ~/.ssh/known_hosts
-          
+
       - name: Install NVM, Node, and Yarn
         run: |
           # Install NVM
           curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
-          # Reload shell configuration
+          # Reload shell configuration to make nvm available
           source ~/.bashrc
           # Install the specific version of Node.js (same as on your server)
           nvm install v20.9.0
@@ -39,12 +39,16 @@ jobs:
         env:
           SSH_PRIVATE_KEY: ${{ secrets.YEAN_WEB_SECRET }}
         run: |
+          # Save the private key for SSH authentication
           echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
-          # Determine which script to run based on the branch
-          if [ "${{ github.ref }}" == "refs/heads/main" ]; then
+          
+          # Check the current branch and select the appropriate script
+          if [ "${GITHUB_REF}" == "refs/heads/main" ]; then
             SCRIPT_PATH="~/build.sh"
           else
             SCRIPT_PATH="~/builddev.sh"
           fi
+          
+          # SSH into the server and run the appropriate script
           ssh -o StrictHostKeyChecking=no -p 22 root@46.101.129.106 "$SCRIPT_PATH"
