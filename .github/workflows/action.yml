@@ -64,9 +64,9 @@ jobs:
 
             # Check the current branch and select the appropriate script
             if [ "$(git symbolic-ref --short HEAD)" == "main" ]; then
-              SCRIPT_PATH="~/build.sh"
+              SCRIPT_PATH="/scripts/build.sh"
             else
-              SCRIPT_PATH="~/builddev.sh"
+              SCRIPT_PATH="/scripts/builddev.sh"
             fi
 
             # Run the script
