@@ -23,8 +23,9 @@ jobs:
         run: |
           # Install NVM
           curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
-          # Reload shell configuration to make nvm available
-          source ~/.bashrc
+          # Source NVM to make it available in this shell
+          export NVM_DIR="$HOME/.nvm"
+          [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
           # Install the specific version of Node.js (same as on your server)
           nvm install v20.9.0
           # Install Yarn globally
