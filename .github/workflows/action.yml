@@ -1,31 +1,37 @@
-name: Yean-Web
+name: Deploy
 
 on:
   push:
-    branches: [develop, main]
-    paths-ignore:
-      - 'README.md'
-  pull_request:
-    branches: [develop]
-    paths-ignore:
-      - 'README.md'
+    branches:
+      - develop
+      - main
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        node-version: [16.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-
     steps:
-      - uses: actions/checkout@v2
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
-        with:
-          node-version: ${{ matrix.node-version }}
-      - name: Install dependencies
-        run: yarn install
-      - name: Build
-        run: yarn build
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up SSH directory
+        run: |
+          mkdir -p ~/.ssh
+          touch ~/.ssh/known_hosts
+
+      - name: Add Server to Known Hosts
+        run: ssh-keyscan -H kitech.rw >> ~/.ssh/known_hosts
+
+      - name: Deploy to Server
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.YEAN_WEB_SECRET }}
+        run: |
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          # Determine which script to run based on the branch
+          if [ "${{ github.ref }}" == "refs/heads/main" ]; then
+            SCRIPT_PATH="/build.sh"
+          else
+            SCRIPT_PATH="/build_dev.sh"
+          fi
+          ssh -o StrictHostKeyChecking=no -p 22 root@46.101.129.106 "$SCRIPT_PATH"
