@@ -44,12 +44,23 @@ jobs:
           echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           
-          # Check the current branch and select the appropriate script
-          if [ "${GITHUB_REF}" == "refs/heads/main" ]; then
-            SCRIPT_PATH="~/build.sh"
-          else
-            SCRIPT_PATH="~/builddev.sh"
-          fi
-          
-          # SSH into the server and run the appropriate script
-          ssh -o StrictHostKeyChecking=no -p 22 root@46.101.129.106 "$SCRIPT_PATH"
+          # SSH into the server and make sure to source NVM before running any commands
+          ssh -o StrictHostKeyChecking=no -p 22 root@46.101.129.106 << 'EOF'
+            # Ensure NVM is sourced
+            export NVM_DIR="$HOME/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+            
+            # Verify that nvm and yarn are available
+            nvm --version
+            yarn --version
+
+            # Check the current branch and select the appropriate script
+            if [ "$(git symbolic-ref --short HEAD)" == "main" ]; then
+              SCRIPT_PATH="~/build.sh"
+            else
+              SCRIPT_PATH="~/builddev.sh"
+            fi
+
+            # Run the script
+            bash "$SCRIPT_PATH"
+          EOF
