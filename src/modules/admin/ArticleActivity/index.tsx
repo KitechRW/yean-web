@@ -6,6 +6,7 @@ import React from 'react';
 import AddItem from '../_Partials/ManageArticle/AddItem';
 import ViewItem from '../_Partials/ManageArticle/ViewItem';
 
+
 const ArticleActivity = () => {
   const topRef = React.useRef(null);
   const [material, setMaterial] = React.useState(false);
@@ -114,6 +115,7 @@ const ArticleActivity = () => {
             label="Material"
           />
         </RadioGroup>
+        
         <AddItem
           handleAdd={item => {
             handleAdd(item);

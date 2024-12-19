@@ -7,7 +7,6 @@ import { useForm } from 'react-hook-form';
 import { joiResolver } from '@hookform/resolvers/joi';
 import UploadImage from 'modules/_partials/UploadImage';
 import { formatJoiErorr } from 'system/format';
-import 'react-quill/dist/quill.snow.css';
 import dynamic from 'next/dynamic';
 import RichText from 'system/config/richtext';
 import Select from 'react-select';
@@ -379,6 +378,7 @@ const AddItem = ({
                 setText(newValue);
               }}
             />
+             
             {errors.text?.message && (
               <p className="mt-1 text-red-500">
                 {formatJoiErorr(`${errors.text?.message}`)}

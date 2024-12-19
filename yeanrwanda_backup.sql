@@ -4,6 +4,8 @@
 -- ------------------------------------------------------
 -- Server version	8.0.39-0ubuntu0.22.04.1
 
+create database yeanrwanda;
+
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
@@ -19,13 +21,13 @@
 -- Table structure for table `SequelizeMeta`
 --
 
-DROP TABLE IF EXISTS `SequelizeMeta`;
+DROP TABLE IF EXISTS yeanrwanda.`SequelizeMeta`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `SequelizeMeta` (
-  `name` varchar(255) COLLATE utf8mb3_unicode_ci NOT NULL,
-  PRIMARY KEY (`name`),
-  UNIQUE KEY `name` (`name`)
+CREATE TABLE yeanrwanda.SequelizeMeta (
+  name varchar(255) COLLATE utf8mb3_unicode_ci NOT NULL,
+  PRIMARY KEY (name),
+  UNIQUE KEY name (name)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 

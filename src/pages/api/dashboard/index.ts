@@ -16,5 +16,5 @@ function handler(req: NextApiRequest, res: NextApiResponse) {
 }
 
 export default withSessionRoute(
-  withRoles(handler, ['admin'], ['GET']),
+  withRoles(handler, ['admin','member'], ['GET']),
 );

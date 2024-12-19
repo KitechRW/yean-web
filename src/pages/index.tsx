@@ -50,6 +50,7 @@ export async function getServerSideProps() {
     );
     resultArticles = articles?.data;
     materials = articles?.materials;
+    console.log(resultArticles)
   } catch (error: any) {
     console.log(error.message);
   }
