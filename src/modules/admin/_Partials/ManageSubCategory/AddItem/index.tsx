@@ -13,7 +13,7 @@ import { useProtectedFetcher } from 'apis/utils/fetcher';
 const schema = joi.object({
   name: joi.string().required(),
   image: joi.object().optional(),
-  categoryId: joi.number().required().label('Category'),
+  category_name: joi.string().required().label('Category'),
 });
 
 const AddItem = ({
@@ -91,7 +91,7 @@ const AddItem = ({
     if (dataValues) {
       reset({
         name: dataValues.name,
-        categoryId: dataValues.categoryId,
+        category_name: dataValues.category_name,
       });
     }
   }, [dataValues]);
@@ -101,7 +101,7 @@ const AddItem = ({
     label: element.name,
   }));
   const defaultCategory = categoryOptions?.filter(
-    (item: any) => item.value == dataValues?.categoryId,
+    (item: any) => item.label == dataValues?.category_name,
   );
 
   const onDelete = async () => {
@@ -175,20 +175,20 @@ const AddItem = ({
             </span>
             <Select
               isMulti={false}
-              {...register('categoryId')}
+              {...register('category_name')}
               defaultValue={defaultCategory}
               options={categoryOptions}
               onChange={(newValue: any) => {
-                setValue('categoryId', Number(newValue.value), {
+                setValue('category_name', newValue.label, {
                   shouldDirty: true,
                   shouldValidate: true,
                 });
               }}
               className="mt-2"
             />
-            {errors.categoryId?.message && (
+            {errors.category_name?.message && (
               <p className="mt-1 text-red-500">
-                {formatJoiErorr(`${errors.categoryId.message}`)}
+                {formatJoiErorr(`${errors.category_name.message}`)}
               </p>
             )}
           </label>

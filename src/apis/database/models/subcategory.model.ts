@@ -15,7 +15,7 @@ const SubCategoryModel = (sequelize: Sequelize) => {
         unique: true,
         allowNull: false,
       },
-      categoryId: DataTypes.INTEGER,
+      category_name: DataTypes.TEXT,
       image: DataTypes.STRING,
     },
     {

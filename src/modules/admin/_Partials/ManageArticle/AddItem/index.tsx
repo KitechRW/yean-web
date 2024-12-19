@@ -13,6 +13,7 @@ import Select from 'react-select';
 import { useProtectedFetcher } from 'apis/utils/fetcher';
 import Http from 'core/factory/fact.http';
 import { Checkbox, FormControlLabel, FormGroup } from '@mui/material';
+import { useNavbar } from 'modules/contexts/NavbarContext';
 
 const ReactQuill = dynamic(() => import('react-quill'), {
   ssr: false,
@@ -22,9 +23,9 @@ const fields = {
   title: joi.string().required(),
   image: joi.object().required().optional(),
   text: joi.string().required(),
-  category_id: joi.number().label('Category'),
-  subcategory_id: joi.number().label('Sub category'),
-  author_id: joi.number().required().label('Author'),
+  category_name: joi.string().label('Category'),
+  subcategory_name: joi.string().label('Sub category'),
+  authorName: joi.string().required(),
 };
 
 const schema = joi.object(fields);
@@ -42,20 +43,21 @@ const AddItem = ({
   handleDelete?: (id: any) => void;
   dataValues?: any;
 }) => {
+
+  const {profile} = useNavbar();
   const [text, setText] = React.useState('');
   const [material, setMaterial] = React.useState(false);
   const [data, setData] = React.useState<any>(null);
   const [loading, setLoading] = React.useState(false);
   const [toggle, setToggle] = React.useState(false);
+  const [triggle, setTriggle] = React.useState(true);
   const {
     data: { data: categories },
   } = useProtectedFetcher('/api/categories');
   const {
     data: { data: subCategories },
   } = useProtectedFetcher('/api/sub-categories');
-  const {
-    data: { data: authors },
-  } = useProtectedFetcher('/api/authors');
+
   const {
     register,
     unregister,
@@ -70,11 +72,20 @@ const AddItem = ({
   });
 
   const onSubmit = async (query: any) => {
+    let status = 'submitted';
     setLoading(true);
     const formData = new FormData();
     Object.keys(query).forEach(key => {
       formData.append(key === 'image' ? 'media' : key, query[key]);
     });
+
+    if(triggle){
+      formData.append('status', status);
+    }else{
+      status = 'published';
+      formData.append('status', status);
+    }
+
     const { data: res, error } = await (!dataValues
       ? DefaultApi.PostRoute.postRoute(
           `/api/articles?material=${material ? 1 : 0}`,
@@ -84,12 +95,12 @@ const AddItem = ({
           `/api/articles/${dataValues.id}?material=${
             material ? 1 : 0
           }`,
-          formData,
+          formData
         ));
     setLoading(false);
 
     if (res) {
-      const message = dataValues ? 'Edited' : 'Added';
+      const message = dataValues ? (triggle ? 'Edited' : 'Published & Edited') : (triggle ? 'Added' : 'Published');
       swal(
         message,
         res.message || `${message} successfully`,
@@ -172,9 +183,9 @@ const AddItem = ({
     reset({
       title: data.title,
       text: data.text,
-      category_id: data.category_id,
-      subcategory_id: data.subcategory_id,
-      author_id: data.author_id,
+      category_name: data.category_name,
+      subcategory_name: data.subcategory_name,
+      authorName: data.authorName,
     });
   };
 
@@ -191,7 +202,7 @@ const AddItem = ({
 
   const subCategoryOptions = subCategories?.rows
     ?.filter(
-      (item: any) => item.categoryId == getValues('category_id'),
+      (item: any) => item.category_name == getValues('category_name'),
     )
     ?.map((element: any) => ({
       value: element.id,
@@ -199,20 +210,12 @@ const AddItem = ({
     }));
 
   const defaultSubCategoryOptions = subCategoryOptions?.filter(
-    (item: any) => item.value == data?.subcategory_id,
+    (item: any) => item.value == data?.subcategory_name,
   );
   const defaultCategoryOptions = categoryOptions?.filter(
-    (item: any) => item.value == data?.category_id,
+    (item: any) => item.value == data?.category_name,
   );
 
-  const authorOptions = authors?.rows?.map((element: any) => ({
-    value: element.id,
-    label: `${element.firstname} ${element.lastname}`,
-  }));
-
-  const defaultAuthorOptions = authorOptions?.filter(
-    (item: any) => item.value == data?.author_id,
-  );
 
   return (
     <DrawerLayout
@@ -225,12 +228,6 @@ const AddItem = ({
         <form
           onSubmit={event => {
             event.preventDefault();
-            if (!material) {
-              unregister(['subcategory_id', 'category_id']);
-            } else {
-              setError('category_id', { type: 'required' });
-              setError('subcategory_id', { type: 'required' });
-            }
             handleSubmit(onSubmit)(event);
           }}
           className="gap-y-3 flex flex-col"
@@ -252,23 +249,7 @@ const AddItem = ({
               </p>
             )}
           </label>
-          <FormGroup>
-            <FormControlLabel
-              control={
-                <Checkbox
-                  onChange={event => {
-                    if (dataValues?.id && material) {
-                      return;
-                    }
-                    setMaterial(event.target.checked);
-                  }}
-                  checked={!!material}
-                />
-              }
-              label="Extension material"
-            />
-          </FormGroup>
-          {material ? (
+          
             <>
               <label className="flex flex-col">
                 <span className="text-sm font-medium text-gray-900 dark:text-gray-300">
@@ -276,20 +257,20 @@ const AddItem = ({
                 </span>
                 <Select
                   isMulti={false}
-                  {...register('category_id')}
+                  {...register('category_name')}
                   options={categoryOptions}
                   defaultValue={defaultCategoryOptions}
                   onChange={(newValue: any) => {
-                    setValue('category_id', newValue.value, {
+                    setValue('category_name', newValue.label, {
                       shouldDirty: true,
                       shouldValidate: true,
                     });
                   }}
                   className="mt-2"
                 />
-                {errors.category_id?.message && (
+                {errors.category_name?.message && (
                   <p className="mt-1 text-red-500">
-                    {formatJoiErorr(`${errors.category_id.message}`)}
+                    {formatJoiErorr(`${errors.category_name.message}`)}
                   </p>
                 )}
               </label>
@@ -299,47 +280,41 @@ const AddItem = ({
                 </span>
                 <Select
                   isMulti={false}
-                  {...register('subcategory_id')}
+                  {...register('subcategory_name')}
                   options={subCategoryOptions}
                   defaultValue={defaultSubCategoryOptions}
                   onChange={(newValue: any) => {
-                    setValue('subcategory_id', newValue.value, {
+                    setValue('subcategory_name', newValue.label, {
                       shouldDirty: true,
                       shouldValidate: true,
                     });
                   }}
                   className="mt-2"
                 />
-                {errors.subcategory_id?.message && (
+                {errors.subcategory_name?.message && (
                   <p className="mt-1 text-red-500">
                     {formatJoiErorr(
-                      `${errors.subcategory_id.message}`,
+                      `${errors.subcategory_name.message}`,
                     )}
                   </p>
                 )}
               </label>
             </>
-          ) : null}
+         
           <label className="flex flex-col">
             <span className="text-sm font-medium text-gray-900 dark:text-gray-300">
-              Author
+              Author Names
             </span>
-            <Select
-              isMulti={false}
-              {...register('author_id')}
-              options={authorOptions}
-              defaultValue={defaultAuthorOptions}
-              onChange={(newValue: any) => {
-                setValue('author_id', newValue.value, {
-                  shouldDirty: true,
-                  shouldValidate: true,
-                });
-              }}
-              className="mt-2"
+            <input
+              type="text"
+              placeholder={'Enter Both Your names...'}
+              {...register('authorName')}
+              defaultValue={data?.authorName}
+              className="mt-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             />
-            {errors.author_id?.message && (
+            {errors.authorName?.message && (
               <p className="mt-1 text-red-500">
-                {formatJoiErorr(`${errors.author_id.message}`)}
+                {formatJoiErorr(`${errors.authorName.message}`)}
               </p>
             )}
           </label>
@@ -397,14 +372,39 @@ const AddItem = ({
                 Delete
               </button>
             ) : null}
-
-            <button
-              type="submit"
-              disabled={loading}
-              className="font-semibold disabled:cursor-not-allowed disabled:bg-slate-400 mt-12 text-white bg-brand-green/80 hover:bg-brand-green focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg text-sm w-full sm:w-auto px-12 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-            >
-              Save
-            </button>
+            {
+              profile?.user?.type !== "admin" ? 
+              (
+                <button
+                type="submit"
+                disabled={loading}
+                className="font-semibold disabled:cursor-not-allowed disabled:bg-slate-400 mt-12 text-white bg-brand-green/80 hover:bg-brand-green focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg text-sm w-full sm:w-auto px-12 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                >
+               {dataValues ? 'Edit' : 'Save'} 
+              </button>
+              )
+              :
+              (
+              <div className='flex items-center space-x-3 justify-between md:col-span-2'>
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="font-semibold disabled:cursor-not-allowed disabled:bg-slate-400 mt-12 text-white bg-slate-600 hover:bg-slate-500 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg text-sm w-full sm:w-auto px-12 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                >
+                  {dataValues ? 'Edit' : 'Save'} 
+                </button>
+                <button
+                  type="submit"
+                  onClick={ () => setTriggle(false)}
+                  disabled={loading}
+                  className="font-semibold disabled:cursor-not-allowed disabled:bg-slate-400 mt-12 text-white bg-brand-green/80 hover:bg-brand-green focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg text-sm w-full sm:w-auto px-12 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                >
+                  Publish
+                </button>
+              </div>
+              )
+            }
+            
           </div>
         </form>
       </div>

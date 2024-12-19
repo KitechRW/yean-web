@@ -4,8 +4,9 @@ import ArticleServices from 'apis/services/articleServices';
 import removeFile, { parseForm } from 'apis/utils/libForm';
 import { paginate } from 'apis/utils/pagnation';
 import DB from 'apis/database';
+import { string } from 'joi';
 
-const { Articles: Article, Material } = DB;
+const { Articles: Article } = DB;
 
 export default class ArticleController {
   static async getOne(req: NextApiRequest, res: NextApiResponse) {
@@ -15,10 +16,10 @@ export default class ArticleController {
       const materialParams = [];
       if (material) {
         materialParams.push(
-          'category_id',
-          'subcategory_id',
+          'category_name',
+          'subcategory_name',
           'slug',
-          'material',
+          
         );
       }
       const query: any = {};
@@ -35,7 +36,7 @@ export default class ArticleController {
             'id',
             'title',
             'image',
-            'author_id',
+            'author_name',
             'text',
             'views',
             ...materialParams,
@@ -43,6 +44,7 @@ export default class ArticleController {
             'updatedAt',
           ],
           ['firstname', 'lastname', 'profile_image'],
+          //@ts-ignore
           material,
         ),
       });
@@ -62,20 +64,20 @@ export default class ArticleController {
       const materialParams = [];
       if (material) {
         materialParams.push(
-          'category_id',
-          'subcategory_id',
+          'category_name',
+          'subcategory_name',
           'slug',
-          'material',
+          // 'material',
         );
       }
       page = Number(page);
       limit = Number(limit);
       const where: any = {};
       if (Number(cat)) {
-        where.category_id = cat;
+        where.category_name = cat;
       }
       if (Number(sub)) {
-        where.subcategory_id = sub;
+        where.subcategory_name = sub;
       }
       const offset = (page - 1) * limit;
       const { rows, count } = await ArticleServices.findAndCountAll(
@@ -84,16 +86,18 @@ export default class ArticleController {
           'id',
           'title',
           'image',
-          'author_id',
+          'author_name',
           'views',
           ...materialParams,
+          'status',
           'createdAt',
           'updatedAt',
         ],
         ['firstname', 'lastname', 'profile_image'],
         limit,
         offset,
-        material,
+        // //@ts-ignore
+        // material,
       );
       const pagination = paginate(page, count, rows, limit);
 
@@ -103,6 +107,7 @@ export default class ArticleController {
         data: rows,
       });
     } catch (error: any) {
+      console.log(error);
       return Response.error(res, 500, {
         message: 'something went wrong',
         error: error.message,
@@ -113,8 +118,7 @@ export default class ArticleController {
   static async create(req: NextApiRequest, res: NextApiResponse) {
     const material = Boolean(req.query.material);
     try {
-      const { fields, files } = await parseForm(req);
-      console.log(fields.text);
+      const { fields, files} = await parseForm(req);
       if (!files.media) {
         return Response.error(res, 500, {
           message: 'Please upload image',
@@ -125,6 +129,7 @@ export default class ArticleController {
       let images = Array.isArray(file)
         ? file.map(f => `/uploads/${f.newFilename}`)
         : `/uploads/${file.newFilename}`;
+      
 
       const payload = {
         ...fields,
@@ -133,9 +138,11 @@ export default class ArticleController {
 
       return Response.success(res, 200, {
         message: 'Article created successfuly',
+        //@ts-ignore
         data: await ArticleServices.create(payload, material),
       });
     } catch (error: any) {
+      console.log(error);
       return Response.error(res, 500, {
         message: 'something went wrong',
         reason: error?.message,
@@ -147,7 +154,7 @@ export default class ArticleController {
     const { id } = req.query;
     const material = Number(req.query.material) > 0;
     try {
-      const ArticleModel = !material ? Article : Material;
+      const ArticleModel =  Article;
       const item = await ArticleModel.findByPk(`${id}`);
 
       if (!item?.toJSON()) {
@@ -162,7 +169,7 @@ export default class ArticleController {
                 ? file.map(f => `/uploads/${f.newFilename}`)
                 : `/uploads/${file.newFilename}`;
             }
-            const data = await Material.create({
+            const data = await Article.create({
               ...fields,
               image: images || foundArticle.toJSON()?.image,
             });
@@ -211,6 +218,7 @@ export default class ArticleController {
         data: await item.save(),
       });
     } catch (error) {
+      console.log(error);
       return Response.error(res, 500, {
         message: 'something went wrong',
       });
@@ -223,6 +231,7 @@ export default class ArticleController {
     try {
       const item = await ArticleServices.findByPk(
         Number(id),
+      //@ts-ignore
         material,
       );
       if (!item) {
@@ -236,6 +245,7 @@ export default class ArticleController {
         data: await item.destroy(),
       });
     } catch (error) {
+      console.log(error)
       return Response.error(res, 500, {
         message: 'something went wrong',
       });

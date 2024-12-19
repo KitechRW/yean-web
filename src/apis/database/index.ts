@@ -22,7 +22,6 @@ import ProjectModel from './models/project.model';
 import InnovationModel from './models/innovation';
 import AboutModel from './models/about';
 import TeamModel from './models/team';
-import MaterialModel from './models/material.model';
 import AuthorModel from './models/author.model';
 
 dotenv.config();
@@ -86,7 +85,6 @@ sequelize.authenticate().then(() => {
 
 const DB = {
   Author: AuthorModel(sequelize),
-  Material: MaterialModel(sequelize),
   Team: TeamModel(sequelize),
   About: AboutModel(sequelize),
   Innovation: InnovationModel(sequelize),
