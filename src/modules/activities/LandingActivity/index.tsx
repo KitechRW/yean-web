@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Scaffold from 'modules/layouts/Scaffold';
 import Image from 'next/image';
 import {
@@ -14,8 +14,7 @@ import Testimonial from 'modules/_partials/Testimonial';
 import Slides from 'modules/_partials/Slides';
 import CarouselPartners from 'modules/_partials/CarouselPartners';
 import {
-  useOpenFetcher,
-  useProtectedFetcher,
+  useOpenFetcher
 } from 'apis/utils/fetcher';
 import { useRouter } from 'next/router';
 import { slideUpItems } from './data';
@@ -37,7 +36,6 @@ const LandingAcitivity = ({
   const slides = data?.slides || [];
   const {
     data: { data: partners },
-    isLoading,
   } = useOpenFetcher(`/api/partners`);
 
   const confirmedPartners = partners?.rows;
@@ -49,9 +47,6 @@ const LandingAcitivity = ({
     const banner = banners?.find(banner => banner.section === section);
 
     if (!banner) return null;
-
-    // Ensure that the image is properly handled
-    const imageUrl = banner.image ? `data:image/jpeg;base64,${banner.image}` : '';
 
     return (
       <div key={banner.id} className="px-4 md:px-8 py-2 bg-white">
