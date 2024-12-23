@@ -49,20 +49,20 @@ DROP TABLE IF EXISTS `article`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `article` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `title` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
-  `image` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `text` longtext COLLATE utf8mb3_unicode_ci NOT NULL,
-  `category` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `views` int DEFAULT '0',
-  `author_id` int DEFAULT NULL,
-  `time` datetime DEFAULT NULL,
-  `tags` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `comment` int DEFAULT '0',
-  `status` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT 'online',
-  `success` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `success_photo` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  PRIMARY KEY (`id`)
+                           `id` int NOT NULL AUTO_INCREMENT,
+                           `title` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
+                           `image` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+                           `text` longtext COLLATE utf8mb3_unicode_ci NOT NULL,
+                           `category` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+                           `views` int DEFAULT '0',
+                           `author_id` int DEFAULT NULL,
+                           `time` datetime DEFAULT NULL,
+                           `tags` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+                           `comment` int DEFAULT '0',
+                           `status` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT 'online',
+                           `success` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+                           `success_photo` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+                           PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4294 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -84,13 +84,13 @@ DROP TABLE IF EXISTS `authors`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `authors` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `firstname` varchar(255) DEFAULT NULL,
-  `lastname` varchar(255) DEFAULT NULL,
-  `profile_image` text,
-  `created_at` datetime NOT NULL,
-  `updated_at` datetime NOT NULL,
-  PRIMARY KEY (`id`)
+                           `id` int NOT NULL AUTO_INCREMENT,
+                           `firstname` varchar(255) DEFAULT NULL,
+                           `lastname` varchar(255) DEFAULT NULL,
+                           `profile_image` text,
+                           `created_at` datetime NOT NULL,
+                           `updated_at` datetime NOT NULL,
+                           PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -111,13 +111,13 @@ DROP TABLE IF EXISTS `comment`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `comment` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `article_id` int NOT NULL,
-  `username` varchar(255) NOT NULL,
-  `comment` text NOT NULL,
-  `time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `status` varchar(3) NOT NULL DEFAULT 'off',
-  PRIMARY KEY (`id`)
+                           `id` int NOT NULL AUTO_INCREMENT,
+                           `article_id` int NOT NULL,
+                           `username` varchar(255) NOT NULL,
+                           `comment` text NOT NULL,
+                           `time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                           `status` varchar(3) NOT NULL DEFAULT 'off',
+                           PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=4471 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
