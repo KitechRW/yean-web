@@ -32,3 +32,4 @@ export const useProtectedFetcher = (pathname: string) => {
     isError: error,
   };
 };
+

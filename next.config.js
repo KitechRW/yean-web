@@ -25,3 +25,13 @@ module.exports = {
     SESSION_PASSWORD: process.env.SESSION_PASSWORD,
   },
 };
+module.exports = {
+  async rewrites() {
+    return [
+      {
+        source: '/share/:shareId',
+        destination: '/share/[shareId]'
+      }
+    ]
+  }
+}
