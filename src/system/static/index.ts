@@ -65,21 +65,11 @@ export const headerNavs = [
   },
 ];
 
-export const adminNavs = [
+export const memberNavs = [
   {
     icon: Dashboard,
     label: 'Dashboard',
-    path: '/admin',
-  },
-  {
-    icon: Category,
-    label: 'Categories',
-    path: '/admin/categories',
-  },
-  {
-    icon: Feed,
-    label: 'Authors',
-    path: '/admin/authors',
+    path: '/dashboard',
   },
   {
     icon: UploadOutlined,
@@ -94,62 +84,85 @@ export const adminNavs = [
   {
     icon: Feed,
     label: 'Articles',
-    path: '/admin/articles',
+    path: '/dashboard/articles',
+  },
+];
+
+export const adminNavs = [
+  {
+    icon: Dashboard,
+    label: 'Dashboard',
+    path: '/dashboard',
+  },
+  {
+    icon: Category,
+    label: 'Categories',
+    path: '/dashboard/categories',
+  },
+  {
+    icon: Feed,
+    label: 'Authors',
+    path: '/dashboard/authors',
+  },
+  {
+    icon: Feed,
+    label: 'Articles',
+    path: '/dashboard/articles',
   },
   {
     icon: LocalLibrary,
     label: 'Library',
-    path: '/admin/libraries',
+    path: '/dashboard/libraries',
   },
   {
     icon: Extension,
     label: 'Services',
-    path: '/admin/services',
+    path: '/dashboard/services',
   },
   {
     icon: Handshake,
     label: 'Partners',
-    path: '/admin/partners',
+    path: '/dashboard/partners',
   },
   {
     icon: Pageview,
     label: 'Home Page',
-    path: '/admin/home',
+    path: '/dashboard/home',
   },
   {
     icon: Pageview,
     label: 'Innovation center',
-    path: '/admin/innovation-center',
+    path: '/dashboard/innovation-center',
   },
   {
     icon: Pageview,
     label: 'About us',
-    path: '/admin/about-us',
+    path: '/dashboard/about-us',
   },
   {
     icon: Pageview,
     label: 'Team',
-    path: '/admin/team',
+    path: '/dashboard/team',
   },
   {
     icon: Work,
     label: 'Jobs',
-    path: '/admin/job',
+    path: '/dashboard/job',
   },
   {
     icon: Work,
     label: 'Projects',
-    path: '/admin/projects',
+    path: '/dashboard/projects',
   },
   {
     icon: Group,
     label: 'Users',
-    path: '/admin/users',
+    path: '/dashboard/users',
     onlyAdmin: true,
   },
   {
     icon: Group,
     label: 'Subscribers',
-    path: '/admin/subscribers',
+    path: '/dashboard/subscribers',
   },
 ];

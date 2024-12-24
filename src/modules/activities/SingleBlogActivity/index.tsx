@@ -68,7 +68,7 @@ const SingleBlogActivity = () => {
           <Link
             href={
               Number(query.material)
-                ? `/extension-material/${data?.category_id}?category_name=${data?.category?.name}&subcategory=${data?.subcategory?.name}&material=1`
+                ? `/extension-material/${data?.category_name}?category_name=${data?.category?.name}&subcategory=${data?.subcategory?.name}&material=1`
                 : '/blog'
             }
           >

@@ -5,6 +5,7 @@ const ExtensionMaterials = ({
   data = [{ name: '', image: '', id: 1 }],
   onClick = (id: number, name: string) => {},
 }) => {
+  console.log(data);
   return (
     <div className="w-full justify-center max-w-6xl mx-auto flex items-center flex-wrap gap-4">
       {data.map((element, index) => (
@@ -23,6 +24,7 @@ const ExtensionMaterials = ({
             width={'298px'}
             loading="lazy"
           />
+          
           <div className="bottom-0 left-0 right-0 relative flex flex-col items-start w-full">
             <p className="w-full bg-[#FCB316] h-1" />
             <p className="bg-dark-green text-white text-center w-full px-4 py-3">

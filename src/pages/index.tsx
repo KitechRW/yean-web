@@ -27,7 +27,6 @@ const LandingPage = ({
       </Head>
       <LandingActivity
         data={data}
-        materials={materials}
         articles={articles}
         banners={banners}
       />
@@ -52,10 +51,10 @@ export async function getServerSideProps() {
 
   try {
     const { data: articles } = await Http.axios.get(
-      '/api/landing/1?attributes=id,title,author_id,comment,views,category,image'
+      '/api/landing/1?attributes=id,title,author_name,comment,views,category_name,status,image',
     );
     resultArticles = articles?.data;
-    materials = articles?.materials;
+    // materials = articles?.materials;
   } catch (error: any) {
     console.log(error.message);
   }

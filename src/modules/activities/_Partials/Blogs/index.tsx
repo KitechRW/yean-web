@@ -11,7 +11,7 @@ const Blogs = ({ onClick = (id: any) => {}, data = {} }: any) => {
   return (
     <div className={'flex flex-col items-center space-y-6'}>
       <div className="w-full justify-center max-w-6xl mx-auto flex flex-wrap gap-4">
-        {data?.data?.map((element: any, index: number) => (
+        {data?.data?.filter((element: any) => (element.status === 'published')).map((element: any, index: number) => (
           <div
             key={JSON.stringify(element)}
             role="button"
@@ -32,7 +32,7 @@ const Blogs = ({ onClick = (id: any) => {}, data = {} }: any) => {
                 <p className="text-dark-green bg-[#FCB316] px-4 py-3">
                   {!Number(router.query.material)
                     ? 'Blog'
-                    : element?.subcategory?.name}
+                    : element?.subcategory_name}
                 </p>
                 <p className="w-full bg-[#FCB316] h-1" />
               </div>
@@ -48,14 +48,13 @@ const Blogs = ({ onClick = (id: any) => {}, data = {} }: any) => {
             </p>
             <div className="px-3 pb-3 space-x-2 flex items-center mt-auto pt-3">
               <Avatar
-                src={element?.author?.avatar}
+                src={element?.author_name}
                 sx={{ width: '24px', height: '24px' }}
                 alt={element?.author?.firstname}
               />
               <div className="flex flex-col text-[#767676]">
                 <h1 className="text-xs">
-                  {element?.author?.firstname}{' '}
-                  {element?.author?.lastname}
+                  {element?.author_name}
                 </h1>
                 {element?.createdAt ? (
                   <p className="text-xs">

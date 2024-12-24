@@ -2,17 +2,17 @@ import React from 'react';
 import { NextPage } from 'next';
 import Head from 'next/head';
 import AdminScaffold from 'modules/layouts/AdminScaffold';
-import ArticleActivity from 'modules/admin/ArticleActivity';
+import DashboardActivity from 'modules/activities/DashboardActivity';
 import { withSessionSsr } from 'system/lib/withSession';
 
-const Article: NextPage = () => {
+const Dashboard: NextPage = () => {
   return (
     <>
       <Head>
         <title>Yean</title>
       </Head>
       <AdminScaffold>
-        <ArticleActivity />
+        <DashboardActivity />
       </AdminScaffold>
     </>
   );
@@ -31,7 +31,7 @@ export const getServerSideProps = withSessionSsr(
       };
     }
 
-    if (!['admin'].includes(`${user?.type}`)) {
+    if (!['admin','member'].includes(`${user?.type}`)) {
       return {
         redirect: {
           permanent: false,
@@ -49,4 +49,4 @@ export const getServerSideProps = withSessionSsr(
   },
 );
 
-export default Article;
+export default Dashboard;

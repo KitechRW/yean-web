@@ -61,15 +61,17 @@ export default class LandingController {
     res: NextApiResponse,
   ) {
     try {
-      // let attributes = req.query.attributes as string;
+      
       const articles = await ArticleServices.findAndCountAll(
         undefined,
         [
           'id',
           'title',
           'image',
-          'author_id',
+          'author_name',
+          'category_name',
           'views',
+          'status',
           'comment',
           'createdAt',
           'updatedAt',
@@ -79,34 +81,9 @@ export default class LandingController {
         0,
       );
 
-      const materialParams = [
-        'category_id',
-        'subcategory_id',
-        'slug',
-        'material',
-      ];
-
-      const materials = await ArticleServices.findAndCountAll(
-        undefined,
-        [
-          'id',
-          'title',
-          'image',
-          'views',
-          'author_id',
-          ...materialParams,
-          'createdAt',
-          'updatedAt',
-        ],
-        ['firstname', 'lastname', 'profile_image'],
-        8,
-        0,
-        true,
-      );
       return Response.success(res, 200, {
         message: 'Landings fetched successfuly',
         data: articles,
-        materials,
       });
     } catch (error: any) {
       return Response.error(res, 500, {
