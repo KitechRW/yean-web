@@ -40,6 +40,22 @@ export class FileService {
       throw new Error(`Failed to create file record. ${error.message}`);
     }
   }
+  static async updateFile(id: string, updateData: Partial<Pick<FileRecord, 'originalName'>>): Promise<FileRecord> {
+    try {
+      const sql = 'UPDATE files SET originalName = ? WHERE id = ?';
+      await query(sql, [updateData.originalName, id]);
+
+      const updatedFile = await this.getFileById(id);
+      if (!updatedFile) {
+        throw new Error(`File record not found after update for ID: ${id}`);
+      }
+
+      return updatedFile;
+    } catch (error) {
+      console.error('Error updating file record:', error);
+      throw new Error(`Failed to update file record. ${error.message}`);
+    }
+  }
 
 
   static async getFileById(id: string): Promise<FileRecord | null> {

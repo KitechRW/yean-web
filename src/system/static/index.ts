@@ -10,7 +10,7 @@ import {
   Pageview,
   Category,
   Work,
-  Group, UploadOutlined,
+  Group, UploadOutlined, Attractions,
 } from '@mui/icons-material';
 
 export const navs = [
@@ -75,6 +75,11 @@ export const memberNavs = [
     icon: UploadOutlined,
     label: 'Upload Files',
     path: '/admin/FileUpload',
+  },
+  {
+    icon: Attractions,
+    label: 'Banners',
+    path: '/admin/Banners',
   },
   {
     icon: Feed,
