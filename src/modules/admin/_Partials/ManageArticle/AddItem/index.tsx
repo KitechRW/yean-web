@@ -25,8 +25,9 @@ const fields = {
   text: joi.string().required(),
   category_name: joi.string().label('Category'),
   subcategory_name: joi.string().label('Sub category'),
-  authorName: joi.string().required(),
-  Slide: joi.string().required().optional(),
+  authorName: joi.string().optional(),
+  Slide: joi.string().optional(),
+  Type: joi.string().optional(),
 };
 
 const schema = joi.object(fields);
@@ -47,12 +48,13 @@ const AddItem = ({
 
   const {profile} = useNavbar();
   const [text, setText] = React.useState('');
-  const [material, setMaterial] = React.useState(false);
+  // const [material, setMaterial] = React.useState(false);
   const [data, setData] = React.useState<any>(null);
   const [loading, setLoading] = React.useState(false);
   const [toggle, setToggle] = React.useState(false);
   const [triggle, setTriggle] = React.useState(true);
   const [selected, setSelected] = React.useState('');
+  const [isMaterial, setMaterial] = React.useState('Yes');
   const {
     data: { data: categories },
   } = useProtectedFetcher('/api/categories');
@@ -74,6 +76,7 @@ const AddItem = ({
   });
 
   const onSubmit = async (query: any) => {
+
     let status = 'submitted';
     setLoading(true);
     const formData = new FormData();
@@ -90,13 +93,11 @@ const AddItem = ({
     
     const { data: res, error } = await (!dataValues
       ? DefaultApi.PostRoute.postRoute(
-          `/api/articles?material=${material ? 1 : 0}`,
+          `/api/articles`,
           formData,
         )
       : DefaultApi.PatchRoute.patchRoute(
-          `/api/articles/${dataValues.id}?material=${
-            material ? 1 : 0
-          }`,
+          `/api/articles/${dataValues.id}`,
           formData
         ));
     setLoading(false);
@@ -112,13 +113,14 @@ const AddItem = ({
         setToggle(false);
         if (dataValues) {
           // @ts-ignore
-          handleEdit(res.data, material);
+          handleEdit(res.data);
         } else {
           // @ts-ignore
-          handleAdd(res.data, material);
+          handleAdd(res.data);
         }
       });
     }
+
 
     if (error) {
       swal('Ooops!', error.message || 'Something went wrong');
@@ -138,7 +140,7 @@ const AddItem = ({
     }
     setLoading(true);
     const { data, error } = await DefaultApi.DeleteRoute.deleteRoute(
-      `/api/articles/${dataValues.id}?material=${material ? 1 : 0}`,
+      `/api/articles/${dataValues.id}`,
     );
     setLoading(false);
 
@@ -161,9 +163,9 @@ const AddItem = ({
   };
 
   React.useEffect(() => {
-    if (dataValues?.material) {
-      setMaterial(!!dataValues.material);
-    }
+    // if (dataValues?.material) {
+    //   setMaterial(!!dataValues.material);
+    // }
     if (dataValues?.id) {
       Http.axios
         .get(
@@ -251,7 +253,23 @@ const AddItem = ({
               </p>
             )}
           </label>
+          <label className='flex flex-col'>
+             <span className='mb-3'>Extension-Material</span>
+              <div className='flex w-[99px] ml-3 justify-around'>
+                <label className='flex items-center'>
+                    <span>Yes</span>
+                    <input {...register('Type')} type="radio" value={isMaterial}  onClick={() =>  setMaterial('Yes')} checked ={ isMaterial === 'Yes'}/>
+                </label>
+                <label className='flex items-center'>
+                    <span >No</span>
+                    <input {...register('Type')} type="radio" value={isMaterial} onClick={() => setMaterial('No')} checked ={ isMaterial === 'No'}/>
+                </label>
+            </div>
+            
+          </label>
           
+          {
+            isMaterial === 'Yes' ? (
             <>
               <label className="flex flex-col">
                 <span className="text-sm font-medium text-gray-900 dark:text-gray-300">
@@ -302,6 +320,9 @@ const AddItem = ({
                 )}
               </label>
             </>
+            ):
+            (<></>)
+          }
          
           <label className="flex flex-col">
             <span className="text-sm font-medium text-gray-900 dark:text-gray-300">
@@ -320,28 +341,24 @@ const AddItem = ({
               </p>
             )}
           </label>
-          <label className='flex flex-col'>
-            <span className='mb-3'>Slide Show</span>
-            <div className='flex ml-3'>
-              <label className='flex items-center'>
-                  <span>Yes</span>
-                  <input {...register('Slide')} type="radio" value='Yes'  onChange={() => setSelected('Yes')} checked ={ selected === 'Yes'}/>
+          {
+            profile?.user?.type === "admin" && isMaterial !== 'Yes' ? (
+              <label className='flex flex-col'>
+                <span className='mb-3'>Slide Show</span>
+                <div className='flex w-[99px] ml-3 justify-around'>
+                  <label className='flex items-center'>
+                      <span>Yes</span>
+                      <input {...register('Slide')} type="radio" value={selected}  onClick={() => setSelected('Yes')} checked ={ selected === 'Yes'}/>
+                  </label>
+                  <label className='flex items-center'>
+                      <span>No</span>
+                      <input {...register('Slide')} type="radio" value={selected} onClick={() => setSelected('No')} checked ={ selected === 'No'}/>
+                  </label>
+                </div>
               </label>
-              <label className='flex items-center'>
-                  <span>No</span>
-                  <input {...register('Slide')} type="radio" value='No' onChange={() => setSelected('No')} checked ={ selected === 'No'}/>
-              </label>
-            </div>
-            <div>
-              {
-                errors.slide?.message && (
-                  <p className="mt-1 text-red-500">
-                   {formatJoiErorr(`${errors.slide.message}`)}
-                  </p>
-                )
-              }
-            </div>
-          </label>
+            ) : (<></>)
+          }
+          
           <div className="flex flex-col">
             <span className="text-sm mb-2 font-medium text-gray-900 dark:text-gray-300">
               Image

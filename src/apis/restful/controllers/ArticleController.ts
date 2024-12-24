@@ -4,7 +4,7 @@ import ArticleServices from 'apis/services/articleServices';
 import removeFile, { parseForm } from 'apis/utils/libForm';
 import { paginate } from 'apis/utils/pagnation';
 import DB from 'apis/database';
-import { string } from 'joi';
+
 
 const { Articles: Article } = DB;
 
@@ -25,10 +25,8 @@ export default class ArticleController {
       const query: any = {};
       if (material && !Number(id)) {
         query.slug = id;
-        console.log('he')
       } else {
         query.id = id;
-        console.log('me')
       }
       return Response.success(res, 200, {
         message: 'Articles fetched successfuly',
@@ -93,6 +91,9 @@ export default class ArticleController {
           ...materialParams,
           'status',
           'slide',
+          'Type',
+          'category_name',
+          'subcategory_name',
           'createdAt',
           'updatedAt',
         ],
@@ -119,7 +120,7 @@ export default class ArticleController {
   }
 
   static async create(req: NextApiRequest, res: NextApiResponse) {
-    const material = Boolean(req.query.material);
+    
     try {
       const { fields, files} = await parseForm(req);
       if (!files.media) {
@@ -138,11 +139,10 @@ export default class ArticleController {
         ...fields,
         image: images,
       };
-      console.log(payload);
       return Response.success(res, 200, {
         message: 'Article created successfuly',
         //@ts-ignore
-        data: await ArticleServices.create(payload, material),
+        data: await ArticleServices.create(payload),
       });
 
     } catch (error: any) {

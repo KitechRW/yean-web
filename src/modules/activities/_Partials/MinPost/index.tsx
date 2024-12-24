@@ -27,9 +27,9 @@ const MinPost = ({ data }: { data: any }) => {
         />
       </div>
 
-      {data?.subcategory && (
+      {data?.subcategory_name && (
         <button className="mr-auto rounded-sm bg-dark-green -translate-y-4 text-white py-2 px-3">
-          {data.subcategory.name}
+          {data.subcategory_name}
         </button>
       )}
       <p className="px-2 py-1 space-x-1 flex items-center">

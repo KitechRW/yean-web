@@ -41,6 +41,7 @@ const LandingAcitivity = ({
   const confirmedPartners = partners?.rows;
 
   const articleList: any[] = articles?.rows || [];
+<<<<<<< HEAD
   const materialList: any[] = materials?.rows || [];
   const renderBanners = (section: string) => {
     // Find the first banner that matches the specified section
@@ -66,6 +67,9 @@ const LandingAcitivity = ({
     );
   };
 
+=======
+ 
+>>>>>>> 2129e3e (addition of slide and type for category specification)
   return (
     <Scaffold>
       <Slides data={slides} />
@@ -121,7 +125,7 @@ const LandingAcitivity = ({
           Extension Materials
         </h1>
         <div className="pt-2 inline-grid sm:grid-cols-2 md:grid-cols-4 gap-3">
-          {articleList.filter(element => (element.status === 'published' && element.category_name === 'extension-material')).map((element: any) => (
+          {articleList.filter((element: any) => (element.status === 'published' && element.type === 'Yes')).map((element: any) => (
             <MinPost key={element.id} data={element} />
           ))}
         </div>
@@ -144,7 +148,7 @@ const LandingAcitivity = ({
           Latest Blog
         </h1>
         <div className="pt-2 inline-grid sm:grid-cols-2 md:grid-cols-4 gap-3">
-          {articleList.filter( (element:any) => (element.status === 'published' && element.category_name !== 'extension-material')).map((element: any) => (
+          {articleList.filter( (element:any) => (element.status === 'published' && element.type !== 'Yes')).map((element: any) => (
             <LatestBlog key={element.id} data={element} />
           ))}
         </div>

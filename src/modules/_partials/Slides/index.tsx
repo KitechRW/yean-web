@@ -77,7 +77,7 @@ const Slides = ({
       className={`w-full relative overflow-hidden flex flex-col bg-brand-green`}
     >
       <div className="bottom-2 z-10 justify-center absolute flex items-center space-x-2 w-full">
-        {data.filter(element => (element.status === 'published' && element.slide === 'Yes')).map((resource, index) => (
+        {data.filter(element => (element.status === 'published' && element.slide === 'Yes' && element.Type !== 'Yes')).map((resource, index) => (
           <div
             role="button"
             tabIndex={index}

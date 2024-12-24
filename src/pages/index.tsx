@@ -40,14 +40,17 @@ export async function getServerSideProps() {
   let resultArticles = null;
   let partners = null;
 <<<<<<< HEAD
+<<<<<<< HEAD
   let materials = null;
   let banners = null;
 
 =======
   const slide = 'yes';
 >>>>>>> 1bf01b7 (new feature added of slide option)
+=======
+>>>>>>> 2129e3e (addition of slide and type for category specification)
   try {
-    const { data } = await Http.axios.get(`/api/articles`);
+    const { data } = await Http.axios.get(`/api/articles?limit=6`);
     results = data?.data;
   } catch (error) {
     console.log(error);
@@ -55,7 +58,7 @@ export async function getServerSideProps() {
 
   try {
     const { data: articles } = await Http.axios.get(
-      '/api/landing/1?attributes=id,title,author_name,comment,views,category_name,status,image',
+      '/api/landing/1?attributes=id,title,author_name,comment,views,category_name,status,image,subcategory_name,type',
     );
     resultArticles = articles?.data;
     // materials = articles?.materials;

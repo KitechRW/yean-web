@@ -18,7 +18,6 @@ const SingleExtensionMaterial = () => {
       pageNumber || 1
     }&limit=20&${query}&material=1`,
   );
-  console.log(data)
   return (
     <>
       <Head>

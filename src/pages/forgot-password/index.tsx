@@ -39,7 +39,6 @@ const ForgotPassword: NextPage = () => {
     resolver: yupResolver(schema),
   });
   const onSubmit = (data: any) => {
-    console.log(data);
     setErrorMessage(null);
     setMessage(null);
     SetSubmitting(true);

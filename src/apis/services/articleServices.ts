@@ -16,7 +16,7 @@ export default class ArticleServices {
     if (data.slug) {
       data.slug = convertToSlug(data.slug);
     }
-    console.log(data);
+   
     return ArticleModel.create(data);
   }
 
