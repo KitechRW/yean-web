@@ -23,12 +23,12 @@ interface AddFileProps {
 }
 
 const AddFile: React.FC<AddFileProps> = ({
-                                           children,
-                                           onAdd,
-                                           maxFileSize = 10 * 1024 * 1024,
-                                           allowedTypes = ['.pdf', '.doc', '.docx', '.xls', '.xlsx', '.ppt', '.pptx'],
-                                           className
-                                         }) => {
+  children,
+  onAdd,
+  maxFileSize = 10 * 1024 * 1024,
+  allowedTypes = ['.pdf', '.doc', '.docx', '.xls', '.xlsx', '.ppt', '.pptx'],
+  className
+}) => {
   const [open, setOpen] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
@@ -214,8 +214,7 @@ const AddFile: React.FC<AddFileProps> = ({
             <input
               type="file"
               id="file-upload"
-              className="hidden border-green-500 bg-green-500 :
-                      hover:border-green-600"
+              className="hidden border-gray-500 bg-gray-500"
               onChange={handleFileSelect}
               accept={allowedTypes.join(',')}
               disabled={uploading}
@@ -228,10 +227,10 @@ const AddFile: React.FC<AddFileProps> = ({
                 w-full h-32 border-2 border-dashed rounded-lg
                 mt-4 transition-colors duration-200
                 ${uploading ? 'bg-gray-50' :
-                isDragging ? 'border-green-500 bg-green-50' :
+                isDragging ? 'border-gray-500 bg-gray-50' :
                   error ? 'border-red-300 bg-red-50' :
-                    selectedFile ? 'border-green-500 bg-green-100' :
-                      'border-green-500 hover:border-green-600'}
+                    selectedFile ? 'border-gray-500 bg-gray-100' :
+                      'border-gray-400 hover:border-gray-600'}
               `}
               onDragEnter={handleDragIn}
               onDragLeave={handleDragOut}
@@ -277,7 +276,8 @@ const AddFile: React.FC<AddFileProps> = ({
           </DialogContent>
 
           <DialogActions>
-            <Button className={"bg-green-300 hover:bg-green-500 text-gray-600"}
+            <Button 
+              className="bg-gray-300 hover:bg-gray-400 text-gray-700"
               onClick={handleClose}
               disabled={uploading}
             >
@@ -287,7 +287,7 @@ const AddFile: React.FC<AddFileProps> = ({
               type="submit"
               variant="contained"
               disabled={!selectedFile || uploading}
-              color="primary"
+              className="bg-gray-600 hover:bg-gray-700 text-white"
             >
               {uploading ? (
                 <>

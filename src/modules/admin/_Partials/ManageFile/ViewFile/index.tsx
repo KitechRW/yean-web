@@ -18,7 +18,6 @@ import {
 import {
   MoreVert,
   Download,
-  Delete,
   Edit,
   Share,
   ContentCopy,
@@ -49,10 +48,9 @@ interface FileRecord {
 interface ViewFileProps {
   data: FileRecord;
   onEdit: (file: FileRecord) => void;
-  onDelete: (id: string) => void;
 }
 
-const ViewFile: React.FC<ViewFileProps> = ({ data, onEdit, onDelete }) => {
+const ViewFile: React.FC<ViewFileProps> = ({ data, onEdit }) => {
   const [fileData, setFileData] = useState<FileRecord>(data);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [shareDialogOpen, setShareDialogOpen] = useState(false);
@@ -81,16 +79,16 @@ const ViewFile: React.FC<ViewFileProps> = ({ data, onEdit, onDelete }) => {
   };
 
   const getFileIcon = (mimeType: string) => {
-    if (mimeType.startsWith('image/')) return <Image className="text-green-600" />;
-    if (mimeType.startsWith('video/')) return <VideoFile className="text-green-600" />;
-    if (mimeType.startsWith('audio/')) return <AudioFile className="text-green-600" />;
-    if (mimeType === 'application/pdf') return <PictureAsPdf className="text-green-700" />;
+    if (mimeType.startsWith('image/')) return <Image className="text-gray-600" />;
+    if (mimeType.startsWith('video/')) return <VideoFile className="text-gray-600" />;
+    if (mimeType.startsWith('audio/')) return <AudioFile className="text-gray-600" />;
+    if (mimeType === 'application/pdf') return <PictureAsPdf className="text-gray-700" />;
     if (mimeType.includes('text/') ||
       mimeType.includes('application/json') ||
-      mimeType.includes('application/xml')) return <Code className="text-green-700" />;
+      mimeType.includes('application/xml')) return <Code className="text-gray-700" />;
     if (mimeType.includes('document') ||
-      mimeType.includes('text/plain')) return <Description className="text-green-700" />;
-    return <InsertDriveFile className="text-green-600" />;
+      mimeType.includes('text/plain')) return <Description className="text-gray-700" />;
+    return <InsertDriveFile className="text-gray-600" />;
   };
 
   const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
@@ -139,7 +137,7 @@ const ViewFile: React.FC<ViewFileProps> = ({ data, onEdit, onDelete }) => {
             class="w-full h-[80vh]"
           >
             <p>Unable to display PDF file.
-            <a href="${fileData.publicUrl}" target="_blank" class="text-blue-500 hover:underline">
+            <a href="${fileData.publicUrl}" target="_blank" class="text-gray-500 hover:underline">
               Download
             </a> instead.</p>
           </object>
@@ -199,31 +197,6 @@ const ViewFile: React.FC<ViewFileProps> = ({ data, onEdit, onDelete }) => {
         severity: 'error'
       });
     }
-  };
-
-  const handleDelete = async () => {
-    try {
-      const response = await fetch(`/api/files/${fileData.id}`, {
-        method: 'DELETE',
-      });
-
-      if (!response.ok) throw new Error('Delete failed');
-
-      onDelete(fileData.id);
-      setSnackbar({
-        open: true,
-        message: 'File deleted successfully',
-        severity: 'success'
-      });
-    } catch (error) {
-      console.error('Delete error:', error);
-      setSnackbar({
-        open: true,
-        message: 'Failed to delete file',
-        severity: 'error'
-      });
-    }
-    handleMenuClose();
   };
 
   const handleEditSubmit = async () => {
@@ -315,19 +288,19 @@ const ViewFile: React.FC<ViewFileProps> = ({ data, onEdit, onDelete }) => {
 
   return (
     <>
-      <Card className="hover:shadow-lg transition-shadow duration-200 border border-green-100">
+      <Card className="hover:shadow-lg transition-shadow duration-200 border border-gray-200">
         <div className="p-4 flex items-center justify-between">
           <div className="flex items-center gap-4 flex-grow min-w-0">
             {getFileIcon(fileData.mimeType)}
             <div className="flex-grow min-w-0">
               <Typography
                 variant="subtitle1"
-                className="font-medium truncate text-green-800"
+                className="font-medium truncate text-gray-800"
                 title={fileData.originalName}
               >
                 {fileData.originalName}
               </Typography>
-              <Typography variant="body2" className="text-green-700 flex gap-2 items-center">
+              <Typography variant="body2" className="text-gray-600 flex gap-2 items-center">
                 <span>{formatFileSize(fileData.size)}</span>
                 <span>•</span>
                 <span>
@@ -343,13 +316,13 @@ const ViewFile: React.FC<ViewFileProps> = ({ data, onEdit, onDelete }) => {
             <IconButton
               onClick={handlePreview}
               disabled={isLoading}
-              className="text-green-600 hover:text-green-800"
+              className="text-gray-600 hover:text-gray-800"
             >
               {isLoading ? <CircularProgress size={24} /> : <Visibility />}
             </IconButton>
             <IconButton
               onClick={handleMenuOpen}
-              className="text-green-600 hover:text-green-800"
+              className="text-gray-600 hover:text-gray-800"
             >
               <MoreVert />
             </IconButton>
@@ -378,9 +351,6 @@ const ViewFile: React.FC<ViewFileProps> = ({ data, onEdit, onDelete }) => {
         >
           <Edit /> Edit
         </MenuItem>
-        <MenuItem onClick={handleDelete} className="gap-2 text-red-500">
-          <Delete /> Delete
-        </MenuItem>
       </Menu>
 
       <Dialog
@@ -405,7 +375,7 @@ const ViewFile: React.FC<ViewFileProps> = ({ data, onEdit, onDelete }) => {
             <IconButton
               onClick={copyShareLink}
               color="primary"
-              className="hover:bg-blue-50"
+              className="hover:bg-gray-50"
             >
               <ContentCopy />
             </IconButton>
@@ -436,7 +406,7 @@ const ViewFile: React.FC<ViewFileProps> = ({ data, onEdit, onDelete }) => {
               onClick={handleDownload}
               size="small"
               title="Download"
-              className="text-gray-600 hover:text-blue-500"
+              className="text-gray-600 hover:text-gray-800"
             >
               <Download />
             </IconButton>
