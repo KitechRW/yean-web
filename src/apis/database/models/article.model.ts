@@ -13,6 +13,8 @@ const ArticleModel = (sequelize: Sequelize) => {
       title: DataTypes.TEXT,
       image: DataTypes.STRING,
       slug: DataTypes.TEXT,
+      Slide: DataTypes.TEXT,
+      Type: DataTypes.TEXT,
       text: DataTypes.TEXT('long'),
       category_name: DataTypes.TEXT,
       subcategory_name: DataTypes.TEXT,

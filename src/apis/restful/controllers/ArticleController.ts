@@ -4,7 +4,7 @@ import ArticleServices from 'apis/services/articleServices';
 import removeFile, { parseForm } from 'apis/utils/libForm';
 import { paginate } from 'apis/utils/pagnation';
 import DB from 'apis/database';
-import { string } from 'joi';
+
 
 const { Articles: Article } = DB;
 
@@ -73,10 +73,10 @@ export default class ArticleController {
       page = Number(page);
       limit = Number(limit);
       const where: any = {};
-      if (Number(cat)) {
+      if (String(cat)) {
         where.category_name = cat;
       }
-      if (Number(sub)) {
+      if (String(sub)) {
         where.subcategory_name = sub;
       }
       const offset = (page - 1) * limit;
@@ -88,8 +88,11 @@ export default class ArticleController {
           'image',
           'author_name',
           'views',
-          ...materialParams,
           'status',
+          'slide',
+          'Type',
+          'category_name',
+          'subcategory_name',
           'createdAt',
           'updatedAt',
         ],
@@ -100,12 +103,13 @@ export default class ArticleController {
         // material,
       );
       const pagination = paginate(page, count, rows, limit);
-
+      console.log(rows);
       return Response.success(res, 200, {
         message: 'Articles fetched successfuly',
         pagination,
         data: rows,
       });
+
     } catch (error: any) {
       console.log(error);
       return Response.error(res, 500, {
@@ -116,7 +120,7 @@ export default class ArticleController {
   }
 
   static async create(req: NextApiRequest, res: NextApiResponse) {
-    const material = Boolean(req.query.material);
+    
     try {
       const { fields, files} = await parseForm(req);
       if (!files.media) {
@@ -135,12 +139,12 @@ export default class ArticleController {
         ...fields,
         image: images,
       };
-
       return Response.success(res, 200, {
         message: 'Article created successfuly',
         //@ts-ignore
-        data: await ArticleServices.create(payload, material),
+        data: await ArticleServices.create(payload),
       });
+
     } catch (error: any) {
       console.log(error);
       return Response.error(res, 500, {

@@ -5,7 +5,7 @@ const ExtensionMaterials = ({
   data = [{ name: '', image: '', id: 1 }],
   onClick = (id: number, name: string) => {},
 }) => {
-  console.log(data);
+  
   return (
     <div className="w-full justify-center max-w-6xl mx-auto flex items-center flex-wrap gap-4">
       {data.map((element, index) => (
