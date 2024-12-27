@@ -11,7 +11,7 @@ const Blogs = ({ onClick = (id: any) => {}, data = {} }: any) => {
   return (
     <div className={'flex flex-col items-center space-y-6'}>
       <div className="w-full justify-center max-w-6xl mx-auto flex flex-wrap gap-4">
-        {data?.data?.filter((element: any) => (element.status === 'published' && element.Type !== 'Yes')).map((element: any, index: number) => (
+        {data?.data?.filter((element: any) => (element.status === 'published')).map((element: any, index: number) => (
           <div
             key={JSON.stringify(element)}
             role="button"

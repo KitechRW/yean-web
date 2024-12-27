@@ -73,10 +73,10 @@ export default class ArticleController {
       page = Number(page);
       limit = Number(limit);
       const where: any = {};
-      if (Number(cat)) {
+      if (String(cat)) {
         where.category_name = cat;
       }
-      if (Number(sub)) {
+      if (String(sub)) {
         where.subcategory_name = sub;
       }
       const offset = (page - 1) * limit;
@@ -88,7 +88,6 @@ export default class ArticleController {
           'image',
           'author_name',
           'views',
-          ...materialParams,
           'status',
           'slide',
           'Type',
@@ -104,12 +103,13 @@ export default class ArticleController {
         // material,
       );
       const pagination = paginate(page, count, rows, limit);
-
+      console.log(rows);
       return Response.success(res, 200, {
         message: 'Articles fetched successfuly',
         pagination,
         data: rows,
       });
+
     } catch (error: any) {
       console.log(error);
       return Response.error(res, 500, {
