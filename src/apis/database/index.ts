@@ -23,6 +23,7 @@ import InnovationModel from './models/innovation';
 import AboutModel from './models/about';
 import TeamModel from './models/team';
 import AuthorModel from './models/author.model';
+import BannerModel from './models/banners';
 
 dotenv.config();
 
@@ -107,6 +108,7 @@ const DB = {
   Tags: TagModel(sequelize),
   Users: UserModel(sequelize),
   Projects: ProjectModel(sequelize),
+  Banners: BannerModel(sequelize),
 
   sequelize, // connection instance (RAW queries)
 };

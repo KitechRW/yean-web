@@ -72,16 +72,6 @@ export const memberNavs = [
     path: '/dashboard',
   },
   {
-    icon: UploadOutlined,
-    label: 'Upload Files',
-    path: '/admin/FileUpload',
-  },
-  {
-    icon: Attractions,
-    label: 'Banners',
-    path: '/admin/Banners',
-  },
-  {
     icon: Feed,
     label: 'Articles',
     path: '/dashboard/articles',
@@ -98,6 +88,17 @@ export const adminNavs = [
     icon: Category,
     label: 'Categories',
     path: '/dashboard/categories',
+  },
+  
+  {
+    icon: UploadOutlined,
+    label: 'Upload Files',
+    path: '/dashboard/FileUpload',
+  },
+  {
+    icon: Attractions,
+    label: 'Banners',
+    path: '/dashboard/Banners',
   },
   {
     icon: Feed,
