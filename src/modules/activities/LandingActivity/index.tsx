@@ -41,7 +41,6 @@ const LandingAcitivity = ({
   const confirmedPartners = partners?.rows;
 
   const articleList: any[] = articles?.rows || [];
-<<<<<<< HEAD
   const materialList: any[] = materials?.rows || [];
   const renderBanners = (section: string) => {
     // Find the first banner that matches the specified section
@@ -67,9 +66,7 @@ const LandingAcitivity = ({
     );
   };
 
-=======
  
->>>>>>> 2129e3e (addition of slide and type for category specification)
   return (
     <Scaffold>
       <Slides data={slides} />
