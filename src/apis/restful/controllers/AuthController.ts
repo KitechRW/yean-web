@@ -120,7 +120,6 @@ export default class AuthController {
     const { token } = req.body;
     try {
       const decodedToken: any = decode(token);
-      console.log(decodedToken)
       if (!decodedToken) {
         return Response.error(res, 400, {
           message: 'Your verification link may have expired.',
