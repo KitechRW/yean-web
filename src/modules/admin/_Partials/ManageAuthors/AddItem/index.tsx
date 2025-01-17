@@ -9,6 +9,7 @@ import { joiResolver } from '@hookform/resolvers/joi';
 import UploadImage from 'modules/_partials/UploadImage';
 import { formatJoiErorr } from 'system/format';
 import { useProtectedFetcher } from 'apis/utils/fetcher';
+import axios from 'axios';
 
 const schema = joi.object({
   firstname: joi.string().required().label('First name'),
@@ -51,9 +52,9 @@ const AddItem = ({
         query[key],
       );
     });
-    const { data, error } = await (!dataValues
-      ? DefaultApi.PostRoute.postRoute('/api/authors', formData)
-      : DefaultApi.PatchRoute.patchRoute(
+    const { data } = await (!dataValues
+      ? axios.post('/api/authors', formData)
+      : axios.patch(
           `/api/authors/${dataValues.id}`,
           formData,
         ));
@@ -78,8 +79,8 @@ const AddItem = ({
       });
     }
 
-    if (error) {
-      swal('Ooops!', error.message || 'Something went wrong');
+    if (!data) {
+      swal('Ooops!', data.message || 'Something went wrong');
     }
   };
 

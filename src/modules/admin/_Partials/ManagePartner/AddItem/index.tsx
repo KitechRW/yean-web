@@ -8,6 +8,7 @@ import { joiResolver } from '@hookform/resolvers/joi';
 import UploadImage from 'modules/_partials/UploadImage';
 import { formatJoiErorr } from 'system/format';
 import { Checkbox, FormControlLabel } from '@mui/material';
+import axios from 'axios';
 
 const schema = joi.object({
   companyName: joi.string().required(),
@@ -44,7 +45,7 @@ const AddItem = ({
     Object.keys(query).forEach(key => {
       formData.append(key === 'image' ? 'media' : key, query[key]);
     });
-    const { data, error } = await DefaultApi.PostRoute.postRoute(
+    const { data } = await axios.post(
       '/api/partners',
       formData,
     );
@@ -62,8 +63,8 @@ const AddItem = ({
       });
     }
 
-    if (error) {
-      swal('Ooops!', error.message || 'Something went wrong');
+    if (data) {
+      swal('Ooops!', data.error || 'Something went wrong');
     }
   };
 

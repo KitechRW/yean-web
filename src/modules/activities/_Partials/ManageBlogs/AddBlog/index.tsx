@@ -6,6 +6,7 @@ import DrawerLayout from 'modules/layouts/DrawerLayout';
 import 'react-quill/dist/quill.snow.css';
 import dynamic from 'next/dynamic';
 import { useOpenFetcher } from 'apis/utils/fetcher';
+import axios from 'axios';
 
 const QuillNoSSRWrapper = dynamic(import('react-quill'), {
   ssr: false,
@@ -57,11 +58,11 @@ const AddBlog = ({
     const formData = new FormData();
     formData.append('media', selectedFiles[0]);
 
-    const { data: imageData, error: imageError } =
-      await DefaultApi.PostRoute.postRoute('/api/uploads', formData);
+    const { data: imageData,} =
+      await axios.post('/api/uploads', formData);
 
-    if (imageError) {
-      swal('Ooops!', imageError.message || 'Something went wrong');
+    if (imageData.error) {
+      swal('Ooops!', imageData.error || 'Something went wrong');
       return;
     }
     const endpoint = !isEdit ? '/api/blogs' : `/api/blogs?id=${id}`;
@@ -69,9 +70,9 @@ const AddBlog = ({
       title: titleValue,
       image: imageData.url,
     };
-    const { data, error } = await (!isEdit
-      ? DefaultApi.PostRoute.postRoute(endpoint, payload)
-      : DefaultApi.PatchRoute.patchRoute(endpoint, payload));
+    const { data } = await (!isEdit
+      ? axios.post(endpoint, payload)
+      : axios.patch(endpoint, payload));
 
     if (data) {
       swal(
@@ -86,8 +87,8 @@ const AddBlog = ({
       });
     }
 
-    if (error) {
-      swal('Ooops!', error.message || 'Something went wrong');
+    if (data.error) {
+      swal('Ooops!', data.error || 'Something went wrong');
     }
   };
 

@@ -9,6 +9,7 @@ import UploadPDF from 'modules/_partials/UploadPDF';
 import { formatJoiErorr } from 'system/format';
 import Select from 'react-select';
 import { useProtectedFetcher } from 'apis/utils/fetcher';
+import axios from 'axios';
 
 const schema = joi.object({
   name: joi.string().required(),
@@ -46,7 +47,7 @@ const AddItem = ({
     Object.keys(query).forEach(key => {
       formData.append(key === 'link' ? 'media' : key, query[key]);
     });
-    const { data, error } = await DefaultApi.PostRoute.postRoute(
+    const { data } = await axios.post(
       '/api/libraries',
       formData,
     );
@@ -64,8 +65,8 @@ const AddItem = ({
       });
     }
 
-    if (error) {
-      swal('Ooops!', error.message || 'Something went wrong');
+    if (!data) {
+      swal('Ooops!', data.error || 'Something went wrong');
     }
   };
 

@@ -14,6 +14,7 @@ import { useProtectedFetcher } from 'apis/utils/fetcher';
 import Http from 'core/factory/fact.http';
 import { Checkbox, FormControlLabel, FormGroup } from '@mui/material';
 import { useNavbar } from 'modules/contexts/NavbarContext';
+import axios from 'axios';
 
 const ReactQuill = dynamic(() => import('react-quill'), {
   ssr: false,
@@ -91,12 +92,12 @@ const AddItem = ({
       formData.append('status', status);
     }
     
-    const { data: res, error } = await (!dataValues
-      ? DefaultApi.PostRoute.postRoute(
+    const { data: res } = await (!dataValues
+      ? axios.post(
           `/api/articles`,
           formData,
         )
-      : DefaultApi.PatchRoute.patchRoute(
+      : axios.patch(
           `/api/articles/${dataValues.id}`,
           formData
         ));
@@ -122,8 +123,8 @@ const AddItem = ({
     }
 
 
-    if (error) {
-      swal('Ooops!', error.message || 'Something went wrong');
+    if (res.reason) {
+      swal('Ooops!', res.reason || 'Something went wrong');
     }
   };
 
