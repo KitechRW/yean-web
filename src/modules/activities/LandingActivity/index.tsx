@@ -38,6 +38,7 @@ const LandingAcitivity = ({
  const confirmedPartners = partners?.rows;
 
   const articleList: any[] = articles?.rows || [];
+
   const renderBanners = (section: string) => {
   const banner = banners?.find(banner => banner.section === section);
 
@@ -60,6 +61,7 @@ const LandingAcitivity = ({
       </div>
     );
   };
+
 
   return (
     <Scaffold>

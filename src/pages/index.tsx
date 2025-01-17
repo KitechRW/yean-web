@@ -43,7 +43,7 @@ export async function getServerSideProps() {
   let materials = null;
   let banners = null;
 
-
+  
   try {
     const { data } = await Http.axios.get(`/api/articles?limit=6`);
     results = data?.data;
