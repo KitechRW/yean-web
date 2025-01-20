@@ -23,6 +23,7 @@ import {
   WhatsappShareButton,
 } from 'react-share';
 import Blogs from '../_Partials/Blogs';
+import axios from 'axios';
 
 const SingleBlogActivity = () => {
   const contentRef = React.useRef<HTMLDivElement>(null);
@@ -33,6 +34,7 @@ const SingleBlogActivity = () => {
   } = useOpenFetcher(
     `/api/articles/${query.slugName}?material=${query.material}`,
   );
+  axios.patch(`/api/views/${query.slugName}`)
   const {
     data: { data: relatedArticles },
   } = useOpenFetcher(

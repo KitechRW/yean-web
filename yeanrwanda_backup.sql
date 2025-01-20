@@ -53,6 +53,8 @@ CREATE TABLE `article` (
   `title` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
   `image` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   `text` longtext COLLATE utf8mb3_unicode_ci NOT NULL,
+  `slide` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
+  `type` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
   `category` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   `views` int DEFAULT '0',
   `author_id` int DEFAULT NULL,

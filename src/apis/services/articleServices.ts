@@ -95,13 +95,7 @@ export default class ArticleServices {
     if (!article) {
       return null;
     }
-    const views = article.toJSON().views;
-    if (views >= 0) {
-      article.set({
-        views: article.toJSON().views + 1,
-      });
-      await article.save();
-    }
+   
     const articleData = await Author.findByPk(
       article.toJSON()?.author_id,
       {
