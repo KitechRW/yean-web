@@ -55,9 +55,10 @@ CREATE TABLE `article` (
   `text` longtext COLLATE utf8mb3_unicode_ci NOT NULL,
   `slide` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
   `type` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
-  `category` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `category_name` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
+  `subcategory_name` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
   `views` int DEFAULT '0',
-  `author_id` int DEFAULT NULL,
+  `author_name` longtext COLLATE utf8mb3_unicode_ci NOT NULL,
   `time` datetime DEFAULT NULL,
   `tags` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   `comment` int DEFAULT '0',
@@ -167,24 +168,24 @@ UNLOCK TABLES;
 DROP TABLE IF EXISTS `extension_materials`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `extension_materials` (
-  `id` bigint NOT NULL AUTO_INCREMENT,
-  `title` text,
-  `slug` text,
-  `image` varchar(255) DEFAULT NULL,
-  `text` longtext,
-  `category_id` int DEFAULT NULL,
-  `subcategory_id` int DEFAULT NULL,
-  `material` tinyint(1) DEFAULT '1',
-  `views` int DEFAULT '0',
-  `author_id` int DEFAULT NULL,
-  `tags` varchar(255) DEFAULT NULL,
-  `comment` int DEFAULT '0',
-  `created_at` datetime NOT NULL,
-  `updated_at` datetime NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `id` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4291 DEFAULT CHARSET=utf8mb3;
+-- CREATE TABLE `extension_materials` (
+--   `id` bigint NOT NULL AUTO_INCREMENT,
+--   `title` text,
+--   `slug` text,
+--   `image` varchar(255) DEFAULT NULL,
+--   `text` longtext,
+--   `category_id` int DEFAULT NULL,
+--   `subcategory_id` int DEFAULT NULL,
+--   `material` tinyint(1) DEFAULT '1',
+--   `views` int DEFAULT '0',
+--   `author_id` int DEFAULT NULL,
+--   `tags` varchar(255) DEFAULT NULL,
+--   `comment` int DEFAULT '0',
+--   `created_at` datetime NOT NULL,
+--   `updated_at` datetime NOT NULL,
+--   PRIMARY KEY (`id`),
+--   UNIQUE KEY `id` (`id`)
+-- ) ENGINE=InnoDB AUTO_INCREMENT=4291 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
