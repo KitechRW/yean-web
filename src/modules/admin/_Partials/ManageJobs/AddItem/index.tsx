@@ -10,6 +10,7 @@ import { useProtectedFetcher } from 'apis/utils/fetcher';
 import 'react-quill/dist/quill.snow.css';
 import dynamic from 'next/dynamic';
 import RichText from 'system/config/richtext';
+import axios from 'axios';
 
 const ReactQuill = dynamic(() => import('react-quill'), {
   ssr: false,
@@ -51,9 +52,9 @@ const AddJob = ({
 
   const onSubmit = async (query: any) => {
     setLoading(true);
-    const { data, error } = await (!dataValues
-      ? DefaultApi.PostRoute.postRoute('/api/jobs', { ...query })
-      : DefaultApi.PatchRoute.patchRoute(
+    const { data } = await (!dataValues
+      ? axios.post('/api/jobs', { ...query })
+      : axios.patch(
           `/api/jobs/${dataValues.id}`,
           { ...query },
         ));
@@ -78,8 +79,8 @@ const AddJob = ({
       });
     }
 
-    if (error) {
-      swal('Ooops!', error.message || 'Something went wrong');
+    if (!data) {
+      swal('Ooops!', data.error || 'Something went wrong');
     }
   };
 
@@ -107,7 +108,7 @@ const AddJob = ({
       return;
     }
     setLoading(true);
-    const { data, error } = await DefaultApi.DeleteRoute.deleteRoute(
+    const { data } = await axios.delete(
       `/api/jobs/${dataValues.id}`,
     );
     setLoading(false);
@@ -125,8 +126,8 @@ const AddJob = ({
       });
     }
 
-    if (error) {
-      swal('Ooops!', error.message || 'Something went wrong');
+    if (data.error) {
+      swal('Ooops!', data.error || 'Something went wrong');
     }
   };
 

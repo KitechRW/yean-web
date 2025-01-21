@@ -11,6 +11,7 @@ import { formatJoiErorr } from 'system/format';
 import 'react-quill/dist/quill.snow.css';
 import dynamic from 'next/dynamic';
 import RichText from 'system/config/richtext';
+import axios from 'axios';
 
 const ReactQuill = dynamic(() => import('react-quill'), {
   ssr: false,
@@ -57,9 +58,9 @@ const AddItem = ({
     Object.keys(query).forEach(key => {
       formData.append(key === 'image' ? 'media' : key, query[key]);
     });
-    const { data, error } = await (!dataValues
-      ? DefaultApi.PostRoute.postRoute('/api/team', formData)
-      : DefaultApi.PatchRoute.patchRoute(
+    const { data } = await (!dataValues
+      ? axios.post('/api/team', formData)
+      : axios.patch(
           `/api/team/${dataValues.id}`,
           formData,
         ));
@@ -84,8 +85,8 @@ const AddItem = ({
       });
     }
 
-    if (error) {
-      swal('Ooops!', error.message || 'Something went wrong');
+    if (data.error) {
+      swal('Ooops!', data.error || 'Something went wrong');
     }
   };
 
@@ -111,7 +112,7 @@ const AddItem = ({
       return;
     }
     setLoading(true);
-    const { data, error } = await DefaultApi.DeleteRoute.deleteRoute(
+    const { data } = await axios.delete(
       `/api/team/${dataValues.id}`,
     );
     setLoading(false);
@@ -129,8 +130,8 @@ const AddItem = ({
       });
     }
 
-    if (error) {
-      swal('Ooops!', error.message || 'Something went wrong');
+    if (data.error) {
+      swal('Ooops!', data.error || 'Something went wrong');
     }
   };
 

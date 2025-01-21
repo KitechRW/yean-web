@@ -9,6 +9,7 @@ import { joiResolver } from '@hookform/resolvers/joi';
 import UploadImage from 'modules/_partials/UploadImage';
 import { formatJoiErorr } from 'system/format';
 import { useProtectedFetcher } from 'apis/utils/fetcher';
+import axios from 'axios';
 
 const schema = joi.object({
   name: joi.string().required(),
@@ -52,12 +53,12 @@ const AddItem = ({
     Object.keys(query).forEach(key => {
       formData.append(key === 'image' ? 'media' : key, query[key]);
     });
-    const { data, error } = await (!dataValues
-      ? DefaultApi.PostRoute.postRoute(
+    const { data } = await (!dataValues
+      ? axios.post(
           '/api/sub-categories',
           formData,
         )
-      : DefaultApi.PatchRoute.patchRoute(
+      : axios.patch(
           `/api/sub-categories/${dataValues.id}`,
           formData,
         ));
@@ -82,8 +83,8 @@ const AddItem = ({
       });
     }
 
-    if (error) {
-      swal('Ooops!', error.message || 'Something went wrong');
+    if (data.error) {
+      swal('Ooops!', data.error || 'Something went wrong');
     }
   };
 
@@ -116,7 +117,7 @@ const AddItem = ({
       return;
     }
     setLoading(true);
-    const { data, error } = await DefaultApi.DeleteRoute.deleteRoute(
+    const { data } = await axios.delete(
       `/api/sub-categories/${dataValues.id}`,
     );
     setLoading(false);
@@ -134,8 +135,8 @@ const AddItem = ({
       });
     }
 
-    if (error) {
-      swal('Ooops!', error.message || 'Something went wrong');
+    if (data.error) {
+      swal('Ooops!', data.error || 'Something went wrong');
     }
   };
 

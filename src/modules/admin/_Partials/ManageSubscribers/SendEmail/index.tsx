@@ -12,6 +12,7 @@ import dynamic from 'next/dynamic';
 import { NoMediaRichText } from 'system/config/richtext';
 import Select from 'react-select';
 import Http from 'core/factory/fact.http';
+import axios from 'axios';
 
 const ReactQuill = dynamic(() => import('react-quill'), {
   ssr: false,
@@ -40,7 +41,7 @@ const SendEmail = ({ children }: { children: React.ReactNode }) => {
 
   const onSubmit = async (query: any) => {
     setLoading(true);
-    const { data: res, error } = await DefaultApi.PostRoute.postRoute(
+    const { data: res } = await axios.post(
       `/api/subscribers/send-emails`,
       query,
     );
@@ -57,8 +58,8 @@ const SendEmail = ({ children }: { children: React.ReactNode }) => {
       });
     }
 
-    if (error) {
-      swal('Ooops!', error.message || 'Something went wrong');
+    if (res.error) {
+      swal('Ooops!', res.error || 'Something went wrong');
     }
   };
 

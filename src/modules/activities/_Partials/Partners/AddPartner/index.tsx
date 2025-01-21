@@ -3,6 +3,7 @@ import Dropzone from 'modules/_partials/ImageUpload';
 import DefaultApi from 'apis/restful';
 import swal from 'sweetalert';
 import DrawerLayout from 'modules/layouts/DrawerLayout';
+import axios from 'axios';
 
 const AddPartnerForm = ({
   email,
@@ -59,11 +60,11 @@ const AddPartnerForm = ({
     const formData = new FormData();
     formData.append('media', selectedFiles[0]);
 
-    const { data: imageData, error: imageError } =
-      await DefaultApi.PostRoute.postRoute('/api/uploads', formData);
+    const { data: imageData } =
+      await axios.post('/api/uploads', formData);
 
-    if (imageError) {
-      swal('Ooops!', imageError.message || 'Something went wrong');
+    if (imageData.error) {
+      swal('Ooops!', imageData.error || 'Something went wrong');
       return;
     }
     const endpoint = !isEdit
@@ -75,9 +76,9 @@ const AddPartnerForm = ({
       companyName: companyNameValue,
       image: imageData.url,
     };
-    const { data, error } = await (!isEdit
-      ? DefaultApi.PostRoute.postRoute(endpoint, payload)
-      : DefaultApi.PatchRoute.patchRoute(endpoint, payload));
+    const { data} = await (!isEdit
+      ? axios.post(endpoint, payload)
+      : axios.patch(endpoint, payload));
 
     if (data) {
       swal(
@@ -94,8 +95,8 @@ const AddPartnerForm = ({
       });
     }
 
-    if (error) {
-      swal('Ooops!', error.message || 'Something went wrong');
+    if (data.error) {
+      swal('Ooops!', data.error || 'Something went wrong');
     }
   };
 

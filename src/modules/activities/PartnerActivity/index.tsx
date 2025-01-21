@@ -47,7 +47,6 @@ const PartnerActivity = () => {
     axios
       .post('/api/partners/request', data)
       .then(response => {
-        console.log(response);
         if (response.status === 201 || response.status === 200) {
           reset();
           setSuccessMessage(

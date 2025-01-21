@@ -14,6 +14,7 @@ import dynamic from 'next/dynamic';
 import DefaultApi from 'apis/restful';
 import Constants from 'apis/utils/constants';
 import swal from 'sweetalert';
+import axios from 'axios';
 const ReactQuill = dynamic(() => import('react-quill'), {
   ssr: false,
 });
@@ -83,8 +84,8 @@ const AddBlog = ({ onAdd }: { onAdd: (item: any) => void }) => {
   ];
 
   const onSubmit = async (data: any) => {
-    const { data: response, error: responseError } =
-      await DefaultApi.PostRoute.postRoute(
+    const { data: response} =
+      await axios.post(
         Constants.Endpoints.BLOG_ENDPOINT,
         {
           title: data.title,
@@ -93,10 +94,10 @@ const AddBlog = ({ onAdd }: { onAdd: (item: any) => void }) => {
         },
       );
 
-    if (responseError) {
+    if (data.error) {
       swal(
         'Ooops!',
-        responseError.message || 'Something went wrong',
+        data.error.message || 'Something went wrong',
         'error',
       );
     }

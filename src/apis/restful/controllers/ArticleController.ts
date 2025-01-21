@@ -81,7 +81,7 @@ export default class ArticleController {
       }
       const offset = (page - 1) * limit;
       const { rows, count } = await ArticleServices.findAndCountAll(
-        where,
+        (cat && sub) ? where : undefined,
         [
           'id',
           'title',

@@ -24,12 +24,10 @@ import { Banner } from 'types/types';
 const LandingAcitivity = ({
                            data,
                            articles,
-                           materials,
                            banners,
                          }: {
   data: any;
   articles: any;
-  materials: any;
   banners?: Banner[];
 }) => {
   const { push } = useRouter();
@@ -37,14 +35,12 @@ const LandingAcitivity = ({
   const {
     data: { data: partners },
   } = useOpenFetcher(`/api/partners`);
-
-  const confirmedPartners = partners?.rows;
+ const confirmedPartners = partners?.rows;
 
   const articleList: any[] = articles?.rows || [];
-  const materialList: any[] = materials?.rows || [];
+
   const renderBanners = (section: string) => {
-    // Find the first banner that matches the specified section
-    const banner = banners?.find(banner => banner.section === section);
+  const banner = banners?.find(banner => banner.section === section);
 
     if (!banner) return null;
 
@@ -66,7 +62,7 @@ const LandingAcitivity = ({
     );
   };
 
- 
+
   return (
     <Scaffold>
       <Slides data={slides} />

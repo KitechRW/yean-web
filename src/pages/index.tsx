@@ -39,9 +39,10 @@ export async function getServerSideProps() {
   let results = null;
   let resultArticles = null;
   let partners = null;
+
   let materials = null;
   let banners = null;
-  const slide = 'yes';
+
   
   try {
     const { data } = await Http.axios.get(`/api/articles?limit=6`);
@@ -55,7 +56,6 @@ export async function getServerSideProps() {
       '/api/landing/1?attributes=id,title,author_name,comment,views,category_name,status,image,subcategory_name,type',
     );
     resultArticles = articles?.data;
-    // materials = articles?.materials;
   } catch (error: any) {
     console.log(error.message);
   }
