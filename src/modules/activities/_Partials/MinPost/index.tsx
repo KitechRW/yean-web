@@ -7,7 +7,7 @@ const MinPost = ({ data }: { data: any }) => {
   const { push } = useRouter();
   const handleClick = () => {
     if (data?.category_name) {
-      push(`/blog/${data?.id}?material=1`);
+      push(`/blog/${data?.id}?material=1&views=${data?.views}`);
     }
   };
   return (

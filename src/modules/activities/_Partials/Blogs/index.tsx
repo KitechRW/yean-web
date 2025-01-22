@@ -8,6 +8,7 @@ import { RemoveRedEye } from '@mui/icons-material';
 
 const Blogs = ({ onClick = (id: any) => {}, data = {} }: any) => {
   const router = useRouter();
+    console.log(data);
   return (
     <div className={'flex flex-col items-center space-y-6'}>
       <div className="w-full justify-center max-w-6xl mx-auto flex flex-wrap gap-4">
@@ -30,9 +31,10 @@ const Blogs = ({ onClick = (id: any) => {}, data = {} }: any) => {
               />
               <div className="bottom-0 left-0 right-0 absolute flex flex-col items-start w-ful">
                 <p className="text-dark-green bg-[#FCB316] px-4 py-3">
-                  {!Number(router.query.material)
-                    ? 'Blog'
-                    : element?.subcategory_name}
+                {
+                (element.category_name === null || element.category_name === 'undefined')
+                ? 'Blog': `${element.category_name}`
+                }
                 </p>
                 <p className="w-full bg-[#FCB316] h-1" />
               </div>

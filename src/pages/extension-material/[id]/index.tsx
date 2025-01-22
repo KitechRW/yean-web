@@ -7,13 +7,13 @@ import MetaData from 'modules/_partials/MetaData';
 
 const SingleExtensionMaterial = () => {
   const {
-    query: { pageNumber, cat, id, category_name, sub },
+    query: { pageNumber, cat, id, category_name, sub, views },
   } = useRouter();
 
   const { data } = useOpenFetcher(
     `/api/articles?page=${
       pageNumber || 1
-    }&limit=20&cat=${category_name}&sub=${sub}&material=1`, 
+    }&limit=20&cat=${category_name}&sub=${sub}&material=1&views=${views}`, 
   );
   
   return (

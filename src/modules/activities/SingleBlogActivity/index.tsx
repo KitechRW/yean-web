@@ -34,18 +34,17 @@ const SingleBlogActivity = () => {
   } = useOpenFetcher(
     `/api/articles/${query.slugName}?material=${query.material}`,
   );
-  axios.patch(`/api/views/${query.slugName}`)
   const {
     data: { data: relatedArticles },
   } = useOpenFetcher(
-    `/api/articles?cat=${data?.article?.category}&material=${query.material}`,
+    `/api/articles?cat=${data?.article?.category_name}&material=${query.material}`,
   );
 
-  const handleClick = (id: any) => {
+  const handleClick = async (id: any) => {
     if (material) {
-      push(`/blog/${id}?material=1`);
+      push(`/blog/${id}?material=1&views=${data?.views}`);
     } else {
-      push(`/blog/${id}`);
+      push(`/blog/${id}?views=${data?.views}`);
     }
   };
 
@@ -62,7 +61,6 @@ const SingleBlogActivity = () => {
   }, [data]);
 
   const url = `${Keys.HOST}${asPath}`;
-  console.log(data?.text);
   return (
     <Scaffold>
       <div className="w-full px-4 bg-white md:px-8 pt-12 border-b border-[#E6E6E6]">
@@ -96,7 +94,10 @@ const SingleBlogActivity = () => {
           />
           <div className="bottom-0 left-0 right-0 absolute flex flex-col items-start w-ful">
             <p className="text-dark-green bg-[#FCB316] px-4 py-3">
-              Blog
+              {
+                data?.category_name === null || data?.category_name === 'undefined'
+                ? 'Blog': `${data?.category_name}`
+              }
             </p>
             <p className="w-full bg-[#FCB316] h-1" />
           </div>
