@@ -21,6 +21,6 @@ export default withSessionRoute(
 
 export const config = {
   api: {
-    bodyParser: false,
+    bodyParser: true,
   },
 };

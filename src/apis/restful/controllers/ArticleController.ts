@@ -39,8 +39,8 @@ export default class ArticleController {
             'author_name',
             'text',
             'views',
-            ...materialParams,
-            'createdAt',
+            'category_name',
+          'subcategory_name',
             'updatedAt',
           ],
           ['firstname', 'lastname', 'profile_image'],
@@ -56,6 +56,22 @@ export default class ArticleController {
       });
     }
   }
+
+  static async UpdateViews(req: NextApiRequest, res: NextApiResponse) {
+  const {id} = req.query;
+  const {views}: any = req.body;
+try{
+  const result = await Article.update(
+  {views},
+  {where: {id} }
+ );
+ if(result[0] === 0) {
+  return res.status(404)
+ }
+}catch(error: any){
+  console.log(error);
+}
+}
 
   static async getAll(req: NextApiRequest, res: NextApiResponse) {
     try {
@@ -103,7 +119,7 @@ export default class ArticleController {
         // material,
       );
       const pagination = paginate(page, count, rows, limit);
-      console.log(rows);
+      
       return Response.success(res, 200, {
         message: 'Articles fetched successfuly',
         pagination,

@@ -6,10 +6,10 @@ import React from 'react';
 
 const LatestBlog = ({ data }: { data: any }) => {
   const { push } = useRouter();
-  let viewIncrement = data?.views;
+  let viewIncrement = 0;
   const handleClick = async () => {
-    viewIncrement += 1; 
-    push(`/blog/${data?.id}&views=${data?.views}`);
+    viewIncrement = data?.views + 1; 
+    push(`/blog/${data?.id}`);
     const {result}: any = await axios.patch(`/api/views/${data?.id}`, {views: viewIncrement});
 
   };
