@@ -2,11 +2,15 @@ import { LocalLibrary } from '@mui/icons-material';
 import { useRouter } from 'next/router';
 import React from 'react';
 import CustomImage from '../CustomImage';
-
+import axios from 'axios';
 const SlideItem = ({ data }: { data: any }) => {
   const router = useRouter();
-  const handleClick = () => {
+  let viewIncrement = 0;
+  const handleClick = async() => {
     router.push(`/blog/${data?.id}`);
+    viewIncrement = data?.views + 1; 
+    const {result}: any = await axios.patch(`/api/views/${data?.id}`, {views: viewIncrement});
+
   };
   let image: string = data?.image || '';
   image = image.startsWith('/uploads') ? image : `/uploads/${image}`;
