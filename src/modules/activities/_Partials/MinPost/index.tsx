@@ -2,12 +2,15 @@ import { ArrowRightAlt, RemoveRedEye } from '@mui/icons-material';
 import CustomImage from 'modules/_partials/CustomImage';
 import { useRouter } from 'next/router';
 import React from 'react';
-
+import axios from 'axios';
 const MinPost = ({ data }: { data: any }) => {
   const { push } = useRouter();
-  const handleClick = () => {
+  let viewIncrement = 0;
+  const handleClick = async () => {
     if (data?.category_name) {
       push(`/blog/${data?.id}?material=1`);
+      viewIncrement = data?.views + 1; 
+      const {result}: any = await axios.patch(`/api/views/${data?.id}`, {views: viewIncrement});
     }
   };
   return (

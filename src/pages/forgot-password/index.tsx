@@ -65,7 +65,6 @@ const ForgotPassword: NextPage = () => {
             return;
           }
         } catch (e) {}
-        console.log(result);
         const { error } =
           result.response?.data || result.response || result;
         console.log(error?.message);

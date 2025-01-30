@@ -13,7 +13,7 @@ const BlogActivity = ({
   const { push, query } = useRouter();
   const material = Number(query.material) || 0;
   const handleClick = (id: any) => {
-    push(`/blog/${id}?material=${material}`);
+    push(`/blog/${id}?material=${material}&views=${data?.views}`);
   };
   return (
     <Scaffold>

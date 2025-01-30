@@ -23,6 +23,7 @@ import {
   WhatsappShareButton,
 } from 'react-share';
 import Blogs from '../_Partials/Blogs';
+import axios from 'axios';
 
 const SingleBlogActivity = () => {
   const contentRef = React.useRef<HTMLDivElement>(null);
@@ -36,15 +37,24 @@ const SingleBlogActivity = () => {
   const {
     data: { data: relatedArticles },
   } = useOpenFetcher(
-    `/api/articles?cat=${data?.article?.category}&material=${query.material}`,
+    `/api/articles?cat=${data?.article?.category_name}&material=${query.material}`,
   );
+  let viewIncrement = 0;
 
-  const handleClick = (id: any) => {
+  const handleClick = async (id: any) => {
+    
     if (material) {
       push(`/blog/${id}?material=1`);
+      viewIncrement = data?.views + 1; 
+      const {result}: any = await axios.patch(`/api/views/${data?.id}`, {views: viewIncrement});
+  
     } else {
       push(`/blog/${id}`);
+      viewIncrement = data?.views + 1; 
+      const {result}: any = await axios.patch(`/api/views/${data?.id}`, {views: viewIncrement});
+  
     }
+    
   };
 
   React.useEffect(() => {
@@ -60,7 +70,7 @@ const SingleBlogActivity = () => {
   }, [data]);
 
   const url = `${Keys.HOST}${asPath}`;
-  console.log(data?.text);
+  console.log(data);
   return (
     <Scaffold>
       <div className="w-full px-4 bg-white md:px-8 pt-12 border-b border-[#E6E6E6]">
@@ -73,13 +83,13 @@ const SingleBlogActivity = () => {
             }
           >
             <span className="cursor-pointer text-sm font-medium pb-3">
-              {Number(query.material) ? data?.category?.name : 'All'}
+              {Number(query.material) ? data?.category_name : 'All'}
             </span>
           </Link>
           <span className="cursor-pointer text-sm font-medium pb-3 border-b-2 border-b-[#FCB316]">
             {!Number(query.material)
               ? 'Blogs'
-              : data?.subcategory?.name}
+              : data?.subcategory_name}
           </span>
         </div>
       </div>
@@ -94,7 +104,10 @@ const SingleBlogActivity = () => {
           />
           <div className="bottom-0 left-0 right-0 absolute flex flex-col items-start w-ful">
             <p className="text-dark-green bg-[#FCB316] px-4 py-3">
-              Blog
+              {
+                (data?.category_name === null || data?.category_name === 'undefined')
+                ? 'Blog': `${data?.category_name}`
+              }
             </p>
             <p className="w-full bg-[#FCB316] h-1" />
           </div>

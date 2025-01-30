@@ -1,12 +1,17 @@
 import { Comment, Person, RemoveRedEye } from '@mui/icons-material';
 import CustomImage from 'modules/_partials/CustomImage';
 import { useRouter } from 'next/router';
+import axios from 'axios';
 import React from 'react';
 
 const LatestBlog = ({ data }: { data: any }) => {
   const { push } = useRouter();
-  const handleClick = () => {
+  let viewIncrement = 0;
+  const handleClick = async () => {
+    viewIncrement = data?.views + 1; 
     push(`/blog/${data?.id}`);
+    const {result}: any = await axios.patch(`/api/views/${data?.id}`, {views: viewIncrement});
+
   };
   return (
     <div

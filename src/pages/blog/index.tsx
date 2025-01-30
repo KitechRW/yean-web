@@ -14,7 +14,6 @@ export async function getServerSideProps({
       }&limit=20`,
     )
     .then(resp => {
-      console.log(resp.data);
       return {
         props: { data: resp.data, status: resp.status },
       };
@@ -28,7 +27,7 @@ export async function getServerSideProps({
 }
 
 const BlogPage = (props: any) => {
-  console.log(props?.data);
+  
   return (
     <>
       <Head>
