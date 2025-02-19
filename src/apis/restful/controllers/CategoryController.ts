@@ -51,11 +51,13 @@ export default class CategoryController {
         ...fields,
         image: images,
       };
+
       return Response.success(res, 200, {
-        message: 'category created successfuly',
+        message: 'Category created successfully',
         data: await Category.create(payload),
       });
     } catch (error) {
+      console.log(error);
       return Response.error(res, 500, {
         message: 'something went wrong',
       });
@@ -98,6 +100,7 @@ export default class CategoryController {
         data: await item.save(),
       });
     } catch (error) {
+      console.log(error);
       return Response.error(res, 500, {
         message: 'something went wrong',
       });

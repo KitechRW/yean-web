@@ -8,10 +8,12 @@ import { joiResolver } from '@hookform/resolvers/joi';
 import UploadImage from 'modules/_partials/UploadImage';
 import { formatJoiErorr } from 'system/format';
 import Select from 'react-select';
+import { useRouter } from 'next/router';
+import axios from 'axios';
 
 const schema = joi.object({
   name: joi.string().required(),
-  parent_id: joi.string().label('Parent').optional(),
+  parent_id: joi.number().label('Parent').optional(),
   image: joi.object().optional(),
 });
 
@@ -33,6 +35,7 @@ const EditItem = ({
   children,
   parentOptions,
 }: EditCategoryProps) => {
+  const router = useRouter();
   const [loading, setLoading] = React.useState(false);
   const [toggle, setToggle] = React.useState(false);
   const {
@@ -43,34 +46,43 @@ const EditItem = ({
     formState: { errors },
   } = useForm({
     resolver: joiResolver(schema),
+    defaultValues: dataValues,
   });
 
   const onSubmit = async (query: any) => {
-    const formData = new FormData();
-    Object.keys(query).forEach(key => {
-      formData.append(key === 'image' ? 'media' : key, query[key]);
-    });
-    setLoading(true);
-    const { data, error } = await DefaultApi.PatchRoute.patchRoute(
-      `/api/categories/${dataValues.id}`,
-      formData,
-    );
-    setLoading(false);
-
-    if (data) {
-      swal(
-        'Edited!',
-        data.message || 'Edited successfully',
-        'success',
-      ).then(() => {
-        reset();
-        setToggle(false);
-        handleEdit(data.data);
+    try {
+      const formData = new FormData();
+      Object.keys(query).forEach(key => {
+        formData.append(key === 'image' ? 'media' : key, query[key]);
       });
-    }
-
-    if (error) {
-      swal('Ooops!', error.message || 'Something went wrong');
+      setLoading(true);
+      const { data } = await axios.patch(
+        `/api/categories/${dataValues.id}`,
+        formData,
+      );
+      if (data) {
+        swal(
+          'Edited!',
+          data.message || 'Edited successfully',
+          'success',
+        ).then(() => {
+          reset();
+          setToggle(false);
+          handleEdit(data.data);
+        });
+        setTimeout(() => {
+          router.reload();
+        }, 1000);
+      }
+    } catch (error) {
+      swal(
+        'Ooops!',
+        (error as any)?.response?.data?.message ||
+          'Something went wrong',
+        'error',
+      );
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -85,26 +97,35 @@ const EditItem = ({
     if (!willDelete) {
       return;
     }
-    setLoading(true);
-    const { data, error } = await DefaultApi.DeleteRoute.deleteRoute(
-      `/api/categories/${dataValues.id}`,
-    );
-    setLoading(false);
+    try {
+      setLoading(true);
+      const { data } = await axios.delete(
+        `/api/categories/${dataValues.id}`,
+      );
 
-    if (data) {
+      if (data) {
+        swal(
+          'Deleted!',
+          data.message || 'Deleted successfully',
+          'success',
+        ).then(() => {
+          reset();
+          setToggle(false);
+          handleDelete(dataValues.id);
+        });
+        setTimeout(() => {
+          router.reload();
+        }, 1000);
+      }
+    } catch (error) {
       swal(
-        'Deleted!',
-        data.message || 'Deleted successfully',
-        'success',
-      ).then(() => {
-        reset();
-        setToggle(false);
-        handleDelete(dataValues.id);
-      });
-    }
-
-    if (error) {
-      swal('Ooops!', error.message || 'Something went wrong');
+        'Ooops!',
+        (error as any)?.response?.data?.message ||
+          'Something went wrong',
+        'error',
+      );
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -154,11 +175,10 @@ const EditItem = ({
             </span>
             <Select
               isMulti={false}
-              {...register('parent_id')}
               options={parentOptions}
               defaultValue={defaultParentOption}
               onChange={(newValue: any) => {
-                setValue('parent_id', newValue.label, {
+                setValue('parent_id', newValue.value, {
                   shouldDirty: true,
                   shouldValidate: true,
                 });
