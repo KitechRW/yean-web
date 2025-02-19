@@ -32,6 +32,7 @@ const ViewItem = ({
               <Chip
                 label={parentHashMap[data.parent_id]}
                 variant="filled"
+                size="small"
               />
             )}
           </p>

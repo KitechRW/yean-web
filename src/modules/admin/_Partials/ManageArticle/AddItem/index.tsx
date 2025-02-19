@@ -1,5 +1,4 @@
 import React from 'react';
-import DefaultApi from 'apis/restful';
 import swal from 'sweetalert';
 import joi from 'joi';
 import DrawerLayout from 'modules/layouts/DrawerLayout';
@@ -11,10 +10,9 @@ import dynamic from 'next/dynamic';
 import RichText from 'system/config/richtext';
 import Select from 'react-select';
 import { useProtectedFetcher } from 'apis/utils/fetcher';
-import Http from 'core/factory/fact.http';
-import { Checkbox, FormControlLabel, FormGroup } from '@mui/material';
 import { useNavbar } from 'modules/contexts/NavbarContext';
 import axios from 'axios';
+import { useRouter } from 'next/router';
 
 const ReactQuill = dynamic(() => import('react-quill'), {
   ssr: false,
@@ -24,21 +22,16 @@ const fields = {
   title: joi.string().required(),
   image: joi.object().required().optional(),
   text: joi.string().required(),
-  category_name: joi.string().label('Category'),
-  subcategory_name: joi.string().label('Sub category'),
-  authorName: joi.string().optional(),
-  Slide: joi.string().optional(),
-  Type: joi.string().optional(),
+  category_id: joi.number().label('Category'),
+  is_slide: joi.boolean().optional(),
+  type: joi.string().default('BLOG'),
 };
 
 const schema = joi.object(fields);
 
 const AddItem = ({
-  handleAdd,
   children,
-  handleEdit,
   dataValues,
-  handleDelete,
 }: {
   handleAdd?: (item: any) => void;
   children: any;
@@ -46,181 +39,125 @@ const AddItem = ({
   handleDelete?: (id: any) => void;
   dataValues?: any;
 }) => {
+  const router = useRouter();
 
-  const {profile} = useNavbar();
-  const [text, setText] = React.useState('');
-  // const [material, setMaterial] = React.useState(false);
-  const [data, setData] = React.useState<any>(null);
+  const { profile } = useNavbar();
   const [loading, setLoading] = React.useState(false);
   const [toggle, setToggle] = React.useState(false);
-  const [triggle, setTriggle] = React.useState(true);
-  const [selected, setSelected] = React.useState('');
-  const [isMaterial, setMaterial] = React.useState('Yes');
   const {
     data: { data: categories },
   } = useProtectedFetcher('/api/categories');
-  const {
-    data: { data: subCategories },
-  } = useProtectedFetcher('/api/sub-categories');
-
+  const types = [
+    { value: 'BLOG', label: 'Blog' },
+    { value: 'EXTENSION_MATERIAL', label: 'Material' },
+  ];
   const {
     register,
-    unregister,
     handleSubmit,
     setValue,
     getValues,
     reset,
-    setError,
+    watch,
     formState: { errors },
   } = useForm({
     resolver: joiResolver(schema),
+    defaultValues: dataValues,
   });
 
+  const isMaterial = watch('type') === 'EXTENSION_MATERIAL';
+  const is_slide = watch('is_slide');
+
   const onSubmit = async (query: any) => {
-
-    let status = 'submitted';
-    setLoading(true);
-    const formData = new FormData();
-    Object.keys(query).forEach(key => {
-      formData.append(key === 'image' ? 'media' : key, query[key]);
-    });
-
-    if(triggle){
-      formData.append('status', status);
-    }else{
-      status = 'published';
-      formData.append('status', status);
-    }
-    
-    const { data: res } = await (!dataValues
-      ? axios.post(
-          `/api/articles`,
-          formData,
-        )
-      : axios.patch(
-          `/api/articles/${dataValues.id}`,
-          formData
-        ));
-    setLoading(false);
-
-    if (res) {
-      const message = dataValues ? (triggle ? 'Edited' : 'Published & Edited') : (triggle ? 'Added' : 'Published');
-      swal(
-        message,
-        res.message || `${message} successfully`,
-        'success',
-      ).then(() => {
-        reset();
-        setToggle(false);
-        if (dataValues) {
-          // @ts-ignore
-          handleEdit(res.data);
-        } else {
-          // @ts-ignore
-          handleAdd(res.data);
-        }
+    try {
+      let status = 'pending';
+      setLoading(true);
+      const formData = new FormData();
+      Object.keys(query).forEach(key => {
+        formData.append(key === 'image' ? 'media' : key, query[key]);
       });
-    }
 
+      const { data: res } = await (!dataValues
+        ? axios.post(`/api/articles`, formData)
+        : axios.patch(`/api/articles/${dataValues.id}`, formData));
+      setLoading(false);
 
-    if (res.reason) {
-      swal('Ooops!', res.reason || 'Something went wrong');
+      if (res) {
+        swal(
+          'Success!',
+          res.message || `Saved as ${query.status} successfully`,
+          'success',
+        );
+        setTimeout(() => {
+          router.reload();
+        }, 1000);
+      }
+    } catch (error) {
+      swal(
+        'Ooops!',
+        (error as any)?.response?.data?.message ||
+          'Something went wrong',
+        'error',
+      );
+    } finally {
+      setLoading(false);
     }
   };
 
   const onDelete = async () => {
-    const willDelete = await swal({
-      title: 'Are you sure?',
-      text: 'Are you sure that you want to delete this article?',
-      icon: 'warning',
-      dangerMode: true,
-    });
-
-    if (!willDelete) {
-      return;
-    }
-    setLoading(true);
-    const { data, error } = await DefaultApi.DeleteRoute.deleteRoute(
-      `/api/articles/${dataValues.id}`,
-    );
-    setLoading(false);
-
-    if (data) {
-      swal(
-        'Deleted!',
-        data.message || 'Deleted successfully',
-        'success',
-      ).then(() => {
-        reset();
-        setToggle(false);
-        // @ts-ignore
-        handleDelete(dataValues.id);
+    try {
+      const willDelete = await swal({
+        title: 'Are you sure?',
+        text: 'Are you sure that you want to delete this article?',
+        icon: 'warning',
+        dangerMode: true,
       });
-    }
 
-    if (error) {
-      swal('Ooops!', error.message || 'Something went wrong');
+      if (!willDelete) {
+        return;
+      }
+      setLoading(true);
+      const { data } = await axios.delete(
+        `/api/articles/${dataValues.id}`,
+      );
+      setLoading(false);
+
+      if (data) {
+        swal(
+          'Deleted!',
+          data.message || 'Deleted successfully',
+          'success',
+        );
+
+        setTimeout(() => {
+          router.reload();
+        }, 1000);
+      }
+    } catch (error) {
+      swal(
+        'Ooops!',
+        (error as any)?.response?.data?.message ||
+          'Something went wrong',
+        'error',
+      );
+    } finally {
+      setLoading(false);
     }
   };
 
-  React.useEffect(() => {
-    // if (dataValues?.material) {
-    //   setMaterial(!!dataValues.material);
-    // }
-    if (dataValues?.id) {
-      Http.axios
-        .get(
-          `/api/articles/${dataValues.id}?material=${
-            !!dataValues.material ? 1 : 0
-          }`,
-        )
-        .then(response => response.data)
-        .then(result => {
-          const article = result.data;
-          setData(article);
-        });
-    }
-  }, [dataValues]);
-
-  const resetForm = React.useRef(() => {});
-
-  resetForm.current = () => {
-    reset({
-      title: data.title,
-      text: data.text,
-      category_name: data.category_name,
-      subcategory_name: data.subcategory_name,
-      authorName: data.authorName,
-    });
-  };
-
-  React.useEffect(() => {
-    if (data) {
-      resetForm.current();
-    }
-  }, [data]);
-
-  const categoryOptions = categories?.rows?.map((element: any) => ({
-    value: element.id,
-    label: element.name,
-  }));
-
-  const subCategoryOptions = subCategories?.rows
-    ?.filter(
-      (item: any) => item.category_name == getValues('category_name'),
-    )
+  const categoryOptions = categories?.rows
+    ?.filter((item: any) => !!item.parent_id)
     ?.map((element: any) => ({
       value: element.id,
       label: element.name,
     }));
 
-  const defaultSubCategoryOptions = subCategoryOptions?.filter(
-    (item: any) => item.value == data?.subcategory_name,
-  );
   const defaultCategoryOptions = categoryOptions?.filter(
-    (item: any) => item.value == data?.category_name,
+    (item: any) => item.value == dataValues?.category_id,
   );
 
+  const defaultTypeOptions = types?.filter(
+    (item: any) => item.value == dataValues?.type,
+  );
 
   return (
     <DrawerLayout
@@ -233,7 +170,15 @@ const AddItem = ({
         <form
           onSubmit={event => {
             event.preventDefault();
-            handleSubmit(onSubmit)(event);
+            handleSubmit(values =>
+              onSubmit({
+                ...values,
+                status:
+                  profile?.user?.type === 'admin'
+                    ? 'published'
+                    : 'pending',
+              }),
+            )(event);
           }}
           className="gap-y-3 flex flex-col"
         >
@@ -245,7 +190,6 @@ const AddItem = ({
               type="text"
               placeholder={'Title'}
               {...register('title')}
-              defaultValue={data?.title}
               className="mt-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             />
             {errors.title?.message && (
@@ -254,23 +198,30 @@ const AddItem = ({
               </p>
             )}
           </label>
-          <label className='flex flex-col'>
-             <span className='mb-3'>Extension-Material</span>
-              <div className='flex w-[99px] ml-3 justify-around'>
-                <label className='flex items-center'>
-                    <span>Yes</span>
-                    <input {...register('Type')} type="radio" value={isMaterial}  onClick={() =>  setMaterial('Yes')} checked ={ isMaterial === 'Yes'}/>
-                </label>
-                <label className='flex items-center'>
-                    <span >No</span>
-                    <input {...register('Type')} type="radio" value={isMaterial} onClick={() => setMaterial('No')} checked ={ isMaterial === 'No'}/>
-                </label>
-            </div>
-            
+          <label className="flex flex-col">
+            <span className="text-sm font-medium text-gray-900 dark:text-gray-300">
+              Type
+            </span>
+            <Select
+              isMulti={false}
+              options={types}
+              defaultValue={defaultTypeOptions}
+              onChange={(newValue: any) => {
+                setValue('type', newValue.value, {
+                  shouldDirty: true,
+                  shouldValidate: true,
+                });
+              }}
+              className="mt-2"
+            />
+            {errors.type?.message && (
+              <p className="mt-1 text-red-500">
+                {formatJoiErorr(`${errors.type.message}`)}
+              </p>
+            )}
           </label>
-          
-          {
-            isMaterial === 'Yes' ? (
+
+          {isMaterial ? (
             <>
               <label className="flex flex-col">
                 <span className="text-sm font-medium text-gray-900 dark:text-gray-300">
@@ -278,88 +229,63 @@ const AddItem = ({
                 </span>
                 <Select
                   isMulti={false}
-                  {...register('category_name')}
                   options={categoryOptions}
                   defaultValue={defaultCategoryOptions}
                   onChange={(newValue: any) => {
-                    setValue('category_name', newValue.label, {
+                    setValue('category_id', newValue.value, {
                       shouldDirty: true,
                       shouldValidate: true,
                     });
                   }}
                   className="mt-2"
                 />
-                {errors.category_name?.message && (
+                {errors.category_id?.message && (
                   <p className="mt-1 text-red-500">
-                    {formatJoiErorr(`${errors.category_name.message}`)}
-                  </p>
-                )}
-              </label>
-              <label className="flex flex-col">
-                <span className="text-sm font-medium text-gray-900 dark:text-gray-300">
-                  Sub Category
-                </span>
-                <Select
-                  isMulti={false}
-                  {...register('subcategory_name')}
-                  options={subCategoryOptions}
-                  defaultValue={defaultSubCategoryOptions}
-                  onChange={(newValue: any) => {
-                    setValue('subcategory_name', newValue.label, {
-                      shouldDirty: true,
-                      shouldValidate: true,
-                    });
-                  }}
-                  className="mt-2"
-                />
-                {errors.subcategory_name?.message && (
-                  <p className="mt-1 text-red-500">
-                    {formatJoiErorr(
-                      `${errors.subcategory_name.message}`,
-                    )}
+                    {formatJoiErorr(`${errors.category_id.message}`)}
                   </p>
                 )}
               </label>
             </>
-            ):
-            (<></>)
-          }
-         
-          <label className="flex flex-col">
-            <span className="text-sm font-medium text-gray-900 dark:text-gray-300">
-              Author Names
-            </span>
-            <input
-              type="text"
-              placeholder={'Enter Both Your names...'}
-              {...register('authorName')}
-              defaultValue={data?.authorName}
-              className="mt-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            />
-            {errors.authorName?.message && (
-              <p className="mt-1 text-red-500">
-                {formatJoiErorr(`${errors.authorName.message}`)}
-              </p>
-            )}
-          </label>
-          {
-            profile?.user?.type === "admin" && isMaterial !== 'Yes' ? (
-              <label className='flex flex-col'>
-                <span className='mb-3'>Slide Show</span>
-                <div className='flex w-[99px] ml-3 justify-around'>
-                  <label className='flex items-center'>
-                      <span>Yes</span>
-                      <input {...register('Slide')} type="radio" value={selected}  onClick={() => setSelected('Yes')} checked ={ selected === 'Yes'}/>
-                  </label>
-                  <label className='flex items-center'>
-                      <span>No</span>
-                      <input {...register('Slide')} type="radio" value={selected} onClick={() => setSelected('No')} checked ={ selected === 'No'}/>
-                  </label>
-                </div>
-              </label>
-            ) : (<></>)
-          }
-          
+          ) : (
+            <></>
+          )}
+
+          {profile?.user?.type === 'admin' && isMaterial ? (
+            <label className="flex flex-col">
+              <span className="mb-3">Slide Show</span>
+              <div className="flex w-[99px] ml-3 justify-around">
+                <label className="flex items-center">
+                  <span>Yes</span>
+                  <input
+                    type="radio"
+                    onClick={() => {
+                      setValue('is_slide', true, {
+                        shouldDirty: true,
+                        shouldValidate: true,
+                      });
+                    }}
+                    checked={!!is_slide}
+                  />
+                </label>
+                <label className="flex items-center">
+                  <span>No</span>
+                  <input
+                    type="radio"
+                    onClick={() => {
+                      setValue('is_slide', false, {
+                        shouldDirty: true,
+                        shouldValidate: true,
+                      });
+                    }}
+                    checked={!is_slide}
+                  />
+                </label>
+              </div>
+            </label>
+          ) : (
+            <></>
+          )}
+
           <div className="flex flex-col">
             <span className="text-sm mb-2 font-medium text-gray-900 dark:text-gray-300">
               Image
@@ -379,12 +305,12 @@ const AddItem = ({
               </p>
             )}
           </div>
-          
+
           <div className="flex flex-col">
             <p className="mt-3 w-full font-medium">Text</p>
             <ReactQuill
               theme="snow"
-              defaultValue={data?.text}
+              defaultValue={getValues('text')}
               modules={RichText.modules}
               formats={RichText.formats}
               onChange={newValue => {
@@ -392,10 +318,9 @@ const AddItem = ({
                   shouldDirty: true,
                   shouldValidate: true,
                 });
-                setText(newValue);
               }}
             />
-             
+
             {errors.text?.message && (
               <p className="mt-1 text-red-500">
                 {formatJoiErorr(`${errors.text?.message}`)}
@@ -414,39 +339,29 @@ const AddItem = ({
                 Delete
               </button>
             ) : null}
-            {
-              profile?.user?.type !== "admin" ? 
-              (
-                <button
+            <div className="flex items-center space-x-3 justify-between md:col-span-2 ml-auto">
+              <button
+                type="button"
+                disabled={loading}
+                onClick={() => {
+                  handleSubmit(values =>
+                    onSubmit({ ...values, status: 'draft' }),
+                  )();
+                }}
+                className="font-semibold disabled:cursor-not-allowed disabled:bg-slate-400 mt-12 text-white bg-slate-600 hover:bg-slate-500 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg text-sm w-full sm:w-auto px-12 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+              >
+                Save Draft
+              </button>
+              <button
                 type="submit"
                 disabled={loading}
                 className="font-semibold disabled:cursor-not-allowed disabled:bg-slate-400 mt-12 text-white bg-brand-green/80 hover:bg-brand-green focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg text-sm w-full sm:w-auto px-12 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                >
-               {dataValues ? 'Edit' : 'Save'} 
+              >
+                {profile?.user?.type === 'admin'
+                  ? 'Publish'
+                  : 'Submit'}
               </button>
-              )
-              :
-              (
-              <div className='flex items-center space-x-3 justify-between md:col-span-2'>
-                <button
-                  type="submit"
-                  disabled={loading}
-                  className="font-semibold disabled:cursor-not-allowed disabled:bg-slate-400 mt-12 text-white bg-slate-600 hover:bg-slate-500 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg text-sm w-full sm:w-auto px-12 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                >
-                  {dataValues ? 'Edit' : 'Save'} 
-                </button>
-                <button
-                  type="submit"
-                  onClick={ () => setTriggle(false)}
-                  disabled={loading}
-                  className="font-semibold disabled:cursor-not-allowed disabled:bg-slate-400 mt-12 text-white bg-brand-green/80 hover:bg-brand-green focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg text-sm w-full sm:w-auto px-12 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                >
-                  Publish
-                </button>
-              </div>
-              )
-            }
-            
+            </div>
           </div>
         </form>
       </div>

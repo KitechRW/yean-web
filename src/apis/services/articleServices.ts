@@ -12,16 +12,16 @@ const {
 
 export default class ArticleServices {
   static create(data: any) {
-    const ArticleModel = Article ;
+    const ArticleModel = Article;
     if (data.slug) {
       data.slug = convertToSlug(data.slug);
     }
-   
+
     return ArticleModel.create(data);
   }
 
   static findAll() {
-    const ArticleModel = Article ;
+    const ArticleModel = Article;
     return ArticleModel.findAll();
   }
 
@@ -42,41 +42,9 @@ export default class ArticleServices {
     });
     const articleRows = await Promise.all(
       rows.map(row => {
-        return Author.findByPk(row.toJSON()?.author_id, {
+        return User.findByPk(row.toJSON()?.author_id, {
           attributes: autherAttributes,
-        })
-          .then(author => {
-            if (!author) {
-              return User.findByPk(row.toJSON()?.author_id, {
-                attributes: autherAttributes,
-              }).then(author => ({ author, ...row.toJSON() }));
-            }
-            return { author, ...row.toJSON() };
-          })
-          .then((articleData: any) => {
-            const categoryId = articleData.category_name;
-            if (categoryId) {
-              return Categories.findByPk(categoryId).then(
-                category => ({
-                  category: category?.toJSON(),
-                  ...articleData,
-                }),
-              );
-            }
-            return articleData;
-          })
-          .then((articleData: any) => {
-            const subcategoryId = articleData.subcategory_name;
-            if (subcategoryId) {
-              return SubCategories.findByPk(subcategoryId).then(
-                subcategory => ({
-                  subcategory: subcategory?.toJSON(),
-                  ...articleData,
-                }),
-              );
-            }
-            return articleData;
-          });
+        }).then(author => ({ author, ...row.toJSON() }));
       }),
     );
     return { count, rows: articleRows };
@@ -95,43 +63,13 @@ export default class ArticleServices {
     if (!article) {
       return null;
     }
-   
-    const articleData = await Author.findByPk(
+
+    const articleData = await User.findByPk(
       article.toJSON()?.author_id,
       {
         attributes: autherAttributes,
       },
-    )
-      .then(author => {
-        if (!author) {
-          return User.findByPk(article.toJSON()?.author_id, {
-            attributes: autherAttributes,
-          }).then(author => ({ author, ...article.toJSON() }));
-        }
-        return { author, ...article.toJSON() };
-      })
-      .then((articleData: any) => {
-        const categoryId = articleData.category_name;
-        if (categoryId) {
-          return Categories.findByPk(categoryId).then(category => ({
-            category: category?.toJSON(),
-            ...articleData,
-          }));
-        }
-        return articleData;
-      })
-      .then((articleData: any) => {
-        const subcategoryId = articleData.subcategory_name;
-        if (subcategoryId) {
-          return SubCategories.findByPk(subcategoryId).then(
-            subcategory => ({
-              subcategory: subcategory?.toJSON(),
-              ...articleData,
-            }),
-          );
-        }
-        return articleData;
-      });
+    ).then(author => ({ author, ...article.toJSON() }));
 
     return articleData;
   }

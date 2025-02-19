@@ -5,7 +5,7 @@ module.exports = {
       type: Sequelize.ENUM('BLOG', 'EXTENSION_MATERIAL'),
       defaultValue: 'BLOG',
     });
-    await queryInterface.addColumn('article', 'isSlide', {
+    await queryInterface.addColumn('article', 'is_slide', {
       type: Sequelize.BOOLEAN,
       defaultValue: false,
     });

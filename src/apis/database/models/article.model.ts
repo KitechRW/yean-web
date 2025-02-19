@@ -22,13 +22,13 @@ const ArticleModel = (sequelize: Sequelize) => {
         type: DataTypes.INTEGER,
         defaultValue: 0,
       },
-      isSlide: {
+      is_slide: {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
       },
       type: {
-        type: DataTypes.ENUM('ARTICLE', 'EXTENSION_MATERIAL'),
-        defaultValue: 'ARTICLE',
+        type: DataTypes.ENUM('BLOG', 'EXTENSION_MATERIAL'),
+        defaultValue: 'BLOG',
       },
       category_id: DataTypes.INTEGER,
       subcategory_id: DataTypes.INTEGER,

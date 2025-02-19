@@ -5,7 +5,6 @@ import removeFile, { parseForm } from 'apis/utils/libForm';
 import { paginate } from 'apis/utils/pagnation';
 import DB from 'apis/database';
 
-
 const { Articles: Article } = DB;
 
 export default class ArticleController {
@@ -19,7 +18,6 @@ export default class ArticleController {
           'category_name',
           'subcategory_name',
           'slug',
-          
         );
       }
       const query: any = {};
@@ -39,8 +37,8 @@ export default class ArticleController {
             // 'author_name',
             'text',
             'views',
-          //   'category_name',
-          // 'subcategory_name',
+            //   'category_name',
+            // 'subcategory_name',
             'updatedAt',
           ],
           ['firstname', 'lastname', 'profile_image'],
@@ -57,35 +55,29 @@ export default class ArticleController {
     }
   }
 
-  static async UpdateViews(req: NextApiRequest, res: NextApiResponse) {
-  const {id} = req.query;
-  const {views}: any = req.body;
-try{
-  const result = await Article.update(
-  {views},
-  {where: {id} }
- );
- if(result[0] === 0) {
-  return res.status(404)
- }
-}catch(error: any){
-  console.log(error);
-}
-}
+  static async UpdateViews(
+    req: NextApiRequest,
+    res: NextApiResponse,
+  ) {
+    const { id } = req.query;
+    const { views }: any = req.body;
+    try {
+      const result = await Article.update(
+        { views },
+        { where: { id } },
+      );
+      if (result[0] === 0) {
+        return res.status(404);
+      }
+    } catch (error: any) {
+      console.log(error);
+    }
+  }
 
   static async getAll(req: NextApiRequest, res: NextApiResponse) {
     try {
       let { page = 1, limit = 10, cat, sub } = req.query;
       const material = Number(req.query.material) > 0;
-      const materialParams = [];
-      if (material) {
-        materialParams.push(
-          'category_name',
-          'subcategory_name',
-          'slug',
-          // 'material',
-        );
-      }
       page = Number(page);
       limit = Number(limit);
       const where: any = {};
@@ -97,18 +89,18 @@ try{
       }
       const offset = (page - 1) * limit;
       const { rows, count } = await ArticleServices.findAndCountAll(
-        (cat && sub) ? where : undefined,
+        cat && sub ? where : undefined,
         [
           'id',
           'title',
           'image',
-          // 'author_name',
           'views',
           'status',
-          // 'slide',
-          // 'Type',
-          // 'category_name',
-          // 'subcategory_name',
+          'is_slide',
+          'type',
+          'text',
+          'category_id',
+          'author_id',
           'createdAt',
           'updatedAt',
         ],
@@ -119,13 +111,12 @@ try{
         // material,
       );
       const pagination = paginate(page, count, rows, limit);
-      
+
       return Response.success(res, 200, {
         message: 'Articles fetched successfuly',
         pagination,
         data: rows,
       });
-
     } catch (error: any) {
       console.log(error);
       return Response.error(res, 500, {
@@ -136,9 +127,8 @@ try{
   }
 
   static async create(req: NextApiRequest, res: NextApiResponse) {
-    
     try {
-      const { fields, files} = await parseForm(req);
+      const { fields, files } = await parseForm(req);
       if (!files.media) {
         return Response.error(res, 500, {
           message: 'Please upload image',
@@ -149,7 +139,6 @@ try{
       let images = Array.isArray(file)
         ? file.map(f => `/uploads/${f.newFilename}`)
         : `/uploads/${file.newFilename}`;
-      
 
       const payload = {
         ...fields,
@@ -160,7 +149,6 @@ try{
         //@ts-ignore
         data: await ArticleServices.create(payload),
       });
-
     } catch (error: any) {
       console.log(error);
       return Response.error(res, 500, {
@@ -174,7 +162,7 @@ try{
     const { id } = req.query;
     const material = Number(req.query.material) > 0;
     try {
-      const ArticleModel =  Article;
+      const ArticleModel = Article;
       const item = await ArticleModel.findByPk(`${id}`);
 
       if (!item?.toJSON()) {
@@ -251,7 +239,7 @@ try{
     try {
       const item = await ArticleServices.findByPk(
         Number(id),
-      //@ts-ignore
+        //@ts-ignore
         material,
       );
       if (!item) {
@@ -265,7 +253,7 @@ try{
         data: await item.destroy(),
       });
     } catch (error) {
-      console.log(error)
+      console.log(error);
       return Response.error(res, 500, {
         message: 'something went wrong',
       });
