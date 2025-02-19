@@ -2,8 +2,8 @@
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.addColumn('article', 'type', {
-      type: Sequelize.ENUM('ARTICLE', 'EXTENSION_MATERIAL'),
-      defaultValue: 'ARTICLE',
+      type: Sequelize.ENUM('BLOG', 'EXTENSION_MATERIAL'),
+      defaultValue: 'BLOG',
     });
     await queryInterface.addColumn('article', 'isSlide', {
       type: Sequelize.BOOLEAN,
