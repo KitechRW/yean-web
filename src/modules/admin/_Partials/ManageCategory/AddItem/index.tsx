@@ -8,18 +8,25 @@ import { joiResolver } from '@hookform/resolvers/joi';
 import UploadImage from 'modules/_partials/UploadImage';
 import { formatJoiErorr } from 'system/format';
 import axios from 'axios';
+import Select from 'react-select';
 
 const schema = joi.object({
   name: joi.string().required(),
+  parent_id: joi.string().label('Parent').optional(),
   image: joi.object().required(),
 });
 
 const AddItem = ({
   handleAdd,
   children,
+  parentOptions,
 }: {
   handleAdd: (item: any) => void;
   children: any;
+  parentOptions: {
+    value: string;
+    label: string;
+  }[];
 }) => {
   const [loading, setLoading] = React.useState(false);
   const [toggle, setToggle] = React.useState(false);
@@ -40,10 +47,7 @@ const AddItem = ({
     Object.keys(query).forEach(key => {
       formData.append(key === 'image' ? 'media' : key, query[key]);
     });
-    const { data } = await axios.post(
-      '/api/categories',
-      formData,
-    );
+    const { data } = await axios.post('/api/categories', formData);
     setLoading(false);
 
     if (data) {
@@ -90,6 +94,28 @@ const AddItem = ({
             {errors.name?.message && (
               <p className="mt-1 text-red-500">
                 {formatJoiErorr(`${errors.name.message}`)}
+              </p>
+            )}
+          </label>
+          <label className="flex flex-col">
+            <span className="text-sm font-medium text-gray-900 dark:text-gray-300">
+              Parent(Optional)
+            </span>
+            <Select
+              isMulti={false}
+              {...register('parent_id')}
+              options={parentOptions}
+              onChange={(newValue: any) => {
+                setValue('parent_id', newValue.label, {
+                  shouldDirty: true,
+                  shouldValidate: true,
+                });
+              }}
+              className="mt-2"
+            />
+            {errors.parent_id?.message && (
+              <p className="mt-1 text-red-500">
+                {formatJoiErorr(`${errors.parent_id.message}`)}
               </p>
             )}
           </label>

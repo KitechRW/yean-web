@@ -7,23 +7,32 @@ import { useForm } from 'react-hook-form';
 import { joiResolver } from '@hookform/resolvers/joi';
 import UploadImage from 'modules/_partials/UploadImage';
 import { formatJoiErorr } from 'system/format';
+import Select from 'react-select';
 
 const schema = joi.object({
   name: joi.string().required(),
+  parent_id: joi.string().label('Parent').optional(),
   image: joi.object().optional(),
 });
+
+export type EditCategoryProps = {
+  handleEdit: (item: any) => void;
+  handleDelete: (id: any) => void;
+  children: any;
+  dataValues: any;
+  parentOptions: {
+    value: string;
+    label: string;
+  }[];
+};
 
 const EditItem = ({
   handleEdit,
   dataValues,
   handleDelete,
   children,
-}: {
-  handleEdit: (item: any) => void;
-  handleDelete: (id: any) => void;
-  children: any;
-  dataValues: any;
-}) => {
+  parentOptions,
+}: EditCategoryProps) => {
   const [loading, setLoading] = React.useState(false);
   const [toggle, setToggle] = React.useState(false);
   const {
@@ -105,11 +114,13 @@ const EditItem = ({
     }
   }, [dataValues]);
 
-  console.log(errors);
+  const defaultParentOption = parentOptions.find(
+    item => item.value === dataValues.parent_id,
+  );
 
   return (
     <DrawerLayout
-      title={`New Category`}
+      title={`Edit Category`}
       toggle={toggle}
       setToggle={setToggle}
     >
@@ -134,6 +145,29 @@ const EditItem = ({
             {errors.name?.message && (
               <p className="mt-1 text-red-500">
                 {formatJoiErorr(`${errors.name.message}`)}
+              </p>
+            )}
+          </label>
+          <label className="flex flex-col">
+            <span className="text-sm font-medium text-gray-900 dark:text-gray-300">
+              Parent(Optional)
+            </span>
+            <Select
+              isMulti={false}
+              {...register('parent_id')}
+              options={parentOptions}
+              defaultValue={defaultParentOption}
+              onChange={(newValue: any) => {
+                setValue('parent_id', newValue.label, {
+                  shouldDirty: true,
+                  shouldValidate: true,
+                });
+              }}
+              className="mt-2"
+            />
+            {errors.parent_id?.message && (
+              <p className="mt-1 text-red-500">
+                {formatJoiErorr(`${errors.parent_id.message}`)}
               </p>
             )}
           </label>

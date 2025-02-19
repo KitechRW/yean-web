@@ -66,6 +66,15 @@ const CategoryActivity = () => {
     return <p>Loading...</p>;
   }
 
+  const parentOptions = categories.rows
+    .filter(item => !item.parent_id)
+    .map(item => {
+      return {
+        value: item.id,
+        label: item.name,
+      };
+    });
+
   return (
     <div className="px-4 md:pl-6 bg-white py-4 flex flex-col flex-grow items-center md:px-8 w-full">
       <div className="space-x-6 md:space-x-12 bg-white flex justify-between w-full">
@@ -80,6 +89,7 @@ const CategoryActivity = () => {
           />
         </div>
         <AddItem
+          parentOptions={parentOptions}
           handleAdd={item => {
             handleAdd(item);
           }}
@@ -98,11 +108,13 @@ const CategoryActivity = () => {
               data={item}
               handleEdit={handleEdit}
               handleDelete={handleDelete}
+              parentOptions={parentOptions}
             />
           );
         })}
 
         <AddItem
+          parentOptions={parentOptions}
           handleAdd={item => {
             handleAdd(item);
           }}

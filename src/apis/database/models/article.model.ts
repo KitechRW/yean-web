@@ -12,17 +12,27 @@ const ArticleModel = (sequelize: Sequelize) => {
       },
       title: DataTypes.TEXT,
       image: DataTypes.STRING,
-      slug: DataTypes.TEXT,
-      Slide: DataTypes.TEXT,
-      Type: DataTypes.TEXT,
+      slug: DataTypes.TEXT('long'),
+      // Slide: DataTypes.TEXT,
+      // Type: DataTypes.TEXT,
       text: DataTypes.TEXT('long'),
-      category_name: DataTypes.TEXT,
-      subcategory_name: DataTypes.TEXT,
+      // category_name: DataTypes.TEXT,
+      // subcategory_name: DataTypes.TEXT,
       views: {
         type: DataTypes.INTEGER,
         defaultValue: 0,
       },
-      authorName: DataTypes.TEXT('long'),
+      isSlide: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+      },
+      type: {
+        type: DataTypes.ENUM('ARTICLE', 'EXTENSION_MATERIAL'),
+        defaultValue: 'ARTICLE',
+      },
+      category_id: DataTypes.INTEGER,
+      subcategory_id: DataTypes.INTEGER,
+      // authorName: DataTypes.TEXT('long'),
       tags: DataTypes.STRING,
       comment: {
         type: DataTypes.INTEGER,
@@ -34,13 +44,13 @@ const ArticleModel = (sequelize: Sequelize) => {
       createdAt: {
         type: DataTypes.DATE,
         field: 'time',
+        defaultValue: DataTypes.NOW,
       },
       updatedAt: {
-        field: 'time',
+        field: 'updated_at',
         type: DataTypes.DATE,
+        defaultValue: DataTypes.NOW,
       },
-
-
     },
     {
       tableName: 'article',

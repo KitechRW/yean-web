@@ -75,7 +75,7 @@ export default class LandingController {
           'comment',
           'createdAt',
           'updatedAt',
-          'type'
+          // 'type'
         ],
         ['firstname', 'lastname', 'profile_image'],
         8,
