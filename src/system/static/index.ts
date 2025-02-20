@@ -100,11 +100,11 @@ export const adminNavs = [
     label: 'Banners',
     path: '/dashboard/Banners',
   },
-  {
-    icon: Feed,
-    label: 'Authors',
-    path: '/dashboard/authors',
-  },
+  // {
+  //   icon: Feed,
+  //   label: 'Authors',
+  //   path: '/dashboard/authors',
+  // },
   {
     icon: Feed,
     label: 'Articles',
@@ -125,11 +125,11 @@ export const adminNavs = [
     label: 'Partners',
     path: '/dashboard/partners',
   },
-  {
-    icon: Pageview,
-    label: 'Home Page',
-    path: '/dashboard/home',
-  },
+  // {
+  //   icon: Pageview,
+  //   label: 'Home Page',
+  //   path: '/dashboard/home',
+  // },
   {
     icon: Pageview,
     label: 'Innovation center',

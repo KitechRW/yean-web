@@ -13,6 +13,7 @@ import { useNavbar } from 'modules/contexts/NavbarContext';
 import axios from 'axios';
 import { useRouter } from 'next/router';
 import { z } from 'zod';
+import 'react-quill/dist/quill.snow.css';
 
 const ReactQuill = dynamic(() => import('react-quill'), {
   ssr: false,
