@@ -32,7 +32,7 @@ const ArticleModel = (sequelize: Sequelize) => {
       },
       category_id: DataTypes.INTEGER,
       subcategory_id: DataTypes.INTEGER,
-      // authorName: DataTypes.TEXT('long'),
+      author_id: DataTypes.BIGINT,
       tags: DataTypes.STRING,
       comment: {
         type: DataTypes.INTEGER,

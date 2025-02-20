@@ -1,9 +1,8 @@
 import React from 'react';
 import swal from 'sweetalert';
-import joi from 'joi';
 import DrawerLayout from 'modules/layouts/DrawerLayout';
 import { useForm } from 'react-hook-form';
-import { joiResolver } from '@hookform/resolvers/joi';
+import { zodResolver } from '@hookform/resolvers/zod';
 import UploadImage from 'modules/_partials/UploadImage';
 import { formatJoiErorr } from 'system/format';
 import dynamic from 'next/dynamic';
@@ -13,21 +12,26 @@ import { useProtectedFetcher } from 'apis/utils/fetcher';
 import { useNavbar } from 'modules/contexts/NavbarContext';
 import axios from 'axios';
 import { useRouter } from 'next/router';
+import { z } from 'zod';
 
 const ReactQuill = dynamic(() => import('react-quill'), {
   ssr: false,
 });
 
-const fields = {
-  title: joi.string().required(),
-  image: joi.object().required().optional(),
-  text: joi.string().required(),
-  category_id: joi.number().label('Category'),
-  is_slide: joi.boolean().optional(),
-  type: joi.string().default('BLOG'),
-};
+const schema = z.object({
+  title: z.string().min(1, {
+    message: 'Title is required',
+  }),
+  image: z.any().optional(),
+  text: z.string().min(1, {
+    message: 'Text is required',
+  }),
+  category_id: z.coerce.number().optional(),
+  is_slide: z.boolean().optional().default(false),
+  type: z.enum(['BLOG', 'EXTENSION_MATERIAL']).default('BLOG'),
+});
 
-const schema = joi.object(fields);
+type FormData = z.infer<typeof schema>;
 
 const AddItem = ({
   children,
@@ -48,20 +52,28 @@ const AddItem = ({
     data: { data: categories },
   } = useProtectedFetcher('/api/categories');
   const types = [
-    { value: 'BLOG', label: 'Blog' },
-    { value: 'EXTENSION_MATERIAL', label: 'Material' },
-  ];
+    { value: 'BLOG', label: 'Blog' } as const,
+    { value: 'EXTENSION_MATERIAL', label: 'Material' } as const,
+  ] as const;
   const {
     register,
     handleSubmit,
     setValue,
     getValues,
-    reset,
     watch,
     formState: { errors },
-  } = useForm({
-    resolver: joiResolver(schema),
-    defaultValues: dataValues,
+  } = useForm<FormData>({
+    resolver: zodResolver(schema),
+    defaultValues: dataValues
+      ? {
+          title: dataValues.title,
+          // image: joi.object().required().optional(),
+          text: dataValues.text,
+          category_id: dataValues.category_id,
+          is_slide: dataValues.is_slide,
+          type: dataValues.type,
+        }
+      : undefined,
   });
 
   const isMaterial = watch('type') === 'EXTENSION_MATERIAL';
@@ -69,7 +81,12 @@ const AddItem = ({
 
   const onSubmit = async (query: any) => {
     try {
-      let status = 'pending';
+      query.author_id = dataValues?.author_id || profile?.user?.id;
+      if (!query.author_id) {
+        swal('Ooops!', 'Please login first', 'error');
+        router.replace('/logout');
+        return;
+      }
       setLoading(true);
       const formData = new FormData();
       Object.keys(query).forEach(key => {
@@ -161,7 +178,7 @@ const AddItem = ({
 
   return (
     <DrawerLayout
-      title={`New Article`}
+      title={!dataValues ? `New Article` : 'Edit Article'}
       toggle={toggle}
       setToggle={setToggle}
     >

@@ -36,7 +36,10 @@ const ViewItem = ({
           />
           <p className="font-semibold pl-2 mt-6">{title}</p>
           <p className="text-gray-500 w-full px-2 mt-2">
-            Author: {data?.author?.firstname} {data?.author?.lastname}
+            Author:{' '}
+            {!data?.author?.firstname && !data?.author?.lastname
+              ? data?.author?.email
+              : `${data.author.firstname} ${data.author.lastname}`}
           </p>
           {(status !== 'published' ||
             profile?.user?.type !== 'member') && (

@@ -104,7 +104,7 @@ export default class ArticleController {
           'createdAt',
           'updatedAt',
         ],
-        ['firstname', 'lastname', 'profile_image'],
+        ['firstname', 'lastname', 'profile_image', 'email'],
         limit,
         offset,
         // //@ts-ignore
@@ -160,47 +160,17 @@ export default class ArticleController {
 
   static async update(req: NextApiRequest, res: NextApiResponse) {
     const { id } = req.query;
-    const material = Number(req.query.material) > 0;
     try {
       const ArticleModel = Article;
       const item = await ArticleModel.findByPk(`${id}`);
 
-      if (!item?.toJSON()) {
-        if (material) {
-          const foundArticle = await Article.findByPk(`${id}`);
-          if (foundArticle) {
-            const { fields, files } = await parseForm(req);
-            const file = files.media;
-            let images: string | string[] | null = null;
-            if (file) {
-              images = Array.isArray(file)
-                ? file.map(f => `/uploads/${f.newFilename}`)
-                : `/uploads/${file.newFilename}`;
-            }
-            const data = await Article.create({
-              ...fields,
-              image: images || foundArticle.toJSON()?.image,
-            });
-
-            foundArticle.destroy();
-            return Response.success(res, 200, {
-              message: 'Article updated successfuly',
-              data,
-            });
-          }
-        }
-
-        return Response.error(res, 404, {
+      if (!item) {
+        return Response.error(res, 409, {
           message: 'Article is not found',
         });
       }
 
       const { fields, files } = await parseForm(req);
-      // if (!files.media) {
-      //   return Response.error(res, 500, {
-      //     message: 'Please upload image',
-      //   });
-      // }
 
       const file = files.media;
       let images: string | string[] | null = null;
@@ -220,10 +190,10 @@ export default class ArticleController {
       };
 
       item.set(payload);
-
+      const data = await item.save();
       return Response.success(res, 200, {
-        message: 'Article updated successfuly',
-        data: await item.save(),
+        message: 'Article updated successfully',
+        data: data.toJSON(),
       });
     } catch (error) {
       console.log(error);
