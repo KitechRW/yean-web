@@ -1,16 +1,15 @@
 import DefaultApi from 'apis/restful';
 import axios, { AxiosRequestConfig } from 'axios';
 import useSWR from 'swr';
+import Keys from '../constants/keys';
 
 const fetcher = (config: AxiosRequestConfig<any>) =>
   axios.request(config).then(res => res.data);
 
 export default fetcher;
 
-
-
 const openApiAxios = axios.create({
-  baseURL: process.env.DEFAULT_API,
+  baseURL: Keys.DEFAULT_API,
 });
 
 export const openFetcher = async (path: string) => {

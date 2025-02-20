@@ -8,11 +8,11 @@ import { RemoveRedEye } from '@mui/icons-material';
 
 const Blogs = ({ onClick = (id: any) => {}, data = {} }: any) => {
   const router = useRouter();
-    console.log(data);
+  console.log(data);
   return (
     <div className={'flex flex-col items-center space-y-6'}>
       <div className="w-full justify-center max-w-6xl mx-auto flex flex-wrap gap-4">
-        {data?.data?.filter((element: any) => (element.status === 'published')).map((element: any, index: number) => (
+        {data?.data?.map((element: any, index: number) => (
           <div
             key={JSON.stringify(element)}
             role="button"
@@ -31,10 +31,10 @@ const Blogs = ({ onClick = (id: any) => {}, data = {} }: any) => {
               />
               <div className="bottom-0 left-0 right-0 absolute flex flex-col items-start w-ful">
                 <p className="text-dark-green bg-[#FCB316] px-4 py-3">
-                {
-                (element.category_name === null || element.category_name === 'undefined')
-                ? 'Blog': `${element.category_name}`
-                }
+                  {element.category_name === null ||
+                  element.category_name === 'undefined'
+                    ? 'Blog'
+                    : `${element.category_name}`}
                 </p>
                 <p className="w-full bg-[#FCB316] h-1" />
               </div>
@@ -55,9 +55,7 @@ const Blogs = ({ onClick = (id: any) => {}, data = {} }: any) => {
                 alt={element?.author?.firstname}
               />
               <div className="flex flex-col text-[#767676]">
-                <h1 className="text-xs">
-                  {element?.author_name}
-                </h1>
+                <h1 className="text-xs">{element?.author_name}</h1>
                 {element?.createdAt ? (
                   <p className="text-xs">
                     {format(

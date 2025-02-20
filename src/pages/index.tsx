@@ -7,17 +7,15 @@ import MetaData from 'modules/_partials/MetaData';
 import { Banner } from 'types/types';
 
 const LandingPage = ({
-                       data,
-                       articles,
-                       partners,
-                       materials,
-                       banners,
-                     }: {
-  data: any;
-  articles: any;
-  partners: any;
-  materials: any;
+  recentArticles,
+  recentExtensionMaterials,
+  slides,
+  banners,
+}: {
   banners: Banner[];
+  recentArticles: any[];
+  recentExtensionMaterials: any[];
+  slides: any[];
 }) => {
   return (
     <>
@@ -26,9 +24,10 @@ const LandingPage = ({
         <MetaData />
       </Head>
       <LandingActivity
-        data={data}
-        articles={articles}
         banners={banners}
+        recentArticles={recentArticles}
+        recentExtensionMaterials={recentExtensionMaterials}
+        slides={slides}
       />
       <Script src="/assets/js/main.js" />
     </>
@@ -36,33 +35,26 @@ const LandingPage = ({
 };
 
 export async function getServerSideProps() {
-  let results = null;
-  let resultArticles = null;
   let partners = null;
 
-  let materials = null;
   let banners = null;
-
-  
+  let recentArticles = [];
+  let recentExtensionMaterials = [];
+  let slides = [];
   try {
-    const { data } = await Http.axios.get(`/api/articles?limit=6`);
-    results = data?.data;
-  } catch (error) {
-    console.log(error);
-  }
-
-  try {
-    const { data: articles } = await Http.axios.get(
-      '/api/landing/1?attributes=id,title,author_name,comment,views,category_name,status,image,subcategory_name,type',
-    );
-    resultArticles = articles?.data;
+    const { data } = await Http.axios.get('/api/landing');
+    recentArticles = data?.recentArticles || [];
+    slides = data?.slides || [];
+    recentExtensionMaterials = data?.recentExtensionMaterials || [];
   } catch (error: any) {
-    console.log(error.message);
+    console.error(error);
   }
 
   // Fetch banners
   try {
-    const { data: bannersResponse } = await Http.axios.get('/api/banners');
+    const { data: bannersResponse } = await Http.axios.get(
+      '/api/banners',
+    );
     banners = bannersResponse;
   } catch (error) {
     console.log('Error fetching banners:', error);
@@ -70,11 +62,11 @@ export async function getServerSideProps() {
 
   return {
     props: {
-      data: results,
-      articles: resultArticles,
       partners,
-      materials,
       banners,
+      recentArticles,
+      recentExtensionMaterials,
+      slides,
     },
   };
 }

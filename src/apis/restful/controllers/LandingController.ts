@@ -3,7 +3,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import ArticleServices from 'apis/services/articleServices';
 import DB from 'apis/database';
 
-const { Articles: Article, Landings: Landing, } = DB;
+const { Articles: Article, Landings: Landing } = DB;
 export default class LandingController {
   static async getOne(req: NextApiRequest, res: NextApiResponse) {
     const { id } = req.query;
@@ -45,9 +45,36 @@ export default class LandingController {
 
   static async getAll(req: NextApiRequest, res: NextApiResponse) {
     try {
+      const recentArticles = await Article.findAll({
+        where: {
+          type: 'BLOG',
+          status: 'published',
+        },
+        order: [['createdAt', 'DESC']],
+        limit: 8,
+      });
+      const recentExtensionMaterials = await Article.findAll({
+        where: {
+          type: 'EXTENSION_MATERIAL',
+          status: 'published',
+        },
+        order: [['createdAt', 'DESC']],
+        limit: 8,
+      });
+      const slides = await Article.findAll({
+        where: {
+          is_slide: true,
+          status: 'published',
+        },
+        order: [['createdAt', 'DESC']],
+        limit: 6,
+      });
       return Response.success(res, 200, {
-        message: 'Landings fetched successfuly',
+        message: 'Landings fetched successfully',
         data: await Landing.findAndCountAll(),
+        recentArticles,
+        recentExtensionMaterials,
+        slides,
       });
     } catch (error) {
       return Response.error(res, 500, {
@@ -61,7 +88,6 @@ export default class LandingController {
     res: NextApiResponse,
   ) {
     try {
-      
       const articles = await ArticleServices.findAndCountAll(
         undefined,
         [

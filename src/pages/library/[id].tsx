@@ -6,10 +6,11 @@ import axios from 'axios';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import ViewBook from 'modules/_partials/PDFPreview/ViewBook';
+import Keys from 'apis/utils/constants/keys';
 
 const getBook = (id: number) => {
   return axios
-    .get(`${process.env.DEFAULT_API}/api/libraries/${id}`)
+    .get(`${Keys.DEFAULT_API}/api/libraries/${id}`)
     .then(resp => {
       return resp.data;
     })
