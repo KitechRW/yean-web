@@ -60,7 +60,14 @@ jobs:
             yarn --version
 
             # Check the current branch and select the appropriate script 
-            BRANCH_NAME="$(git symbolic-ref --short HEAD)"
+            if [[ "${{ github.event_name }}" == "push" ]]; then
+            BRANCH_NAME="${{ github.ref_name }}"
+            elif [[ "${{ github.event_name }}" == "pull_request" ]]; then
+              BRANCH_NAME="${{ github.head_ref }}"
+            else
+              echo "Unsupported event type: ${{ github.event_name }}"
+              exit 1
+            fi
             if [ "$BRANCH_NAME" == "main" ]; then SCRIPT_PATH="/scripts/build.sh"
             else SCRIPT_PATH="/scripts/builddev.sh"
             fi
