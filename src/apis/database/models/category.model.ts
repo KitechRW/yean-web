@@ -16,6 +16,7 @@ const CategoryModel = (sequelize: Sequelize) => {
         allowNull: false,
       },
       image: DataTypes.STRING,
+      parent_id: DataTypes.INTEGER,
     },
     {
       tableName: 'tbl_category',

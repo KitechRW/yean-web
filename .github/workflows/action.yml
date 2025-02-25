@@ -62,13 +62,11 @@ jobs:
             nvm --version
             yarn --version
 
-            # Check the current branch and select the appropriate script
-            if [ "$(git symbolic-ref --short HEAD)" == "main" ]; then
-              SCRIPT_PATH="/scripts/build.sh"
-            else
-              SCRIPT_PATH="/scripts/builddev.sh"
+            # Check the current branch and select the appropriate script 
+            BRANCH_NAME="$(git symbolic-ref --short HEAD)"
+            if [ "$BRANCH_NAME" == "main" ]; then SCRIPT_PATH="/scripts/build.sh"
+            else SCRIPT_PATH="/scripts/builddev.sh"
             fi
-
-            # Run the script
-            bash "$SCRIPT_PATH"
+            # Run the script and pass the branch name as an argument 
+            bash "$SCRIPT_PATH" "$BRANCH_NAME"
           EOF

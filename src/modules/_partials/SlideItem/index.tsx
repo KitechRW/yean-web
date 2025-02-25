@@ -6,11 +6,10 @@ import axios from 'axios';
 const SlideItem = ({ data }: { data: any }) => {
   const router = useRouter();
   let viewIncrement = 0;
-  const handleClick = async() => {
-    router.push(`/blog/${data?.id}`);
-    viewIncrement = data?.views + 1; 
-    const {result}: any = await axios.patch(`/api/views/${data?.id}`, {views: viewIncrement});
-
+  const handleClick = async () => {
+    router.push(`/blog/${data?.slug || data?.id}`);
+    viewIncrement = data?.views + 1;
+    axios.patch(`/api/views/${data?.id}`, { views: viewIncrement });
   };
   let image: string = data?.image || '';
   image = image.startsWith('/uploads') ? image : `/uploads/${image}`;

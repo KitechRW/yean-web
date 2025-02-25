@@ -4,48 +4,34 @@ import ArticleServices from 'apis/services/articleServices';
 import removeFile, { parseForm } from 'apis/utils/libForm';
 import { paginate } from 'apis/utils/pagnation';
 import DB from 'apis/database';
-
+import { Op, WhereOptions } from 'sequelize';
 
 const { Articles: Article } = DB;
 
 export default class ArticleController {
   static async getOne(req: NextApiRequest, res: NextApiResponse) {
     const { id } = req.query;
-    const material = Number(req.query.material) > 0;
     try {
-      const materialParams = [];
-      if (material) {
-        materialParams.push(
-          'category_name',
-          'subcategory_name',
-          'slug',
-          
-        );
-      }
-      const query: any = {};
-      if (material && !Number(id)) {
-        query.slug = id;
-      } else {
-        query.id = id;
-      }
+      const where: WhereOptions<any> = {
+        [Op.or]: [[{ id: `${id}` }], [{ slug: `${id}` }]],
+      };
       return Response.success(res, 200, {
         message: 'Articles fetched successfuly',
         data: await ArticleServices.findOne(
-          query,
+          where,
           [
             'id',
             'title',
             'image',
-            'author_name',
+            'author_id',
+            'category_id',
+            'slug',
+            'type',
             'text',
             'views',
-            'category_name',
-          'subcategory_name',
             'updatedAt',
           ],
           ['firstname', 'lastname', 'profile_image'],
-          //@ts-ignore
-          material,
         ),
       });
     } catch (error: any) {
@@ -57,75 +43,66 @@ export default class ArticleController {
     }
   }
 
-  static async UpdateViews(req: NextApiRequest, res: NextApiResponse) {
-  const {id} = req.query;
-  const {views}: any = req.body;
-try{
-  const result = await Article.update(
-  {views},
-  {where: {id} }
- );
- if(result[0] === 0) {
-  return res.status(404)
- }
-}catch(error: any){
-  console.log(error);
-}
-}
+  static async UpdateViews(
+    req: NextApiRequest,
+    res: NextApiResponse,
+  ) {
+    const { id } = req.query;
+    const { views }: any = req.body;
+    try {
+      const result = await Article.update(
+        { views },
+        { where: { id } },
+      );
+      if (result[0] === 0) {
+        return res.status(404);
+      }
+    } catch (error: any) {
+      console.log(error);
+    }
+  }
 
   static async getAll(req: NextApiRequest, res: NextApiResponse) {
     try {
-      let { page = 1, limit = 10, cat, sub } = req.query;
-      const material = Number(req.query.material) > 0;
-      const materialParams = [];
-      if (material) {
-        materialParams.push(
-          'category_name',
-          'subcategory_name',
-          'slug',
-          // 'material',
-        );
-      }
+      let { page = 1, limit = 10, cat, status } = req.query;
       page = Number(page);
       limit = Number(limit);
-      const where: any = {};
-      if (String(cat)) {
-        where.category_name = cat;
+      const where: WhereOptions<any> = {};
+      if (cat) {
+        where.category_id = String(cat);
       }
-      if (String(sub)) {
-        where.subcategory_name = sub;
+      if (status) {
+        where.status = String(status);
       }
       const offset = (page - 1) * limit;
       const { rows, count } = await ArticleServices.findAndCountAll(
-        (cat && sub) ? where : undefined,
+        where,
         [
           'id',
           'title',
           'image',
-          'author_name',
           'views',
           'status',
-          'slide',
-          'Type',
-          'category_name',
-          'subcategory_name',
+          'slug',
+          'is_slide',
+          'type',
+          'text',
+          'category_id',
+          'author_id',
           'createdAt',
           'updatedAt',
         ],
-        ['firstname', 'lastname', 'profile_image'],
+        ['firstname', 'lastname', 'profile_image', 'email'],
         limit,
         offset,
-        // //@ts-ignore
-        // material,
       );
       const pagination = paginate(page, count, rows, limit);
-      
+
       return Response.success(res, 200, {
-        message: 'Articles fetched successfuly',
+        message: 'Articles fetched successfully',
         pagination,
         data: rows,
       });
-
     } catch (error: any) {
       console.log(error);
       return Response.error(res, 500, {
@@ -136,9 +113,8 @@ try{
   }
 
   static async create(req: NextApiRequest, res: NextApiResponse) {
-    
     try {
-      const { fields, files} = await parseForm(req);
+      const { fields, files } = await parseForm(req);
       if (!files.media) {
         return Response.error(res, 500, {
           message: 'Please upload image',
@@ -149,7 +125,6 @@ try{
       let images = Array.isArray(file)
         ? file.map(f => `/uploads/${f.newFilename}`)
         : `/uploads/${file.newFilename}`;
-      
 
       const payload = {
         ...fields,
@@ -157,10 +132,8 @@ try{
       };
       return Response.success(res, 200, {
         message: 'Article created successfuly',
-        //@ts-ignore
         data: await ArticleServices.create(payload),
       });
-
     } catch (error: any) {
       console.log(error);
       return Response.error(res, 500, {
@@ -172,47 +145,17 @@ try{
 
   static async update(req: NextApiRequest, res: NextApiResponse) {
     const { id } = req.query;
-    const material = Number(req.query.material) > 0;
     try {
-      const ArticleModel =  Article;
+      const ArticleModel = Article;
       const item = await ArticleModel.findByPk(`${id}`);
 
-      if (!item?.toJSON()) {
-        if (material) {
-          const foundArticle = await Article.findByPk(`${id}`);
-          if (foundArticle) {
-            const { fields, files } = await parseForm(req);
-            const file = files.media;
-            let images: string | string[] | null = null;
-            if (file) {
-              images = Array.isArray(file)
-                ? file.map(f => `/uploads/${f.newFilename}`)
-                : `/uploads/${file.newFilename}`;
-            }
-            const data = await Article.create({
-              ...fields,
-              image: images || foundArticle.toJSON()?.image,
-            });
-
-            foundArticle.destroy();
-            return Response.success(res, 200, {
-              message: 'Article updated successfuly',
-              data,
-            });
-          }
-        }
-
-        return Response.error(res, 404, {
+      if (!item) {
+        return Response.error(res, 409, {
           message: 'Article is not found',
         });
       }
 
       const { fields, files } = await parseForm(req);
-      // if (!files.media) {
-      //   return Response.error(res, 500, {
-      //     message: 'Please upload image',
-      //   });
-      // }
 
       const file = files.media;
       let images: string | string[] | null = null;
@@ -232,10 +175,10 @@ try{
       };
 
       item.set(payload);
-
+      const data = await item.save();
       return Response.success(res, 200, {
-        message: 'Article updated successfuly',
-        data: await item.save(),
+        message: 'Article updated successfully',
+        data: data.toJSON(),
       });
     } catch (error) {
       console.log(error);
@@ -251,7 +194,7 @@ try{
     try {
       const item = await ArticleServices.findByPk(
         Number(id),
-      //@ts-ignore
+        //@ts-ignore
         material,
       );
       if (!item) {
@@ -261,11 +204,11 @@ try{
       }
       removeFile(item.toJSON()?.image);
       return Response.success(res, 200, {
-        message: 'Articles deleted successfuly',
+        message: 'Articles deleted successfully',
         data: await item.destroy(),
       });
     } catch (error) {
-      console.log(error)
+      console.log(error);
       return Response.error(res, 500, {
         message: 'something went wrong',
       });

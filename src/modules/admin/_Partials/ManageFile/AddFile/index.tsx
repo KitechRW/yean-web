@@ -23,12 +23,20 @@ interface AddFileProps {
 }
 
 const AddFile: React.FC<AddFileProps> = ({
-                                           children,
-                                           onAdd,
-                                           maxFileSize = 10 * 1024 * 1024,
-                                           allowedTypes = ['.pdf', '.doc', '.docx', '.xls', '.xlsx', '.ppt', '.pptx'],
-                                           className
-                                         }) => {
+  children,
+  onAdd,
+  maxFileSize = 10 * 1024 * 1024,
+  allowedTypes = [
+    '.pdf',
+    '.doc',
+    '.docx',
+    '.xls',
+    '.xlsx',
+    '.ppt',
+    '.pptx',
+  ],
+  className,
+}) => {
   const [open, setOpen] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
@@ -56,9 +64,14 @@ const AddFile: React.FC<AddFileProps> = ({
       return `File size exceeds ${formatFileSize(maxFileSize)} limit`;
     }
 
-    const fileExtension = `.${file.name.split('.').pop()?.toLowerCase()}`;
+    const fileExtension = `.${file.name
+      .split('.')
+      .pop()
+      ?.toLowerCase()}`;
     if (!allowedTypes.includes(fileExtension)) {
-      return `File type not allowed. Accepted types: ${allowedTypes.join(', ')}`;
+      return `File type not allowed. Accepted types: ${allowedTypes.join(
+        ', ',
+      )}`;
     }
 
     return null;
@@ -77,7 +90,9 @@ const AddFile: React.FC<AddFileProps> = ({
     setError(null);
   };
 
-  const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileSelect = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
     const files = event.target.files;
     if (files && files.length > 0) {
       handleFile(files[0]);
@@ -126,9 +141,11 @@ const AddFile: React.FC<AddFileProps> = ({
 
       const xhr = new XMLHttpRequest();
 
-      xhr.upload.onprogress = (event) => {
+      xhr.upload.onprogress = event => {
         if (event.lengthComputable) {
-          const progress = Math.round((event.loaded / event.total) * 100);
+          const progress = Math.round(
+            (event.loaded / event.total) * 100,
+          );
           setUploadProgress(progress);
         }
       };
@@ -152,7 +169,11 @@ const AddFile: React.FC<AddFileProps> = ({
       xhr.open('POST', '/api/upload');
       xhr.send(formData);
 
-      const response = await uploadPromise as { success: boolean; data: FileRecord; error?: string };
+      const response = (await uploadPromise) as {
+        success: boolean;
+        data: FileRecord;
+        error?: string;
+      };
 
       if (!response.success || response.error) {
         throw new Error(response.error || 'Upload failed');
@@ -162,7 +183,9 @@ const AddFile: React.FC<AddFileProps> = ({
       handleClose();
     } catch (error) {
       console.error('Upload error:', error);
-      setError(error instanceof Error ? error.message : 'Upload failed');
+      setError(
+        error instanceof Error ? error.message : 'Upload failed',
+      );
     } finally {
       setUploading(false);
     }
@@ -173,7 +196,9 @@ const AddFile: React.FC<AddFileProps> = ({
     const k = 1024;
     const sizes = ['Bytes', 'KB', 'MB', 'GB'];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return `${parseFloat((bytes / Math.pow(k, i)).toFixed(2))} ${sizes[i]}`;
+    return `${parseFloat((bytes / Math.pow(k, i)).toFixed(2))} ${
+      sizes[i]
+    }`;
   };
 
   return (
@@ -205,7 +230,7 @@ const AddFile: React.FC<AddFileProps> = ({
               fullWidth
               label="File Name"
               value={title}
-              onChange={(e) => setTitle(e.target.value)}
+              onChange={e => setTitle(e.target.value)}
               required
               disabled={uploading}
               margin="normal"
@@ -227,11 +252,17 @@ const AddFile: React.FC<AddFileProps> = ({
                 cursor-pointer flex flex-col items-center justify-center
                 w-full h-32 border-2 border-dashed rounded-lg
                 mt-4 transition-colors duration-200
-                ${uploading ? 'bg-gray-50' :
-                isDragging ? 'border-green-500 bg-green-50' :
-                  error ? 'border-red-300 bg-red-50' :
-                    selectedFile ? 'border-green-500 bg-green-100' :
-                      'border-green-500 hover:border-green-600'}
+                ${
+                  uploading
+                    ? 'bg-gray-50'
+                    : isDragging
+                    ? 'border-green-500 bg-green-50'
+                    : error
+                    ? 'border-red-300 bg-red-50'
+                    : selectedFile
+                    ? 'border-green-500 bg-green-100'
+                    : 'border-green-500 hover:border-green-600'
+                }
               `}
               onDragEnter={handleDragIn}
               onDragLeave={handleDragOut}
@@ -268,7 +299,11 @@ const AddFile: React.FC<AddFileProps> = ({
 
             {uploading && (
               <div className="mt-4">
-                <LinearProgress variant="determinate" value={uploadProgress} color="primary" />
+                <LinearProgress
+                  variant="determinate"
+                  value={uploadProgress}
+                  color="primary"
+                />
                 <p className="text-xs text-gray-500 mt-1 text-center">
                   Uploading... {uploadProgress}%
                 </p>
@@ -277,7 +312,9 @@ const AddFile: React.FC<AddFileProps> = ({
           </DialogContent>
 
           <DialogActions>
-            <Button className={"bg-green-300 hover:bg-green-500 text-gray-600"}
+            <Button
+              type="button"
+              variant="text"
               onClick={handleClose}
               disabled={uploading}
             >
@@ -285,7 +322,7 @@ const AddFile: React.FC<AddFileProps> = ({
             </Button>
             <Button
               type="submit"
-              variant="contained"
+              variant="outlined"
               disabled={!selectedFile || uploading}
               color="primary"
             >

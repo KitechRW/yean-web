@@ -1,31 +1,40 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import Head from 'next/head';
 import BlogActivity from 'modules/activities/BlogActivity';
-import { useRouter } from 'next/router';
-import { useOpenFetcher } from 'apis/utils/fetcher';
 import MetaData from 'modules/_partials/MetaData';
+import Http from 'core/factory/fact.http';
+import Keys from 'apis/utils/constants/keys';
 
-const SingleExtensionMaterial = () => {
-  const {
-    query: { pageNumber, cat, id, category_name, sub, views },
-  } = useRouter();
+export async function getServerSideProps({
+  query: { pageNumber, id },
+}: any) {
+  return Http.axios
+    .get(
+      `${Keys.DEFAULT_API}/api/articles?page=${
+        pageNumber || 1
+      }&limit=20&cat=${id}&status=published`,
+    )
+    .then(resp => {
+      return {
+        props: { data: resp.data, status: resp.status, id },
+      };
+    })
+    .catch(ex => {
+      console.error(ex);
+      return {
+        props: { data: {}, status: 404 },
+      };
+    });
+}
 
-  const { data } = useOpenFetcher(
-    `/api/articles?page=${
-      pageNumber || 1
-    }&limit=20&cat=${category_name}&sub=${sub}&material=1&views=${views}`, 
-  );
-  
+const SingleExtensionMaterial = ({ data, id }: any) => {
   return (
     <>
       <Head>
         <title>Yean</title>
         <MetaData />
       </Head>
-      <BlogActivity
-        data={data}
-        extension={{ id, cat, category_name, sub }}
-      />
+      <BlogActivity data={data} extension={{ id }} />
     </>
   );
 };

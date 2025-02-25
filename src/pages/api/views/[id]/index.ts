@@ -4,7 +4,7 @@ import Response from 'apis/utils/helpers/response';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { withSessionRoute } from 'system/lib/withSession';
 
-function handler(req: NextApiRequest, res: NextApiResponse) {
+export default function handler(req: NextApiRequest, res: NextApiResponse) {
   switch (req.method) {
     case 'PATCH':
       return ArticleController.UpdateViews(req, res);
@@ -15,9 +15,9 @@ function handler(req: NextApiRequest, res: NextApiResponse) {
   }
 }
 
-export default withSessionRoute(
-  withRoles(handler, ['admin','member' ], ['PATCH']),
-);
+// export default withSessionRoute(
+//   withRoles(handler, ['admin','member' ], ['PATCH']),
+// );
 
 export const config = {
   api: {

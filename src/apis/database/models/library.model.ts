@@ -14,12 +14,12 @@ const LibraryModel = (sequelize: Sequelize) => {
       size: DataTypes.BIGINT,
       name: DataTypes.TEXT,
       cat: DataTypes.BIGINT,
-      desc: DataTypes.TEXT,
+      // desc: DataTypes.TEXT,
       cover: DataTypes.STRING,
     },
     {
       tableName: 'library',
-      timestamps: true,
+      timestamps: false,
       sequelize,
     },
   );

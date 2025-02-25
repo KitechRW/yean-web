@@ -3,13 +3,14 @@ import React from 'react';
 import LibraryActivity from 'modules/activities/LibraryActivity';
 import axios from 'axios';
 import MetaData from 'modules/_partials/MetaData';
+import Keys from 'apis/utils/constants/keys';
 
 export async function getServerSideProps({
   query: { pageNumber },
 }: any) {
   return axios
     .get(
-      `${process.env.DEFAULT_API}/api/libraries?page=${
+      `${Keys.DEFAULT_API}/api/libraries?page=${
         pageNumber || 1
       }&limit=20`,
     )

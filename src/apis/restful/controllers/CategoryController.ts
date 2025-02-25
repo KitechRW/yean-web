@@ -23,7 +23,7 @@ export default class CategoryController {
   static async getAll(req: NextApiRequest, res: NextApiResponse) {
     try {
       return Response.success(res, 200, {
-        message: 'Categorys fetched successfuly',
+        message: 'Categories fetched successfully',
         data: await Category.findAndCountAll(),
       });
     } catch (error) {
@@ -51,11 +51,18 @@ export default class CategoryController {
         ...fields,
         image: images,
       };
+
       return Response.success(res, 200, {
-        message: 'category created successfuly',
+        message: 'Category created successfully',
         data: await Category.create(payload),
       });
-    } catch (error) {
+    } catch (error: any) {
+      console.log(error);
+      if (error.name === 'SequelizeUniqueConstraintError') {
+        return Response.error(res, 403, {
+          message: 'Category already exists',
+        });
+      }
       return Response.error(res, 500, {
         message: 'something went wrong',
       });
@@ -97,7 +104,13 @@ export default class CategoryController {
         message: 'category updated successfuly',
         data: await item.save(),
       });
-    } catch (error) {
+    } catch (error: any) {
+      console.log(error);
+      if (error.name === 'SequelizeUniqueConstraintError') {
+        return Response.error(res, 403, {
+          message: 'Category already exists',
+        });
+      }
       return Response.error(res, 500, {
         message: 'something went wrong',
       });

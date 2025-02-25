@@ -52,19 +52,25 @@ interface ViewFileProps {
   onDelete: (id: string) => void;
 }
 
-const ViewFile: React.FC<ViewFileProps> = ({ data, onEdit, onDelete }) => {
+const ViewFile: React.FC<ViewFileProps> = ({
+  data,
+  onEdit,
+  onDelete,
+}) => {
   const [fileData, setFileData] = useState<FileRecord>(data);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [shareDialogOpen, setShareDialogOpen] = useState(false);
   const [previewDialogOpen, setPreviewDialogOpen] = useState(false);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
-  const [previewContent, setPreviewContent] = useState<string | null>(null);
+  const [previewContent, setPreviewContent] = useState<string | null>(
+    null,
+  );
   const [editedName, setEditedName] = useState(data.originalName);
   const [isLoading, setIsLoading] = useState(false);
   const [snackbar, setSnackbar] = useState({
     open: false,
     message: '',
-    severity: 'success' as 'success' | 'error'
+    severity: 'success' as 'success' | 'error',
   });
 
   useEffect(() => {
@@ -77,19 +83,31 @@ const ViewFile: React.FC<ViewFileProps> = ({ data, onEdit, onDelete }) => {
     const k = 1024;
     const sizes = ['Bytes', 'KB', 'MB', 'GB'];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return `${parseFloat((bytes / Math.pow(k, i)).toFixed(2))} ${sizes[i]}`;
+    return `${parseFloat((bytes / Math.pow(k, i)).toFixed(2))} ${
+      sizes[i]
+    }`;
   };
 
   const getFileIcon = (mimeType: string) => {
-    if (mimeType.startsWith('image/')) return <Image className="text-green-600" />;
-    if (mimeType.startsWith('video/')) return <VideoFile className="text-green-600" />;
-    if (mimeType.startsWith('audio/')) return <AudioFile className="text-green-600" />;
-    if (mimeType === 'application/pdf') return <PictureAsPdf className="text-green-700" />;
-    if (mimeType.includes('text/') ||
+    if (mimeType.startsWith('image/'))
+      return <Image className="text-green-600" />;
+    if (mimeType.startsWith('video/'))
+      return <VideoFile className="text-green-600" />;
+    if (mimeType.startsWith('audio/'))
+      return <AudioFile className="text-green-600" />;
+    if (mimeType === 'application/pdf')
+      return <PictureAsPdf className="text-green-700" />;
+    if (
+      mimeType.includes('text/') ||
       mimeType.includes('application/json') ||
-      mimeType.includes('application/xml')) return <Code className="text-green-700" />;
-    if (mimeType.includes('document') ||
-      mimeType.includes('text/plain')) return <Description className="text-green-700" />;
+      mimeType.includes('application/xml')
+    )
+      return <Code className="text-green-700" />;
+    if (
+      mimeType.includes('document') ||
+      mimeType.includes('text/plain')
+    )
+      return <Description className="text-green-700" />;
     return <InsertDriveFile className="text-green-600" />;
   };
 
@@ -144,11 +162,14 @@ const ViewFile: React.FC<ViewFileProps> = ({ data, onEdit, onDelete }) => {
             </a> instead.</p>
           </object>
         `);
-      } else if (fileData.mimeType.includes('text/') ||
+      } else if (
+        fileData.mimeType.includes('text/') ||
         fileData.mimeType.includes('application/json') ||
-        fileData.mimeType.includes('application/xml')) {
+        fileData.mimeType.includes('application/xml')
+      ) {
         const response = await fetch(fileData.publicUrl);
-        if (!response.ok) throw new Error('Failed to fetch file content');
+        if (!response.ok)
+          throw new Error('Failed to fetch file content');
         const text = await response.text();
         setPreviewContent(`
           <pre class="whitespace-pre-wrap break-words p-4 bg-gray-50 rounded-md max-h-[80vh] overflow-auto">
@@ -165,7 +186,7 @@ const ViewFile: React.FC<ViewFileProps> = ({ data, onEdit, onDelete }) => {
       setSnackbar({
         open: true,
         message: 'Failed to load preview',
-        severity: 'error'
+        severity: 'error',
       });
     } finally {
       setIsLoading(false);
@@ -188,7 +209,7 @@ const ViewFile: React.FC<ViewFileProps> = ({ data, onEdit, onDelete }) => {
       setSnackbar({
         open: true,
         message: 'Download started',
-        severity: 'success'
+        severity: 'success',
       });
       handleMenuClose();
     } catch (error) {
@@ -196,7 +217,7 @@ const ViewFile: React.FC<ViewFileProps> = ({ data, onEdit, onDelete }) => {
       setSnackbar({
         open: true,
         message: 'Failed to download file',
-        severity: 'error'
+        severity: 'error',
       });
     }
   };
@@ -213,14 +234,14 @@ const ViewFile: React.FC<ViewFileProps> = ({ data, onEdit, onDelete }) => {
       setSnackbar({
         open: true,
         message: 'File deleted successfully',
-        severity: 'success'
+        severity: 'success',
       });
     } catch (error) {
       console.error('Delete error:', error);
       setSnackbar({
         open: true,
         message: 'Failed to delete file',
-        severity: 'error'
+        severity: 'error',
       });
     }
     handleMenuClose();
@@ -231,7 +252,7 @@ const ViewFile: React.FC<ViewFileProps> = ({ data, onEdit, onDelete }) => {
       setSnackbar({
         open: true,
         message: 'File name cannot be empty',
-        severity: 'error'
+        severity: 'error',
       });
       return;
     }
@@ -256,14 +277,14 @@ const ViewFile: React.FC<ViewFileProps> = ({ data, onEdit, onDelete }) => {
       setSnackbar({
         open: true,
         message: 'File renamed successfully',
-        severity: 'success'
+        severity: 'success',
       });
     } catch (error) {
       console.error('Edit error:', error);
       setSnackbar({
         open: true,
         message: 'Failed to rename file',
-        severity: 'error'
+        severity: 'error',
       });
     }
   };
@@ -271,11 +292,15 @@ const ViewFile: React.FC<ViewFileProps> = ({ data, onEdit, onDelete }) => {
   const handleShare = async () => {
     try {
       if (!fileData.shareId) {
-        const response = await fetch(`/api/files/${fileData.id}/share`, {
-          method: 'POST',
-        });
+        const response = await fetch(
+          `/api/files/${fileData.id}/share`,
+          {
+            method: 'POST',
+          },
+        );
 
-        if (!response.ok) throw new Error('Failed to generate share link');
+        if (!response.ok)
+          throw new Error('Failed to generate share link');
 
         const updatedFile = await response.json();
         setFileData(updatedFile);
@@ -286,7 +311,7 @@ const ViewFile: React.FC<ViewFileProps> = ({ data, onEdit, onDelete }) => {
       setSnackbar({
         open: true,
         message: 'Failed to generate share link',
-        severity: 'error'
+        severity: 'error',
       });
     }
     handleMenuClose();
@@ -302,13 +327,13 @@ const ViewFile: React.FC<ViewFileProps> = ({ data, onEdit, onDelete }) => {
       setSnackbar({
         open: true,
         message: 'Share link copied to clipboard',
-        severity: 'success'
+        severity: 'success',
       });
     } catch (error) {
       setSnackbar({
         open: true,
         message: 'Failed to copy share link',
-        severity: 'error'
+        severity: 'error',
       });
     }
   };
@@ -319,7 +344,7 @@ const ViewFile: React.FC<ViewFileProps> = ({ data, onEdit, onDelete }) => {
         <div className="p-4 flex items-center justify-between">
           <div className="flex items-center gap-4 flex-grow min-w-0">
             {getFileIcon(fileData.mimeType)}
-            <div className="flex-grow min-w-0">
+            <div className="flex-grow flex flex-col min-w-0">
               <Typography
                 variant="subtitle1"
                 className="font-medium truncate text-green-800"
@@ -327,14 +352,21 @@ const ViewFile: React.FC<ViewFileProps> = ({ data, onEdit, onDelete }) => {
               >
                 {fileData.originalName}
               </Typography>
-              <Typography variant="body2" className="text-green-700 flex gap-2 items-center">
+              <Typography
+                variant="body2"
+                className="text-gray-700 flex gap-2 items-center flex-col"
+              >
                 <span>{formatFileSize(fileData.size)}</span>
-                <span>•</span>
-                <span>
-                  Uploaded {formatDistanceToNow(new Date(fileData.uploadDate), { addSuffix: true })}
+                <span className='whitespace-nowrap'>
+                  Uploaded{' '}
+                  {formatDistanceToNow(
+                    new Date(fileData.uploadDate),
+                    { addSuffix: true },
+                  )}
                 </span>
-                <span>•</span>
-                <span>{fileData.downloads} downloads</span>
+                {fileData.downloads && (
+                  <span>{fileData.downloads} downloads</span>
+                )}
               </Typography>
             </div>
           </div>
@@ -345,7 +377,11 @@ const ViewFile: React.FC<ViewFileProps> = ({ data, onEdit, onDelete }) => {
               disabled={isLoading}
               className="text-green-600 hover:text-green-800"
             >
-              {isLoading ? <CircularProgress size={24} /> : <Visibility />}
+              {isLoading ? (
+                <CircularProgress size={24} />
+              ) : (
+                <Visibility />
+              )}
             </IconButton>
             <IconButton
               onClick={handleMenuOpen}
@@ -378,7 +414,10 @@ const ViewFile: React.FC<ViewFileProps> = ({ data, onEdit, onDelete }) => {
         >
           <Edit /> Edit
         </MenuItem>
-        <MenuItem onClick={handleDelete} className="gap-2 text-red-500">
+        <MenuItem
+          onClick={handleDelete}
+          className="gap-2 text-red-500"
+        >
           <Delete /> Delete
         </MenuItem>
       </Menu>
@@ -392,7 +431,8 @@ const ViewFile: React.FC<ViewFileProps> = ({ data, onEdit, onDelete }) => {
         <DialogTitle>Share File</DialogTitle>
         <DialogContent>
           <Typography variant="body2" className="mb-4">
-            Share this link with others to give them access to the file:
+            Share this link with others to give them access to the
+            file:
           </Typography>
           <div className="flex gap-2">
             <TextField
@@ -424,7 +464,7 @@ const ViewFile: React.FC<ViewFileProps> = ({ data, onEdit, onDelete }) => {
         maxWidth="lg"
         fullWidth
         PaperProps={{
-          className: 'min-h-[60vh] max-h-[90vh]'
+          className: 'min-h-[60vh] max-h-[90vh]',
         }}
       >
         <DialogTitle>
@@ -478,14 +518,17 @@ const ViewFile: React.FC<ViewFileProps> = ({ data, onEdit, onDelete }) => {
             fullWidth
             variant="outlined"
             value={editedName}
-            onChange={(e) => setEditedName(e.target.value)}
-            onKeyPress={(e) => {
+            onChange={e => setEditedName(e.target.value)}
+            onKeyPress={e => {
               if (e.key === 'Enter') handleEditSubmit();
             }}
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setEditDialogOpen(false)} color="secondary">
+          <Button
+            onClick={() => setEditDialogOpen(false)}
+            color="secondary"
+          >
             Cancel
           </Button>
           <Button onClick={handleEditSubmit} color="primary">

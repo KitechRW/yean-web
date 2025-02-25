@@ -27,9 +27,11 @@ export default class AuthController {
       const userData = {
         id: user.id,
         email: user.email,
+        firstname: user.firstname,
+        lastname: user.lastname,
       };
       const token = signinToken(userData);
-      const emailOptions:any = {
+      const emailOptions: any = {
         email: user.email,
         message: await emailMocks.verifyAccount({
           ...userData,
@@ -88,14 +90,14 @@ export default class AuthController {
       const userData = {
         id: inUser.id,
         email: inUser.email,
-        type:inUser.type,
+        type: inUser.type,
       };
       const token = signinToken(userData);
 
       req.session.user = userData;
       req.session.token = token;
       await req.session.save();
-      
+
       return Response.success(res, 200, {
         message: 'login successfully',
         user: userData,
@@ -151,8 +153,7 @@ export default class AuthController {
           active: true,
         },
       });
-    } catch (err:any) {
-      
+    } catch (err: any) {
       console.log(err);
       const message = err.message || 'something went wrong';
       return Response.error(res, 500, { message });
@@ -165,7 +166,7 @@ export default class AuthController {
    * @param {Response} res Response
    */
   static async logout(req: NextApiRequest, res: NextApiResponse) {
-    const isLogged: any = await isloggedIn(req,res);
+    const isLogged: any = await isloggedIn(req, res);
     if (!isLogged) {
       return Response.error(res, 404, {
         message: "you aren't logged in",
@@ -173,13 +174,15 @@ export default class AuthController {
     }
     try {
       let user: any = isLogged;
-      user = await UserService.update({status:0},{email:user.email})
+      user = await UserService.update(
+        { status: 0 },
+        { email: user.email },
+      );
       // req.session.destroy();
       return Response.success(res, 201, {
         message: 'logout successfully',
       });
     } catch (error: any) {
-      
       console.log(error);
       return Response.error(res, 500, {
         message: 'something went wrong',
@@ -213,7 +216,7 @@ export default class AuthController {
         email: inUser.email,
       };
       const token = signinToken(userData);
-      const emailOptions:any = {
+      const emailOptions: any = {
         email: inUser.email,
         message: await emailMocks.forgetPassword({
           ...inUser,
@@ -226,7 +229,6 @@ export default class AuthController {
         message: 'check your email',
       });
     } catch (error: any) {
-      
       console.log(error);
       return Response.error(res, 500, {
         message: 'something went wrong',
@@ -269,7 +271,7 @@ export default class AuthController {
           error: err.message,
         });
       }
-      
+
       console.log(err);
       return Response.error(res, 500, {
         message: 'server errror',
@@ -284,13 +286,13 @@ export default class AuthController {
    * @param {Response} res Response
    */
   static async getProfile(req: NextApiRequest, res: NextApiResponse) {
-    const isLogged: any = await isloggedIn(req,res);
+    const isLogged: any = await isloggedIn(req, res);
     if (!isLogged) {
       return Response.error(res, 404, {
         message: "you aren't logged in",
       });
     }
-    
+
     try {
       isLogged.password = undefined;
       return Response.success(res, 201, {
@@ -298,7 +300,6 @@ export default class AuthController {
         profile: isLogged,
       });
     } catch (error: any) {
-      
       console.log(error);
       return Response.error(res, 500, {
         message: 'something went wrong',

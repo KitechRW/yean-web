@@ -3,7 +3,9 @@ import { query } from 'system/lib/db';
 import { FileRecord } from 'types/types';
 
 export class FileService {
-  static async createFile(fileData: Omit<FileRecord, 'id' | 'uploadDate' | 'downloads'>): Promise<FileRecord> {
+  static async createFile(
+    fileData: Omit<FileRecord, 'id' | 'uploadDate' | 'downloads'>,
+  ): Promise<FileRecord> {
     try {
       const id = uuidv4();
       const sql = `
@@ -31,37 +33,47 @@ export class FileService {
 
       const result = await this.getFileById(id);
       if (!result) {
-        throw new Error(`File record not found after creation for ID: ${id}`);
+        throw new Error(
+          `File record not found after creation for ID: ${id}`,
+        );
       }
 
       return result;
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error creating file record:', error);
-      throw new Error(`Failed to create file record. ${error.message}`);
+      throw new Error(
+        `Failed to create file record. ${error.message}`,
+      );
     }
   }
-  static async updateFile(id: string, updateData: Partial<Pick<FileRecord, 'originalName'>>): Promise<FileRecord> {
+  static async updateFile(
+    id: string,
+    updateData: Partial<Pick<FileRecord, 'originalName'>>,
+  ): Promise<FileRecord> {
     try {
       const sql = 'UPDATE files SET originalName = ? WHERE id = ?';
       await query(sql, [updateData.originalName, id]);
 
       const updatedFile = await this.getFileById(id);
       if (!updatedFile) {
-        throw new Error(`File record not found after update for ID: ${id}`);
+        throw new Error(
+          `File record not found after update for ID: ${id}`,
+        );
       }
 
       return updatedFile;
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error updating file record:', error);
-      throw new Error(`Failed to update file record. ${error.message}`);
+      throw new Error(
+        `Failed to update file record. ${error.message}`,
+      );
     }
   }
-
 
   static async getFileById(id: string): Promise<FileRecord | null> {
     try {
       const sql = 'SELECT * FROM files WHERE id = ?';
-      const results = await query(sql, [id]);
+      const results: any = await query(sql, [id]);
       return results[0] || null;
     } catch (error) {
       console.error('Error fetching file record:', error);
@@ -81,7 +93,8 @@ export class FileService {
 
   static async incrementDownloads(id: string): Promise<void> {
     try {
-      const sql = 'UPDATE files SET downloads = downloads + 1 WHERE id = ?';
+      const sql =
+        'UPDATE files SET downloads = downloads + 1 WHERE id = ?';
       await query(sql, [id]);
     } catch (error) {
       console.error('Error incrementing downloads:', error);
@@ -89,7 +102,7 @@ export class FileService {
     }
   }
 
-  static async getAllFiles(): Promise<FileRecord[]> {
+  static async getAllFiles() {
     try {
       const sql = 'SELECT * FROM files ORDER BY uploadDate DESC';
       return await query(sql);

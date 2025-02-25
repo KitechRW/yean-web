@@ -7,24 +7,19 @@ import { useProtectedFetcher } from 'apis/utils/fetcher';
 import CustomImage from 'modules/_partials/CustomImage';
 import { useRouter } from 'next/router';
 
-const ExtensionMaterialsActivity = () => {
+const ExtensionMaterialsActivity = ({
+  subCategories,
+  categories,
+}: {
+  categories: any[];
+  subCategories: any[];
+}) => {
   const { push } = useRouter();
-  const [current, setCurrent] = React.useState<any>(null);
-  const {
-    data: { data: subCategories },
-  } = useProtectedFetcher('/api/sub-categories');
-  const {
-    data: { data: categories },
-  } = useProtectedFetcher('/api/categories');
 
-  React.useEffect(() => {
-    if (!current && categories?.rows?.length) {
-      setCurrent(categories.rows[0]);
-    }
-  }, [categories]);
+  const [current, setCurrent] = React.useState<any>(categories?.[0]);
 
-  const matchSubCategories = subCategories?.rows?.filter(
-    (item: any) => item.category_name == current?.name,
+  const matchSubCategories = subCategories.filter(
+    (item: any) => item.parent_id == current?.id,
   );
 
   return (
@@ -45,7 +40,7 @@ const ExtensionMaterialsActivity = () => {
       </div>
       <div className="w-full px-4 bg-white md:px-8 pt-12 border-b border-[#E6E6E6]">
         <div className="px-4 md:px-8 w-full max-w-6xl mx-auto flex items-center space-x-4 overflow-x-auto">
-          {categories?.rows?.map((element: any) => (
+          {categories.map((element: any) => (
             <button
               key={element.id}
               onClick={() => setCurrent(element)}
@@ -64,10 +59,8 @@ const ExtensionMaterialsActivity = () => {
       <div className="w-full px-4 bg-white md:px-8 py-6">
         <ExtensionMaterials
           data={matchSubCategories}
-          onClick={(id, name) => {
-            push(
-              `/extension-material/${current.id}?cat=${id}&category_name=${current.name}&sub=${name}&material=1`,
-            );
+          onClick={(id) => {
+            push(`/extension-material/${id}`);
           }}
         />
       </div>

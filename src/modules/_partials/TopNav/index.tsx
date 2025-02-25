@@ -46,7 +46,7 @@ const TopNav = ({
           <Logo />
         </div>
         <div className="ml-auto pl-6 md:pl-12 flex items-center space-x-6 relative">
-          <NotificationList />
+          {/* <NotificationList /> */}
           <ProfilePopup />
         </div>
       </div>

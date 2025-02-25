@@ -10,12 +10,12 @@ const FileUpload: NextPage = () => {
     <>
       <Head>
         <title>File Upload System</title>
-  </Head>
-  <AdminScaffold>
-  <FileUploadActivity />
-  </AdminScaffold>
-  </>
-);
+      </Head>
+      <AdminScaffold>
+        <FileUploadActivity />
+      </AdminScaffold>
+    </>
+  );
 };
 
 export const getServerSideProps = withSessionSsr(

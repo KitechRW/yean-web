@@ -1,7 +1,6 @@
 import { RemoveRedEye } from '@mui/icons-material';
 import { Avatar } from '@mui/material';
 import Keys from 'apis/utils/constants/keys';
-import { useOpenFetcher } from 'apis/utils/fetcher';
 import { format } from 'date-fns';
 import Scaffold from 'modules/layouts/Scaffold';
 import CustomImage from 'modules/_partials/CustomImage';
@@ -25,71 +24,54 @@ import {
 import Blogs from '../_Partials/Blogs';
 import axios from 'axios';
 
-const SingleBlogActivity = () => {
-  const contentRef = React.useRef<HTMLDivElement>(null);
+const SingleBlogActivity = ({
+  data,
+  relatedArticles,
+  isExtension,
+}: {
+  relatedArticles: any[];
+  data: any;
+  isExtension: boolean;
+}) => {
   const { push, asPath, query } = useRouter();
   const material = Number(query.material);
-  const {
-    data: { data },
-  } = useOpenFetcher(
-    `/api/articles/${query.slugName}?material=${query.material}`,
-  );
-  const {
-    data: { data: relatedArticles },
-  } = useOpenFetcher(
-    `/api/articles?cat=${data?.article?.category_name}&material=${query.material}`,
-  );
+
   let viewIncrement = 0;
 
   const handleClick = async (id: any) => {
-    
     if (material) {
       push(`/blog/${id}?material=1`);
-      viewIncrement = data?.views + 1; 
-      const {result}: any = await axios.patch(`/api/views/${data?.id}`, {views: viewIncrement});
-  
+      viewIncrement = data?.views + 1;
+      await axios.patch(`/api/views/${data?.id}`, {
+        views: viewIncrement,
+      });
     } else {
       push(`/blog/${id}`);
-      viewIncrement = data?.views + 1; 
-      const {result}: any = await axios.patch(`/api/views/${data?.id}`, {views: viewIncrement});
-  
+      viewIncrement = data?.views + 1;
+      await axios.patch(`/api/views/${data?.id}`, {
+        views: viewIncrement,
+      });
     }
-    
   };
 
-  React.useEffect(() => {
-    if (data?.title) {
-      document.title = `Yean - ${data?.title}`;
-    }
-  }, [data]);
-
-  React.useEffect(() => {
-    if (data?.text && contentRef.current) {
-      contentRef.current.innerHTML = data?.text;
-    }
-  }, [data]);
-
   const url = `${Keys.HOST}${asPath}`;
-  console.log(data);
   return (
     <Scaffold>
       <div className="w-full px-4 bg-white md:px-8 pt-12 border-b border-[#E6E6E6]">
         <div className="px-4 md:px-8 w-full max-w-6xl mx-auto flex items-center space-x-4">
           <Link
             href={
-              Number(query.material)
-                ? `/extension-material/${data?.category_name}?category_name=${data?.category?.name}&subcategory=${data?.subcategory?.name}&material=1`
+              isExtension
+                ? `/extension-material/${data.category_id}`
                 : '/blog'
             }
           >
             <span className="cursor-pointer text-sm font-medium pb-3">
-              {Number(query.material) ? data?.category_name : 'All'}
+              {isExtension ? data?.category?.parent?.name : 'All'}
             </span>
           </Link>
           <span className="cursor-pointer text-sm font-medium pb-3 border-b-2 border-b-[#FCB316]">
-            {!Number(query.material)
-              ? 'Blogs'
-              : data?.subcategory_name}
+            {!isExtension ? 'Blogs' : data.category?.name}
           </span>
         </div>
       </div>
@@ -104,10 +86,10 @@ const SingleBlogActivity = () => {
           />
           <div className="bottom-0 left-0 right-0 absolute flex flex-col items-start w-ful">
             <p className="text-dark-green bg-[#FCB316] px-4 py-3">
-              {
-                (data?.category_name === null || data?.category_name === 'undefined')
-                ? 'Blog': `${data?.category_name}`
-              }
+              {!data?.category?.name ||
+              data?.type !== 'EXTENSION_MATERIAL'
+                ? 'Blog'
+                : `${data?.category?.name}`}
             </p>
             <p className="w-full bg-[#FCB316] h-1" />
           </div>
@@ -134,7 +116,7 @@ const SingleBlogActivity = () => {
               <RemoveRedEye className="text-brand-violet" />{' '}
               <span className="text-base">{data?.views}</span>
             </p>
-            
+
             <TwitterShareButton title={data?.title} url={url}>
               <TwitterIcon size={32} round={true} />
             </TwitterShareButton>
@@ -166,19 +148,13 @@ const SingleBlogActivity = () => {
           // ref={contentRef}
         />
 
-        <h1 className="mt-12 mb-6 text-xl md:text-2xl text-dark-green font-bold bg-brand-green/10 p-2 text-center">
-          View Related
-        </h1>
-
-        {data ? (
-          <Blogs
-            data={{
-              data: relatedArticles?.filter(
-                (item: any) => item.id !== data.id,
-              ),
-            }}
-            onClick={handleClick}
-          />
+        {relatedArticles.length > 1 ? (
+          <>
+            <h1 className="mt-12 mb-6 text-xl md:text-2xl text-dark-green font-bold bg-brand-green/10 p-2 text-center">
+              View Related
+            </h1>
+            <Blogs data={relatedArticles} onClick={handleClick} />
+          </>
         ) : null}
       </div>
     </Scaffold>

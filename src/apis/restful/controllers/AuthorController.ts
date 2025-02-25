@@ -10,7 +10,7 @@ export default class AuthorController {
     const { id } = req.query;
     try {
       return Response.success(res, 200, {
-        message: 'Authors fetched successfuly',
+        message: 'Authors fetched successfully',
         data: await Author.findByPk(`${id}`),
       });
     } catch (error) {

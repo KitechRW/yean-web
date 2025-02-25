@@ -29,6 +29,7 @@ export default class DashboardController {
         },
       });
     } catch (error: any) {
+      console.log(error)
       return Response.error(res, 500, {
         message: 'something went wrong',
         error: error.message,

@@ -20,7 +20,7 @@ function handler(req: NextApiRequest, res: NextApiResponse) {
 }
 
 export default withSessionRoute(
-  withRoles(handler, ['admin'], ['PATCH', 'DELETE']),
+  withRoles(handler, ['admin', 'member'], ['PATCH', 'DELETE']),
 );
 
 export const config = {

@@ -6,12 +6,12 @@ export const formatJoiErorr = (error: string) => {
   return message.charAt(0).toUpperCase() + message.slice(1);
 };
 
-export const convertToSlug = (param: string) => {
-  const url = param
+export const convertToSlug = (title: string, id: number) => {
+  const url = title
     .toLowerCase()
     .trim()
     .replace(/[^\w\s-]/g, '')
     .replace(/[\s_-]+/g, '-')
     .replace(/^-+|-+$/g, '');
-  return url;
+  return `${url}-${id}`;
 };

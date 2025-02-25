@@ -3,7 +3,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import ArticleServices from 'apis/services/articleServices';
 import DB from 'apis/database';
 
-const { Articles: Article, Landings: Landing, } = DB;
+const { Articles: Article, Categories, Landings: Landing } = DB;
 export default class LandingController {
   static async getOne(req: NextApiRequest, res: NextApiResponse) {
     const { id } = req.query;
@@ -45,9 +45,53 @@ export default class LandingController {
 
   static async getAll(req: NextApiRequest, res: NextApiResponse) {
     try {
+      const recentArticles = await Article.findAll({
+        where: {
+          type: 'BLOG',
+          status: 'published',
+        },
+        order: [['createdAt', 'DESC']],
+        limit: 8,
+      });
+      const recentExtensionMaterials = await Article.findAll({
+        where: {
+          type: 'EXTENSION_MATERIAL',
+          status: 'published',
+        },
+        order: [['createdAt', 'DESC']],
+        limit: 8,
+      });
+      const extensionMaterials = await Promise.all(
+        recentExtensionMaterials.map(async item => {
+          const category = await Categories.findByPk(
+            item.toJSON().category_id,
+          );
+          const parentCategory = await Categories.findByPk(
+            category?.toJSON()?.parent_id,
+          );
+          return {
+            ...item.toJSON(),
+            category: {
+              ...category?.toJSON(),
+              parent: parentCategory?.toJSON(),
+            },
+          };
+        }),
+      );
+      const slides = await Article.findAll({
+        where: {
+          is_slide: true,
+          status: 'published',
+        },
+        order: [['createdAt', 'DESC']],
+        limit: 6,
+      });
       return Response.success(res, 200, {
-        message: 'Landings fetched successfuly',
+        message: 'Landings fetched successfully',
         data: await Landing.findAndCountAll(),
+        recentArticles,
+        recentExtensionMaterials: extensionMaterials,
+        slides,
       });
     } catch (error) {
       return Response.error(res, 500, {
@@ -61,7 +105,6 @@ export default class LandingController {
     res: NextApiResponse,
   ) {
     try {
-      
       const articles = await ArticleServices.findAndCountAll(
         undefined,
         [
@@ -75,7 +118,7 @@ export default class LandingController {
           'comment',
           'createdAt',
           'updatedAt',
-          'type'
+          // 'type'
         ],
         ['firstname', 'lastname', 'profile_image'],
         8,

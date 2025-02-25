@@ -8,19 +8,28 @@ import { joiResolver } from '@hookform/resolvers/joi';
 import UploadImage from 'modules/_partials/UploadImage';
 import { formatJoiErorr } from 'system/format';
 import axios from 'axios';
+import Select from 'react-select';
+import { useRouter } from 'next/router';
 
 const schema = joi.object({
   name: joi.string().required(),
+  parent_id: joi.number().label('Parent').optional(),
   image: joi.object().required(),
 });
 
 const AddItem = ({
   handleAdd,
   children,
+  parentOptions,
 }: {
   handleAdd: (item: any) => void;
   children: any;
+  parentOptions: {
+    value: string;
+    label: string;
+  }[];
 }) => {
+  const router = useRouter();
   const [loading, setLoading] = React.useState(false);
   const [toggle, setToggle] = React.useState(false);
   const {
@@ -35,31 +44,36 @@ const AddItem = ({
   });
 
   const onSubmit = async (query: any) => {
-    setLoading(true);
-    const formData = new FormData();
-    Object.keys(query).forEach(key => {
-      formData.append(key === 'image' ? 'media' : key, query[key]);
-    });
-    const { data } = await axios.post(
-      '/api/categories',
-      formData,
-    );
-    setLoading(false);
-
-    if (data) {
-      swal(
-        'Added!',
-        data.message || 'Added successfully',
-        'success',
-      ).then(() => {
-        reset();
-        setToggle(false);
-        handleAdd(data.data);
+    try {
+      setLoading(true);
+      const formData = new FormData();
+      Object.keys(query).forEach(key => {
+        formData.append(key === 'image' ? 'media' : key, query[key]);
       });
-    }
-
-    if (data.error) {
-      swal('Ooops!', data.error || 'Something went wrong');
+      const { data } = await axios.post('/api/categories', formData);
+      if (data) {
+        swal(
+          'Added!',
+          data.message || 'Added successfully',
+          'success',
+        ).then(() => {
+          reset();
+          setToggle(false);
+          handleAdd(data.data);
+        });
+      }
+      setTimeout(() => {
+        router.reload();
+      }, 1000);
+    } catch (error) {
+      swal(
+        'Ooops!',
+        (error as any)?.response?.data?.message ||
+          'Something went wrong',
+        'error',
+      );
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -90,6 +104,28 @@ const AddItem = ({
             {errors.name?.message && (
               <p className="mt-1 text-red-500">
                 {formatJoiErorr(`${errors.name.message}`)}
+              </p>
+            )}
+          </label>
+          <label className="flex flex-col">
+            <span className="text-sm font-medium text-gray-900 dark:text-gray-300">
+              Parent(Optional)
+            </span>
+            <Select
+              isMulti={false}
+              {...register('parent_id')}
+              options={parentOptions}
+              onChange={(newValue: any) => {
+                setValue('parent_id', newValue.value, {
+                  shouldDirty: true,
+                  shouldValidate: true,
+                });
+              }}
+              className="mt-2"
+            />
+            {errors.parent_id?.message && (
+              <p className="mt-1 text-red-500">
+                {formatJoiErorr(`${errors.parent_id.message}`)}
               </p>
             )}
           </label>

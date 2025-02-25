@@ -3,15 +3,16 @@ import CustomImage from 'modules/_partials/CustomImage';
 import { useRouter } from 'next/router';
 import React from 'react';
 import axios from 'axios';
+
 const MinPost = ({ data }: { data: any }) => {
   const { push } = useRouter();
   let viewIncrement = 0;
   const handleClick = async () => {
-    if (data?.category_name) {
-      push(`/blog/${data?.id}?material=1`);
-      viewIncrement = data?.views + 1; 
-      const {result}: any = await axios.patch(`/api/views/${data?.id}`, {views: viewIncrement});
-    }
+    push(`/blog/${data?.slug}`);
+    viewIncrement = data?.views + 1;
+    axios.patch(`/api/views/${data?.id}`, {
+      views: viewIncrement,
+    });
   };
   return (
     <div
@@ -30,9 +31,9 @@ const MinPost = ({ data }: { data: any }) => {
         />
       </div>
 
-      {data?.subcategory_name && (
+      {data?.category?.name && (
         <button className="mr-auto rounded-sm bg-dark-green -translate-y-4 text-white py-2 px-3">
-          {data.subcategory_name}
+          {data.category?.name}
         </button>
       )}
       <p className="px-2 py-1 space-x-1 flex items-center">

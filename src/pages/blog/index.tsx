@@ -3,15 +3,16 @@ import Head from 'next/head';
 import BlogActivity from 'modules/activities/BlogActivity';
 import Http from 'core/factory/fact.http';
 import MetaData from 'modules/_partials/MetaData';
+import Keys from 'apis/utils/constants/keys';
 
 export async function getServerSideProps({
   query: { pageNumber },
 }: any) {
   return Http.axios
     .get(
-      `${process.env.DEFAULT_API}/api/articles?page=${
+      `${Keys.DEFAULT_API}/api/articles?page=${
         pageNumber || 1
-      }&limit=20`,
+      }&limit=20&status=published`,
     )
     .then(resp => {
       return {
@@ -27,7 +28,6 @@ export async function getServerSideProps({
 }
 
 const BlogPage = (props: any) => {
-  
   return (
     <>
       <Head>

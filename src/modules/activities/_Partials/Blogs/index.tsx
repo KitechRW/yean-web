@@ -5,20 +5,24 @@ import { useRouter } from 'next/router';
 import Pagination from 'modules/_partials/Pagination';
 import { format } from 'date-fns';
 import { RemoveRedEye } from '@mui/icons-material';
+import Http from 'core/factory/fact.http';
 
 const Blogs = ({ onClick = (id: any) => {}, data = {} }: any) => {
   const router = useRouter();
-    console.log(data);
   return (
     <div className={'flex flex-col items-center space-y-6'}>
       <div className="w-full justify-center max-w-6xl mx-auto flex flex-wrap gap-4">
-        {data?.data?.filter((element: any) => (element.status === 'published')).map((element: any, index: number) => (
+        {data?.map((element: any, index: number) => (
           <div
-            key={JSON.stringify(element)}
+            key={element.id}
             role="button"
             tabIndex={index}
-            onClick={() => {
-              onClick(element?.id);
+            onClick={async () => {
+              onClick(element.slug);
+              const viewIncrement = element.views + 1;
+              Http.axios.patch(`/api/views/${element.id}`, {
+                views: viewIncrement,
+              });
             }}
             className="flex flex-col w-full max-w-[298px] border border-[#E6E6E6] rounded-sm"
           >
@@ -31,10 +35,10 @@ const Blogs = ({ onClick = (id: any) => {}, data = {} }: any) => {
               />
               <div className="bottom-0 left-0 right-0 absolute flex flex-col items-start w-ful">
                 <p className="text-dark-green bg-[#FCB316] px-4 py-3">
-                {
-                (element.category_name === null || element.category_name === 'undefined')
-                ? 'Blog': `${element.category_name}`
-                }
+                  {!element.category ||
+                  element.type !== 'EXTENSION_MATERIAL'
+                    ? 'Blog'
+                    : `${element.category?.name}`}
                 </p>
                 <p className="w-full bg-[#FCB316] h-1" />
               </div>
@@ -55,9 +59,7 @@ const Blogs = ({ onClick = (id: any) => {}, data = {} }: any) => {
                 alt={element?.author?.firstname}
               />
               <div className="flex flex-col text-[#767676]">
-                <h1 className="text-xs">
-                  {element?.author_name}
-                </h1>
+                <h1 className="text-xs">{element?.author_name}</h1>
                 {element?.createdAt ? (
                   <p className="text-xs">
                     {format(
@@ -74,7 +76,7 @@ const Blogs = ({ onClick = (id: any) => {}, data = {} }: any) => {
       <Pagination
         pageCount={data?.pagination?.pageCount}
         currentPage={data?.pagination?.currentPage}
-        setPageNumber={(page: number) => {
+        setPageNumber={async (page: number) => {
           router.query.pageNumber = String(page);
           router.push(router);
         }}
