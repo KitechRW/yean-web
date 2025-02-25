@@ -4,46 +4,34 @@ import ArticleServices from 'apis/services/articleServices';
 import removeFile, { parseForm } from 'apis/utils/libForm';
 import { paginate } from 'apis/utils/pagnation';
 import DB from 'apis/database';
+import { Op, WhereOptions } from 'sequelize';
 
 const { Articles: Article } = DB;
 
 export default class ArticleController {
   static async getOne(req: NextApiRequest, res: NextApiResponse) {
     const { id } = req.query;
-    const material = Number(req.query.material) > 0;
     try {
-      const materialParams = [];
-      if (material) {
-        materialParams.push(
-          'category_name',
-          'subcategory_name',
-          'slug',
-        );
-      }
-      const query: any = {};
-      if (material && !Number(id)) {
-        query.slug = id;
-      } else {
-        query.id = id;
-      }
+      const where: WhereOptions<any> = {
+        [Op.or]: [[{ id: `${id}` }], [{ slug: `${id}` }]],
+      };
       return Response.success(res, 200, {
         message: 'Articles fetched successfuly',
         data: await ArticleServices.findOne(
-          query,
+          where,
           [
             'id',
             'title',
             'image',
-            // 'author_name',
+            'author_id',
+            'category_id',
+            'slug',
+            'type',
             'text',
             'views',
-            //   'category_name',
-            // 'subcategory_name',
             'updatedAt',
           ],
           ['firstname', 'lastname', 'profile_image'],
-          //@ts-ignore
-          material,
         ),
       });
     } catch (error: any) {
@@ -76,26 +64,26 @@ export default class ArticleController {
 
   static async getAll(req: NextApiRequest, res: NextApiResponse) {
     try {
-      let { page = 1, limit = 10, cat, sub } = req.query;
-      const material = Number(req.query.material) > 0;
+      let { page = 1, limit = 10, cat, status } = req.query;
       page = Number(page);
       limit = Number(limit);
-      const where: any = {};
-      if (String(cat)) {
-        where.category_name = cat;
+      const where: WhereOptions<any> = {};
+      if (cat) {
+        where.category_id = String(cat);
       }
-      if (String(sub)) {
-        where.subcategory_name = sub;
+      if (status) {
+        where.status = String(status);
       }
       const offset = (page - 1) * limit;
       const { rows, count } = await ArticleServices.findAndCountAll(
-        cat && sub ? where : undefined,
+        where,
         [
           'id',
           'title',
           'image',
           'views',
           'status',
+          'slug',
           'is_slide',
           'type',
           'text',
@@ -107,13 +95,11 @@ export default class ArticleController {
         ['firstname', 'lastname', 'profile_image', 'email'],
         limit,
         offset,
-        // //@ts-ignore
-        // material,
       );
       const pagination = paginate(page, count, rows, limit);
 
       return Response.success(res, 200, {
-        message: 'Articles fetched successfuly',
+        message: 'Articles fetched successfully',
         pagination,
         data: rows,
       });
@@ -146,7 +132,6 @@ export default class ArticleController {
       };
       return Response.success(res, 200, {
         message: 'Article created successfuly',
-        //@ts-ignore
         data: await ArticleServices.create(payload),
       });
     } catch (error: any) {
@@ -219,7 +204,7 @@ export default class ArticleController {
       }
       removeFile(item.toJSON()?.image);
       return Response.success(res, 200, {
-        message: 'Articles deleted successfuly',
+        message: 'Articles deleted successfully',
         data: await item.destroy(),
       });
     } catch (error) {

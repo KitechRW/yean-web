@@ -2,22 +2,23 @@ import { FindAttributeOptions, WhereOptions } from 'sequelize/types';
 import DB from 'apis/database';
 import { convertToSlug } from 'system/format';
 
-const {
-  Articles: Article,
-  Users: User,
-  Author,
-  Categories,
-  SubCategories,
-} = DB;
+const { Articles: Article, Users: User, Categories, sequelize } = DB;
 
 export default class ArticleServices {
-  static create(data: any) {
-    const ArticleModel = Article;
-    if (data.slug) {
-      data.slug = convertToSlug(data.slug);
-    }
-
-    return ArticleModel.create(data);
+  static async create(data: any) {
+    await sequelize.transaction(async t => {
+      const ArticleModel = Article;
+      const article = await ArticleModel.create(data, {
+        transaction: t,
+      });
+      article.set({
+        slug: convertToSlug(
+          article.toJSON().title,
+          article.toJSON().id,
+        ),
+      });
+      return await article.save({ transaction: t });
+    });
   }
 
   static findAll() {
@@ -41,10 +42,24 @@ export default class ArticleServices {
       order: [['id', 'DESC']],
     });
     const articleRows = await Promise.all(
-      rows.map(row => {
-        return User.findByPk(row.toJSON()?.author_id, {
+      rows.map(async row => {
+        const author = await User.findByPk(row.toJSON()?.author_id, {
           attributes: autherAttributes,
-        }).then(author => ({ author, ...row.toJSON() }));
+        });
+        const category = await Categories.findByPk(
+          row.toJSON().category_id,
+        );
+        const parentCategory = await Categories.findByPk(
+          category?.toJSON()?.parent_id,
+        );
+        return {
+          ...row.toJSON(),
+          author,
+          category: {
+            ...category?.toJSON(),
+            parent: parentCategory?.toJSON(),
+          },
+        };
       }),
     );
     return { count, rows: articleRows };
@@ -64,14 +79,24 @@ export default class ArticleServices {
       return null;
     }
 
-    const articleData = await User.findByPk(
-      article.toJSON()?.author_id,
-      {
-        attributes: autherAttributes,
-      },
-    ).then(author => ({ author, ...article.toJSON() }));
+    const author = await User.findByPk(article.toJSON()?.author_id, {
+      attributes: autherAttributes,
+    });
+    const category = await Categories.findByPk(
+      article.toJSON().category_id,
+    );
+    const parentCategory = await Categories.findByPk(
+      category?.toJSON()?.parent_id,
+    );
 
-    return articleData;
+    return {
+      ...article.toJSON(),
+      author,
+      category: {
+        ...category?.toJSON(),
+        parent: parentCategory?.toJSON(),
+      },
+    };
   }
 
   static findByPk(id: number) {

@@ -12,7 +12,7 @@ export async function getServerSideProps({
     .get(
       `${Keys.DEFAULT_API}/api/articles?page=${
         pageNumber || 1
-      }&limit=20`,
+      }&limit=20&status=published`,
     )
     .then(resp => {
       return {
@@ -28,7 +28,6 @@ export async function getServerSideProps({
 }
 
 const BlogPage = (props: any) => {
-  
   return (
     <>
       <Head>

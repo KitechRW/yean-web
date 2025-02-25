@@ -1,4 +1,4 @@
-const { HOST } = process.env;
+import Keys from '../constants/keys';
 
 export default class emailMocks {
   /**
@@ -9,11 +9,11 @@ export default class emailMocks {
     return `
         <div style="width:85%;margin:auto;">
             <p style="font-family: 'Roboto', sans-serif;font-size: 1.2em;font-weight: 400;line-height: 1.55;color: #222222;margin: 10px 0 30px;padding: 44px 34px 44px 34px;background-color: #ffffff;border-radius: 8px; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 210, 190, 129);">
-                Hi <span>${mailOptions.email}</span>,<br><br>
+                Hi <span>${mailOptions.firstname}</span>,<br><br>
                 Welcome in the YEAN System and ofcourse in the green world!!<br /> <br />
                 In this digital era we must make sure that we are not interacting <br />
                 with robots hence we are verifying your email address. <br />
-                 <a href="${HOST}/activate-account?activation=${mailOptions.token}"><button type="button" style="   border: none;color: white;padding: 10px; text-align: center;text-decoration: none;display: inline-block;font-size: 16px;margin: 4px 2px;cursor: pointer;background-color: #4CAF50;">click here</button></a>
+                 <a href="${Keys.HOST}/activate-account?activation=${mailOptions.token}"><button type="button" style="   border: none;color: white;padding: 10px; text-align: center;text-decoration: none;display: inline-block;font-size: 16px;margin: 4px 2px;cursor: pointer;background-color: #4CAF50;">click here</button></a>
                 <br /><br />
                 Welcome again in the green world and we expect you to be creating your account by now :-)<br><br>
                 Best,<br>
@@ -42,7 +42,7 @@ export default class emailMocks {
    * @param {Object} mailData Object
    */
   static async forgetPassword(mailData: any) {
-    const url = `${HOST}/reset-password?token=${mailData.token}`;
+    const url = `${Keys.HOST}/reset-password?token=${mailData.token}`;
     return `
         <div style="width:85%;margin:auto;">
             <p style="font-family: 'Roboto', sans-serif;font-size: 1.2em;font-weight: 400;line-height: 1.55;color: #222222;margin: 10px 0 30px;padding: 44px 34px 44px 34px;background-color: #ffffff;border-radius: 8px; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 210, 190, 129);">

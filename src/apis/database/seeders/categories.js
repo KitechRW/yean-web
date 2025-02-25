@@ -249,22 +249,22 @@ const subcategories = [
 
 module.exports = {
     up: async (queryInterface) => {
-        try {
-            await queryInterface.bulkInsert('tbl_category', subcategories.map(item => ({
-                ...item,
-                id: item.id + 3
-            })), {
-                updateOnDuplicate: ["name", 'parent_id', 'image']
-            })
-        } catch (error) {
-            console.log(error)
-        }
+        // try {
+        //     await queryInterface.bulkInsert('tbl_category', subcategories.map(item => ({
+        //         ...item,
+        //         id: item.id + 3
+        //     })), {
+        //         updateOnDuplicate: ["name", 'parent_id', 'image']
+        //     })
+        // } catch (error) {
+        //     console.log(error)
+        // }
     },
     down: async (queryInterface) => {
-        await queryInterface.bulkDelete('tbl_category', {
-            id: {
-                [Op.in]: subcategories.map(item => item.id)
-            }
-        });
+        // await queryInterface.bulkDelete('tbl_category', {
+        //     id: {
+        //         [Op.in]: subcategories.map(item => item.id)
+        //     }
+        // });
     }
 };

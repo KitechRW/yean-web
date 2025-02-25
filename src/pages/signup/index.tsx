@@ -17,6 +17,8 @@ import MetaData from 'modules/_partials/MetaData';
 
 const schema = joi
   .object({
+    firstname: joi.string().required(),
+    lastname: joi.string().optional(),
     password: joi.string().required(),
     retypePassword: joi.string().required().label('Re-type Password'),
     email: joi
@@ -75,10 +77,10 @@ const Signup: NextPage = () => {
   };
   return (
     <>
-    <Head>
-      <title>Signup - YEAN</title>
-      <MetaData />
-    </Head>
+      <Head>
+        <title>Signup - YEAN</title>
+        <MetaData />
+      </Head>
       <div className="bg-top bg-cover bg-no-repeat bg-[url(/assets/images/login.svg)] flex flex-col items-center min-h-screen">
         <div className="flex flex-col bg-black/50 flex-grow w-full items-center justify-center p-4 md:p-8">
           <div className="bg-white flex flex-col w-full md:max-w-md rounded shadow-xl border-t-[0.5px] border-gray-50 justify-center">
@@ -107,6 +109,36 @@ const Signup: NextPage = () => {
                 }}
                 className="w-full flex flex-col mt-6"
               >
+                <label htmlFor="firstname" className="flex flex-col">
+                  <span className="text-black-200 text-sm">
+                    First name
+                  </span>
+                  <input
+                    id="firstname"
+                    {...register('firstname')}
+                    className="mt-1 focus:border-primary bg-gray-202 outline-none rounded-lg border border-gray-201 px-3 py-2"
+                  />
+                  {errors.firstname?.message && (
+                    <p className="text-red-500 text-xs mt-1">
+                      {formatJoiErorr(`${errors.firstname?.message}`)}
+                    </p>
+                  )}
+                </label>
+                <label htmlFor="firstname" className="flex flex-col">
+                  <span className="text-black-200 text-sm">
+                    Last name
+                  </span>
+                  <input
+                    id="lastname"
+                    {...register('lastname')}
+                    className="mt-1 focus:border-primary bg-gray-202 outline-none rounded-lg border border-gray-201 px-3 py-2"
+                  />
+                  {errors.lastname?.message && (
+                    <p className="text-red-500 text-xs mt-1">
+                      {formatJoiErorr(`${errors.lastname?.message}`)}
+                    </p>
+                  )}
+                </label>
                 <label htmlFor="user-email" className="flex flex-col">
                   <span className="text-black-200 text-sm">
                     Email

@@ -8,10 +8,11 @@ const LatestBlog = ({ data }: { data: any }) => {
   const { push } = useRouter();
   let viewIncrement = 0;
   const handleClick = async () => {
-    viewIncrement = data?.views + 1; 
-    push(`/blog/${data?.id}`);
-    const {result}: any = await axios.patch(`/api/views/${data?.id}`, {views: viewIncrement});
-
+    viewIncrement = data?.views + 1;
+    push(`/blog/${data?.slug}`);
+    axios.patch(`/api/views/${data?.id}`, {
+      views: viewIncrement,
+    });
   };
   return (
     <div
@@ -40,7 +41,10 @@ const LatestBlog = ({ data }: { data: any }) => {
           <Comment /> <span>{data?.comment}</span>
         </button>
       </div>
-      <div className="px-2 text-gray-600 line-clamp-3" dangerouslySetInnerHTML={{__html: data?.title}} />
+      <div
+        className="px-2 text-gray-600 line-clamp-3"
+        dangerouslySetInnerHTML={{ __html: data?.title }}
+      />
     </div>
   );
 };

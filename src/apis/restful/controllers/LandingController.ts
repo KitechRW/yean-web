@@ -3,7 +3,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import ArticleServices from 'apis/services/articleServices';
 import DB from 'apis/database';
 
-const { Articles: Article, Landings: Landing } = DB;
+const { Articles: Article, Categories, Landings: Landing } = DB;
 export default class LandingController {
   static async getOne(req: NextApiRequest, res: NextApiResponse) {
     const { id } = req.query;
@@ -61,6 +61,23 @@ export default class LandingController {
         order: [['createdAt', 'DESC']],
         limit: 8,
       });
+      const extensionMaterials = await Promise.all(
+        recentExtensionMaterials.map(async item => {
+          const category = await Categories.findByPk(
+            item.toJSON().category_id,
+          );
+          const parentCategory = await Categories.findByPk(
+            category?.toJSON()?.parent_id,
+          );
+          return {
+            ...item.toJSON(),
+            category: {
+              ...category?.toJSON(),
+              parent: parentCategory?.toJSON(),
+            },
+          };
+        }),
+      );
       const slides = await Article.findAll({
         where: {
           is_slide: true,
@@ -73,7 +90,7 @@ export default class LandingController {
         message: 'Landings fetched successfully',
         data: await Landing.findAndCountAll(),
         recentArticles,
-        recentExtensionMaterials,
+        recentExtensionMaterials: extensionMaterials,
         slides,
       });
     } catch (error) {

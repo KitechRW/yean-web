@@ -876,23 +876,23 @@ const articles = [
 
 module.exports = {
     up: async (queryInterface) => {
-        try {
-            await queryInterface.bulkInsert('article', articles.map(item => ({
-                ...item,
-                type: 'EXTENSION_MATERIAL',
-                category_id: !item.subcategory_id ? item.category_id : item.subcategory_id + 3
-            })), {
-                updateOnDuplicate: ["type", 'category_id', 'subcategory_id', 'views', 'author_id', 'tags', 'comment', 'time', 'updated_at']
-            })
-        } catch (error) {
-            console.log(error)
-        }
+        // try {
+        //     await queryInterface.bulkInsert('article', articles.map(item => ({
+        //         ...item,
+        //         type: 'EXTENSION_MATERIAL',
+        //         category_id: !item.subcategory_id ? item.category_id : item.subcategory_id + 3
+        //     })), {
+        //         updateOnDuplicate: ["type", 'category_id', 'subcategory_id', 'views', 'author_id', 'tags', 'comment', 'time', 'updated_at']
+        //     })
+        // } catch (error) {
+        //     console.log(error)
+        // }
     },
     down: async (queryInterface) => {
-        await queryInterface.bulkDelete('article', {
-            id: {
-                [Op.in]: articles.map(item => item.id)
-            }
-        });
+        // await queryInterface.bulkDelete('article', {
+        //     id: {
+        //         [Op.in]: articles.map(item => item.id)
+        //     }
+        // });
     }
 };

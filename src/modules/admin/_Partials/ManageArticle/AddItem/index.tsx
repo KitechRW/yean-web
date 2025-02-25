@@ -14,6 +14,13 @@ import axios from 'axios';
 import { useRouter } from 'next/router';
 import { z } from 'zod';
 import 'react-quill/dist/quill.snow.css';
+import {
+  FormControl,
+  FormControlLabel,
+  FormLabel,
+  Radio,
+  RadioGroup,
+} from '@mui/material';
 
 const ReactQuill = dynamic(() => import('react-quill'), {
   ssr: false,
@@ -78,7 +85,6 @@ const AddItem = ({
   });
 
   const isMaterial = watch('type') === 'EXTENSION_MATERIAL';
-  const is_slide = watch('is_slide');
 
   const onSubmit = async (query: any) => {
     try {
@@ -169,11 +175,11 @@ const AddItem = ({
       label: element.name,
     }));
 
-  const defaultCategoryOptions = categoryOptions?.filter(
+  const defaultCategoryOption = categoryOptions?.find(
     (item: any) => item.value == dataValues?.category_id,
   );
 
-  const defaultTypeOptions = types?.filter(
+  const defaultTypeOption = types?.find(
     (item: any) => item.value == dataValues?.type,
   );
 
@@ -223,7 +229,9 @@ const AddItem = ({
             <Select
               isMulti={false}
               options={types}
-              defaultValue={defaultTypeOptions}
+              defaultValue={
+                dataValues?.type ? defaultTypeOption : types[0]
+              }
               onChange={(newValue: any) => {
                 setValue('type', newValue.value, {
                   shouldDirty: true,
@@ -239,70 +247,59 @@ const AddItem = ({
             )}
           </label>
 
-          {isMaterial ? (
-            <>
-              <label className="flex flex-col">
-                <span className="text-sm font-medium text-gray-900 dark:text-gray-300">
-                  Category
-                </span>
-                <Select
-                  isMulti={false}
-                  options={categoryOptions}
-                  defaultValue={defaultCategoryOptions}
-                  onChange={(newValue: any) => {
-                    setValue('category_id', newValue.value, {
-                      shouldDirty: true,
-                      shouldValidate: true,
-                    });
-                  }}
-                  className="mt-2"
-                />
-                {errors.category_id?.message && (
-                  <p className="mt-1 text-red-500">
-                    {formatJoiErorr(`${errors.category_id.message}`)}
-                  </p>
-                )}
-              </label>
-            </>
-          ) : (
-            <></>
+          {isMaterial && (
+            <label className="flex flex-col">
+              <span className="text-sm font-medium text-gray-900 dark:text-gray-300">
+                Category
+              </span>
+              <Select
+                isMulti={false}
+                options={categoryOptions}
+                defaultValue={defaultCategoryOption}
+                onChange={(newValue: any) => {
+                  setValue('category_id', newValue.value, {
+                    shouldDirty: true,
+                    shouldValidate: true,
+                  });
+                }}
+                className="mt-2"
+              />
+              {errors.category_id?.message && (
+                <p className="mt-1 text-red-500">
+                  {formatJoiErorr(`${errors.category_id.message}`)}
+                </p>
+              )}
+            </label>
           )}
 
-          {profile?.user?.type === 'admin' && isMaterial ? (
-            <label className="flex flex-col">
-              <span className="mb-3">Slide Show</span>
-              <div className="flex w-[99px] ml-3 justify-around">
-                <label className="flex items-center">
-                  <span>Yes</span>
-                  <input
-                    type="radio"
-                    onClick={() => {
-                      setValue('is_slide', true, {
-                        shouldDirty: true,
-                        shouldValidate: true,
-                      });
-                    }}
-                    checked={!!is_slide}
-                  />
-                </label>
-                <label className="flex items-center">
-                  <span>No</span>
-                  <input
-                    type="radio"
-                    onClick={() => {
-                      setValue('is_slide', false, {
-                        shouldDirty: true,
-                        shouldValidate: true,
-                      });
-                    }}
-                    checked={!is_slide}
-                  />
-                </label>
-              </div>
-            </label>
-          ) : (
-            <></>
-          )}
+          <FormControl>
+            <FormLabel id="slide-show-group-label">
+              Slide Show
+            </FormLabel>
+            <RadioGroup
+              aria-labelledby="slide-show-group-label"
+              name="radio-buttons-group"
+              row
+              value={getValues('is_slide') === true ? 'yes' : 'no'}
+              onChange={(event, newValue) => {
+                setValue('is_slide', newValue === 'yes', {
+                  shouldDirty: true,
+                  shouldValidate: true,
+                });
+              }}
+            >
+              <FormControlLabel
+                value="yes"
+                control={<Radio />}
+                label="Yes"
+              />
+              <FormControlLabel
+                value="no"
+                control={<Radio />}
+                label="No"
+              />
+            </RadioGroup>
+          </FormControl>
 
           <div className="flex flex-col">
             <span className="text-sm mb-2 font-medium text-gray-900 dark:text-gray-300">
@@ -346,7 +343,7 @@ const AddItem = ({
             )}
           </div>
 
-          <div className="flex items-center space-x-3 justify-between md:col-span-2">
+          <div className="flex flex-wrap items-center space-x-3 justify-between md:col-span-2">
             {dataValues ? (
               <button
                 type="button"
@@ -357,7 +354,7 @@ const AddItem = ({
                 Delete
               </button>
             ) : null}
-            <div className="flex items-center space-x-3 justify-between md:col-span-2 ml-auto">
+            <div className="flex items-center gap-3 justify-between md:col-span-2 ml-auto">
               <button
                 type="button"
                 disabled={loading}
@@ -366,7 +363,7 @@ const AddItem = ({
                     onSubmit({ ...values, status: 'draft' }),
                   )();
                 }}
-                className="font-semibold disabled:cursor-not-allowed disabled:bg-slate-400 mt-12 text-white bg-slate-600 hover:bg-slate-500 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg text-sm w-full sm:w-auto px-12 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                className="whitespace-nowrap font-semibold disabled:cursor-not-allowed disabled:bg-slate-400 mt-12 text-white bg-slate-600 hover:bg-slate-500 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg text-sm w-full sm:w-auto px-12 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
               >
                 Save Draft
               </button>
