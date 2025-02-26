@@ -36,16 +36,29 @@ const SingleBlogPage = ({
   relatedArticles,
   isExtension,
 }: any) => {
+  const content = data.text.replace(/<[^>]*>?/gm, '');
+  let image: string = data.image || '';
+  image = image.startsWith('/uploads') ? image : `/uploads/${image}`;
+  if (image.slice(0, 3) !== 'http') {
+    image = `${Keys.HOST}${image}`;
+  }
   return (
     <>
       <Head>
         <meta charSet="UTF-8" />
-        <meta name="description" content="ubuhinzi mu rwanda" />
+        <meta
+          name="description"
+          content={
+            content.length > 150
+              ? content.substring(0, 150) + '...'
+              : content
+          }
+        />
         <meta
           name="keywords"
           content="youth, agribusiness, ubuhinzi, urubyiruko, amakuru, isoko, ihuriro, farmers, platform, Rwanda, farming"
         />
-        <meta name="author" content="Fridolin niyonsaba" />
+        <meta name="author" content="Celestin Niyindagiriye" />
         <meta
           name="viewport"
           content="width=device-width, initial-scale=1.0"
@@ -54,19 +67,30 @@ const SingleBlogPage = ({
         <meta property="fb:app_id" content="2004258806506916" />
         <meta property="og:url" content="https://yeanrwanda.org/" />
         <meta property="og:type" content="" />
-        <meta property="og:description" content="" />
-        <meta property="og:title" content="YEAN - My farming story" />
-        <meta property="og:image" content="" itemProp="image" />
+        <meta
+          property="og:description"
+          content={
+            content.length > 150
+              ? content.substring(0, 150) + '...'
+              : content
+          }
+        />
+        <meta property="og:title" content={`${data.title}`} />
+        <meta property="og:image" content="" itemProp={image} />
 
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:site" content="@YEAN_Rwanda" />
         <meta name="twitter:creator" content="@fridolin_r" />
+        <meta property="twitter:title" content={`${data.title}`} />
         <meta
-          property="twitter:title"
-          content="YEAN - My farming story"
+          name="twitter:description"
+          content={
+            content.length > 150
+              ? content.substring(0, 150) + '...'
+              : content
+          }
         />
-        <meta name="twitter:description" content="" />
-        <meta name="twitter:image" content="" />
+        <meta name="twitter:image" content={image} />
         <title>{`${data.title}`}</title>
       </Head>
       <SingleBlogActivity

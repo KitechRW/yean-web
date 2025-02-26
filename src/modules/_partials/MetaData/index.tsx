@@ -9,7 +9,7 @@ const MetaData = () => {
         name="keywords"
         content="youth, agribusiness, ubuhinzi, urubyiruko, amakuru, isoko, ihuriro, farmers, platform, Rwanda, farming"
       />
-      <meta name="author" content="Fridolin niyonsaba" />
+      <meta name="author" content="Celestin Niyindagiriye" />
       <meta
         name="viewport"
         content="width=device-width, initial-scale=1.0"
