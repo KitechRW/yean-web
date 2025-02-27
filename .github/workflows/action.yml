@@ -48,29 +48,36 @@ jobs:
           echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           
-          # SSH into the server and make sure to source NVM before running any commands
-            ssh -o StrictHostKeyChecking=no -p 22 root@46.101.129.106 << 'EOF'
-
+          # Determine branch name
+          if [ "${{ github.event_name }}" == "pull_request" ]; then 
+            BRANCH_NAME="${{ github.head_ref }}"
+          else 
+            BRANCH_NAME="${{ github.ref_name }}"
+          fi
+          
+          # Set correct script path based on the branch
+          if [ "$BRANCH_NAME" == "main" ]; then 
+            SCRIPT_PATH="/scripts/build.sh"
+          else 
+            SCRIPT_PATH="/scripts/builddev.sh"
+          fi
+          
+          # SSH into the server and deploy
+          ssh -o StrictHostKeyChecking=no -p 22 root@46.101.129.106 << EOF
             # Ensure NVM is sourced
-            export NVM_DIR="$HOME/.nvm"
-            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-            
-            # Verify that nvm and yarn are available
+            export NVM_DIR="\$HOME/.nvm"
+            [ -s "\$NVM_DIR/nvm.sh" ] && \. "\$NVM_DIR/nvm.sh"
+
+            # Verify that NVM and Yarn are available
             nvm --version
             yarn --version
 
-            # Check the current branch and select the appropriate script 
-            if [[ "${{ github.event_name }}" == "pull_request" ]]; then
-            BRANCH_NAME="${{ github.head_ref }}"
-            elif [[ "${{ github.event_name }}" == "push" ]]; then
-              BRANCH_NAME="${{ github.ref_name }}"
+            # Ensure the script exists and is executable
+            if [ -f "$SCRIPT_PATH" ]; then
+              chmod +x "$SCRIPT_PATH"
+              bash "$SCRIPT_PATH" "$BRANCH_NAME"
             else
-              echo "Unsupported event: ${{ github.event_name }}"
+              echo "Error: Deployment script $SCRIPT_PATH not found!"
               exit 1
             fi
-            if [ "$BRANCH_NAME" == "main" ]; then SCRIPT_PATH="/scripts/build.sh"
-            else SCRIPT_PATH="/scripts/builddev.sh"
-            fi
-            # Run the script and pass the branch name as an argument 
-            bash "$SCRIPT_PATH" "$BRANCH_NAME"
           EOF
