@@ -12,7 +12,7 @@ interface IItem {
 const CarouselPartners = ({ data }: { data: IItem[] }) => {
   const maxScrollWidth = useRef(0);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const carousel = useRef(null);
+  const carousel = useRef<HTMLDivElement>(null);
 
   const isDisabled = (direction: string) => {
     if (direction === 'prev') {

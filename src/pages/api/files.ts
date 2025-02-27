@@ -3,7 +3,10 @@ import { FileService } from 'services/fileServices';
 import path from 'path';
 import fs from 'fs/promises';
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse,
+) {
   switch (req.method) {
     case 'GET':
       return handleGet(req, res);
@@ -19,18 +22,22 @@ async function handleGet(req: NextApiRequest, res: NextApiResponse) {
     const files = await FileService.getAllFiles();
     return res.status(200).json({
       rows: files,
-      total: files.length
+      total: (files as any).length,
     });
   } catch (error) {
     console.error('Fetch error:', error);
     return res.status(500).json({
       error: 'Failed to fetch files',
-      message: error instanceof Error ? error.message : 'Unknown error'
+      message:
+        error instanceof Error ? error.message : 'Unknown error',
     });
   }
 }
 
-async function handleDelete(req: NextApiRequest, res: NextApiResponse) {
+async function handleDelete(
+  req: NextApiRequest,
+  res: NextApiResponse,
+) {
   try {
     const { id } = req.query;
 
@@ -46,7 +53,11 @@ async function handleDelete(req: NextApiRequest, res: NextApiResponse) {
 
     // Delete file from filesystem
     if (file.publicUrl) {
-      const filePath = path.join(process.cwd(), 'public', file.publicUrl);
+      const filePath = path.join(
+        process.cwd(),
+        'public',
+        file.publicUrl,
+      );
       console.log('Attempting to delete file at path:', filePath);
 
       try {
@@ -63,7 +74,9 @@ async function handleDelete(req: NextApiRequest, res: NextApiResponse) {
       await FileService.deleteFile(id);
     } catch (error) {
       console.error('Database deletion error:', error);
-      return res.status(500).json({ error: 'Failed to delete file from database' });
+      return res
+        .status(500)
+        .json({ error: 'Failed to delete file from database' });
     }
 
     return res.status(200).json({ success: true });
@@ -71,7 +84,8 @@ async function handleDelete(req: NextApiRequest, res: NextApiResponse) {
     console.error('Delete endpoint error:', error);
     return res.status(500).json({
       error: 'Failed to delete file',
-      details: error instanceof Error ? error.message : 'Unknown error'
+      details:
+        error instanceof Error ? error.message : 'Unknown error',
     });
   }
 }

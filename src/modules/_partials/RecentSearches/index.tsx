@@ -1,7 +1,11 @@
 import { useSearchbar } from 'modules/contexts/SearchbarContext';
 import { useRouter } from 'next/router';
 
-export default function RecentSearches({ onClickSearch }) {
+export default function RecentSearches({
+  onClickSearch,
+}: {
+  onClickSearch: () => void;
+}) {
   const { recentSearches } = useSearchbar();
   const { push } = useRouter();
 

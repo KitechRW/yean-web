@@ -26,28 +26,36 @@ function CSSTransition({
   tag = 'div',
   children,
   ...rest
-}) {
-  const enterClasses = enter.split(' ').filter(s => s.length);
+}: any) {
+  const enterClasses = enter
+    .split(' ')
+    .filter((s: string) => s.length);
   const enterStartClasses = enterStart
     .split(' ')
-    .filter(s => s.length);
-  const enterEndClasses = enterEnd.split(' ').filter(s => s.length);
-  const leaveClasses = leave.split(' ').filter(s => s.length);
+    .filter((s: any) => s.length);
+  const enterEndClasses = enterEnd
+    .split(' ')
+    .filter((s: string) => s.length);
+  const leaveClasses = leave
+    .split(' ')
+    .filter((s: string) => s.length);
   const leaveStartClasses = leaveStart
     .split(' ')
-    .filter(s => s.length);
-  const leaveEndClasses = leaveEnd.split(' ').filter(s => s.length);
+    .filter((s: any) => s.length);
+  const leaveEndClasses = leaveEnd
+    .split(' ')
+    .filter((s: string) => s.length);
   const removeFromDom = unmountOnExit;
 
-  function addClasses(node, classes) {
+  function addClasses(node: any, classes: any) {
     classes.length && node.classList.add(...classes);
   }
 
-  function removeClasses(node, classes) {
+  function removeClasses(node: any, classes: any) {
     classes.length && node.classList.remove(...classes);
   }
 
-  const nodeRef = React.useRef(null);
+  const nodeRef = React.useRef<any>(null);
   const Component = tag;
 
   return (
@@ -56,7 +64,7 @@ function CSSTransition({
       nodeRef={nodeRef}
       unmountOnExit={removeFromDom}
       in={show}
-      addEndListener={done => {
+      addEndListener={(done: any) => {
         nodeRef.current.addEventListener(
           'transitionend',
           done,
@@ -95,7 +103,13 @@ function CSSTransition({
           ...leaveEndClasses,
           ...leaveClasses,
         ]);
-        if (!removeFromDom) nodeRef.current.style.display = 'none';
+        if (
+          !removeFromDom &&
+          nodeRef.current &&
+          nodeRef.current.style
+        ) {
+          nodeRef.current.style.display = 'none';
+        }
       }}
     >
       <Component
@@ -109,7 +123,7 @@ function CSSTransition({
   );
 }
 
-function Transition({ show, appear, ...rest }) {
+function Transition({ show, appear, ...rest }: any) {
   const { parent } = useContext(TransitionContext);
   const isInitialRender = useIsInitialRender();
   const isChild = show === undefined;
@@ -117,8 +131,10 @@ function Transition({ show, appear, ...rest }) {
   if (isChild) {
     return (
       <CSSTransition
-        appear={parent.appear || !parent.isInitialRender}
-        show={parent.show}
+        appear={
+          (parent as any).appear || !(parent as any).isInitialRender
+        }
+        show={(parent as any).show}
         {...rest}
       />
     );

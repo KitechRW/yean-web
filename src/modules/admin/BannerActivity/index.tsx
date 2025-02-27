@@ -29,9 +29,9 @@ const BannerActivity: React.FC = () => {
 
       const response = await fetch('/api/banners', {
         headers: {
-          'Accept': 'application/json',
-          'Cache-Control': 'no-cache'
-        }
+          Accept: 'application/json',
+          'Cache-Control': 'no-cache',
+        },
       });
 
       if (!response.ok) {
@@ -42,15 +42,21 @@ const BannerActivity: React.FC = () => {
           throw new Error('Please log in to access banners');
         }
         if (response.status === 403) {
-          throw new Error('You do not have permission to access banners');
+          throw new Error(
+            'You do not have permission to access banners',
+          );
         }
-        throw new Error(`Failed to fetch banners (Status: ${response.status})`);
+        throw new Error(
+          `Failed to fetch banners (Status: ${response.status})`,
+        );
       }
 
       const data = await response.json();
       setBanners(Array.isArray(data) ? data : []);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to load banners');
+      setError(
+        err instanceof Error ? err.message : 'Failed to load banners',
+      );
     } finally {
       setIsLoading(false);
       setIsRetrying(false);
@@ -63,13 +69,13 @@ const BannerActivity: React.FC = () => {
 
   // Filter banners based on search input
   const filteredBanners = React.useMemo(() => {
-    return banners.filter((banner) =>
-      banner.title.toLowerCase().includes(filterValue.toLowerCase())
+    return banners.filter(banner =>
+      banner.title.toLowerCase().includes(filterValue.toLowerCase()),
     );
   }, [banners, filterValue]);
 
   const handleAddBanner = (banner: Banner) => {
-    setBanners((prev) => [...prev, banner]);
+    setBanners(prev => [...prev, banner]);
   };
 
   const handleEditBanner = async (banner: Banner) => {
@@ -87,11 +93,17 @@ const BannerActivity: React.FC = () => {
       }
 
       const updatedBanner = await response.json();
-      setBanners((prev) =>
-        prev.map((item) => (item.id === updatedBanner.id ? updatedBanner : item))
+      setBanners(prev =>
+        prev.map(item =>
+          item.id === updatedBanner.id ? updatedBanner : item,
+        ),
       );
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to update banner');
+      setError(
+        err instanceof Error
+          ? err.message
+          : 'Failed to update banner',
+      );
     }
   };
 
@@ -105,9 +117,13 @@ const BannerActivity: React.FC = () => {
         throw new Error('Failed to delete banner');
       }
 
-      setBanners((prev) => prev.filter((item) => item.id !== id));
+      setBanners(prev => prev.filter(item => item.id !== id));
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to delete banner');
+      setError(
+        err instanceof Error
+          ? err.message
+          : 'Failed to delete banner',
+      );
     }
   };
 
@@ -146,14 +162,14 @@ const BannerActivity: React.FC = () => {
           <Search className="absolute left-2 h-5 w-5 text-slate-400" />
           <input
             value={filterValue}
-            onChange={(e) => setFilterValue(e.target.value)}
+            onChange={e => setFilterValue(e.target.value)}
             className="peer w-full appearance-none rounded-md py-2 pl-10 text-sm leading-6 text-slate-900 placeholder-slate-400 shadow-sm ring-1 ring-slate-200 focus:outline-none focus:ring-2 focus:ring-green-500"
             type="text"
             placeholder="Filter banners..."
           />
         </div>
 
-        <AddBanner onAdd={handleAddBanner}>
+        <AddBanner onAdd={banner => handleAddBanner(banner as any)}>
           <button className="group flex items-center rounded-md bg-green-500 px-8 py-2 text-sm font-medium text-white shadow-sm hover:bg-green-600">
             <Plus className="mr-1 h-5 w-5" />
             <span>New</span>
@@ -162,16 +178,16 @@ const BannerActivity: React.FC = () => {
       </div>
 
       <ul className="grid w-full grid-cols-1 gap-4 py-4 text-sm leading-6 sm:grid-cols-2 md:py-8 lg:grid-cols-3 xl:grid-cols-4">
-        {filteredBanners.map((banner) => (
+        {filteredBanners.map(banner => (
           <ViewBanner
             key={banner.id}
-            data={banner}
-            onEdit={handleEditBanner}
+            data={banner as any}
+            onEdit={() => handleEditBanner(banner)}
             onDelete={handleDeleteBanner}
           />
         ))}
 
-        <AddBanner onAdd={handleAddBanner}>
+        <AddBanner onAdd={banner => handleAddBanner(banner as any)}>
           <li className="flex">
             <button className="group flex w-full flex-col items-center justify-center rounded-md border-2 border-dashed border-slate-300 p-3 text-sm font-medium leading-6 text-slate-900 hover:border-green-500 hover:border-solid hover:bg-white hover:text-green-500">
               <Plus className="mb-1 h-6 w-6 text-slate-400 group-hover:text-green-500" />

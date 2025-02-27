@@ -78,7 +78,7 @@ export default function AddBanner({ onAdd, children }: AddBannerProps) {
 
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
-    accept: 'image/*',
+    accept: 'image/*' as any,
     maxSize: 100 * 1024 * 1024, //100MB
   });
 

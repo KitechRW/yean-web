@@ -1,7 +1,11 @@
 import { useNavbar } from 'modules/contexts/NavbarContext';
 import { useRouter } from 'next/router';
 
-export default function RecentPages({ onClickPage }) {
+export default function RecentPages({
+  onClickPage,
+}: {
+  onClickPage: () => void;
+}) {
   const { push } = useRouter();
   const { recentPages } = useNavbar();
   if (recentPages.length <= 1) {

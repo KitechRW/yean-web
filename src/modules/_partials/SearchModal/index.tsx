@@ -4,10 +4,10 @@ import RecentPages from '../RecentPages';
 import RecentSearches from '../RecentSearches';
 import Transition from '../Transition';
 
-function SearchModal({ id, searchId, modalOpen, setModalOpen }) {
+function SearchModal({ id, searchId, modalOpen, setModalOpen }: any) {
   const { push } = useRouter();
-  const modalContent = useRef(null);
-  const searchInput = useRef(null);
+  const modalContent = useRef<any>(null);
+  const searchInput = useRef<any>(null);
 
   const onSearch = (event: any) => {
     event.preventDefault();
@@ -21,7 +21,7 @@ function SearchModal({ id, searchId, modalOpen, setModalOpen }) {
 
   // close on click outside
   useEffect(() => {
-    const clickHandler = ({ target }) => {
+    const clickHandler = ({ target }: any) => {
       if (!modalOpen || modalContent.current.contains(target)) return;
       setModalOpen(false);
     };
@@ -31,7 +31,7 @@ function SearchModal({ id, searchId, modalOpen, setModalOpen }) {
 
   // close if the esc key is pressed
   useEffect(() => {
-    const keyHandler = ({ keyCode }) => {
+    const keyHandler = ({ keyCode }: any) => {
       if (!modalOpen || keyCode !== 27) return;
       setModalOpen(false);
     };

@@ -13,12 +13,13 @@ const ProfilePopup = () => {
   const { push } = useRouter();
   const [dropdownOpen, setDropdownOpen] = React.useState(false);
 
-  const trigger = React.useRef(null);
-  const dropdown = React.useRef(null);
+  const trigger = React.useRef<any>(null);
+  const dropdown = React.useRef<any>(null);
 
   // close on click outside
   React.useEffect(() => {
-    const clickHandler = ({ target }) => {
+    const clickHandler = ({ target }: any) => {
+      if (!trigger.current || !dropdown.current) return;
       if (
         !dropdownOpen ||
         dropdown.current.contains(target) ||
@@ -33,7 +34,7 @@ const ProfilePopup = () => {
 
   // close if the esc key is pressed
   React.useEffect(() => {
-    const keyHandler = ({ keyCode }) => {
+    const keyHandler = ({ keyCode }: any) => {
       if (!dropdownOpen || keyCode !== 27) return;
       setDropdownOpen(false);
     };
@@ -64,6 +65,7 @@ const ProfilePopup = () => {
         leave="transition ease-out duration-200"
         leaveStart="opacity-100"
         leaveEnd="opacity-0"
+        appear={true}
       >
         <div
           ref={dropdown}

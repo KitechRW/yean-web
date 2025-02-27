@@ -9,7 +9,7 @@ export default class ContactControllers {
     try {
       let { name, email, message } = req.body;
       const emailOptions = {
-        email: process.env.SERVICE_USERNAME,
+        email: process.env.SERVICE_USERNAME!,
         from: name,
         message: await emailMocks.contact({
           name,

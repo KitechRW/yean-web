@@ -10,7 +10,10 @@ export const config = {
   },
 };
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse,
+) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
@@ -31,25 +34,31 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     filename: (_name, _ext, part) => {
       // Keep original filename but make it safe
       const originalName = part.originalFilename || 'unknown';
-      return `${Date.now()}-${originalName.replace(/[^a-zA-Z0-9.-]/g, '_')}`;
+      return `${Date.now()}-${originalName.replace(
+        /[^a-zA-Z0-9.-]/g,
+        '_',
+      )}`;
     },
     filter: ({ mimetype }) => {
       // Accept PDF and common document types
-      return mimetype && [
-        'application/pdf',
-        'application/msword',
-        'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-        'application/vnd.ms-excel',
-        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-        'application/vnd.ms-powerpoint',
-        'application/vnd.openxmlformats-officedocument.presentationml.presentation'
-      ].includes(mimetype);
-    }
+      return (
+        mimetype &&
+        ([
+          'application/pdf',
+          'application/msword',
+          'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+          'application/vnd.ms-excel',
+          'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+          'application/vnd.ms-powerpoint',
+          'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+        ].includes(mimetype) as any)
+      );
+    },
   });
 
   try {
     // Parse the form with proper error handling
-    const [fields, files] = await new Promise((resolve, reject) => {
+    const results: any = await new Promise((resolve, reject) => {
       form.parse(req, (err, fields, files) => {
         if (err) {
           console.error('Form parsing error:', err);
@@ -59,6 +68,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         resolve([fields, files]);
       });
     });
+
+    const [fields, files] = results; 
 
     // Get the uploaded file
     const fileKey = Object.keys(files)[0];
@@ -87,7 +98,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       success: true,
       data: fileRecord,
     });
-
   } catch (error) {
     console.error('Upload error:', error);
     // Clean up any partially uploaded files
@@ -104,7 +114,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     return res.status(500).json({
       error: 'File upload failed',
-      details: error instanceof Error ? error.message : 'Unknown error',
+      details:
+        error instanceof Error ? error.message : 'Unknown error',
     });
   }
 }
