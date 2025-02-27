@@ -68,6 +68,9 @@ jobs:
               echo "Unsupported event: ${{ github.event_name }}"
               exit 1
             fi
+            if [ "$BRANCH_NAME" == "main" ]; then SCRIPT_PATH="/scripts/build.sh"
+            else SCRIPT_PATH="/scripts/builddev.sh"
+            fi
             # Run the script and pass the branch name as an argument 
             bash "$SCRIPT_PATH" "$BRANCH_NAME"
           EOF
