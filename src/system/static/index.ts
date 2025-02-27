@@ -16,7 +16,7 @@ import {
 export const navs = [
   {
     path: '/about',
-    label: 'About us',
+    label: 'About',
   },
   {
     path: '/blog',
