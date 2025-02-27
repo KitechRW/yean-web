@@ -1,56 +1,58 @@
 /** @type {import('next').NextConfig} */
-module.exports = {
+const nextConfig = {
+  // Enable SWC-based minification for faster build
   swcMinify: true,
+
+  // Set a timeout for static page generation
   staticPageGenerationTimeout: 1000,
+
+  // Enable React Strict Mode for better development experience
   reactStrictMode: true,
+
+  // TypeScript Configuration
   typescript: {
-    // !! WARN !!
-    // Dangerously allow production builds to successfully complete even if
-    // your project has type errors.
-    // !! WARN !!
+    // Allow production builds to succeed even if there are TypeScript errors
     ignoreBuildErrors: true,
   },
+
+  // ESLint Configuration
   eslint: {
-    // Warning: This allows production builds to successfully complete even if
-    // your project has ESLint errors.
+    // Allow production builds to succeed even if there are ESLint errors
     ignoreDuringBuilds: true,
   },
+
+  // Environment Variables
   env: {
     HOST: process.env.HOST,
     DEFAULT_API: process.env.DEFAULT_API,
     DEFAULT_JWT_SECRET: process.env.DEFAULT_JWT_SECRET,
     USER_INFO: process.env.USER_INFO,
     REACT_APP_ACCESS_TOKEN: process.env.REACT_APP_ACCESS_TOKEN,
-    ISSERVER: typeof window === 'undefined',
+    ISSERVER: typeof window === 'undefined',  // Check if the code is running server-side
     SESSION_PASSWORD: process.env.SESSION_PASSWORD,
   },
-};
-module.exports = {
-  async rewrites() {
+
+  // Image Configuration
+  images: {
+    domains: ['localhost'], // Allow images from localhost or specify your domain
+  },
+
+  // URL Rewrites
+  rewrites() {
     return [
       {
-        source: '/share/:shareId',
-        destination: '/share/[shareId]'
-      }
-    ]
-  }
-}
-module.exports = {
-  images: {
-    domains: ['localhost'], // Add your domain
+        source: '/share/:shareId',  // Match '/share/:shareId' URL
+        destination: '/share/[shareId]',  // Redirect to '/share/[shareId]' page
+      },
+    ];
   },
-}
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-  images: {
-    domains: ['localhost'],
-  },
-  // Enable file uploads larger than 1MB (default limit)
+
+  // API Configuration
   api: {
     bodyParser: {
-      sizeLimit: '10mb',
+      sizeLimit: '10mb',  // Increase file upload limit to 10MB
     },
   },
-}
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;
