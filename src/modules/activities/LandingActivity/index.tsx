@@ -18,6 +18,7 @@ import { useRouter } from 'next/router';
 import { slideUpItems } from './data';
 import SlideUpItem from './SlideUpItem';
 import { Banner } from 'types/types';
+import CustomImage from 'modules/_partials/CustomImage';
 
 const LandingAcitivity = ({
   banners,
@@ -25,7 +26,7 @@ const LandingAcitivity = ({
   recentExtensionMaterials,
   slides,
 }: {
-  banners?: Banner[];
+  banners: Record<string, Banner>;
   recentArticles: any[];
   recentExtensionMaterials: any[];
   slides: any[];
@@ -37,18 +38,20 @@ const LandingAcitivity = ({
   const confirmedPartners = partners?.rows;
 
   const renderBanners = (section: string) => {
-    const banner = banners?.find(
-      banner => banner.section === section,
-    );
+    const banner = banners[section];
 
     if (!banner) return null;
 
     return (
-      <div key={banner.id} className="px-4 md:px-8 py-2 bg-white">
+      <div
+        id={section}
+        key={banner.id}
+        className="px-4 md:px-8 py-2 bg-white"
+      >
         <div className="flex flex-col relative min-h-[64px] md:min-h-[195px]">
-          <Link href={banner.url || '#'}>
-            <Image
-              src={banner.image}
+          <Link href={banner.path || '#'}>
+            <CustomImage
+              src={banner.url}
               alt={banner.title}
               layout="fill"
               loading="lazy"
@@ -110,7 +113,7 @@ const LandingAcitivity = ({
           />
         ))}
       </div>
-      {renderBanners('products')} {/* it must be section products */}
+      {renderBanners('first')} {/* it must be section products */}
       <div className="flex flex-col px-4 md:px-8 py-2 bg-white">
         <h1 className="text-2xl md:text-4xl text-white font-bold bg-brand-green p-2 text-center">
           Extension Materials
@@ -133,7 +136,7 @@ const LandingAcitivity = ({
           <span>View More</span>
         </button>
       </div>
-      {renderBanners('services')} {/* it must be section services */}
+      {renderBanners('second')} {/* it must be section services */}
       <div className="flex flex-col px-4 md:px-8 py-2 bg-white">
         <h1 className="text-2xl md:text-4xl text-white font-bold bg-brand-green p-2 text-center">
           Latest Blog
@@ -156,7 +159,7 @@ const LandingAcitivity = ({
           <span>View More</span>
         </button>
       </div>
-      {renderBanners('about')} {/* it must be section about */}
+      {renderBanners('third')} {/* it must be section about */}
       <div className="flex flex-col px-4 md:px-8 py-2 bg-white">
         <h1 className="text-2xl md:text-4xl text-white font-bold bg-brand-green p-2 text-center">
           Our Partners

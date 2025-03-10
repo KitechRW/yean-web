@@ -2,7 +2,7 @@ import { Call, Email, Facebook,Twitter, WhatsApp, LinkedIn } from '@mui/icons-ma
 const social_medias = [
   {
   name:"Facebook",
-  link:"https://web.facebook.com/YEANAGRO",
+  link:"https://www.facebook.com/share/g/1C3oFs5joM/?mibextid=wwXIfr",
   bg_color:"bg-[#4267B2]",
   logo:Facebook,
   },
@@ -15,7 +15,7 @@ const social_medias = [
 
   {
   name:"WhatsApp",
-  link:"https://api.whatsapp.com/send?phone=250788940434",
+  link:"https://api.whatsapp.com/send?phone=250792397594",
   bg_color:"bg-[#00a884]",
   logo:WhatsApp,
   },

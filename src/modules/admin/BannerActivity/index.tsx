@@ -70,7 +70,7 @@ const BannerActivity: React.FC = () => {
   // Filter banners based on search input
   const filteredBanners = React.useMemo(() => {
     return banners.filter(banner =>
-      banner.title.toLowerCase().includes(filterValue.toLowerCase()),
+      banner.title?.toLowerCase().includes(filterValue.toLowerCase()),
     );
   }, [banners, filterValue]);
 

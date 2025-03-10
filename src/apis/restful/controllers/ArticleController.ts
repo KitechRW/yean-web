@@ -30,6 +30,7 @@ export default class ArticleController {
             'text',
             'views',
             'updatedAt',
+            'createdAt',
           ],
           ['firstname', 'lastname', 'profile_image'],
         ),

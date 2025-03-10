@@ -92,7 +92,7 @@ export const adminNavs = [
   
   {
     icon: UploadOutlined,
-    label: 'Upload Files',
+    label: 'File Manager',
     path: '/dashboard/FileUpload',
   },
   {
@@ -130,11 +130,11 @@ export const adminNavs = [
   //   label: 'Home Page',
   //   path: '/dashboard/home',
   // },
-  {
-    icon: Pageview,
-    label: 'Innovation center',
-    path: '/dashboard/innovation-center',
-  },
+  // {
+  //   icon: Pageview,
+  //   label: 'Innovation center',
+  //   path: '/dashboard/innovation-center',
+  // },
   {
     icon: Pageview,
     label: 'About us',

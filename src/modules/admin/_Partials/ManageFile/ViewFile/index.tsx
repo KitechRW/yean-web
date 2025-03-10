@@ -14,6 +14,7 @@ import {
   Snackbar,
   Alert,
   CircularProgress,
+  SnackbarCloseReason,
 } from '@mui/material';
 import {
   MoreVert,
@@ -30,8 +31,10 @@ import {
   Code,
   Description,
   InsertDriveFile,
+  Cancel,
 } from '@mui/icons-material';
 import { formatDistanceToNow } from 'date-fns';
+import { CopyIcon } from 'lucide-react';
 
 interface FileRecord {
   id: string;
@@ -323,7 +326,9 @@ const ViewFile: React.FC<ViewFileProps> = ({
 
   const copyShareLink = async () => {
     try {
-      await navigator.clipboard.writeText(shareUrl);
+      await navigator.clipboard.writeText(
+        `${window.location.origin}${fileData.publicUrl}`,
+      );
       setSnackbar({
         open: true,
         message: 'Share link copied to clipboard',
@@ -338,8 +343,40 @@ const ViewFile: React.FC<ViewFileProps> = ({
     }
   };
 
+  const handleClose = (
+    event: React.SyntheticEvent | Event,
+    reason?: SnackbarCloseReason,
+  ) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setSnackbar({ ...snackbar, open: false });
+  };
+
+  const action = (
+    <React.Fragment>
+      <IconButton
+        size="small"
+        aria-label="close"
+        color="inherit"
+        onClick={handleClose}
+      >
+        <Cancel fontSize="small" />
+      </IconButton>
+    </React.Fragment>
+  );
+
   return (
     <>
+      <Snackbar
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+        open={snackbar.open}
+        autoHideDuration={2000}
+        onClose={handleClose}
+        message={snackbar.message}
+        action={action}
+      />
       <Card className="hover:shadow-lg transition-shadow duration-200 border border-green-100">
         <div className="p-4 flex items-center justify-between">
           <div className="flex items-center gap-4 flex-grow min-w-0">
@@ -357,7 +394,7 @@ const ViewFile: React.FC<ViewFileProps> = ({
                 className="text-gray-700 flex gap-2 items-center flex-col"
               >
                 <span>{formatFileSize(fileData.size)}</span>
-                <span className='whitespace-nowrap'>
+                <span className="whitespace-nowrap">
                   Uploaded{' '}
                   {formatDistanceToNow(
                     new Date(fileData.uploadDate),
@@ -375,7 +412,7 @@ const ViewFile: React.FC<ViewFileProps> = ({
             <IconButton
               onClick={handlePreview}
               disabled={isLoading}
-              className="text-green-600 hover:text-green-800"
+              // className="text-green-600 hover:text-green-800"
             >
               {isLoading ? (
                 <CircularProgress size={24} />
@@ -384,10 +421,16 @@ const ViewFile: React.FC<ViewFileProps> = ({
               )}
             </IconButton>
             <IconButton
-              onClick={handleMenuOpen}
-              className="text-green-600 hover:text-green-800"
+              onClick={copyShareLink}
+              disabled={isLoading}
+              // className="text-green-600 hover:text-green-800"
+              title="Copy Link"
             >
-              <MoreVert />
+              {isLoading ? (
+                <CircularProgress size={24} />
+              ) : (
+                <CopyIcon />
+              )}
             </IconButton>
           </div>
         </div>
@@ -398,9 +441,6 @@ const ViewFile: React.FC<ViewFileProps> = ({
         open={Boolean(anchorEl)}
         onClose={handleMenuClose}
       >
-        <MenuItem onClick={handleDownload} className="gap-2">
-          <Download /> Download
-        </MenuItem>
         <MenuItem onClick={handleShare} className="gap-2">
           <Share /> Share
         </MenuItem>
