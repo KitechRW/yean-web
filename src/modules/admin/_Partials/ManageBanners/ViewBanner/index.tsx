@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Edit2, Trash2, X, Upload, ExternalLink } from 'lucide-react';
 import { Banner } from 'types/types';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 interface ViewBannerProps {
   data: Banner;
@@ -16,7 +18,12 @@ interface EditFormData {
   image: File | null;
 }
 
-const ViewBanner: React.FC<ViewBannerProps> = ({ data, onEdit, onDelete }) => {
+const ViewBanner: React.FC<ViewBannerProps> = ({
+  data,
+  onEdit,
+  onDelete,
+}) => {
+  const router = useRouter();
   const [showModal, setShowModal] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
@@ -56,7 +63,9 @@ const ViewBanner: React.FC<ViewBannerProps> = ({ data, onEdit, onDelete }) => {
     setPreviewUrl(data.image);
   };
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ) => {
     const file = e.target.files?.[0];
     if (file) {
       // Validate file type
@@ -78,7 +87,7 @@ const ViewBanner: React.FC<ViewBannerProps> = ({ data, onEdit, onDelete }) => {
   };
 
   const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
@@ -91,7 +100,12 @@ const ViewBanner: React.FC<ViewBannerProps> = ({ data, onEdit, onDelete }) => {
 
     try {
       // Validate form data
-      if (!formData.title || !formData.url || !formData.section || !formData.path) {
+      if (
+        !formData.title ||
+        !formData.url ||
+        !formData.section ||
+        !formData.path
+      ) {
         throw new Error('Please fill in all required fields');
       }
 
@@ -119,7 +133,9 @@ const ViewBanner: React.FC<ViewBannerProps> = ({ data, onEdit, onDelete }) => {
       onEdit(updatedBanner);
       handleClose();
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'An error occurred');
+      setError(
+        err instanceof Error ? err.message : 'An error occurred',
+      );
     } finally {
       setIsEditing(false);
     }
@@ -145,17 +161,24 @@ const ViewBanner: React.FC<ViewBannerProps> = ({ data, onEdit, onDelete }) => {
       if (!response.ok) {
         const errorData = await response.json();
         console.error('Delete Error Response:', errorData);
-        throw new Error(errorData.message || 'Failed to delete banner');
+        throw new Error(
+          errorData.message || 'Failed to delete banner',
+        );
       }
 
       const result = await response.json();
       console.log('Delete Result:', result);
 
-      onDelete(data.id);
+      // onDelete(data.id);
       handleClose();
+      router.reload();
     } catch (err) {
       console.error('Delete Catch Error:', err);
-      setDeleteError(err instanceof Error ? err.message : 'An unexpected error occurred');
+      setDeleteError(
+        err instanceof Error
+          ? err.message
+          : 'An unexpected error occurred',
+      );
     } finally {
       setIsDeleting(false);
       setConfirmDelete(false);
@@ -167,19 +190,19 @@ const ViewBanner: React.FC<ViewBannerProps> = ({ data, onEdit, onDelete }) => {
       <li className="group relative flex flex-col overflow-hidden rounded-lg bg-white shadow-sm ring-1 ring-gray-200 hover:shadow-md">
         <div className="relative aspect-video overflow-hidden">
           <img
-            src={data.image}
+            src={data.url}
             alt={data.title}
             className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
           <div className="absolute bottom-0 left-0 right-0 flex items-center justify-end space-x-2 p-4 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-            <button
+            {/* <button
               onClick={() => setShowModal(true)}
               className="rounded-full bg-white/90 p-2 text-gray-700 hover:bg-white"
               title="Edit banner"
             >
               <Edit2 className="h-4 w-4" />
-            </button>
+            </button> */}
             <button
               onClick={handleDelete}
               className="rounded-full bg-white/90 p-2 text-red-600 hover:bg-white"
@@ -191,23 +214,16 @@ const ViewBanner: React.FC<ViewBannerProps> = ({ data, onEdit, onDelete }) => {
         </div>
 
         <div className="flex flex-1 flex-col p-4">
-          <h3 className="font-medium text-gray-900">{data.title}</h3>
           <div className="mt-1 flex items-center text-sm text-gray-500">
-            <span className="truncate">{data.url}</span>
+            <span className="truncate">{data.title}</span>
             <a
-              href={data.url}
+              href={data.path || `${window.origin}#${data.section}`}
               target="_blank"
               rel="noopener noreferrer"
               className="ml-1 text-green-500 hover:text-green-600"
             >
               <ExternalLink className="h-4 w-4" />
             </a>
-          </div>
-          <div className="mt-2 flex items-center space-x-2 text-xs">
-            <span className="rounded-full bg-gray-100 px-2 py-1 font-medium text-gray-600">
-              {data.section}
-            </span>
-            <span className="text-gray-400">{data.path}</span>
           </div>
         </div>
       </li>
@@ -239,7 +255,10 @@ const ViewBanner: React.FC<ViewBannerProps> = ({ data, onEdit, onDelete }) => {
               <form onSubmit={handleEdit} className="mt-4 space-y-4">
                 {/* Title Input */}
                 <div>
-                  <label htmlFor="title" className="block text-sm font-medium text-gray-700">
+                  <label
+                    htmlFor="title"
+                    className="block text-sm font-medium text-gray-700"
+                  >
                     Title
                   </label>
                   <input
@@ -255,7 +274,10 @@ const ViewBanner: React.FC<ViewBannerProps> = ({ data, onEdit, onDelete }) => {
 
                 {/* URL Input */}
                 <div>
-                  <label htmlFor="url" className="block text-sm font-medium text-gray-700">
+                  <label
+                    htmlFor="url"
+                    className="block text-sm font-medium text-gray-700"
+                  >
                     URL
                   </label>
                   <input
@@ -271,7 +293,10 @@ const ViewBanner: React.FC<ViewBannerProps> = ({ data, onEdit, onDelete }) => {
 
                 {/* Section Select */}
                 <div>
-                  <label htmlFor="section" className="block text-sm font-medium text-gray-700">
+                  <label
+                    htmlFor="section"
+                    className="block text-sm font-medium text-gray-700"
+                  >
                     Section
                   </label>
                   <select
@@ -285,7 +310,8 @@ const ViewBanner: React.FC<ViewBannerProps> = ({ data, onEdit, onDelete }) => {
                     <option value="">Select a section</option>
                     {sections.map(section => (
                       <option key={section} value={section}>
-                        {section.charAt(0).toUpperCase() + section.slice(1)}
+                        {section.charAt(0).toUpperCase() +
+                          section.slice(1)}
                       </option>
                     ))}
                   </select>
@@ -293,7 +319,10 @@ const ViewBanner: React.FC<ViewBannerProps> = ({ data, onEdit, onDelete }) => {
 
                 {/* Path Input */}
                 <div>
-                  <label htmlFor="path" className="block text-sm font-medium text-gray-700">
+                  <label
+                    htmlFor="path"
+                    className="block text-sm font-medium text-gray-700"
+                  >
                     Path
                   </label>
                   <input
@@ -324,7 +353,10 @@ const ViewBanner: React.FC<ViewBannerProps> = ({ data, onEdit, onDelete }) => {
                           <button
                             type="button"
                             onClick={() => {
-                              setFormData(prev => ({ ...prev, image: null }));
+                              setFormData(prev => ({
+                                ...prev,
+                                image: null,
+                              }));
                               setPreviewUrl(data.image);
                             }}
                             className="absolute -right-2 -top-2 rounded-full bg-red-500 p-1 text-white hover:bg-red-600"
@@ -418,7 +450,8 @@ const ViewBanner: React.FC<ViewBannerProps> = ({ data, onEdit, onDelete }) => {
               </div>
 
               <p className="mt-4 text-sm text-gray-500">
-                Are you sure you want to delete this banner? This action cannot be undone.
+                Are you sure you want to delete this banner? This
+                action cannot be undone.
               </p>
 
               {deleteError && (

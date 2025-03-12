@@ -13,6 +13,7 @@ import {
 } from '@mui/material';
 import { CloudUpload, Close } from '@mui/icons-material';
 import { FileRecord } from 'types/types';
+import { useRouter } from 'next/router';
 
 interface AddFileProps {
   children: React.ReactNode;
@@ -25,7 +26,7 @@ interface AddFileProps {
 const AddFile: React.FC<AddFileProps> = ({
   children,
   onAdd,
-  maxFileSize = 10 * 1024 * 1024,
+  maxFileSize = 20 * 1024 * 1024,
   allowedTypes = [
     '.pdf',
     '.doc',
@@ -37,6 +38,7 @@ const AddFile: React.FC<AddFileProps> = ({
   ],
   className,
 }) => {
+  const router = useRouter();
   const [open, setOpen] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
@@ -179,8 +181,9 @@ const AddFile: React.FC<AddFileProps> = ({
         throw new Error(response.error || 'Upload failed');
       }
 
-      onAdd(response.data);
+      // onAdd(response.data);
       handleClose();
+      router.reload();
     } catch (error) {
       console.error('Upload error:', error);
       setError(
@@ -234,6 +237,7 @@ const AddFile: React.FC<AddFileProps> = ({
               required
               disabled={uploading}
               margin="normal"
+              className="hidden"
             />
 
             <input

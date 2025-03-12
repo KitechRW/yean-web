@@ -12,7 +12,7 @@ const LandingPage = ({
   slides,
   banners,
 }: {
-  banners: Banner[];
+  banners: Record<string, Banner>;
   recentArticles: any[];
   recentExtensionMaterials: any[];
   slides: any[];
@@ -37,7 +37,7 @@ const LandingPage = ({
 export async function getServerSideProps() {
   let partners = null;
 
-  let banners = null;
+  let banners: any = {};
   let recentArticles = [];
   let recentExtensionMaterials = [];
   let slides = [];
@@ -55,7 +55,18 @@ export async function getServerSideProps() {
     const { data: bannersResponse } = await Http.axios.get(
       '/api/banners',
     );
-    banners = bannersResponse;
+    banners.first =
+      bannersResponse.find(
+        (item: any) => item.section.toString() === '1',
+      ) || null;
+    banners.second =
+      bannersResponse.find(
+        (item: any) => item.section.toString() === '2',
+      ) || null;
+    banners.third =
+      bannersResponse.find(
+        (item: any) => item.section.toString() === '3',
+      ) || null;
   } catch (error) {
     console.log('Error fetching banners:', error);
   }

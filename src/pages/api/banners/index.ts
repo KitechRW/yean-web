@@ -2,6 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import formidable from 'formidable';
 import fs from 'fs/promises';
 import { pool } from 'system/lib/db';
+import path from 'path';
 
 // Disable the default body parser
 export const config = {
@@ -10,14 +11,19 @@ export const config = {
   },
 };
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse,
+) {
   let connection;
   try {
     connection = await pool.getConnection();
 
     switch (req.method) {
       case 'GET':
-        const [banners] = await connection.execute('SELECT * FROM banners');
+        const [banners] = await connection.execute(
+          'SELECT * FROM banners ORDER BY created_at DESC',
+        );
 
         // Process the banners data and convert images to base64
         const processedBanners = (banners as any[]).map(banner => ({
@@ -27,9 +33,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           section: banner.section,
           path: banner.path,
           image: banner.image_data
-            ? `data:${banner.image_type};base64,${banner.image_data.toString('base64')}`
+            ? `data:${
+                banner.image_type
+              };base64,${banner.image_data.toString('base64')}`
             : null,
-          created_at: banner.created_at
+          created_at: banner.created_at,
         }));
 
         return res.status(200).json(processedBanners);
@@ -38,63 +46,81 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         // Start a transaction for safe insertion
         await connection.beginTransaction();
 
+        // Validate image type
+        const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
         try {
+          // Ensure upload directory exists
+          const uploadDir = path.join(
+            process.cwd(),
+            'public',
+            'uploads',
+          );
+          try {
+            await fs.access(uploadDir);
+          } catch {
+            await fs.mkdir(uploadDir, { recursive: true });
+          }
           const form = formidable({
-            maxFileSize: 5 * 1024 * 1024, // 5MB
+            uploadDir,
             keepExtensions: true,
+            maxFileSize: 50 * 1024 * 1024, // 50MB
+            filename: (_name, _ext, part) => {
+              // Keep original filename but make it safe
+              const originalName = part.originalFilename || 'unknown';
+              return `${Date.now()}-${originalName.replace(
+                /[^a-zA-Z0-9.-]/g,
+                '_',
+              )}`;
+            },
+            filter: ({ mimetype }) => {
+              return (
+                mimetype && (allowedTypes.includes(mimetype) as any)
+              );
+            },
           });
 
-          const [fields, files] = await new Promise<[formidable.Fields, formidable.Files]>((resolve, reject) => {
-            form.parse(req, (err, fields, files) => {
-              if (err) reject(err);
-              resolve([fields, files]);
-            });
-          });
+          const results: any = await new Promise(
+            (resolve, reject) => {
+              form.parse(req, (err, fields, files) => {
+                if (err) {
+                  console.error('Form parsing error:', err);
+                  reject(err);
+                  return;
+                }
+                resolve([fields, files]);
+              });
+            },
+          );
 
-          // Validate required fields
-          const requiredFields = ['title', 'url', 'section', 'path'];
-          for (const field of requiredFields) {
-            if (!fields[field]) {
-              await connection.rollback();
-              return res.status(400).json({ message: `Missing required field: ${field}` });
-            }
+          const [fields, files] = results;
+
+          // Get the uploaded file
+          const fileKey = Object.keys(files)[0];
+          const file = files[fileKey][0] || files[fileKey];
+
+          if (!file) {
+            return res
+              .status(400)
+              .json({ error: 'No image uploaded' });
           }
 
-          // Validate image
-          const imageFile = files.image as formidable.File;
-          if (!imageFile) {
-            await connection.rollback();
-            return res.status(400).json({ message: 'Image is required' });
-          }
-
-          // Validate image type
-          const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
-          if (!allowedTypes.includes(imageFile.mimetype || '')) {
-            await connection.rollback();
-            return res.status(400).json({ message: 'Invalid image type' });
-          }
-
-          const imageData = await fs.readFile(imageFile.filepath);
+          // Get file details
+          const filename = path.basename(file.filepath);
+          const publicUrl = `/uploads/${filename}`;
 
           const [result] = await connection.execute(
             `INSERT INTO banners (
-              title, url, section, path,
-              image_data, image_name, image_type,
+              title, url, path, section, image_type,
               created_at
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, NOW())`,
+            ) VALUES (?, ?, ?, ?, ?, NOW())`,
             [
-              fields.title as string,
-              fields.url as string,
-              fields.section as string,
+              `${file.originalFilename || filename} ${Date.now()}`,
+              publicUrl,
               fields.path as string,
-              imageData,
-              imageFile.originalFilename,
-              imageFile.mimetype,
-            ]
+              fields.section as string,
+              file.mimetype,
+            ],
           );
-
-          // Clean up temporary file
-          await fs.unlink(imageFile.filepath);
 
           // Commit the transaction
           await connection.commit();
@@ -105,7 +131,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             url: fields.url,
             section: fields.section,
             path: fields.path,
-            image: `data:${imageFile.mimetype};base64,${imageData.toString('base64')}`,
           });
         } catch (postError) {
           // Rollback the transaction in case of any error
@@ -114,13 +139,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
 
       default:
-        return res.status(405).json({ message: 'Method not allowed' });
+        return res
+          .status(405)
+          .json({ message: 'Method not allowed' });
     }
   } catch (error) {
     console.error('Error handling banner request:', error);
     return res.status(500).json({
       message: 'Internal server error',
-      error: error instanceof Error ? error.message : 'Unknown error'
+      error: error instanceof Error ? error.message : 'Unknown error',
     });
   } finally {
     if (connection) connection.release();

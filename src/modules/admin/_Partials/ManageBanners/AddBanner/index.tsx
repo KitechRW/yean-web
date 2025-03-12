@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import React, { useState } from 'react';
 import {
   Dialog,
@@ -11,38 +12,43 @@ import {
   MenuItem,
   FormControl,
   InputLabel,
-  Alert
+  Alert,
 } from '@mui/material';
 import { CloudUpload, Close } from '@mui/icons-material';
 import { useDropzone } from 'react-dropzone';
 import { Banner } from 'types/types';
+import { useRouter } from 'next/router';
 
 interface AddBannerProps {
   onAdd: (banner: Banner) => void;
   children: React.ReactNode;
+  allowedTypes?: string[];
 }
 
 interface FormData {
-  title: string;
-  url: string;
   section: string;
   path: string;
   image: File | null;
 }
 
 const INITIAL_FORM_STATE: FormData = {
-  title: '',
-  url: '',
   section: '',
   path: '',
   image: null,
 };
 
-const sections = ['products', 'services', 'about'];
+const sections = [1, 2, 3];
 
-export default function AddBanner({ onAdd, children }: AddBannerProps) {
+export default function AddBanner({
+  onAdd,
+  children,
+  allowedTypes = ['image/png', 'image/jpeg', 'image/gif'],
+}: AddBannerProps) {
+  const router = useRouter();
   const [open, setOpen] = useState(false);
-  const [formData, setFormData] = useState<FormData>(INITIAL_FORM_STATE);
+  const [formData, setFormData] = useState<FormData>(
+    INITIAL_FORM_STATE,
+  );
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [previewUrl, setPreviewUrl] = useState<string>('');
   const [error, setError] = useState<string>('');
@@ -71,14 +77,13 @@ export default function AddBanner({ onAdd, children }: AddBannerProps) {
       return;
     }
 
-    setFormData((prev) => ({ ...prev, image: file }));
+    setFormData(prev => ({ ...prev, image: file }));
     setPreviewUrl(URL.createObjectURL(file));
     setError('');
   };
 
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
-    accept: 'image/*' as any,
     maxSize: 100 * 1024 * 1024, //100MB
   });
 
@@ -88,9 +93,11 @@ export default function AddBanner({ onAdd, children }: AddBannerProps) {
     setError('');
 
     try {
-      const { title, url, section, path, image } = formData;
-      if (!title.trim() || !url.trim() || !section.trim() || !path.trim() || !image) {
-        throw new Error('Please fill in all required fields completely');
+      const { section, path, image } = formData;
+      if (!section || !image || !path.trim()) {
+        throw new Error(
+          'Please fill in all required fields completely',
+        );
       }
 
       const submitFormData = new FormData();
@@ -107,14 +114,19 @@ export default function AddBanner({ onAdd, children }: AddBannerProps) {
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.message || 'Failed to create banner');
+        throw new Error(
+          errorData.message || 'Failed to create banner',
+        );
       }
 
       const newBanner = await response.json();
-      onAdd(newBanner);
+      // onAdd(newBanner);
       handleClose();
+      router.reload();
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'An error occurred');
+      setError(
+        err instanceof Error ? err.message : 'An error occurred',
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -143,43 +155,23 @@ export default function AddBanner({ onAdd, children }: AddBannerProps) {
 
         <form onSubmit={handleSubmit}>
           <DialogContent>
-            <TextField
-              fullWidth
-              label="Title"
-              value={formData.title}
-              onChange={(e) => setFormData((prev) => ({ ...prev, title: e.target.value }))}
-              required
-              disabled={isSubmitting}
-              margin="normal"
-              variant="outlined"
-              color="success"
-            />
-
-            <TextField
-              fullWidth
-              label="URL"
-              type="url"
-              value={formData.url}
-              onChange={(e) => setFormData((prev) => ({ ...prev, url: e.target.value }))}
-              required
-              disabled={isSubmitting}
-              margin="normal"
-              variant="outlined"
-              color="success"
-            />
-
             <FormControl fullWidth margin="normal" required>
               <InputLabel>Section</InputLabel>
               <Select
                 value={formData.section}
                 label="Section"
-                onChange={(e) => setFormData((prev) => ({ ...prev, section: e.target.value }))}
+                onChange={e =>
+                  setFormData(prev => ({
+                    ...prev,
+                    section: e.target.value,
+                  }))
+                }
                 disabled={isSubmitting}
                 color="success"
               >
-                {sections.map((section) => (
+                {sections.map(section => (
                   <MenuItem key={section} value={section}>
-                    {section.charAt(0).toUpperCase() + section.slice(1)}
+                    {`Banner ${section}`}
                   </MenuItem>
                 ))}
               </Select>
@@ -187,20 +179,27 @@ export default function AddBanner({ onAdd, children }: AddBannerProps) {
 
             <TextField
               fullWidth
-              label="Path"
+              label="Link To Page"
               value={formData.path}
-              onChange={(e) => setFormData((prev) => ({ ...prev, path: e.target.value }))}
+              onChange={e =>
+                setFormData(prev => ({
+                  ...prev,
+                  path: e.target.value,
+                }))
+              }
               required
               disabled={isSubmitting}
               margin="normal"
               variant="outlined"
               color="success"
+              type="url"
             />
 
             <input
               {...getInputProps()}
               style={{ display: 'none' }}
               id="banner-file-upload"
+              accept={allowedTypes.join(',')}
             />
 
             <label
@@ -209,10 +208,15 @@ export default function AddBanner({ onAdd, children }: AddBannerProps) {
                 cursor-pointer flex flex-col items-center justify-center
                 w-full h-48 border-2 border-dashed rounded-lg
                 mt-4 transition-colors duration-200
-                ${isSubmitting ? 'bg-green-50' :
-                error ? 'border-red-300 bg-red-50' :
-                  previewUrl ? 'border-green-500 bg-green-50' :
-                    'border-green-300 hover:border-green-500'}
+                ${
+                  isSubmitting
+                    ? 'bg-green-50'
+                    : error
+                    ? 'border-red-300 bg-red-50'
+                    : previewUrl
+                    ? 'border-green-500 bg-green-50'
+                    : 'border-green-300 hover:border-green-500'
+                }
               `}
               {...getRootProps()}
             >
@@ -221,13 +225,13 @@ export default function AddBanner({ onAdd, children }: AddBannerProps) {
                   <img
                     src={previewUrl}
                     alt="Preview"
-                    className="max-h-35 w-auto object-contain"
+                    className="max-h-35 w-auto object-contain mt-48"
                   />
                   <IconButton
                     size="small"
-                    onClick={(e) => {
+                    onClick={e => {
                       e.stopPropagation();
-                      setFormData((prev) => ({ ...prev, image: null }));
+                      setFormData(prev => ({ ...prev, image: null }));
                       setPreviewUrl('');
                     }}
                     sx={{
@@ -236,7 +240,7 @@ export default function AddBanner({ onAdd, children }: AddBannerProps) {
                       right: -10,
                       backgroundColor: 'green',
                       color: 'white',
-                      '&:hover': { backgroundColor: 'darkgreen' }
+                      '&:hover': { backgroundColor: 'darkgreen' },
                     }}
                   >
                     <Close fontSize="small" />
@@ -244,7 +248,9 @@ export default function AddBanner({ onAdd, children }: AddBannerProps) {
                 </div>
               ) : (
                 <div className="flex flex-col items-center justify-center h-full">
-                  <CloudUpload sx={{ fontSize: 64, color: 'green', mb: 2 }} />
+                  <CloudUpload
+                    sx={{ fontSize: 64, color: 'green', mb: 2 }}
+                  />
                   <span className="text-lg text-center text-green-600">
                     Drag and Drop Banner Image
                   </span>
@@ -276,7 +282,7 @@ export default function AddBanner({ onAdd, children }: AddBannerProps) {
             </Button>
             <Button
               type="submit"
-              variant="contained"
+              variant="outlined"
               disabled={isSubmitting || !formData.image}
               color="success"
             >

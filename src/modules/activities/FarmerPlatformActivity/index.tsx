@@ -117,7 +117,7 @@ const FarmerPlatformActivity = () => {
 
       <div className="flex items-center flex-wrap gap-4 justify-center w-full bg-[#F7F6F6] p-4 md:p-8 mx-auto">
         <a
-          href="https://www.facebook.com/groups/farmerplatform/?ref=share_group_link"
+          href="https://www.facebook.com/share/g/1C3oFs5joM/?mibextid=wwXIfr"
           target="_blank"
           rel="noopener noreferrer"
           className="bg-[#4267B2] text-lg text-white rounded-lg py-3 px-4"
@@ -129,7 +129,7 @@ const FarmerPlatformActivity = () => {
         </a>
 
         <a
-          href="https://wa.me/+250788845727"
+          href="https://wa.me/250792397594"
           target="_blank"
           rel="noopener noreferrer"
           className="bg-[#3B951C] text-lg text-white rounded-lg py-3 px-4"
