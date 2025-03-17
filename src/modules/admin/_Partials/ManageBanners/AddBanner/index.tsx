@@ -77,9 +77,33 @@ export default function AddBanner({
       return;
     }
 
-    setFormData(prev => ({ ...prev, image: file }));
-    setPreviewUrl(URL.createObjectURL(file));
-    setError('');
+    // Check image dimensions
+    const img = new Image();
+    img.onload = () => {
+      URL.revokeObjectURL(img.src);
+
+      // Example: Check if dimensions are within limits
+      const maxWidth = 1211;
+      const maxHeight = 195;
+      console.log(img.height, img.width)
+
+      if (img.width > maxWidth || img.height > maxHeight) {
+        setError(
+          `Image dimensions must be exact ${maxWidth}x${maxHeight} or smaller`,
+        );
+        return;
+      }
+
+      setFormData(prev => ({ ...prev, image: file }));
+      setPreviewUrl(URL.createObjectURL(file));
+      setError('');
+    };
+
+    img.onerror = () => {
+      setError('Error loading image for validation');
+    };
+
+    img.src = URL.createObjectURL(file);
   };
 
   const { getRootProps, getInputProps } = useDropzone({
