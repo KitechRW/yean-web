@@ -40,3 +40,28 @@ export const emailSender = async ({
     console.log(err.message);
   }
 };
+
+export const emailSenderSendGrid = ({
+  email,
+  subject,
+  message,
+}: {
+  email: string;
+  subject?: string;
+  message: string;
+}) => {
+  const sgMail = require('@sendgrid/mail');
+
+  sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
+  const msg = {
+    to: email, // Change to your recipient
+    from: process.env.SERVICE_USERNAME, // Change to your verified sender
+    subject,
+    html: message,
+  };
+
+  return sgMail.send(msg).catch((error: any) => {
+    console.error(error);
+  });
+};

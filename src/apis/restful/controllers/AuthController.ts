@@ -2,7 +2,7 @@ import UserService from '../../services/userServices';
 import bcrypt from 'bcryptjs';
 import { signinToken, decode } from 'apis/utils/jwt';
 import Response from 'apis/utils/helpers/response';
-import { emailSender } from 'apis/utils/sendEmail';
+import { emailSenderSendGrid } from 'apis/utils/sendEmail';
 import emailMocks from 'apis/utils/mocks';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { isloggedIn } from '../../middlewares/auth';
@@ -39,7 +39,7 @@ export default class AuthController {
         }),
         subject: 'Account Verification Link',
       };
-      await emailSender(emailOptions);
+      await emailSenderSendGrid(emailOptions);
       return Response.success(res, 201, {
         message: `Dear ${user.email}, verify your email`,
         user: userData,
@@ -224,7 +224,7 @@ export default class AuthController {
         }),
         subject: 'Reset Password Link',
       };
-      await emailSender(emailOptions);
+      await emailSenderSendGrid(emailOptions);
       return Response.success(res, 201, {
         message: 'check your email',
       });

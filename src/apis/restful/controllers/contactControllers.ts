@@ -2,7 +2,7 @@ import ContactService from 'apis/services/contactServices';
 import { NextApiRequest, NextApiResponse } from 'next';
 import Response from 'apis/utils/helpers/response';
 import emailMocks from 'apis/utils/mocks';
-import { emailSender } from 'apis/utils/sendEmail';
+import { emailSenderSendGrid } from 'apis/utils/sendEmail';
 
 export default class ContactControllers {
   static async create(req: NextApiRequest, res: NextApiResponse) {
@@ -18,7 +18,7 @@ export default class ContactControllers {
         }),
         subject: 'New Contact',
       };
-      await emailSender(emailOptions);
+      await emailSenderSendGrid(emailOptions);
       await ContactService.create({ name, email, message })
         .then(rslt => {
           return Response.success(res, 201, {

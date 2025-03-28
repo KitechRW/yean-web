@@ -2,21 +2,21 @@ import SubscribeService from 'apis/services/subscriberSrvices';
 import { NextApiRequest, NextApiResponse } from 'next';
 import Response from 'apis/utils/helpers/response';
 import DB from 'apis/database';
-import { emailSender } from 'apis/utils/sendEmail';
+import { emailSenderSendGrid } from 'apis/utils/sendEmail';
 
 const { Subscribes } = DB;
 
 export default class SubscriberController {
   static async sendEmails(req: NextApiRequest, res: NextApiResponse) {
     try {
-      const { title, subject, message } = req.body;
+      const { subject, message } = req.body;
       const subscribers = await Subscribes.findAll({
         attributes: ['email'],
       });
 
       subscribers.forEach(item => {
         const email = item.toJSON().email;
-        emailSender({ email, from: title, subject, message });
+        emailSenderSendGrid({ email, subject, message });
       });
 
       return Response.success(res, 200, {
