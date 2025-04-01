@@ -74,7 +74,7 @@ const PartnerActivity = () => {
     <Scaffold>
       <div className="flex flex-col w-full relative bg-brand-green min-h-[312px] md:min-h-[500px]">
         <Image
-          src="/assets/images/partner.jpg"
+          src="/assets/images/partner_new.jpg"
           alt=""
           layout="fill"
           objectFit="cover"

@@ -143,7 +143,7 @@ const SingleBlogActivity = ({
         </h1>
 
         <div
-          className="mt-4 text-justify leading-relaxed flex flex-col space-y-3 max-w-4xl hideContentNotInTagUL prose prose-lg prose-img:max-h-80"
+          className="mt-4 text-justify leading-relaxed flex flex-col space-y-3 max-w-4xl hideContentNotInTagUL prose prose-lg prose-img:w-full prose-img:max-w-full prose-img:h-auto prose-img:max-h-none"
           dangerouslySetInnerHTML={{ __html: data?.text }}
           // ref={contentRef}
         />
