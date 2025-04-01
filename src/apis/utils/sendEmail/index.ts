@@ -58,7 +58,7 @@ export const emailSenderSendGrid = ({
     to: email,
     from: {
       email: process.env.SERVICE_USERNAME, 
-      name: "YEAN Agro",
+      name: "YEAN",
     },
     subject,
     html: message,
