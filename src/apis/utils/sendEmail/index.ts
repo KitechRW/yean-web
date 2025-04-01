@@ -55,8 +55,11 @@ export const emailSenderSendGrid = ({
   sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
   const msg = {
-    to: email, // Change to your recipient
-    from: process.env.SERVICE_USERNAME, // Change to your verified sender
+    to: email,
+    from: {
+      email: process.env.SERVICE_USERNAME, 
+      name: "YEAN Agro",
+    },
     subject,
     html: message,
   };
