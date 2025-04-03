@@ -15,7 +15,7 @@ export default class DashboardController {
     try {
       const articles = await Article.findAndCountAll();
       const users = await User.findAndCountAll({
-        order: [['createdAt', 'DESC']]
+        order: [['id', 'DESC']]
       });
       const books = await Library.findAndCountAll();
       const partners = await Partner.findAndCountAll();
