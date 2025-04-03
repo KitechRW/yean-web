@@ -36,6 +36,7 @@ export default class UserController {
           'firstname',
           'lastname',
         ],
+        order: [['id', 'DESC']],
         limit,
         offset,
       });
