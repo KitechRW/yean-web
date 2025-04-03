@@ -14,7 +14,9 @@ export default class DashboardController {
   static async stat(req: NextApiRequest, res: NextApiResponse) {
     try {
       const articles = await Article.findAndCountAll();
-      const users = await User.findAndCountAll();
+      const users = await User.findAndCountAll({
+        order: [['createdAt', 'DESC']]
+      });
       const books = await Library.findAndCountAll();
       const partners = await Partner.findAndCountAll();
       const jobs = await Job.findAndCountAll();
