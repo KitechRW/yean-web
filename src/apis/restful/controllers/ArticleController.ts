@@ -65,15 +65,24 @@ export default class ArticleController {
 
   static async getAll(req: NextApiRequest, res: NextApiResponse) {
     try {
-      let { page = 1, limit = 10, cat, status } = req.query;
+      let { page = 1, limit = 10, cat, status, search } = req.query;
       page = Number(page);
       limit = Number(limit);
-      const where: WhereOptions<any> = {};
+      let where: WhereOptions<any> = {};
       if (cat) {
         where.category_id = String(cat);
       }
       if (status) {
         where.status = String(status);
+      }
+      if (search) {
+        where = {
+          ...where,
+          [Op.or]: [
+            { title: { [Op.like]: `%${search}%` } },
+            { text: { [Op.like]: `%${search}%` } },
+          ],
+        };
       }
       const offset = (page - 1) * limit;
       const { rows, count } = await ArticleServices.findAndCountAll(

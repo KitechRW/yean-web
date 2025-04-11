@@ -4,6 +4,7 @@ import removeFile, { parseForm } from 'apis/utils/libForm';
 import { paginate } from 'apis/utils/pagnation';
 
 import DB from 'apis/database';
+import { Op, WhereOptions } from 'sequelize';
 
 const { Users: User } = DB;
 
@@ -25,10 +26,23 @@ export default class UserController {
   static async getAll(req: NextApiRequest, res: NextApiResponse) {
     const attributes: string = req.query.attributes as string;
     try {
-      let { page = 1, limit = 100000 } = req.query;
+      let { page = 1, limit = 100000, search } = req.query;
       page = Number(page);
       limit = Number(limit);
       const offset = (page - 1) * limit;
+
+      let where: WhereOptions<any> = {};
+
+      if (search) {
+        where = {
+          ...where,
+          [Op.or]: [
+            { firstname: { [Op.like]: `%${search}%` } },
+            { lastname: { [Op.like]: `%${search}%` } },
+            { email: { [Op.like]: `%${search}%` } },
+          ],
+        };
+      }
 
       const { count, rows } = await User.findAndCountAll({
         attributes: (attributes && attributes.split(',')) || [
@@ -39,6 +53,7 @@ export default class UserController {
         order: [['id', 'DESC']],
         limit,
         offset,
+        where,
       });
 
       const pagination = paginate(page, count, rows, limit);
