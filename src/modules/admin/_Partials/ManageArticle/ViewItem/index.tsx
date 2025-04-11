@@ -1,19 +1,10 @@
 import React from 'react';
-import { useRouter } from 'next/router';
 import { Chip, IconButton } from '@mui/material';
 import CustomImage from 'modules/_partials/CustomImage';
 import AddItem from '../AddItem';
 import { Edit } from '@mui/icons-material';
 import { useNavbar } from 'modules/contexts/NavbarContext';
-const ViewItem = ({
-  data,
-  handleEdit,
-  handleDelete,
-}: {
-  data: any;
-  handleEdit: (item: any) => void;
-  handleDelete: (id: any) => void;
-}) => {
+const ViewItem = ({ data }: { data: any }) => {
   const { title, image, status } = data || {};
   const { profile } = useNavbar();
   return (
@@ -43,11 +34,7 @@ const ViewItem = ({
           </p>
           {(status !== 'published' ||
             profile?.user?.type !== 'member') && (
-            <AddItem
-              dataValues={data}
-              handleEdit={handleEdit}
-              handleDelete={handleDelete}
-            >
+            <AddItem dataValues={data}>
               <IconButton>
                 <Edit />
               </IconButton>

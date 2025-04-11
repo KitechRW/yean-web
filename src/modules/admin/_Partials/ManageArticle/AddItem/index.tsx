@@ -45,10 +45,7 @@ const AddItem = ({
   children,
   dataValues,
 }: {
-  handleAdd?: (item: any) => void;
   children: any;
-  handleEdit?: (item: any) => void;
-  handleDelete?: (id: any) => void;
   dataValues?: any;
 }) => {
   const router = useRouter();
